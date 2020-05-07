@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.mort.DictMapper" >
+ 	<select id="selectDict" resultType="Map" parameterType="java.lang.String">
+   		select * from tbl_dict 
+   		<if test="type!=null">
+   			where type=#{type}
+   		</if>
+   		order by type,sort,id
+   </select>
+   <update id="updateDict" parameterType="java.util.Map">
+   		update tbl_dict set `code`=#{newCode} ,`name`=#{newName} where `code` = #{code} and type = #{type}
+   </update>
+   <insert id="addDict" parameterType="java.util.Map">
+   	insert into tbl_dict(`code`,`name`,type,sort) values(#{code},#{name},#{type},#{sort})
+   </insert>
+</mapper>

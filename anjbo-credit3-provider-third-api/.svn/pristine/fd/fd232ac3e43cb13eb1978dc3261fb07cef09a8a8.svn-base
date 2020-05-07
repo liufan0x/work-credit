@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.hrtrust.HrtrustLoanMapper">
+
+	<select id="selectHrtrustLoan" parameterType="String"
+		resultType="map">
+		select * from tbl_third_hrtrust_loan where orderNo=#{orderNo} order by id
+		DESC limit 0,1
+	</select>
+	
+	<update id="updateMap" parameterType="java.util.Map">
+        update tbl_third_hrtrust_loan
+        <set>
+            <if test="borrowId != null and borrowId !=''">
+                borrowId = #{borrowId},
+            </if>
+            <if test="batchNo != null and batchNo !=''">
+                batchNo = #{batchNo},
+            </if>
+            <if test="sendDate != null and sendDate !=''">
+                sendDate = #{sendDate},
+            </if>
+           <if test="allNums != null and allNums !=''">
+                allNums = #{allNums},
+            </if>
+             <if test="allAccount != null and allAccount !=''">
+                allAccount = #{allAccount},
+            </if>
+             <if test="applSeq != null and applSeq !=''">
+                applSeq = #{applSeq},
+            </if>
+             <if test="bchCde != null and bchCde !=''">
+                bchCde = #{bchCde},
+            </if>
+             <if test="bchName != null and bchName !=''">
+                bchName = #{bchName},
+            </if>
+             <if test="custName != null and custName !=''">
+                custName = #{custName},
+            </if>
+             <if test="idType != null and idType !=''">
+                idType = #{idType},
+            </if>
+             <if test="idNo != null and idNo !=''">
+                idNo = #{idNo},
+            </if>
+             <if test="applyAmt != null and applyAmt !=''">
+                applyAmt = #{applyAmt},
+            </if>
+             <if test="apprvAmt != null and apprvAmt !=''">
+                apprvAmt = #{apprvAmt},
+            </if>
+             <if test="applyTnrUnit != null and applyTnrUnit !=''">
+                applyTnrUnit = #{applyTnrUnit},
+            </if>
+             <if test="applyTnr != null and applyTnr !=''">
+                applyTnr = #{applyTnr},
+            </if>
+             <if test="mtdCde != null and mtdCde !=''">
+                mtdCde = #{mtdCde},
+            </if>
+             <if test="apr != null and apr !=''">
+                apr = #{apr},
+            </if>
+             <if test="odIntRate != null and odIntRate !=''">
+                odIntRate = #{odIntRate},
+            </if>
+             <if test="sysbPct != null and sysbPct !=''">
+              sysbPct  = #{sysbPct},
+            </if>
+             <if test="sysbAmt != null and sysbAmt !=''">
+                sysbAmt = #{sysbAmt},
+            </if>
+             <if test="hrdPct != null and hrdPct !=''">
+                hrdPct = #{hrdPct},
+            </if>
+             <if test="hrdAmt != null and hrdAmt !=''">
+                hrdAmt = #{hrdAmt},
+            </if>
+             <if test="ifCeOut != null and ifCeOut !=''">
+                ifCeOut = #{ifCeOut},
+            </if>
+             <if test="repaymentTime != null and repaymentTime !=''">
+                repaymentTime = #{repaymentTime},
+            </if>
+             <if test="respStatus != null and respStatus !=''">
+                respStatus = #{respStatus},
+            </if>
+        </set>
+        where orderNo = #{orderNo}
+    </update>
+
+	<!-- 快鸽提单信息,业务信息 -->
+	<insert id="saveHrtrustLoan" parameterType="Map">
+		INSERT INTO
+		tbl_third_hrtrust_loan (
+		orderNo,
+		borrowId,
+		batchNo,
+		sendDate,
+		allNums,
+		allAccount,
+		applSeq,
+		bchCde,
+		bchName,
+		custName,
+		idType,
+		idNo,
+		applyAmt,
+		apprvAmt,
+		applyTnrUnit,
+		applyTnr,
+		mtdCde,
+		apr,
+		odIntRate,
+		sysbPct,
+		sysbAmt,
+		hrdPct,
+		hrdAmt,
+		ifCeOut,
+		repaymentTime,
+		respStatus
+		)
+		VALUES
+		(
+		#{orderNo},
+		#{borrowId},
+		#{batchNo},
+		#{sendDate},
+		#{allNums},
+		#{allAccount},
+		#{applSeq},
+		#{bchCde},
+		#{bchName},
+		#{custName},
+		#{idType},
+		#{idNo},
+		#{applyAmt},
+		#{apprvAmt},
+		#{applyTnrUnit},
+		#{applyTnr},
+		#{mtdCde},
+		#{apr},
+		#{odIntRate},
+		#{sysbPct},
+		#{sysbAmt},
+		#{hrdPct},
+		#{hrdAmt},
+		#{ifCeOut},
+		#{repaymentTime},
+		#{respStatus}
+		)
+	</insert>
+
+</mapper>

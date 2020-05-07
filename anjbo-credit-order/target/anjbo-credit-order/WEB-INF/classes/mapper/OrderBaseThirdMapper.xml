@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.OrderBaseThirdMapper">
+	
+	<!-- 查询订单列表 -->
+	<select id="selectOrderList" parameterType="java.util.Map" resultType="OrderListDto">
+		SELECT obb.orderNo AS isUp, olb.*,obb.phoneNumber FROM (
+			select * from tbl_order_list_base where 
+			<include refid="selectOrderWhere"/>
+		) AS olb
+		LEFT JOIN tbl_order_base_borrow obb ON (obb.orderNo=olb.orderNo)
+		where obb.phoneNumber = #{phoneNumber} 
+		ORDER BY obb.createTime DESC
+		limit #{start},#{pageSize} 	
+	</select>
+	<select id="selectOrderCount" parameterType="java.util.Map"	resultType="int">
+		select count(1) from tbl_order_list_base as olb 
+		LEFT JOIN tbl_order_base_borrow obb ON (obb.orderNo=olb.orderNo)
+		where obb.phoneNumber = #{phoneNumber} and 
+		<include refid="selectOrderWhere"/>
+	</select>
+	<sql id="selectOrderWhere">
+		1=1 
+		<if test="customerName !=null and customerName != ''">
+			and customerName like CONCAT('%',#{customerName},'%')
+		</if>
+		<if test="cityCode !=null and cityCode!=''">
+			and cityCode = #{cityCode} 
+		</if>
+		<if test="productCode != null and  productCode != '' ">
+			and productCode = #{productCode} 
+		</if>
+		<if test="state !=null and state != '' ">
+			<if test="state == '待提单' or state =='待公证' or state == '待面签' ">
+				and `state` like CONCAT('%',#{state},'%')   
+			</if>
+			<if test="state != '待提单' and state !='待公证' and state != '待面签' ">
+				and `state` = #{state} 
+			</if>
+		</if>
+		<if test="agencyId !=null and agencyId !=''">
+			and agencyId = #{agencyId} 
+		</if>
+		<if test="cooperativeAgencyId !=null and cooperativeAgencyId !=''">
+			and cooperativeAgencyId = #{cooperativeAgencyId} 
+		</if>
+		<if test="channelManagerUid !=null and channelManagerUid !=''">
+			and channelManagerUid = #{channelManagerUid} 
+		</if>
+		<if test="acceptMemberUid !=null and acceptMemberUid !=''">
+			and acceptMemberUid = #{acceptMemberUid} 
+		</if>
+		<if test="createTimeStart !=null and createTimeStart !=''">
+			and  <![CDATA[ createTime >= #{createTimeStart} ]]>
+		</if>
+		<if test="createTimeEnd !=null and createTimeEnd !=''">
+			and  <![CDATA[ createTime <= #{createTimeEnd} ]]>
+		</if>
+		<if test="lendingTimeStart !=null and lendingTimeStart !=''">
+			and  <![CDATA[ lendingTime >= #{lendingTimeStart} ]]>
+		</if>
+		<if test="lendingTimeEnd !=null and lendingTimeEnd !=''">
+			and  <![CDATA[ lendingTime <= #{lendingTimeEnd} ]]>
+		</if>
+		<if test="null != planPaymentTimeOrders and planPaymentTimeOrders != ''">
+			and orderNo IN(${planPaymentTimeOrders})
+		</if>
+		<if test="branchCompany !=null and branchCompany !=''">
+			and  branchCompany = #{branchCompany} 
+		</if>
+		<if test="searchName !=null and searchName !=''">
+			and  (channelManagerName like CONCAT('%',#{searchName},'%') or  customerName like CONCAT('%',#{searchName},'%') or acceptMemberName like CONCAT('%',#{searchName},'%'))  
+		</if> 
+		<if test="customerType!=null and customerType!=0"> and customerType=#{customerType}</if>
+		 and state != '已关闭'
+	</sql>
+	
+	
+
+	
+   
+   <select id="selectDetail" parameterType="string" resultType="OrderListDto">
+		select id,createUid,updateUid,agencyId,orderNo,cityCode,cityName,branchCompany,productCode,productName,contractNo,
+		customerName,borrowingAmount,borrowingDay,cooperativeAgencyId,cooperativeAgencyName,channelManagerUid,channelManagerName
+		,acceptMemberUid,acceptMemberName,planPaymentTime,lendingTime,previousHandler,previousHandlerUid,previousHandleTime,state,currentHandlerUid,currentHandler
+		,processId,source,notarialUid,facesignUid,appShowValue1,appShowValue2,relationOrderNo,receptionManagerUid,customerType
+		 from tbl_order_list_base where 
+		 orderNo = #{orderNo} limit 1
+	</select>
+	
+</mapper>

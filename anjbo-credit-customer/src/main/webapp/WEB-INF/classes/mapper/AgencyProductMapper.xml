@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.AgencyProductMapper">
+
+	<select id="search" resultType="AgencyProductDto">
+		select
+			*
+		from tbl_customer_agency_product
+		where agencyId=#{agencyId}
+		<if test="status!=null">
+			AND status=#{status}
+		</if>
+	</select>
+
+	<insert id="batchInsert" parameterType="java.util.List">
+		INSERT INTO tbl_customer_agency_product
+		(
+			productCode,productName,cityCode,cityName,agencyId,createTime,createUid
+		)
+		VALUES
+		<foreach collection="list" item="obj" separator=",">
+		(
+			#{obj.productCode},#{obj.productName},#{obj.cityCode},#{obj.cityName},#{obj.agencyId},now(),#{obj.createUid}
+		)
+		</foreach>
+	</insert>
+	<update id="update" parameterType="java.util.Map">
+		UPDATE tbl_customer_agency_product
+		<set>
+			<if test="productCode!=null and productCode!=''">
+				productCode = #{productCode},
+			</if>
+			<if test="productName!=null and productName!=''">
+				productName = #{productName},
+			</if>
+			<if test="cityCode!=null and cityCode!=''">
+				cityCode = #{cityCode},
+			</if>
+			<if test="cityName!=null and cityName!=''">
+				cityName = #{cityName},
+			</if>
+			<if test="agencyId>0">
+				agencyId = #{agencyId},
+			</if>
+			<if test="status!=null">
+				status = #{status},
+			</if>
+			<if test="feescaleId>0">
+				feescaleId = #{feescaleId},
+			</if>
+			<if test="updateUid!=null and updateUid!=''">
+				updateUid = #{updateUid},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	<delete id="delete" parameterType="AgencyProductDto">
+		DELETE FROM tbl_customer_agency_product WHERE agencyId=#{agencyId}
+	</delete>
+	
+	<select id="findAllCityProduct" resultType="AgencyProductDto">
+		SELECT
+			agencyId,
+			cityCode,
+			cityName,
+			GROUP_CONCAT(productCode) AS productCode,
+			GROUP_CONCAT(productName) AS productName
+		FROM
+			tbl_customer_agency_product
+		WHERE
+			agencyId=#{agencyId}
+			<if test="status!=null">
+				AND status=#{status}
+			</if>
+		GROUP BY
+			cityCode
+	</select>
+	<select id="allAgencyProduct" resultType="AgencyProductDto">
+		SELECT * FROM tbl_customer_agency_product
+	</select>
+</mapper>

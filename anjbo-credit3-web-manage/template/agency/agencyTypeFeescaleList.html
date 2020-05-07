@@ -1,0 +1,35 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<ul class="breadcrumb">
+				<li>
+					<a ui-sref="agencyTypeList">机构类型列表</a> <span class="divider"></span>
+				</li>
+				<li class="active">
+					收费标准列表
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<!--row-->
+	<div class="row">
+		<div class="col-md-12"> 
+		    <form class="form-inline" style="margin-left:30px;">
+				<div class="form-group">
+					<label ng-bind="agencyTypeName" style="width: 210px"></label>
+				</div>
+				<button type="button" class="btn btn-primary fr" ng-click="addShow()" style="margin-right:10px;  margin-bottom: 10px;">添加业务产品</button>
+			</form>
+		</div>
+	</div>
+	<!--row-->
+
+	<div class="row">
+		<div class="col-md-12">
+			<!--table-->
+			<table bs-table-control="agencyTypeFeescaleList" id="table"></table>
+			<!--table end-->
+	    </div>
+	</div>
+</div>

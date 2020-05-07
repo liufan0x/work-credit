@@ -1,0 +1,83 @@
+<div class="row huarong-update-file" ng-if="fundId==31">
+    <div class="col-md-12">
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>分类</th>
+                <th>资料名称</th>
+                <th>文档数</th>
+                <th>操作</th>
+                <th>说明</th>
+            </tr>
+            </thead>
+            <tbody ng-repeat="pType in huarongImageDatas.topType">
+                <tr  ng-repeat="sType in pType.childrenType">
+                    <td ng-if="$index==0" rowspan="{{pType.childrenType.length}}" class="white-bg"></br><span ng-bind="pType.name"></span></br></td>
+                    <td ng-bind="sType.name"></td>
+                    <td ng-bind="sType.listImgs.length||'0'"></td>
+                    <td>
+                        <!--上传图片col-md-12 -->
+                        <span class="caozuo red-word" ng-show="isImgEdit">
+                            <a data-fancybox="iframe" data-src="/plugins/uploadify/upload_image.html?returnFun=huarongUpdateFile" ng-click="selectTypeCheck(sType.id);" data-type="iframe" href="javascript:void(0);">上传</a>
+                        </span>
+
+                        <span class="caozuo chakan-img gallerys" ng-show="sType.listImgs.length>0">
+                            <!--
+                            <a href="javascript:void(0);"  onclick="lookImg()">查看图片</a>
+                            -->
+                            <img  title="查看图片"  ng-repeat="imgMap in sType.listImgs" src="{{imgMap.filePath}}" class="gallery-pic"  alt="查看图片" ng-show="$index==0" hieght="30" width="30">
+                            <!--
+                            <img  ng-repeat="imgMap in sType.listImgs" src="{{imgMap.url}}" class="gallery-pic" style="display: none;"/>
+                            -->
+                        </span>
+                        <input type="hidden" name="typeId" value="{{sType.id}}">
+                    </td>
+                    <td ng-bind="sType.remark"></td>
+                </tr>
+                   <button type="button" class="btn btn-danger lhw-alert-cancel" ng-click="download()">一键下载</button>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- 非华融影像资料 -->
+
+<div class="row update-file" ng-if="fundId!=31">
+    <div class="col-md-12">
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>分类</th>
+                <th>资料名称</th>
+                <th>文档数</th>
+                <th>操作</th>
+                <th>说明</th>
+            </tr>
+            </thead>
+            <tbody ng-repeat="pType in imageDatas.topType">
+                <tr  ng-repeat="sType in pType.childrenType">
+                    <td ng-if="$index==0" rowspan="{{pType.childrenType.length}}" class="white-bg"></br><span ng-bind="pType.name"></span></br></td>
+                    <td ng-bind="sType.name"></td>
+                    <td ng-bind="sType.listImgs.length||'0'"></td>
+                    <td>
+                        <!--上传图片col-md-12 -->
+                        <span class="caozuo red-word" ng-show="isImgEdit">
+                            <a data-fancybox="iframe" data-src="/plugins/uploadify/upload_image.html?returnFun=fundUpdateFile" ng-click="selectTypeCheck(sType.id);" data-type="iframe" href="javascript:void(0);">上传</a>
+                        </span>
+                        <span class="caozuo red-word" ng-show="isImgEdit"><a ng-click="delImgShow(sType.listImgs);" ng-show="sType.listImgs.length>0">删除</a></span>
+                        <span class="caozuo chakan-img gallerys">
+                                <img  title="查看图片"  ng-repeat="imgMap in sType.listImgs" src="{{imgMap.url}}" class="gallery-pic"  alt="查看图片" ng-show="$index==0" hieght="30" width="30">
+                        </span>
+                        <input type="hidden" name="typeId" value="{{sType.id}}">
+                    </td>
+                    <td ng-bind="sType.remark"></td>
+                </tr>
+                 <button type="button" class="btn btn-danger lhw-alert-cancel" ng-click="download()">一键下载</button>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="lhw-alert-but" ng-show="isImgEdit">
+    <button type="button" class="btn btn-danger lhw-alert-cancel" ng-click="delAllImg()">删除所有</button>
+</div>
+

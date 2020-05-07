@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.BoxBaseWebMapper">
+
+    <select id="selectBoxBaseHaveCityList" resultType="java.lang.String">
+        SELECT DISTINCT
+            city
+        FROM
+            tbl_element_box_base
+    </select>
+
+    <!--要件柜管理 数量-->
+    <select id="selectBoxBaseCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+        COUNT(t1.id)
+        FROM
+        tbl_element_box_base t1
+        LEFT JOIN tbl_element_list t2 ON t1.orderNo = t2.orderNo
+        <where>
+            <if test=" authIds !=null ">
+                (
+                t1.operationAuthority IN
+                <foreach collection="authIds" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                OR t1.readOnlyAuthority IN
+                <foreach collection="authIds" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                )
+            </if>
+            <if test="city!='' and city !=null ">
+                AND t1.city = #{city}
+            </if>
+            <if test="boxNo!='' and boxNo !=null ">
+                AND t1.boxNo like CONCAT('%',#{boxNo},'%')
+            </if>
+            <if test="useStatus!='' and useStatus !=null ">
+                AND t1.useStatus = #{useStatus}
+            </if>
+            <if test="deviceStatus!='' and deviceStatus !=null ">
+                AND t1.deviceStatus = #{deviceStatus}
+            </if>
+            <if test="customerName!='' and customerName !=null ">
+                AND t2.customerName like CONCAT('%',#{customerName},'%')
+            </if>
+        </where>
+    </select>
+    <!--要件柜管理 列表-->
+    <select id="selectBoxBaseList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        t1.id,
+        t1.city,
+        t1.subsidiary,
+        t1.boxNo,
+        t1.useStatus,
+        t1.deviceStatus,
+        t2.customerName
+        FROM
+        tbl_element_box_base t1
+        LEFT JOIN tbl_element_list t2 ON t1.orderNo = t2.orderNo
+        <where>
+            <if test=" authIds !=null ">
+                (
+                t1.operationAuthority IN
+                <foreach collection="authIds" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                OR t1.readOnlyAuthority IN
+                <foreach collection="authIds" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                )
+            </if>
+            <if test="city!='' and city !=null ">
+                AND t1.city = #{city}
+            </if>
+            <if test="boxNo!='' and boxNo !=null ">
+                AND t1.boxNo like CONCAT('%',#{boxNo},'%')
+            </if>
+            <if test="useStatus!='' and useStatus !=null ">
+                AND t1.useStatus = #{useStatus}
+            </if>
+            <if test="deviceStatus!='' and deviceStatus !=null ">
+                AND t1.deviceStatus = #{deviceStatus}
+            </if>
+            <if test="customerName!='' and customerName !=null ">
+                AND t2.customerName like CONCAT('%',#{customerName},'%')
+            </if>
+        </where>
+        order by t1.id
+        limit #{start},#{pageSize}
+    </select>
+
+    <!--开箱记录 数量-->
+    <select id="selectOpenBoxBaseCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+        COUNT(t1.id)
+        FROM
+        tbl_element_access_flow t1
+        LEFT JOIN tbl_element_list t2 ON t1.orderNo = t2.orderNo
+        LEFT JOIN tbl_element_box_base t3 ON t2.boxNo = t3.boxNo
+        <where>
+        	t1.operationType&lt;8 
+            <if test="id!='' and id !=null ">
+                and t3.id = #{id}
+            </if>
+            <if test="applierName!='' and applierName !=null ">
+                AND t1.applierName like CONCAT('%',#{applierName},'%')
+            </if>
+            <if test="currentHandler!='' and currentHandler !=null ">
+                AND t1.currentHandler like CONCAT('%',#{currentHandler},'%')
+            </if>
+            <if test="startTime!='' and startTime !=null ">
+                AND <![CDATA[ DATE_FORMAT(t1.operationTime, '%Y-%m-%d') >= #{startTime} ]]>
+            </if>
+            <if test="endTime!='' and endTime !=null ">
+                AND <![CDATA[ DATE_FORMAT(t1.operationTime, '%Y-%m-%d') <= #{endTime} ]]>
+            </if>
+        </where>
+    </select>
+    <!--开箱记录 列表-->
+    <select id="selectOpenBoxBaseList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        t1.id,
+        t1.operationTime,
+        t1.operationType,
+        t1.applierName,
+        t1.currentHandler,
+        t2.orderType
+        FROM
+        tbl_element_access_flow t1
+        LEFT JOIN tbl_element_list t2 ON t1.orderNo = t2.orderNo
+        LEFT JOIN tbl_element_box_base t3 ON t2.boxNo = t3.boxNo
+        <where>
+			t1.operationType&lt;8 
+            <if test="id!='' and id !=null ">
+                and t3.id = #{id}
+            </if>
+            <if test="applierName!='' and applierName !=null ">
+                AND t1.applierName like CONCAT('%',#{applierName},'%')
+            </if>
+            <if test="currentHandler!='' and currentHandler !=null ">
+                AND t1.currentHandler like CONCAT('%',#{currentHandler},'%')
+            </if>
+            <if test="startTime!='' and startTime !=null ">
+                AND <![CDATA[ DATE_FORMAT(t1.operationTime, '%Y-%m-%d') >= #{startTime} ]]>
+            </if>
+            <if test="endTime!='' and endTime !=null ">
+                AND <![CDATA[ DATE_FORMAT(t1.operationTime, '%Y-%m-%d') <= #{endTime} ]]>
+            </if>
+        </where>
+        order by t1.operationTime DESC,t1.id DESC
+        limit #{start},#{pageSize}
+    </select>
+
+    <select id="getElementBoxDetail" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT
+        id,
+        boxNo,
+        deviceId,
+        lockAddress,
+        deviceStatus,
+        useStatus,
+        orderNo,
+        city,
+        subsidiary
+        FROM
+        tbl_element_box_base
+        <where>
+            <if test="id!='' and id !=null ">
+                id = #{id}
+            </if>
+            <if test="boxNo!='' and boxNo !=null ">
+                AND boxNo = #{boxNo}
+            </if>
+            <if test="deviceId!='' and deviceId !=null ">
+                AND deviceId = #{deviceId}
+            </if>
+            <if test="lockAddress!='' and lockAddress !=null ">
+                AND lockAddress = #{lockAddress}
+            </if>
+            <if test="deviceStatus!='' and deviceStatus !=null ">
+                AND deviceStatus = #{deviceStatus}
+            </if>
+            <if test="useStatus!='' and useStatus !=null ">
+                AND useStatus = #{useStatus}
+            </if>
+            <if test="city!='' and city !=null ">
+                AND city = #{city}
+            </if>
+            <if test="subsidiary!='' and subsidiary !=null ">
+                AND subsidiary = #{subsidiary}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateBoxBaseStatus" parameterType="java.util.Map">
+        UPDATE tbl_element_box_base
+        <set >
+            <if test="deviceStatus != null" >
+                deviceStatus = #{deviceStatus},
+            </if>
+            <if test="useStatus != null" >
+                useStatus = #{useStatus},
+            </if>
+            <if test="orderNo != null and orderNo !=''" >
+                orderNo = #{orderNo},
+            </if>
+        </set>
+        <where>
+            <if test="id !='' and id !=null ">
+                id = #{id}
+            </if>
+            <if test="boxNo!='' and boxNo !=null ">
+                AND boxNo = #{boxNo}
+            </if>
+            <if test="deviceId !='' and deviceId !=null ">
+                deviceId = #{deviceId}
+            </if>
+            <if test="lockAddress!='' and lockAddress !=null ">
+                AND lockAddress = #{lockAddress}
+            </if>
+        </where>
+    </update>
+
+    <!--要件柜操作记录-->
+    <insert id="saveElementBoxLogs"  parameterType="java.util.Map">
+        INSERT INTO tbl_element_box_logs
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="type != null and type !=''" >
+                type,
+            </if>
+            <if test="log != null and log !=''" >
+                log,
+            </if>
+            createTime,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="type != null and type !=''" >
+                #{type},
+            </if>
+            <if test="log != null and log !=''" >
+                #{log},
+            </if>
+            now(),
+        </trim>
+    </insert>
+
+    <!--要件箱离线列表-->
+    <select id="selectOffLineBoxList" resultType="java.util.Map">
+        SELECT
+            id,
+            boxNo,
+            deviceId,
+            lockAddress
+        FROM
+          tbl_element_box_base
+        WHERE
+          deviceStatus = 0
+        GROUP BY
+          deviceId
+    </select>
+</mapper>

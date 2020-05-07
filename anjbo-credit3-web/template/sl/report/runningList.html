@@ -1,0 +1,138 @@
+<div class="container-fluid">
+  <div class="row">
+    <button ng-click="test()" ng-show=0>
+      测试
+    </button>
+  
+    <div class="col-md-12">
+      <ul class="breadcrumb">
+        <li>
+          报表管理
+        </li>
+        <li>
+          统计报表
+        </li>
+        <li>
+          运行报表
+        </li>
+      </ul>
+    </div>
+  </div><!--row-->
+  <div style="margin-left:30px; ">
+      <div class="form-group" >
+           <button type="button" class="btn" ng-click="reportType='0'" ng-class="{true: 'btn-primary', false: 'btn-default'}[reportType=='0']">资方报表</button>
+           <button type="button" class="btn" ng-click="reportType='1'" ng-class="{true: 'btn-primary', false: 'btn-default'}[reportType=='1']">机构报表</button>
+       </div>
+  </div>
+  <!-- 业绩概览 -->
+  <div ng-show="reportType == 0">
+    <div class="row">
+    <div class="col-md-12"> 
+      <form class="form-inline search" style="margin-bottom:20px;margin-left:30px; ">
+        <br></br>
+        <div class="form-group" >
+         <label id="timeShow">放款时间：</label>
+         <button type="button" class="btn" ng-click="page0.timeWhere='yesterday';query0('clear')" ng-class="{true: 'btn-primary', false: 'btn-default'}[page0.timeWhere=='yesterday']">昨日</button>
+            <button type="button"  class="btn" ng-click="page0.timeWhere='lastWeek';query0('clear')" ng-class="{true: 'btn-primary', false: 'btn-default'}[page0.timeWhere=='lastWeek']">上周</button>
+            <button type="button" class="btn" ng-click="page0.timeWhere='lastMonth';query0('clear')" ng-class="{true: 'btn-primary', false: 'btn-default'}[page0.timeWhere=='lastMonth']">上月</button>
+            
+            <button type="button" class="btn" ng-click="page0.timeWhere='thisMonth';query0('clear')" ng-class="{true: 'btn-primary', false: 'btn-default'}[page0.timeWhere=='thisMonth']">本月</button>
+        </div>
+        <div class="form-group">
+          <label>自定义<span id="zdyShow">放款</span>时间：</label>
+          <input  size="16" type="text" readonly  class="form-control form_date_two" ng-model="page0.startTime">
+          <span class="clear-date" ng-click="clearDate($event,'start','0')">X</span>
+              &nbsp;&nbsp;至
+          <input  size="16" type="text" readonly  class="form-control form_date_two" ng-model="page0.endTime">
+           <span class="clear-date" ng-click="clearDate($event,'end','0')">X</span>
+        </div>
+        <button type="submit" class="btn btn-default" ng-click="query0()" style="margin-bottom:10px; margin-right:10px;">查询</button>
+        <br></br>
+        <div class="form-group" >
+            <label>产品:</label>
+               <button type="button" class="btn" ng-click="page0.productCode=''" ng-class="{true: 'btn-primary', false: 'btn-default'}[page0.productCode=='']">全部</button>
+               <button type="button" class="btn" ng-click="page0.productCode='01'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page0.productCode=='01']">债务置换贷款（交易类）</button>
+               <button type="button" class="btn" ng-click="page0.productCode='02'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page0.productCode=='02']">债务置换贷款（非交易类）</button>
+               <button type="button" class="btn" ng-click="page0.productCode='03'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page0.productCode=='03']">畅贷</button>
+           </div>
+           <br></br>
+           <div class="form-group" ng-if=0>
+               <label>机构类型:</label>
+                  <button type="button" class="btn" ng-click="page0.cooperativeModeId='1'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page0.cooperativeModeId=='1']">兜底机构</button>
+                  <button type="button" class="btn" ng-click="page0.cooperativeModeId='2'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page0.cooperativeModeId=='2']">非兜底机构</button>
+              </div>
+  </form>
+    </div>
+  </div>
+ 
+  <!--row-->
+  <div class="row">
+      <div style="margin-left:30px"><span style="width: 4px;
+        display: inline-block;
+        height: 11px;
+        margin-right: 5px;
+        background-color: #333;"></span>
+        资方放款回款统计</div>
+    <div class="col-md-12" id="fundwrap">
+           <table  bs-table-control="fund" id="fundTable" data-show-export="true" style="min-width:1000px;"></table>
+    </div>
+  </div>
+  </div>
+  
+  </div><!--container-fluid-->
+  <!-- 个人创收 -->
+  <div ng-show="reportType == 1">
+      <div class="row">
+      <div class="col-md-12"> 
+        <form class="form-inline search" style="margin-bottom:20px;margin-left:30px; ">
+    
+          <br></br>
+          <div class="form-group" >
+           <label id="timeShow">放款时间：</label>
+           <button type="button" class="btn" ng-click="page1.timeWhere='yesterday';query1('clear')" ng-class="{true: 'btn-primary', false: 'btn-default'}[page1.timeWhere=='yesterday']">昨日</button>
+           <button type="button"  class="btn" ng-click="page1.timeWhere='lastWeek';query1('clear')" ng-class="{true: 'btn-primary', false: 'btn-default'}[page1.timeWhere=='lastWeek']">上周</button>
+           <button type="button" class="btn" ng-click="page1.timeWhere='lastMonth';query1('clear')" ng-class="{true: 'btn-primary', false: 'btn-default'}[page1.timeWhere=='lastMonth']">上月</button>
+           <button type="button" class="btn" ng-click="page1.timeWhere='thisMonth';query1('clear')" ng-class="{true: 'btn-primary', false: 'btn-default'}[page1.timeWhere=='thisMonth']">本月</button>
+          </div>
+          <div class="form-group">
+            <label>自定义<span id="zdyShow">放款</span>时间：</label>
+            <input  size="16" type="text" readonly  class="form-control form_date_two" ng-model="page1.startTime">
+            <span class="clear-date" ng-click="clearDate($event,'start','1')">X</span>
+                &nbsp;&nbsp;至
+            <input  size="16" type="text" readonly  class="form-control form_date_two" ng-model="page1.endTime">
+             <span class="clear-date" ng-click="clearDate($event,'end','1')">X</span>
+          </div>
+          <button type="submit" class="btn btn-default" ng-click="query1()" style="margin-bottom:10px; margin-right:10px;">查询</button>
+          <br></br>
+          <div class="form-group" >
+              <label>产品:</label>
+                 <button type="button"  class="btn" ng-click="page1.productCode=''" ng-class="{true: 'btn-primary', false: 'btn-default'}[page1.productCode=='']">全部</button>
+                 <button type="button" class="btn" ng-click="page1.productCode='01'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page1.productCode=='01']">债务置换贷款（交易类）</button>
+                 <button type="button" class="btn" ng-click="page1.productCode='02'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page1.productCode=='02']">债务置换贷款（非交易类）</button>
+                 <button type="button" class="btn" ng-click="page1.productCode='03'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page1.productCode=='03']">畅贷</button>
+             </div>
+             <br></br>
+          <div class="form-group" >
+              <label>机构类型:</label>
+                 <button type="button"  class="btn" ng-click="page1.cooperativeModeId='1'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page1.cooperativeModeId=='1']">兜底机构</button>
+                 <button type="button" class="btn" ng-click="page1.cooperativeModeId='2'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page1.cooperativeModeId=='2']">非兜底机构</button>
+             </div>
+    </form>
+      </div>
+    </div>
+  
+    <!--row-->
+    <div class="row">
+        <div style="margin-left:30px"><span style="width: 4px;
+          display: inline-block;
+          height: 11px;
+          margin-right: 5px;
+          background-color: #333;"></span>
+          机构放款回款统计</div>
+      <div class="col-md-12" id="agencywrap">
+             <table  bs-table-control="agency" id="agencyTable" data-show-export="true" style="min-width:1000px;"></table>
+      </div>
+    </div>
+    </div>
+
+    </div>

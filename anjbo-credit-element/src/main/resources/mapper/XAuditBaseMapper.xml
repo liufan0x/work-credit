@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.XAuditBaseMapper">   
+    <select id="selectAuditBaseList" parameterType="java.util.Map" resultType="java.util.Map">
+    	select * from tbl_element_audit_base WHERE orderNo=#{orderNo} and state=1 and hasTake=0 order by createTime desc;
+    </select>
+    
+    
+     
+    <update id="updateAuditBaseById" parameterType="java.util.Map">
+        update tbl_element_audit_base set hasTake=1 where id = #{id} ;
+    </update>
+    
+    
+    <select id="selectAuditBaseById" parameterType="java.util.Map" resultType="java.util.Map">
+    	select * from tbl_element_audit_base WHERE id=#{id};
+    </select>
+    
+     <select id="selectFileIdsByOrderNo" parameterType="java.util.Map" resultType="java.util.Map">
+    	select elementIds from tbl_element_audit_base where state in (0,1) and hasTake=0 and orderNo=#{orderNo}
+    </select>
+    
+    
+</mapper>

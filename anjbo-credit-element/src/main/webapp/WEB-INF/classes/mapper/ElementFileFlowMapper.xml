@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.ElementFileFlowMapper">
+
+    <insert id="insertElementFileFlow" parameterType="java.util.List" useGeneratedKeys ="true" keyProperty="id">
+       	INSERT INTO tbl_element_element_file_flow (
+       	createTime,
+       	createUid,
+       	createName,
+		elementType,
+		cardType,
+		cardNumber,
+		cardCustomer,
+		boxNo,
+		bankName,
+		bankSubName,
+		type,
+		orderNo,
+		editReason,
+		operationType,
+		status,
+		accessFlowId,
+		flowType,
+		operationTime,
+		operationAccessFlowId,
+		elementId
+		)
+		VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			now(),
+			#{item.createUid},
+			#{item.createName},
+			#{item.elementType},
+			#{item.cardType},
+			#{item.cardNumber},
+			#{item.cardCustomer},
+			#{item.boxNo},
+			#{item.bankName},
+			#{item.bankSubName},
+			#{item.type},
+			#{item.orderNo},
+			#{item.editReason},
+			#{item.operationType},
+			#{item.status},
+			#{item.accessFlowId},
+			#{item.flowType},
+			#{item.operationTime},
+			#{item.operationAccessFlowId},
+			#{item.elementId}
+			)
+		</foreach>
+    </insert>
+    
+     <select id="selectElementFileFlow" resultType="java.util.Map">
+    	select * from tbl_element_element_file_flow 
+    	
+    	 <if test="array.length>0">
+       		WHERE id in 
+         <foreach collection="array" open="(" close=")" separator="," item="id">
+            #{id}
+         </foreach>
+       
+       </if>
+       
+        <if test="array.length==0">
+        	WHERE id=0
+        </if>
+    	
+    </select>
+    
+    
+    <select id="selectElementFileFlowByOrderNo" parameterType="java.util.Map" resultType="java.util.Map">
+    	select * from tbl_element_element_file_flow where orderNo=#{orderNo} 
+    	<if test="ids != null and ids != ''">
+    		and elementId in (${ids})
+    	</if>
+    	<if test="accessFlowId != null and accessFlowId != ''">
+    		and accessFlowId=#{accessFlowId}
+    	</if>
+    	<if test="operationAccessFlowId != null and operationAccessFlowId != ''">
+    		and operationAccessFlowId=#{operationAccessFlowId}
+    	</if>
+    	and flowType = #{flowType} order by id desc
+    </select>
+    <!-- <delete id="deleteFormOrderNo" parameterType="java.util.Map">
+    	delete from  tbl_element_element_file_flow where orderNo=#{orderNo} and operationType = #{operationType}
+    </delete> -->
+    
+    
+    
+</mapper>

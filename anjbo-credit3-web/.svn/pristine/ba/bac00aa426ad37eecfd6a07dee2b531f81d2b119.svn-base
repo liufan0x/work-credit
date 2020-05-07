@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>借款人</title>
+<!--标准mui.css-->
+<link rel="stylesheet" href="./css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="./css/order.css" />
+<link href="./css/mui.picker.min.css" rel="stylesheet" />
+</head>
+<body>
+ 
+<div class="form-box">
+     <div class="inp-div">
+           <span class="inp-span mi">姓名</span><span class="inp-r">&nbsp;</span>
+           <input type="text" value=""  class="inp-box" name="bank3" placeholder="请输入">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">手机号码</span><span class="inp-r">&nbsp;</span>
+           <input type="tel" value=""  class="inp-box" name="bank3" placeholder="请输入">
+     </div>
+     <div class="inp-div">
+           <span class="inp-span mi">证件类型</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" readonly="" class="inp-box" name="bank" placeholder="请选择"></a>
+     </div>
+     <div class="inp-div">
+           <span class="inp-span mi">证件号码</span><span class="inp-r">&nbsp;</span>
+           <input type="tel" value=""  class="inp-box" name="bank3" placeholder="请输入">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">婚姻状况</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" readonly="" class="inp-box" name="bank" placeholder="请选择"></a>
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">配偶姓名</span><span class="inp-r">&nbsp;</span>
+           <input type="text" value=""  class="inp-box" name="bank3" placeholder="请输入">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">配偶职业/单位</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" readonly="" class="inp-box" name="bank" placeholder="请选择"></a>
+     </div>
+	 <div class="inp-div no-border">
+           <span class="inp-span mi">配偶职位</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" readonly="" class="inp-box" name="bank" placeholder="请选择"></a>
+     </div>
+	 <div class="inp-div no-border">
+           <span class="inp-span mi">与借款人信息</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" readonly="" class="inp-box" name="bank" placeholder="请选择"></a>
+     </div>
+	 <div class="inp-div no-border">
+           <span class="inp-span mi">与借款人关系</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" readonly="" class="inp-box" name="bank" placeholder="请选择"></a>
+     </div>
+	 <div class="inp-div no-border">
+           <span class="inp-span mi">是否产权人</span><span class="inp-r icon-d"> &nbsp;</span>
+           <input type="text" value="是"  readonly class="inp-box sel" name="name" >
+     </div>
+	 <div class="clear"> </div>
+</div>
+
+
+
+  <br> 
+
+ 
+<div class="but-box">
+     <div class="add-but"></div>
+     <div class="del-but"></div>
+</div>
+<div class="clear"> </div>
+<br> <br>
+<div class="save-but"></div>
+ 
+
+<script src="./js/mui.min.js"></script>
+<script src="./js/mui.picker.min.js"></script>
+<script src="./js/jquery.min.js"></script>
+<script>
+  (function($, doc, $$) {
+				$.init();
+				$.ready(function() {
+
+				 
+				   $$(".sel").click(function(){
+					  var userPicker = new $.PopPicker();
+					  userPicker.setData([{
+						value: 'yes',
+						text: '是'
+					  }, {
+						value: 'no',
+						text: '否'
+					  }]);
+					  var _this=$$(this);
+				      userPicker.show(function(items) {
+							_this.val((items[0].text));
+							//返回 false 可以阻止选择框的关闭
+							//return false;
+						});
+				  });
+				 
+
+
+					 
+					 
+				});
+			})(mui, document,jQuery);
+</script>
+</body>
+</html>

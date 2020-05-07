@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.yntrust.YntrustBorrowMapper">
+
+    <sql id="Base_Column_List">
+        id, createTime, createUid, updateUid, updateTime, orderNo, shortName, bankReservedPhoneNo,
+        iDCardNo, cardType, maritalStatus, telephoneNo, city, jobType, jobTypeName, roleType, 
+        roleTypeName,cardTypeName,maritalStatusName,cityName,pushStatus,ynProductCode,ynProductName
+    </sql>
+    <select id="select" parameterType="YntrustBorrowDto" resultType="YntrustBorrowDto">
+        select
+        <include refid="Base_Column_List" />
+        from tbl_third_yntrust_borrow
+        where orderNo = #{orderNo}
+        <if test="pushStatus!=null">
+            AND pushStatus = #{pushStatus}
+        </if>
+        <if test="ynProductCode != null and ynProductCode!=''">
+            AND ynProductCode = #{ynProductCode}
+        </if> 
+        ORDER BY createTime DESC limit 1
+    </select>
+    <delete id="delete" parameterType="YntrustBorrowDto">
+        delete from tbl_third_yntrust_borrow
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteByOrderNo" parameterType="java.lang.String">
+      DELETE FROM  tbl_third_yntrust_borrow WHERE orderNo = #{orderNo}
+    </delete>
+
+    <insert id="insert" parameterType="YntrustBorrowDto">
+        insert into tbl_third_yntrust_borrow
+        (
+            createTime,
+            createUid,
+            orderNo,
+            shortName,
+            bankReservedPhoneNo,
+            iDCardNo,
+            cardType,
+            maritalStatus,
+            telephoneNo,
+            city,
+            jobType,
+            jobTypeName,
+            roleType,
+            roleTypeName,
+            cardTypeName,
+            maritalStatusName,
+            cityName,
+            pushStatus,
+            ynProductCode,
+            ynProductName
+        )
+        values
+        (
+            now(),
+            #{createUid},
+            #{orderNo},
+            #{shortName},
+            #{bankReservedPhoneNo},
+            #{iDCardNo},
+            #{cardType},
+            #{maritalStatus},
+            #{telephoneNo},
+            #{city},
+            #{jobType},
+            #{jobTypeName},
+            #{roleType},
+            #{roleTypeName},
+            #{cardTypeName},
+            #{maritalStatusName},
+            #{cityName},
+            #{pushStatus},
+            #{ynProductCode},
+            #{ynProductName}
+        )
+    </insert>
+
+    <insert id="insertMap" parameterType="java.util.Map">
+        insert into tbl_third_yntrust_borrow
+        (
+            createTime,
+            createUid,
+            orderNo,
+            shortName,
+            bankReservedPhoneNo,
+            iDCardNo,
+            cardType,
+            maritalStatus,
+            telephoneNo,
+            city,
+            jobType,
+            jobTypeName,
+            roleType,
+            roleTypeName,
+            cardTypeName,
+            maritalStatusName,
+            cityName,
+            pushStatus,
+            ynProductCode,
+            ynProductName
+        )
+        values
+        (
+            now(),
+            #{createUid},
+            #{orderNo},
+            #{shortName},
+            #{bankReservedPhoneNo},
+            #{iDCardNo},
+            #{cardType},
+            #{maritalStatus},
+            #{telephoneNo},
+            #{city},
+            #{jobType},
+            #{jobTypeName},
+            #{roleType},
+            #{roleTypeName},
+            #{cardTypeName},
+            #{maritalStatusName},
+            #{cityName},
+            #{pushStatus},
+            #{ynProductCode},
+            #{ynProductName}
+        )
+    </insert>
+
+    <update id="update" parameterType="YntrustBorrowDto">
+        update tbl_third_yntrust_borrow
+        <set>
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+
+            <if test="shortName != null and shortName!=''">
+                shortName = #{shortName},
+            </if>
+            <if test="bankReservedPhoneNo != null and bankReservedPhoneNo!=''">
+                bankReservedPhoneNo = #{bankReservedPhoneNo},
+            </if>
+            <if test="iDCardNo != null and iDCardNo!=''">
+                iDCardNo = #{iDCardNo},
+            </if>
+            <if test="cardType != null">
+                cardType = #{cardType},
+            </if>
+            <if test="cardTypeName != null and cardTypeName!=''">
+                cardTypeName = #{cardTypeName},
+            </if>
+            <if test="maritalStatus != null">
+                maritalStatus = #{maritalStatus},
+            </if>
+            <if test="maritalStatusName != null and maritalStatusName!=''">
+                maritalStatusName = #{maritalStatusName},
+            </if>
+            <if test="telephoneNo != null and telephoneNo!=''">
+                telephoneNo = #{telephoneNo},
+            </if>
+            <if test="city != null and city!=''">
+                city = #{city},
+            </if>
+            <if test="cityName != null and cityName!=''">
+                cityName = #{cityName},
+            </if>
+            <if test="jobType != null and jobType!=''">
+                jobType = #{jobType},
+            </if>
+            <if test="jobTypeName != null and jobTypeName!=''">
+                jobTypeName = #{jobTypeName},
+            </if>
+            <if test="roleType != null and roleType!=''">
+                roleType = #{roleType},
+            </if>
+            <if test="roleTypeName != null and roleTypeName!=''">
+                roleTypeName = #{roleTypeName},
+            </if>
+            <if test="pushStatus!=null">
+                pushStatus = #{pushStatus},
+            </if>
+             <if test="ynProductCode != null and ynProductCode!=''">
+                ynProductCode = #{ynProductCode},
+            </if>
+             <if test="ynProductName != null and ynProductName!=''">
+                ynProductName = #{ynProductName}, 
+            </if>
+        </set>
+        where orderNo = #{orderNo}
+    </update>
+    
+    <update id="updateMap" parameterType="java.util.Map">
+        update tbl_third_yntrust_borrow
+        <set>
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+
+            <if test="shortName != null and shortName!=''">
+                shortName = #{shortName},
+            </if>
+            <if test="bankReservedPhoneNo != null and bankReservedPhoneNo!=''">
+                bankReservedPhoneNo = #{bankReservedPhoneNo},
+            </if>
+            <if test="iDCardNo != null and iDCardNo!=''">
+                iDCardNo = #{iDCardNo},
+            </if>
+            <if test="cardType != null">
+                cardType = #{cardType},
+            </if>
+            <if test="cardTypeName != null and cardTypeName!=''">
+                cardTypeName = #{cardTypeName},
+            </if>
+            <if test="maritalStatus != null">
+                maritalStatus = #{maritalStatus},
+            </if>
+            <if test="maritalStatusName != null and maritalStatusName!=''">
+                maritalStatusName = #{maritalStatusName},
+            </if>
+            <if test="telephoneNo != null and telephoneNo!=''">
+                telephoneNo = #{telephoneNo},
+            </if>
+            <if test="city != null and city!=''">
+                city = #{city},
+            </if>
+            <if test="cityName != null and cityName!=''">
+                cityName = #{cityName},
+            </if>
+            <if test="jobType != null and jobType!=''">
+                jobType = #{jobType},
+            </if>
+            <if test="jobTypeName != null and jobTypeName!=''">
+                jobTypeName = #{jobTypeName},
+            </if>
+            <if test="roleType != null and roleType!=''">
+                roleType = #{roleType},
+            </if>
+            <if test="roleTypeName != null and roleTypeName!=''">
+                roleTypeName = #{roleTypeName},
+            </if>
+            <if test="ynProductCode != null and ynProductCode!=''">
+                ynProductCode = #{ynProductCode},
+            </if>
+             <if test="ynProductName != null and ynProductName!=''">
+                ynProductName = #{ynProductName}, 
+            </if>
+        </set>
+        where orderNo = #{orderNo}
+    </update>
+</mapper>

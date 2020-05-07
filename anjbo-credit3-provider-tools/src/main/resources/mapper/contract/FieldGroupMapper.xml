@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.contract.FieldGroupMapper">
+	<sql id="sqlwhereSearch">
+		<where>
+			<if test="null!=id and id>0"> AND `id`=#{id}</if>
+			<if test="null!=name and ''!=name"> AND `name`=#{name}</if>
+			<if test="null!=sort and ''!=sort"> AND `sort`=#{sort}</if>
+		</where>
+	</sql>
+
+	<!-- 获取实体 -->
+	<select id="find" parameterType="FieldGroupDto"
+		resultType="FieldGroupDto">
+		SELECT `id`, `name` ,`sort`
+		FROM tbl_common_field_group
+		<include refid="sqlwhereSearch" />
+	</select>
+
+	<!-- 查询 -->
+	<select id="search" parameterType="FieldGroupDto"
+		resultType="FieldGroupDto">
+		SELECT `id`, `name`,`sort`
+		FROM tbl_common_field_group
+		<include refid="sqlwhereSearch" />
+		order by `sort`
+		<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+	</select>
+
+	<!-- 查询 -->
+	<select id="count" parameterType="FieldGroupDto"
+		resultType="int">
+		SELECT count(1)
+		FROM tbl_common_field_group
+		<include refid="sqlwhereSearch" />
+	</select>
+
+
+	<!-- 增删改 -->
+	<insert id="insert" parameterType="FieldGroupDto"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tbl_common_field_group(
+		`name`,
+		`sort`
+		) VALUES(
+		#{name},
+		#{sort}
+		)
+	</insert>
+
+
+	<delete id="delete" parameterType="FieldGroupDto">
+		DELETE FROM tbl_common_field_group
+		<include refid="sqlwhereSearch" />
+	</delete>
+
+	<update id="update" parameterType="FieldGroupDto">
+		UPDATE tbl_common_field_group
+		<set>
+			<if test="null!=name">`name`=#{name},</if>
+			<if test="null!=sort">`sort`=#{sort},</if>
+		</set>
+		WHERE ID=#{id}
+	</update>
+
+	<select id="selectMaxSort" resultType="int">
+		SELECT
+		IF
+		( IFNULL( max(
+		`sort` ), "" ) = "", 1, max( `sort` ) )
+		FROM
+		tbl_common_field_group
+	</select>
+
+</mapper>

@@ -1,0 +1,50 @@
+<div class="container-fluid" id="allocationFund">
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;分配资金方信息
+		<a ng-show="!isEdit" style="display:inline-block;float:right;padding-right: 10px;" ui-sref="orderList" >返回上一步</a>
+		<span ng-show="isEdit" class="detail-trash2 text-danger" ng-click="deleteDetail('allocation-fund-detail')" >隐藏</span>
+		<div style="position:absolute;right:400px;top:0px;">
+			  <span id="elementFlag" ng-bind="elementFlag">是否已收到要件：是</span>
+			  <span><a id="elementInfo" ng-bind="elementInfo" ng-click="showDetail('elementEntrance');">要件详情</a></span>
+		</div>
+	</div>
+	<div class="col-md-12">
+		<table class="table table-hover table-bordered">
+			<thead>
+				<tr>
+					<th>说明</th>
+					<th>资金方代号</th> 
+					<th>放款金额</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td rowspan="{{dataList.length+1}}">按资金成本从低往高排列 </td>
+				</tr>
+				<tr ng-repeat="obj in dataList">
+					<td><label><span ng-bind="obj.fundDesc"></span></label></td>
+		            <td>
+					    <div class="form-inline">
+                                <label>放款金额：</label><span ng-bind="obj.loanAmount"></span>万&nbsp;&nbsp;&nbsp;&nbsp;
+								<!-- <span ng-if="obj.fundCode=='105'&&(obj.isHuaanPush==2||obj.isHuaanPush==3)">
+									推送给105资金方系统具体信息<span ng-if="obj.isHuaanPush==2">【推送成功】</span><span ng-if="obj.isHuaanPush==3">【推送失败】</span>:<a href="javascript:void(0);" ng-click="huaanShow(true);">点此查看</a>
+								</span>
+								<span ng-if="obj.fundCode=='110'&&(obj.isHuarongPush==2||obj.isHuarongPush==3)">
+									推送给110资金方系统具体信息<span ng-if="obj.isHuarongPush==2">【推送成功】</span><span ng-if="obj.isHuarongPush==3">【推送失败】</span>:<a href="javascript:void(0);" ng-click="huarongShow(true);">点此查看</a>
+								</span>
+								 -->
+		                </div>
+		            </td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div style="width:100%;clear:both; height:1px;"></div>
+	<div class="row relative" ng-if="remark!=null&&remark!=''">
+		<span class="remark-span remark-lhw" >备注:</span>
+		<textarea  ng-bind="remark"   class="remark-p remark-lhw-p textarea-lhw" readonly="readonly"/>
+	</div>
+	<allocation-fund-huaan-push-detail></allocation-fund-huaan-push-detail>
+	<allocation-fund-huarong-push-detail></allocation-fund-huarong-push-detail>
+</div>
+
+

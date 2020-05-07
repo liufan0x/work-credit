@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>要件退还</title>
+<!--标准mui.css-->
+<link rel="stylesheet" href="./css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="./css/order.css" />
+<link href="./css/mui.picker.min.css" rel="stylesheet" />
+</head>
+<body>
+<div class="form-box">
+<div class="detail-box">
+     <iframe src="detail.html" frameborder="0" id="detail-if" style="width:100%;height:307px;"></iframe>
+</div>
+<p class="toggle-p">展开查看订单信息</p>
+</div>
+<div class="form-box">
+     <div class="inp-div">
+           <span class="inp-span mi">要件退回时间</span><span class="inp-r icon-d"> &nbsp;</span>
+           <input type="text" value="" readonly class="inp-box date" data-options='{"type":"date","beginYear":2014,"endYear":2016}'  name="returnTime" placeholder="请选择">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">退回操作人</span><span class="inp-r">&nbsp;</span>
+           <input type="text" value=""  class="inp-box" name="returnHandleName"  placeholder="请输入">
+     </div>
+	  
+      <div class="inp-div no-border" >
+           <span class="inp-span mi">上传凭证</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" name="returnImgUrl" readonly class="inp-box" name="pic2" ></a>
+     </div>
+     <div class="clear"></div>
+</div>
+
+
+
+<div class="form-box">
+    <div class="clear"> </div>
+	<div class="inp-div no-border">
+           <span class="inp-span">备注</span>
+     </div>
+     <textarea id="textarea" rows="5" name="remark" placeholder="如有特殊说明，请在此备注（非必填）。" class="textarea-box"></textarea>
+	 <div class="clear"></div>
+     <div class="sub-but dis">确认</div>
+     <br>
+</div>
+
+
+ 
+
+<script src="./js/mui.min.js"></script>
+<script src="./js/mui.picker.min.js"></script>
+<script src="./js/jquery.min.js"></script>
+<script src="./js/process.js"></script>
+<script>
+  (function($, doc, $$) {
+
+	$.init();
+	$.ready(function() {
+
+	  $$(".sel").click(function(){
+		  var userPicker = new $.PopPicker();
+		  userPicker.setData([{
+			value: 'yes',
+			text: '是'
+		  }, {
+			value: 'no',
+			text: '否'
+		  }]);
+		  var _this=$$(this);
+		  userPicker.show(function(items) {
+				_this.val((items[0].text));
+				//返回 false 可以阻止选择框的关闭
+				//return false;
+			});
+
+	  });
+
+	  $$(".date").on("click",function(){
+		  var _this=$$(this);
+		  var optionsJson = _this.attr('data-options') || '{}';
+		  var options = JSON.parse(optionsJson);
+		   var  picker = new $.DtPicker(options);
+		  picker.show(function(rs) {
+			  _this.val(rs.text);
+			   picker.dispose();
+			});
+
+	  });
+
+	  $$(".toggle-p").on("click",function(){
+		  $$(this).prev(".detail-box").toggle();
+	  })
+
+	});
+})(mui, document,jQuery);
+
+
+  $(".sub-but").click(function(){
+	  var orderNo = GetQueryString("orderNo");
+	  var returnTime = $("input[name='returnTime']").val();
+	  var returnHandleName = $("input[name='returnHandleName']").val();
+	  var returnImgUrl = $("input[name='returnImgUrl']").val();
+	  var remark = $("textarea[name='remark']").val()
+	  var flg = checkInput(returnTime,returnHandleName,returnImgUrl);
+	  if(!flg){
+		  return;
+	  }
+
+	  var content = {
+		  "orderNo":orderNo,
+		  "returnTime":returnTime,
+		  "returnHandleName":returnHandleName,
+		  "returnImgUrl":returnImgUrl,
+		  "remark":remark
+	  }
+
+	  $.ajax({
+		  url:'/credit/element/return/v/insert',
+		  data:JSON.stringify(content),
+		  type: 'post' ,
+		  dataType: 'json',
+		  contentType:'application/json;charset=utf-8',
+		  success: function(data){
+			  alert(data.msg);
+		  }
+	  });
+  });
+
+	function checkInput(obj1,obj2,obj3){
+		var returnTime = obj1;
+		var returnHandleName = obj2;
+		var returnImgUrl = obj3;
+		if(null==returnTime||""==returnTime){
+			alert("要件退回时间不能为空");
+			return false;
+		} else if(null==returnHandleName||""==returnHandleName){
+			alert("退回操作人不能为空");
+			return false;
+		} /*else if(null==returnImgUrl||""==returnImgUrl){
+			alert("请上传凭证");
+			return false;
+		}*/
+		return true;
+	}
+</script>
+</body>
+</html>

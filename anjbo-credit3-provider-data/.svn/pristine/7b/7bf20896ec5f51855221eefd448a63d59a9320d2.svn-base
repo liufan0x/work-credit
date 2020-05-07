@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.DictMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND id=#{id}</if>
+		<if test="null!=code and ''!=code"> AND code=#{code}</if>
+		<if test="null!=pcode and ''!=pcode"> AND pcode=#{pcode}</if>
+		<!-- <if test="null==pcode"> AND pcode is null</if> -->
+		<if test="null!=name and ''!=name"> AND name = #{name} </if>
+		<if test="null!=type and ''!=type"> AND type = #{type} </if>
+		<if test="null!=sort and sort>0"> AND sort=#{sort}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="DictDto" resultType="DictDto">    
+	SELECT id, code, pcode, name, type, sort 
+	FROM tbl_common_dict 
+	<include refid="sqlwhereSearch"/>
+  </select>
+  
+  
+   <!-- 获取实体 -->
+  <select id="findDto" parameterType="DictDto" resultType="DictDto">    
+	SELECT id, code, pcode, name, type, sort 
+	FROM tbl_common_dict 
+	where code = #{code} and type=#{type}
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="DictDto" resultType="DictDto">
+	SELECT id, code, pcode, name, type, sort
+	FROM tbl_common_dict 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="DictDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_common_dict 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="DictDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_common_dict(
+		<if test="null!=code">code,</if>
+		<if test="null!=pcode">pcode,</if>
+		<if test="null!=name">name,</if>
+		<if test="null!=type">type,</if>
+		<if test="null!=sort">sort</if>
+	) VALUES(
+		<if test="null!=code">#{code},</if>
+		<if test="null!=pcode">#{pcode},</if>
+		<if test="null!=name">#{name},</if>
+		<if test="null!=type">#{type},</if>
+		<if test="null!=sort">#{sort}</if>
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="DictDto" >
+    DELETE FROM tbl_common_dict 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="DictDto" >
+    UPDATE tbl_common_dict
+	<set>
+		<if test="null!=code">code=#{code},</if>
+		<if test="null!=pcode">pcode=#{pcode},</if>
+		<if test="null!=name">name=#{name},</if>
+		<if test="null!=type">type=#{type},</if>
+		<if test="null!=sort">sort=#{sort}</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+
+    <!-- 批量增删改 -->
+  <insert id="batchInsert" parameterType="DictDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_common_dict(
+		code,
+		pcode,
+		name,
+		type,
+		sort
+	) VALUES
+	<foreach collection="list" index="index" item="item" separator="," >
+	(
+		#{item.code},
+		#{item.pcode},
+		#{item.name},
+		#{item.type},
+		#{item.sort}
+	)
+	</foreach>
+  </insert>
+
+
+  <delete id="batchDelete" parameterType="DictDto" >
+    <foreach collection="list" index="index" item="item" separator=";" >
+    DELETE FROM tbl_common_dict 
+	WHERE ID=#{item.id}
+	</foreach>
+  </delete>
+  
+  <update id="batchUpdate" parameterType="DictDto" >
+    <foreach collection="list" index="index" item="item" separator=";" >
+    UPDATE tbl_common_dict
+	<set>
+		<if test="null!=item.code">code=#{item.code},</if>
+		<if test="null!=item.pcode">pcode=#{item.pcode},</if>
+		<if test="null!=item.name">name=#{item.name},</if>
+		<if test="null!=item.type">type=#{item.type},</if>
+		<if test="null!=item.sort">sort=#{item.sort}</if>
+	</set>
+	WHERE ID=#{item.id}
+	</foreach>
+  </update>
+</mapper>

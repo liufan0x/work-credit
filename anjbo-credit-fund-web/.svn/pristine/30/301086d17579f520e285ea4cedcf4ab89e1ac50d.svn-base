@@ -1,0 +1,85 @@
+<style>
+.form-inline.w165 label{width:165px;}
+ 
+</style>
+	<div class="row form-inline w165 detail-row-min" >
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;客户征信资料</div>
+		<div class="col-md-6 col-lg-4"><label>信用卡年限：</label>
+			<span ng-bind="credit.creditCardYears"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>个人贷款记录年限：</label>
+			<span ng-bind="credit.loanRecordYears"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label style="width:235px;">个人贷款、信用卡累计有效违约率：</label>
+			<span ng-bind="credit.violationProportion"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>所有房产评估总值：</label>
+			<span ng-bind="credit.allHouseWorth"></span>万元
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>房产套数：</label>
+			<span ng-bind="credit.allHouseNumber"></span>套
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>信用卡半年月均透支额：</label>
+			<span ng-bind="credit.creditCardOverdraft"></span>万元
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>授信总额：</label>
+			<span ng-bind="credit.creditQuota"></span>万元
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>已用额度：</label>
+			<span ng-bind="credit.useQuota"></span>万元
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>征信总负债：</label>
+			<span ng-bind="credit.creditLiabilities"></span>万元
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>负债比例：</label>
+			<span ng-bind="credit.liabilitiesProportion"></span>%
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>借款成数：</label>
+			<span ng-bind="credit.loanPercentage"></span>%
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>债务置换贷款成数：</label>
+			<span ng-bind="credit.foreclosurePercentage"></span>%
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>近2年征信报告逾期：</label>
+			<span ng-bind="credit.creditOverdueNumber"></span>次
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>近半年征信查询次数：</label>
+			<span ng-bind="credit.latelyHalfYearSelectNumber"></span>次
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>是否公司产权：</label>
+			<span ng-bind="credit.isCompanyProperty"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>原贷款是否银行：</label>
+			<span ng-if="credit.oldLoanIsBank==1">是</span>
+			<span ng-if="credit.oldLoanIsBank==2">否</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>新贷款是否银行：</label>
+			<span ng-if="credit.newLoanIsBank==1">是</span>
+			<span ng-if="credit.newLoanIsBank==2">否</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>产权抵押情况：</label>
+			<span ng-bind="credit.propertyMortgage"></span>
+		</div>
+		
+		<!-- <div class="col-md-12 col-lg-12">
+			<label class="remark-span remark-lhw">备注：</label>
+			<textarea ng-bind="credit.remark" class="remark-p remark-lhw-p textarea-lhw" readonly="readonly" ></textarea>
+		</div> -->
+	</div>

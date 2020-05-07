@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.lineparty.PlatformMapper">
+
+	<select id="selectOne" parameterType="String" resultType="PlatformDto">
+		select * from tbl_third_platform where idCardNumber = #{idCardNumber}
+	</select>
+  
+   <insert id="insertOne" parameterType="PlatformDto">
+        INSERT INTO tbl_third_platform
+        (
+            idCardType,
+            idCardNumber,
+            customerName,
+            insuranceFile,
+            status,
+            createTime
+        )
+        values
+        (
+            #{idCardType},
+            #{idCardNumber},
+            #{customerName},
+            #{insuranceFile},
+            #{status},
+            now()
+        )
+    </insert>
+</mapper>

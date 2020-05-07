@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>图片查看器</title>
+    <link rel="stylesheet" href="photoGallery.css"/>
+      <script src="dragiframe.js"></script>
+    <script src="jquery.js"></script>
+    <script src="jquery.photo.gallery.js"></script>
+</head>
+<body onLoad="addHandle(document.getElementById('dragHeader'), window);">
+<div class="box">
+	<header id="dragHeader" style="background:#333a47;cursor:pointer;z-index:10000">
+		<div class="winControl">
+	        <span class="closeWin" title="关闭"><i class="icon_close-big"></i></span>
+	    </div>
+	</header>
+	<div class="gallery"></div>
+	<div class="scaleBtn">
+		<span class="scaleBtn1" title="缩放窗口"><i class="icon_yidong-big"></i></span>
+	</div>
+</div>
+<script>
+	$.initGallery();
+	console.log($('iframe').length);
+</script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.huarong.LcAppointMapper" >
+
+    <select id="getLcAppoint" parameterType="String" resultType="map">  
+         select * from  tbl_third_hr_lc_appoint  where  orderNo=#{orderNo} order by id DESC limit 0,1
+    </select>  
+
+	<!-- 添加订单共同担保人信息 -->
+	<insert id="saveLcAppoint" parameterType="Map">
+		INSERT INTO tbl_third_hr_lc_appoint  (
+			applSeq,
+			orderNo,
+			custName,
+			idType,
+			idNo,
+			mobile,
+			mtdCde,
+			applyAmt,
+			applyTnr,
+			apr,
+		    useHr,
+			cooprCode,
+			applyTnrUnit,
+			apprvAmt,
+			productId,
+			loanCooprCode
+
+		)
+		VALUES
+		(
+			#{applSeq},
+			#{orderNo},
+			#{custName},
+			#{idType},
+			#{idNo},
+			#{mobile},
+			#{mtdCde},
+			#{applyAmt},
+			#{applyTnr},
+			#{apr},
+		     #{use},
+			#{cooprCode},
+			#{applyTnrUnit},
+			#{apprvAmt},
+			#{productId},
+			#{loanCooprCode}
+		)
+	</insert>
+	
+</mapper>

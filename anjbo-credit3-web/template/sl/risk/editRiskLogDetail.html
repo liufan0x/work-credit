@@ -1,0 +1,10 @@
+<div class="container-fluid" ng-show="dataList.length>0">
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;风控修改征信日志
+	</div>
+	<div class="col-md-12 detail-row">
+		&nbsp;&nbsp;操作记录（操作人：<span ng-bind="handleName"/>）
+		<p class="gray" ng-repeat="obj in dataList">{{$index+1}}:将【{{obj.colName}}】从"{{obj.startVal}}"改为"{{obj.endVal}}";{{obj.createTime|date:'yyyy-MM-dd HH:mm:ss'}}</p>
+	</div>
+</div>
+
+

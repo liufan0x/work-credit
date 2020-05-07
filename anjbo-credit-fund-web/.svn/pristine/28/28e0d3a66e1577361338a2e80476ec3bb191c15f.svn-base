@@ -1,0 +1,72 @@
+<form name="huarongKgLoanForm">
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;放款数据</div>
+    <div class="row form-inline detail-row w112" style="padding:0 10px;">
+        <div class="col-md-6 col-lg-4">
+            <label>申请人姓名: </label>
+            <span ng-bind="kgLoan.custName"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>证件类型:</label>
+            <span ng-bind="kgLoan.idType"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>证件号: </label>
+            <span ng-bind="kgLoan.idNo"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>贷款申请金额: </label>
+            <span ng-bind="kgLoan.applyAmt"></span> 万元
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>贷款申请金额: </label>
+            <span ng-bind="kgLoan.apprvAmt"></span> 万元
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>申请期限单位: </label>
+            <span ng-bind="kgLoan.applyTnrUnit"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>申请期限: </label>
+            <span ng-bind="kgLoan.applyTnr"></span> <span ng-bind="kgLoan.applyTnrUnit"/>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>还款方式: </label>
+            <span ng-bind="kgLoan.mtdCde"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>借款人利率: </label>
+            <span ng-bind="kgLoan.apr"></span>%/天
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>罚息执行利率: </label>
+            <span ng-bind="kgLoan.odIntRate"></span>%/天
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>合作商贴息比例: </label>
+            <span ng-bind="kgLoan.sysbPct"></span>%
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>合作商贴息金额: </label>
+            <span ng-bind="kgLoan.sysbAmt"></span>元
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>助贷商贴息比例: </label>
+            <span ng-bind="kgLoan.hrdPct"></span>%
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>助贷商贴息金额: </label>
+            <span ng-bind="kgLoan.hrdAmt"></span>元
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>是否差额打款:</label>
+            <span ng-bind="kgLoan.ifCeOut"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>起息日: </label>
+            <span ng-bind="kgLoan.repaymentTime"></span>
+        </div>
+
+    </div>
+</div>
+</form>

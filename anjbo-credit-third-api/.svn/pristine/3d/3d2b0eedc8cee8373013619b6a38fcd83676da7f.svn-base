@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.yntrust.YntrustRequestFlowMapper">
+
+
+    <sql id="Base_Column_List">
+        id, createUid, createTime, orderNo,
+         requestId, requestInterfaceName, requestInterface,
+         responseMsg,responseStatusMsg,requestMsg
+    </sql>
+    <sql id="selectWhere">
+        <if test="requestId!=null and requestId!=''">
+            AND requestId = #{requestId}
+        </if>
+        <if test="requestInterface!=null and requestInterface!=''">
+            AND requestInterface = #{requestInterface}
+        </if>
+        <if test="orderNo!=null and orderNo!=''">
+            AND orderNo = #{orderNo}
+        </if>
+    </sql>
+    <select id="list" parameterType="YntrustRequestFlowDto" resultType="YntrustRequestFlowDto">
+        select
+        <include refid="Base_Column_List" />
+        from tbl_third_yntrust_request_flow
+        where 1=1
+        <include refid="selectWhere"/>
+    </select>
+    <delete id="delete" parameterType="YntrustRequestFlowDto">
+        delete from tbl_third_yntrust_request_flow
+        where id = #{id}
+    </delete>
+    <insert id="insert" parameterType="YntrustRequestFlowDto">
+        insert into tbl_third_yntrust_request_flow
+        (
+            createUid,
+            createTime,
+            orderNo,
+            requestId,
+            requestInterfaceName,
+            requestInterface,
+            responseMsg,
+            responseStatusMsg,
+            requestMsg
+        )
+        values
+        (
+            #{createUid},
+            now(),
+            #{orderNo},
+            #{requestId},
+            #{requestInterfaceName},
+            #{requestInterface},
+            #{responseMsg},
+            #{responseStatusMsg},
+            #{requestMsg}
+        )
+    </insert>
+
+    <update id="update" parameterType="YntrustRequestFlowDto">
+        update tbl_third_yntrust_request_flow
+        <set>
+            <if test="requestId != null and requestId!=''">
+                requestId = #{requestId},
+            </if>
+            <if test="requestInterfaceName != null and requestInterfaceName!=''">
+                requestInterfaceName = #{requestInterfaceName},
+            </if>
+            <if test="requestInterface != null and requestInterface!=''">
+                requestInterface = #{requestInterface},
+            </if>
+            <if test="responseMsg != null and responseMsg!=''">
+                responseMsg = #{responseMsg},
+            </if>
+            <if test="responseStatusMsg != null and responseStatusMsg!=''">
+                responseStatusMsg = #{responseStatusMsg},
+            </if>
+            <if test="requestMsg!=null and requestMsg!=''">
+                requestMsg = #{requestMsg},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

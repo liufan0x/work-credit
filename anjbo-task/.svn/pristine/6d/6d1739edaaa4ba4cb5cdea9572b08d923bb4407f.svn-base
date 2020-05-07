@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.mort.estateprice.NetworkOfferMapper">
+
+    <select id="selectNetworkOfferDtoByPropertyNameAndCity" parameterType="string" resultType="com.anjbo.bean.estateprice.NetworkOfferDto">
+        select * from (SELECT label as propertyName,city,AVG(unitPrice) as avgPrice FROM `tbl_enquiry_detail_network_offer` GROUP BY label,city) a
+        where a.propertyName=#{0} and a.city=#{1}
+    </select>
+
+    <select id="selectNetworkOfferDtoAll" resultType="com.anjbo.bean.estateprice.NetworkOfferDto">
+        SELECT label as propertyName,city,AVG(unitPrice) as avgPrice FROM `tbl_enquiry_detail_network_offer` GROUP BY label,city
+    </select>
+    <select id="selectNetworkOfferDtoAllByArea" resultType="com.anjbo.bean.estateprice.NetworkOfferDto">
+        SELECT label as propertyName,city,AVG(unitPrice) as avgPrice
+        FROM `tbl_enquiry_detail_network_offer` where area>#{0} and area &lt;=#{1} GROUP BY label,city
+    </select>
+    <select id="selectNetworkOfferByCity" parameterType="java.lang.String" resultType="java.lang.String">
+    	select DISTINCT label from tbl_enquiry_detail_network_offer where city = #{0}
+    </select>
+</mapper>

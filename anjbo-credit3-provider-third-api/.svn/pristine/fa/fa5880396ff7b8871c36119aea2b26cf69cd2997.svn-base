@@ -1,0 +1,569 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.yntrust.YntrustContractMapper">
+
+    <sql id="Base_Column_List">
+        id, createTime, createUid, updateTime, updateUid, orderNo, shortName, amount, signRate,
+        signDayRate, signDate, beginDate, repaymentCycle, repaymentCycleName, repaymentMode, 
+        repaymentModeName, repaymentPeriod, borrowingDays, loanContractNumber, accountno, 
+        bankcode, bankId, bankName, branchBankId, branchbankname, bankcardAttributionProvinceName, 
+        bankcardAttributionProvinceCode, bankcardAttributionCityName, bankcardAttributionCityCode, 
+        contractAmount, accountname,`type`, typeName, paymentsBankCode, paymentsBankId, paymentsBankName,
+        paymentsSubBankName, paymentsSubBankId, paymentsBankAttributionProvinceCode, paymentsBankAttributionProvinceName, 
+        paymentsBankAttributionCityCode, paymentsBankAttributionCityName, paymentsBankAccountName, 
+        paymentsBankAccount,pushStatus,address,overdueRate,overdueDayRate,bankcardAttributionCountyCode,
+        bankcardAttributionCountyName,paymentsBankAttributionCountyCode,paymentsBankAttributionCountyName,
+        ynProductCode,ynProductName
+    </sql>
+    <select id="select" parameterType="YntrustContractDto" resultType="YntrustContractDto">
+        select
+        <include refid="Base_Column_List" />
+        from tbl_third_yntrust_contract
+        where orderNo = #{orderNo}
+        <if test="pushStatus!=null">
+            AND pushStatus = #{pushStatus}
+        </if>
+       <!--   <if test="ynProductCode!=null">
+            AND ynProductCode = #{ynProductCode}
+        </if> -->
+        ORDER BY createTime DESC limit 1
+    </select>
+
+    <delete id="delete" parameterType="YntrustContractDto">
+        delete from tbl_third_yntrust_contract
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteByOrderNo" parameterType="java.lang.String">
+        DELETE FROM tbl_third_yntrust_contract WHERE orderNo = #{orderNo}
+    </delete>
+
+    <insert id="insert" parameterType="YntrustContractDto">
+        INSERT INTO tbl_third_yntrust_contract
+        (
+            createTime,
+            createUid,
+            orderNo,
+            shortName,
+            amount,
+            signRate,
+            signDayRate,
+            signDate,
+            beginDate,
+            repaymentCycle,
+            repaymentCycleName,
+            repaymentMode,
+            repaymentModeName,
+            repaymentPeriod,
+            borrowingDays,
+            loanContractNumber,
+            accountno,
+            bankcode,
+            bankId,
+            bankName,
+            branchBankId,
+            branchbankname,
+            bankcardAttributionProvinceName,
+            bankcardAttributionProvinceCode,
+            bankcardAttributionCityName,
+            bankcardAttributionCityCode,
+            contractAmount,
+            accountname,
+            `type`,
+            typeName,
+            paymentsBankCode,
+            paymentsBankId,
+            paymentsBankName,
+            paymentsSubBankName,
+            paymentsSubBankId,
+            paymentsBankAttributionProvinceCode,
+            paymentsBankAttributionProvinceName,
+            paymentsBankAttributionCityCode,
+            paymentsBankAttributionCityName,
+            paymentsBankAccountName,
+            paymentsBankAccount,
+            pushStatus,
+            address,
+            overdueRate,
+            overdueDayRate,
+            bankcardAttributionCountyCode,
+            bankcardAttributionCountyName,
+            paymentsBankAttributionCountyCode,
+            paymentsBankAttributionCountyName,
+            ynProductCode,
+            ynProductName
+        )
+        VALUES
+        (
+            now(),
+            #{createUid},
+            #{orderNo},
+            #{shortName},
+            #{amount},
+            #{signRate},
+            #{signDayRate},
+            #{signDate},
+            #{beginDate},
+            #{repaymentCycle},
+            #{repaymentCycleName},
+            #{repaymentMode},
+            #{repaymentModeName},
+            #{repaymentPeriod},
+            #{borrowingDays},
+            #{loanContractNumber},
+            #{accountno},
+            #{bankcode},
+            #{bankId},
+            #{bankName},
+            #{branchBankId},
+            #{branchbankname},
+            #{bankcardAttributionProvinceName},
+            #{bankcardAttributionProvinceCode},
+            #{bankcardAttributionCityName},
+            #{bankcardAttributionCityCode},
+            #{contractAmount},
+            #{accountname},
+            #{type},
+            #{typeName},
+            #{paymentsBankCode},
+            #{paymentsBankId},
+            #{paymentsBankName},
+            #{paymentsSubBankName},
+            #{paymentsSubBankId},
+            #{paymentsBankAttributionProvinceCode},
+            #{paymentsBankAttributionProvinceName},
+            #{paymentsBankAttributionCityCode},
+            #{paymentsBankAttributionCityName},
+            #{paymentsBankAccountName},
+            #{paymentsBankAccount},
+            #{pushStatus},
+            #{address},
+            #{overdueRate},
+            #{overdueDayRate},
+            #{bankcardAttributionCountyCode},
+            #{bankcardAttributionCountyName},
+            #{paymentsBankAttributionCountyCode},
+            #{paymentsBankAttributionCountyName},
+            #{ynProductCode},
+            #{ynProductName}
+        )
+    </insert>
+    <insert id="insertMap" parameterType="java.util.Map">
+        INSERT INTO tbl_third_yntrust_contract
+        (
+            createTime,
+            createUid,
+            orderNo,
+            shortName,
+            amount,
+            signRate,
+            signDayRate,
+            signDate,
+            beginDate,
+            repaymentCycle,
+            repaymentCycleName,
+            repaymentMode,
+            repaymentModeName,
+            repaymentPeriod,
+            borrowingDays,
+            loanContractNumber,
+            accountno,
+            bankcode,
+            bankId,
+            bankName,
+            branchBankId,
+            branchbankname,
+            bankcardAttributionProvinceName,
+            bankcardAttributionProvinceCode,
+            bankcardAttributionCityName,
+            bankcardAttributionCityCode,
+            contractAmount,
+            accountname,
+            `type`,
+            typeName,
+            paymentsBankCode,
+            paymentsBankId,
+            paymentsBankName,
+            paymentsSubBankName,
+            paymentsSubBankId,
+            paymentsBankAttributionProvinceCode,
+            paymentsBankAttributionProvinceName,
+            paymentsBankAttributionCityCode,
+            paymentsBankAttributionCityName,
+            paymentsBankAccountName,
+            paymentsBankAccount,
+            pushStatus,
+            address,
+            overdueRate,
+            overdueDayRate,
+            bankcardAttributionCountyCode,
+            bankcardAttributionCountyName,
+            paymentsBankAttributionCountyCode,
+            paymentsBankAttributionCountyName,
+            ynProductCode,
+            ynProductName
+        )
+        VALUES
+        (
+            now(),
+            #{createUid},
+            #{orderNo},
+            #{shortName},
+            #{amount},
+            #{signRate},
+            #{signDayRate},
+            #{signDate},
+            #{beginDate},
+            #{repaymentCycle},
+            #{repaymentCycleName},
+            #{repaymentMode},
+            #{repaymentModeName},
+            #{repaymentPeriod},
+            #{borrowingDays},
+            #{loanContractNumber},
+            #{accountno},
+            #{bankcode},
+            #{bankId},
+            #{bankName},
+            #{branchBankId},
+            #{branchbankname},
+            #{bankcardAttributionProvinceName},
+            #{bankcardAttributionProvinceCode},
+            #{bankcardAttributionCityName},
+            #{bankcardAttributionCityCode},
+            #{contractAmount},
+            #{accountname},
+            #{type},
+            #{typeName},
+            #{paymentsBankCode},
+            #{paymentsBankId},
+            #{paymentsBankName},
+            #{paymentsSubBankName},
+            #{paymentsSubBankId},
+            #{paymentsBankAttributionProvinceCode},
+            #{paymentsBankAttributionProvinceName},
+            #{paymentsBankAttributionCityCode},
+            #{paymentsBankAttributionCityName},
+            #{paymentsBankAccountName},
+            #{paymentsBankAccount},
+            #{pushStatus},
+            #{address},
+            #{overdueRate},
+            #{overdueDayRate},
+            #{bankcardAttributionCountyCode},
+            #{bankcardAttributionCountyName},
+            #{paymentsBankAttributionCountyCode},
+            #{paymentsBankAttributionCountyName},
+            #{ynProductCode},
+            #{ynProductName}
+        )
+    </insert>
+
+    <update id="update" parameterType="YntrustContractDto">
+        update tbl_third_yntrust_contract
+        <set>
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+            <if test="shortName != null and shortName!=''">
+                shortName = #{shortName},
+            </if>
+            <if test="amount != null">
+                amount = #{amount},
+            </if>
+            <if test="signRate != null">
+                signRate = #{signRate},
+            </if>
+            <if test="signDayRate != null">
+                signDayRate = #{signDayRate},
+            </if>
+            <if test="signDate != null">
+                signDate = #{signDate},
+            </if>
+            <if test="beginDate != null">
+                beginDate = #{beginDate},
+            </if>
+            <if test="repaymentCycle != null and repaymentCycle!=''">
+                repaymentCycle = #{repaymentCycle},
+            </if>
+            <if test="repaymentCycleName != null and repaymentCycleName!=''">
+                repaymentCycleName = #{repaymentCycleName},
+            </if>
+            <if test="repaymentMode != null and repaymentMode!=''">
+                repaymentMode = #{repaymentMode},
+            </if>
+            <if test="repaymentModeName != null and repaymentModeName!=''">
+                repaymentModeName = #{repaymentModeName},
+            </if>
+            <if test="repaymentPeriod != null">
+                repaymentPeriod = #{repaymentPeriod},
+            </if>
+            <if test="borrowingDays != null">
+                borrowingDays = #{borrowingDays},
+            </if>
+            <if test="loanContractNumber != null and loanContractNumber!=''">
+                loanContractNumber = #{loanContractNumber},
+            </if>
+            <if test="accountno != null and accountno!=''">
+                accountno = #{accountno},
+            </if>
+            <if test="bankcode != null and bankcode!=''">
+                bankcode = #{bankcode},
+            </if>
+            <if test="bankId != null and bankId!=''">
+                bankId = #{bankId},
+            </if>
+            <if test="bankName != null and bankName!=''">
+                bankName = #{bankName},
+            </if>
+            <if test="branchBankId != null">
+                branchBankId = #{branchBankId},
+            </if>
+            <if test="branchbankname != null and branchbankname!=''">
+                branchbankname = #{branchbankname},
+            </if>
+            <if test="bankcardAttributionProvinceName != null and bankcardAttributionProvinceName!=''">
+                bankcardAttributionProvinceName = #{bankcardAttributionProvinceName},
+            </if>
+            <if test="bankcardAttributionProvinceCode != null and bankcardAttributionProvinceCode!=''">
+                bankcardAttributionProvinceCode = #{bankcardAttributionProvinceCode},
+            </if>
+            <if test="bankcardAttributionCityName != null and bankcardAttributionCityName!=''">
+                bankcardAttributionCityName = #{bankcardAttributionCityName},
+            </if>
+            <if test="bankcardAttributionCityCode != null and bankcardAttributionCityCode!=''">
+                bankcardAttributionCityCode = #{bankcardAttributionCityCode},
+            </if>
+            <if test="contractAmount != null">
+                contractAmount = #{contractAmount},
+            </if>
+            <if test="accountname != null and accountname!=''">
+                accountname = #{accountname},
+            </if>
+            <if test="type != null and type!=''">
+                `type` = #{type},
+            </if>
+            <if test="typeName != null and typeName!=''">
+                typeName = #{typeName},
+            </if>
+            <if test="paymentsBankCode != null and paymentsBankCode!=''">
+                paymentsBankCode = #{paymentsBankCode},
+            </if>
+            <if test="paymentsBankId != null">
+                paymentsBankId = #{paymentsBankId},
+            </if>
+            <if test="paymentsBankName != null and paymentsBankName!=''">
+                paymentsBankName = #{paymentsBankName},
+            </if>
+            <if test="paymentsSubBankName != null and paymentsSubBankName!=''">
+                paymentsSubBankName = #{paymentsSubBankName},
+            </if>
+            <if test="paymentsSubBankId != null">
+                paymentsSubBankId = #{paymentsSubBankId},
+            </if>
+            <if test="paymentsBankAttributionProvinceCode != null and paymentsBankAttributionProvinceCode!=''">
+                paymentsBankAttributionProvinceCode = #{paymentsBankAttributionProvinceCode},
+            </if>
+            <if test="paymentsBankAttributionProvinceName != null and paymentsBankAttributionProvinceName!=''">
+                paymentsBankAttributionProvinceName = #{paymentsBankAttributionProvinceName},
+            </if>
+            <if test="paymentsBankAttributionCityCode != null and paymentsBankAttributionCityCode!=''">
+                paymentsBankAttributionCityCode = #{paymentsBankAttributionCityCode},
+            </if>
+            <if test="paymentsBankAttributionCityName != null and paymentsBankAttributionCityName!=''">
+                paymentsBankAttributionCityName = #{paymentsBankAttributionCityName},
+            </if>
+            <if test="paymentsBankAccountName != null and paymentsBankAccountName!=''">
+                paymentsBankAccountName = #{paymentsBankAccountName},
+            </if>
+            <if test="paymentsBankAccount != null and paymentsBankAccount!=''">
+                paymentsBankAccount = #{paymentsBankAccount},
+            </if>
+            <if test="pushStatus!=null">
+                pushStatus = #{pushStatus},
+            </if>
+            <if test="address!=null">
+                address = #{address},
+            </if>
+            <if test="overdueRate!=null">
+                overdueRate = #{overdueRate},
+            </if>
+            <if test="overdueDayRate!=null">
+                overdueDayRate = #{overdueDayRate},
+            </if>
+            <if test="bankcardAttributionCountyCode!=null and bankcardAttributionCountyCode!=''">
+                bankcardAttributionCountyCode = #{bankcardAttributionCountyCode},
+            </if>
+            <if test="bankcardAttributionCountyName!=null and bankcardAttributionCountyName!=''">
+                bankcardAttributionCountyName = #{bankcardAttributionCountyName},
+            </if>
+            <if test="paymentsBankAttributionCountyCode!=null and paymentsBankAttributionCountyCode!=''">
+                paymentsBankAttributionCountyCode = #{paymentsBankAttributionCountyCode},
+            </if>
+           <if test="paymentsBankAttributionCountyName!=null and paymentsBankAttributionCountyName!=''">
+               paymentsBankAttributionCountyName = #{paymentsBankAttributionCountyName},
+           </if>
+           <if test="ynProductCode != null and ynProductCode!=''">
+                ynProductCode = #{ynProductCode},
+           </if>
+           <if test="ynProductName != null and ynProductName!=''">
+                ynProductName = #{ynProductName}, 
+           </if> 
+        </set>
+        where orderNo = #{orderNo}
+    </update>
+
+    <update id="updateMap" parameterType="java.util.Map">
+        update tbl_third_yntrust_contract
+        <set>
+           <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+            <if test="shortName != null and shortName!=''">
+                shortName = #{shortName},
+            </if>
+            <if test="amount != null">
+                amount = #{amount},
+            </if>
+            <if test="signRate != null">
+                signRate = #{signRate},
+            </if>
+            <if test="signDayRate != null">
+                signDayRate = #{signDayRate},
+            </if>
+            <if test="signDate != null">
+                signDate = #{signDate},
+            </if>
+            <if test="beginDate != null">
+                beginDate = #{beginDate},
+            </if>
+            <if test="repaymentCycle != null and repaymentCycle!=''">
+                repaymentCycle = #{repaymentCycle},
+            </if>
+            <if test="repaymentCycleName != null and repaymentCycleName!=''">
+                repaymentCycleName = #{repaymentCycleName},
+            </if>
+            <if test="repaymentMode != null and repaymentMode!=''">
+                repaymentMode = #{repaymentMode},
+            </if>
+            <if test="repaymentModeName != null and repaymentModeName!=''">
+                repaymentModeName = #{repaymentModeName},
+            </if>
+            <if test="repaymentPeriod != null">
+                repaymentPeriod = #{repaymentPeriod},
+            </if>
+            <if test="borrowingDays != null">
+                borrowingDays = #{borrowingDays},
+            </if>
+            <if test="loanContractNumber != null and loanContractNumber!=''">
+                loanContractNumber = #{loanContractNumber},
+            </if>
+            <if test="accountno != null and accountno!=''">
+                accountno = #{accountno},
+            </if>
+            <if test="bankcode != null and bankcode!=''">
+                bankcode = #{bankcode},
+            </if>
+            <if test="bankId != null and bankId!=''">
+                bankId = #{bankId},
+            </if>
+            <if test="bankName != null and bankName!=''">
+                bankName = #{bankName},
+            </if>
+            <if test="branchBankId != null">
+                branchBankId = #{branchBankId},
+            </if>
+            <if test="branchbankname != null and branchbankname!=''">
+                branchbankname = #{branchbankname},
+            </if>
+            <if test="bankcardAttributionProvinceName != null and bankcardAttributionProvinceName!=''">
+                bankcardAttributionProvinceName = #{bankcardAttributionProvinceName},
+            </if>
+            <if test="bankcardAttributionProvinceCode != null and bankcardAttributionProvinceCode!=''">
+                bankcardAttributionProvinceCode = #{bankcardAttributionProvinceCode},
+            </if>
+            <if test="bankcardAttributionCityName != null and bankcardAttributionCityName!=''">
+                bankcardAttributionCityName = #{bankcardAttributionCityName},
+            </if>
+            <if test="bankcardAttributionCityCode != null and bankcardAttributionCityCode!=''">
+                bankcardAttributionCityCode = #{bankcardAttributionCityCode},
+            </if>
+            <if test="contractAmount != null">
+                contractAmount = #{contractAmount},
+            </if>
+            <if test="accountname != null and accountname!=''">
+                accountname = #{accountname},
+            </if>
+            <if test="type != null and type!=''">
+                `type` = #{type},
+            </if>
+            <if test="typeName != null and typeName!=''">
+                typeName = #{typeName},
+            </if>
+            <if test="paymentsBankCode != null and paymentsBankCode!=''">
+                paymentsBankCode = #{paymentsBankCode},
+            </if>
+            <if test="paymentsBankId != null">
+                paymentsBankId = #{paymentsBankId},
+            </if>
+            <if test="paymentsBankName != null and paymentsBankName!=''">
+                paymentsBankName = #{paymentsBankName},
+            </if>
+            <if test="paymentsSubBankName != null and paymentsSubBankName!=''">
+                paymentsSubBankName = #{paymentsSubBankName},
+            </if>
+            <if test="paymentsSubBankId != null">
+                paymentsSubBankId = #{paymentsSubBankId},
+            </if>
+            <if test="paymentsBankAttributionProvinceCode != null and paymentsBankAttributionProvinceCode!=''">
+                paymentsBankAttributionProvinceCode = #{paymentsBankAttributionProvinceCode},
+            </if>
+            <if test="paymentsBankAttributionProvinceName != null and paymentsBankAttributionProvinceName!=''">
+                paymentsBankAttributionProvinceName = #{paymentsBankAttributionProvinceName},
+            </if>
+            <if test="paymentsBankAttributionCityCode != null and paymentsBankAttributionCityCode!=''">
+                paymentsBankAttributionCityCode = #{paymentsBankAttributionCityCode},
+            </if>
+            <if test="paymentsBankAttributionCityName != null and paymentsBankAttributionCityName!=''">
+                paymentsBankAttributionCityName = #{paymentsBankAttributionCityName},
+            </if>
+            <if test="paymentsBankAccountName != null and paymentsBankAccountName!=''">
+                paymentsBankAccountName = #{paymentsBankAccountName},
+            </if>
+            <if test="paymentsBankAccount != null and paymentsBankAccount!=''">
+                paymentsBankAccount = #{paymentsBankAccount},
+            </if>
+            <if test="pushStatus!=null">
+                pushStatus = #{pushStatus},
+            </if>
+            <if test="address!=null">
+                address = #{address},
+            </if>
+            <if test="overdueRate!=null">
+                overdueRate = #{overdueRate},
+            </if>
+            <if test="overdueDayRate!=null">
+                overdueDayRate = #{overdueDayRate},
+            </if>
+            <if test="bankcardAttributionCountyCode!=null and bankcardAttributionCountyCode!=''">
+                bankcardAttributionCountyCode = #{bankcardAttributionCountyCode},
+            </if>
+            <if test="bankcardAttributionCountyName!=null and bankcardAttributionCountyName!=''">
+                bankcardAttributionCountyName = #{bankcardAttributionCountyName},
+            </if>
+            <if test="paymentsBankAttributionCountyCode!=null and paymentsBankAttributionCountyCode!=''">
+                paymentsBankAttributionCountyCode = #{paymentsBankAttributionCountyCode},
+            </if>
+           <if test="paymentsBankAttributionCountyName!=null and paymentsBankAttributionCountyName!=''">
+               paymentsBankAttributionCountyName = #{paymentsBankAttributionCountyName},
+           </if>
+           <if test="ynProductCode != null and ynProductCode!=''">
+                ynProductCode = #{ynProductCode},
+           </if>
+           <if test="ynProductName != null and ynProductName!=''">
+                ynProductName = #{ynProductName}, 
+           </if> 
+        </set>
+        where orderNo = #{orderNo}
+    </update>
+</mapper>

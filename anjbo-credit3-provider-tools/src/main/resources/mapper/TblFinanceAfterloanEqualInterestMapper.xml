@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.TblFinanceAfterloanEqualInterestMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<if test="null!=repaymentPeriods and repaymentPeriods>0"> AND `repaymentPeriods`=#{repaymentPeriods}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(repaymentDateBegin)"> AND repaymentDate >= #{repaymentDateBegin}</if>
+		<if test="@Ognl@isNotEmpty(repaymentDateEnd)"> AND repaymentDate &lt;= #{repaymentDateEnd}</if>
+		-->
+		<if test="null!=surplusPrincipal and surplusPrincipal>0"> AND `surplusPrincipal`=#{surplusPrincipal}</if>
+		<if test="null!=repayAmount and repayAmount>0"> AND `repayAmount`=#{repayAmount}</if>
+		<if test="null!=repayPrincipal and repayPrincipal>0"> AND `repayPrincipal`=#{repayPrincipal}</if>
+		<if test="null!=repayInterest and repayInterest>0"> AND `repayInterest`=#{repayInterest}</if>
+		<if test="null!=repayOverdue and repayOverdue>0"> AND `repayOverdue`=#{repayOverdue}</if>
+		<if test="null!=givePayPrincipal and givePayPrincipal>0"> AND `givePayPrincipal`=#{givePayPrincipal}</if>
+		<if test="null!=givePayInterest and givePayInterest>0"> AND `givePayInterest`=#{givePayInterest}</if>
+		<if test="null!=givePayOverdue and givePayOverdue>0"> AND `givePayOverdue`=#{givePayOverdue}</if>
+		<if test="null!=lateDay and lateDay>0"> AND `lateDay`=#{lateDay}</if>
+		<if test="null!=status and status>0"> AND `status`=#{status}</if>
+		<if test="null!=rate and rate>0"> AND `rate`=#{rate}</if>
+		<if test="null!=overdueRate and overdueRate>0"> AND `overdueRate`=#{overdueRate}</if>
+		<if test="null!=overflow and overflow>0"> AND `overflow`=#{overflow}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(realityPayDateBegin)"> AND realityPayDate >= #{realityPayDateBegin}</if>
+		<if test="@Ognl@isNotEmpty(realityPayDateEnd)"> AND realityPayDate &lt;= #{realityPayDateEnd}</if>
+		-->
+		<if test="null!=closeMsg and closeMsg>0"> AND `closeMsg`=#{closeMsg}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="TblFinanceAfterloanEqualInterestDto" resultType="TblFinanceAfterloanEqualInterestDto">    
+	SELECT `id`, `createTime`, `createUid`, `updateTime`, `updateUid`, `orderNo`, `repaymentPeriods`, `repaymentDate`, `surplusPrincipal`, `repayAmount`, `repayPrincipal`, `repayInterest`, `repayOverdue`, `givePayPrincipal`, `givePayInterest`, `givePayOverdue`, `lateDay`, `status`, `rate`, `overdueRate`, `overflow`, `realityPayDate`, `closeMsg` 
+	FROM tbl_finance_afterloan_equal_interest 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="TblFinanceAfterloanEqualInterestDto" resultType="TblFinanceAfterloanEqualInterestDto">
+	SELECT `id`, `createTime`, `createUid`, `updateTime`, `updateUid`, `orderNo`, `repaymentPeriods`, `repaymentDate`, `surplusPrincipal`, `repayAmount`, `repayPrincipal`, `repayInterest`, `repayOverdue`, `givePayPrincipal`, `givePayInterest`, `givePayOverdue`, `lateDay`, `status`, `rate`, `overdueRate`, `overflow`, `realityPayDate`, `closeMsg`
+	FROM tbl_finance_afterloan_equal_interest 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="TblFinanceAfterloanEqualInterestDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_finance_afterloan_equal_interest 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="TblFinanceAfterloanEqualInterestDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_finance_afterloan_equal_interest(
+		`createTime`,
+		`createUid`,
+		`updateTime`,
+		`updateUid`,
+		`orderNo`,
+		`repaymentPeriods`,
+		`repaymentDate`,
+		`surplusPrincipal`,
+		`repayAmount`,
+		`repayPrincipal`,
+		`repayInterest`,
+		`repayOverdue`,
+		`givePayPrincipal`,
+		`givePayInterest`,
+		`givePayOverdue`,
+		`lateDay`,
+		`status`,
+		`rate`,
+		`overdueRate`,
+		`overflow`,
+		`realityPayDate`,
+		`closeMsg`
+	) VALUES(
+		now(),
+		#{createUid},
+		now(),
+		#{createUid},
+		#{orderNo},
+		#{repaymentPeriods},
+		#{repaymentDate},
+		#{surplusPrincipal},
+		#{repayAmount},
+		#{repayPrincipal},
+		#{repayInterest},
+		#{repayOverdue},
+		#{givePayPrincipal},
+		#{givePayInterest},
+		#{givePayOverdue},
+		#{lateDay},
+		#{status},
+		#{rate},
+		#{overdueRate},
+		#{overflow},
+		#{realityPayDate},
+		#{closeMsg}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="TblFinanceAfterloanEqualInterestDto" >
+    DELETE FROM tbl_finance_afterloan_equal_interest 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="TblFinanceAfterloanEqualInterestDto" >
+    UPDATE tbl_finance_afterloan_equal_interest
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=repaymentPeriods">`repaymentPeriods`=#{repaymentPeriods},</if>
+		<if test="null!=repaymentDate">`repaymentDate`=#{repaymentDate},</if>
+		<if test="null!=surplusPrincipal">`surplusPrincipal`=#{surplusPrincipal},</if>
+		<if test="null!=repayAmount">`repayAmount`=#{repayAmount},</if>
+		<if test="null!=repayPrincipal">`repayPrincipal`=#{repayPrincipal},</if>
+		<if test="null!=repayInterest">`repayInterest`=#{repayInterest},</if>
+		<if test="null!=repayOverdue">`repayOverdue`=#{repayOverdue},</if>
+		<if test="null!=givePayPrincipal">`givePayPrincipal`=#{givePayPrincipal},</if>
+		<if test="null!=givePayInterest">`givePayInterest`=#{givePayInterest},</if>
+		<if test="null!=givePayOverdue">`givePayOverdue`=#{givePayOverdue},</if>
+		<if test="null!=lateDay">`lateDay`=#{lateDay},</if>
+		<if test="null!=status">`status`=#{status},</if>
+		<if test="null!=rate">`rate`=#{rate},</if>
+		<if test="null!=overdueRate">`overdueRate`=#{overdueRate},</if>
+		<if test="null!=overflow">`overflow`=#{overflow},</if>
+		<if test="null!=realityPayDate">`realityPayDate`=#{realityPayDate},</if>
+		<if test="null!=closeMsg">`closeMsg`=#{closeMsg},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

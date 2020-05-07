@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.finance.ApplyLoanMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<!--
+		<if test="@Ognl@isNotEmpty(lastUpdateTimeBegin)"> AND lastUpdateTime >= #{lastUpdateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(lastUpdateTimeEnd)"> AND lastUpdateTime &lt;= #{lastUpdateTimeEnd}</if>
+		-->
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<if test="null!=borrowerName and ''!=borrowerName"> AND `borrowerName`=#{borrowerName}</if>
+		<if test="null!=borrowingDays and borrowingDays>0"> AND `borrowingDays`=#{borrowingDays}</if>
+		<if test="null!=loanAmount and loanAmount>0"> AND `loanAmount`=#{loanAmount}</if>
+		<if test="null!=lendingBankId and ''!=lendingBankId"> AND `lendingBankId`=#{lendingBankId}</if>
+		<if test="null!=lendingBankSubId and ''!=lendingBankSubId"> AND `lendingBankSubId`=#{lendingBankSubId}</if>
+		<if test="null!=bankName and ''!=bankName"> AND `bankName`=#{bankName}</if>
+		<if test="null!=bankAccount and ''!=bankAccount"> AND `bankAccount`=#{bankAccount}</if>
+		<if test="null!=chargesReceivedImg and ''!=chargesReceivedImg"> AND `chargesReceivedImg`=#{chargesReceivedImg}</if>
+		<if test="null!=remark and ''!=remark"> AND `remark`=#{remark}</if>
+		<if test="null!=payAccountImg and ''!=payAccountImg"> AND `payAccountImg`=#{payAccountImg}</if>
+		<if test="null!=mortgageImg and ''!=mortgageImg"> AND `mortgageImg`=#{mortgageImg}</if>
+		<if test="null!=mortgageImgType and mortgageImgType>0"> AND `mortgageImgType`=#{mortgageImgType}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="ApplyLoanDto" resultType="ApplyLoanDto">    
+	SELECT `id`, `createUid`, `updateUid`, `createTime`, `lastUpdateTime`, `orderNo`, `borrowerName`, `borrowingDays`, `loanAmount`, `lendingBankId`, `lendingBankSubId`, `bankName`, `bankAccount`, `chargesReceivedImg`, `remark`, `payAccountImg`, `mortgageImg`, `mortgageImgType` 
+	FROM tbl_finance_apply_loan 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="ApplyLoanDto" resultType="ApplyLoanDto">
+	SELECT `id`, `createUid`, `updateUid`, `createTime`, `lastUpdateTime`, `orderNo`, `borrowerName`, `borrowingDays`, `loanAmount`, `lendingBankId`, `lendingBankSubId`, `bankName`, `bankAccount`, `chargesReceivedImg`, `remark`, `payAccountImg`, `mortgageImg`, `mortgageImgType`
+	FROM tbl_finance_apply_loan 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="ApplyLoanDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_finance_apply_loan 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="ApplyLoanDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_finance_apply_loan(
+		`createUid`,
+		`updateUid`,
+		`createTime`,
+		`lastUpdateTime`,
+		`orderNo`,
+		`borrowerName`,
+		`borrowingDays`,
+		`loanAmount`,
+		`lendingBankId`,
+		`lendingBankSubId`,
+		`bankName`,
+		`bankAccount`,
+		`chargesReceivedImg`,
+		`remark`,
+		`payAccountImg`,
+		`mortgageImg`,
+		`mortgageImgType`
+	) VALUES(
+		#{createUid},
+		#{createUid},
+		now(),
+		#{lastUpdateTime},
+		#{orderNo},
+		#{borrowerName},
+		#{borrowingDays},
+		#{loanAmount},
+		#{lendingBankId},
+		#{lendingBankSubId},
+		#{bankName},
+		#{bankAccount},
+		#{chargesReceivedImg},
+		#{remark},
+		#{payAccountImg},
+		#{mortgageImg},
+		#{mortgageImgType}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="ApplyLoanDto" >
+    DELETE FROM tbl_finance_apply_loan 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="ApplyLoanDto" >
+    UPDATE tbl_finance_apply_loan
+	<set>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=lastUpdateTime">`lastUpdateTime`=#{lastUpdateTime},</if>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=borrowerName">`borrowerName`=#{borrowerName},</if>
+		<if test="null!=borrowingDays">`borrowingDays`=#{borrowingDays},</if>
+		<if test="null!=loanAmount">`loanAmount`=#{loanAmount},</if>
+		<if test="null!=lendingBankId">`lendingBankId`=#{lendingBankId},</if>
+		<if test="null!=lendingBankSubId">`lendingBankSubId`=#{lendingBankSubId},</if>
+		<if test="null!=bankName">`bankName`=#{bankName},</if>
+		<if test="null!=bankAccount">`bankAccount`=#{bankAccount},</if>
+		<if test="null!=chargesReceivedImg">`chargesReceivedImg`=#{chargesReceivedImg},</if>
+		<if test="null!=remark">`remark`=#{remark},</if>
+		<if test="null!=payAccountImg">`payAccountImg`=#{payAccountImg},</if>
+		<if test="null!=mortgageImg">`mortgageImg`=#{mortgageImg},</if>
+		<if test="null!=mortgageImgType">`mortgageImgType`=#{mortgageImgType},</if>
+	</set>
+	WHERE orderNo=#{orderNo}
+  </update>
+    
+</mapper>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.mort.house.EnquiryMarketBargainMapper">
+    <select id="enquiryMarketBargin" resultType="java.util.Map">
+      SELECT
+        b.propertyName,
+        b.houseType,
+        b.signTime,
+        AVG(b.unitPrice) unitPrice,
+        DATE_FORMAT(signTime, '%Y-%m') months
+    FROM
+        tbl_enquiry_detail_market_bargain AS b
+    GROUP BY
+        b.propertyName,
+        months
+    </select>
+    <select id="enquiryMarketBarginByDate" resultType="java.util.Map" parameterType="java.util.Map">
+         SELECT
+        b.propertyName,
+        b.houseType,
+        b.signTime,
+        AVG(b.unitPrice) unitPrice,
+        DATE_FORMAT(signTime, '%Y-%m') months
+    FROM
+        tbl_enquiry_detail_market_bargain AS b
+    WHERE
+        DATE_FORMAT(signTime,'%Y-%m')=DATE_FORMAT(#{signDate},'%Y-%m')
+    GROUP BY
+        b.propertyName,
+        months
+    </select>
+</mapper>

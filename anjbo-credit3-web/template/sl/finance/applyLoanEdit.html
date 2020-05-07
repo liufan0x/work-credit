@@ -1,0 +1,199 @@
+<div class="container-fluid">
+	<place-order-detail></place-order-detail>
+	<div id="viewRow"></div>
+
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;申请放款信息</div>
+	<div class="row detail-row form-inline detail-lhw" >
+		<div class="col-md-6 col-lg-4">
+			<label>客户姓名：</label>
+			<input type="text"  ng-model="order.borrowerName" ng-readonly="productCode!='04'" class="form-control" ng-disabled="productCode=='04'"> 
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>借款期限：</label>
+			<input type="text"  ng-model="order.borrowingDays" ng-readonly="productCode!='04'"  ng-disabled="productCode=='04'" class="form-control" maxlength="9" onkeyup="value=value.replace(/[^\d]/g,'')"> <span ng-if="productCode!='04'">天</span><span ng-if="productCode=='04'">期</span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>借款金额：</label>
+			<span ng-bind="order.loanAmount"></span>万
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>银行卡户名：</label>
+			<input type="text"  ng-model="order.bankName"   class="form-control">
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>银行卡账号：</label>
+			<input type="text"  ng-model="order.bankAccount" class="form-control" onkeyup="value=value.replace(/[^\d]/g,'')" id="bankAccount">
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>放款卡银行-支行：</label>
+			<bank-sub-bank bank-id="order.lendingBankId" sub-bank-id="order.lendingBankSubId" ></bank-sub-bank>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>已收取费用：</label>
+			<a href="#"><span data-fancybox="iframe" data-src="/plugins/uploadify/upload_image.html?returnFun=returnDatafinance" data-type="iframe" >点此上传截屏照片（必传）</span></a>
+			
+			<input  id="img" type="hidden">
+			  <span class="gallerys processuUpdImg" style="display:none">
+			       <a href="#" class="processuView-pic">查看图片</a>
+			       <img ng-repeat="img in obj.imgs" ng-src="{{img}}"  class='gallery-pic' style='display:none;'>
+			  </span>
+		</div>
+		<div class="col-md-6 col-lg-6">
+			<label>出款账户图片：</label>
+			<a href="#"><span data-fancybox="iframe" data-src="/plugins/uploadify/upload_image.html?returnFun=returnDatafinance2" data-type="iframe" >点此上传截屏照片（必传）</span></a>
+			<input  id="ng_payAccountImg_init" type="hidden" ng-value="order.payAccountImg">
+			<input type="hidden" id="ckimg" >
+			  <span class="gallerys processuUpdImg2" style="display:none">
+			       <a href="#" class="processuView-pic2">查看图片</a>
+			       <img ng-repeat="img in obj.ckimgs" ng-src="{{img}}"  class='gallery-pic' style='display:none;'>
+			  </span>
+		</div>
+		<div class="col-md-6 col-lg-6" ng-if="productCode=='04' && (order.mortgageImgType==1 || order.mortgageImgType==2)">
+			<label ng-if="order.mortgageImgType==1">抵押回执照片：</label>
+			<label ng-if="order.mortgageImgType==2">抵押状态截图：</label>
+			<a href="#"><span data-fancybox="iframe" data-src="/plugins/uploadify/upload_image.html?returnFun=returnDatafinance3" data-type="iframe" >点此上传截屏照片（必传）</span></a>
+			<input type="hidden" id="ckimg3" >
+			  <span class="gallerys processuUpdImg3" style="display:none">
+			       <a href="#" class="processuView-pic3">查看图片</a>
+			       <img ng-repeat="img in obj.ckimgs3" ng-src="{{img}}"  class='gallery-pic' style='display:none;'>
+			  </span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="form-group">
+			<textarea class="form-control" ng-model="order.remark" rows="5" placeholder="如有特殊说明，请在此处备注（非必填）"/>
+		</div>
+		<div class="col-md-12">
+			<button type="button" class="btn btn-primary" ng-click="submit()">提交</button>
+			<button type="button" class="btn btn-warning" ng-click="showBack()">关闭</button>
+			<button type="button" class="btn btn-warning" ng-show="!orderIsBack" ng-click="backToSubmit()">退回</button>
+		</div>
+	</div>
+</div>
+
+<script>
+	$(document).ready(function(){
+		var chargesReceivedImg= $("#ng_chargesReceivedImg_init").val();
+		var payAccountImg= $("#ng_payAccountImg_init").val();
+		//alert(chargesReceivedImg);
+		if(chargesReceivedImg&&chargesReceivedImg!=''){
+			returnDatafinance(chargesReceivedImg+",",'','');
+		}
+		if(payAccountImg&&payAccountImg!=''){
+			returnDatafinance2(payAccountImg+",",'','');
+		}
+	});
+//删除图片
+$(".processuView-pic").click(function(){
+    $.openPhotoGallery($(this).next("img"),"delZijinPic");
+})
+function delZijinPic(a){ 
+  $(".processuUpdImg").find("img").each(function(){ 
+      if($(this).attr("src")==a){
+       $(this).remove();
+    }
+   })
+   var returnPic="";
+   $(".processuUpdImg").find("img").each(function(){
+        returnPic+=returnPic+$(this).attr("src")+",";
+   })
+   $("#img").val(returnPic.substring(0,returnPic.length-1)); 
+   var img=$("#img").val();
+   if(img==''){
+	   $(".processuUpdImg").hide() 
+   }
+}
+$(".processuView-pic2").click(function(){
+    $.openPhotoGallery($(this).next("img"),"delZijinPic2");
+})
+function delZijinPic2(a){ 
+  $(".processuUpdImg2").find("img").each(function(){ 
+      if($(this).attr("src")==a){
+       $(this).remove();
+    }
+   })
+   var returnPic="";
+   $(".processuUpdImg2").find("img").each(function(){
+        returnPic+=returnPic+$(this).attr("src")+",";
+   })
+   $("#ckimg").val(returnPic.substring(0,returnPic.length-1)); 
+   var img=$("#ckimg").val();
+   if(img==''){
+	   $(".processuUpdImg2").hide() 
+   }
+}
+$(".processuView-pic3").click(function(){
+    $.openPhotoGallery($(this).next("img"),"delZijinPic3");
+})
+function delZijinPic3(a){ 
+  $(".processuUpdImg3").find("img").each(function(){ 
+      if($(this).attr("src")==a){
+       $(this).remove();
+    }
+   })
+   var returnPic="";
+   $(".processuUpdImg3").find("img").each(function(){
+        returnPic+=returnPic+$(this).attr("src")+",";
+   })
+   $("#ckimg3").val(returnPic.substring(0,returnPic.length-1)); 
+   var img=$("#ckimg3").val();
+   if(img==''){
+	   $(".processuUpdImg3").hide() 
+   }
+}
+//上传回调
+function returnDatafinance(url,smallUrl,name){
+	var img=$("#img").val();
+	if(url!=''){
+		 url=url.substring(0,url.length-1);
+		 var urls= new Array();
+		 var urls=url.split(",");	
+		 var h="";
+		 for (var i=0;i<urls.length ;i++ )  { 
+			 h+="<img src='"+urls[i]+"' class='gallery-pic' style='display:none;'>";
+		 }   
+		 $(".processuUpdImg").append(h);
+		 if(img!=''){
+			 url=img+","+url;
+		 }
+		 $("#img").val(url); 
+		 $(".processuUpdImg").show();
+	}
+}
+function returnDatafinance2(url,smallUrl,name){
+	var img=$("#ckimg").val();
+	if(url!=''){
+		 url=url.substring(0,url.length-1);
+		 var urls= new Array();
+		 var urls=url.split(",");	
+		 var h="";
+		 for (var i=0;i<urls.length ;i++ )  { 
+			 h+="<img src='"+urls[i]+"' class='gallery-pic' style='display:none;'>";
+		 }   
+		 $(".processuUpdImg2").append(h);
+		 if(img!=''){
+			 url=img+","+url;
+		 }
+		 $("#ckimg").val(url); 
+		 $(".processuUpdImg2").show();
+	}
+}
+function returnDatafinance3(url,smallUrl,name){
+	var img=$("#ckimg3").val();
+	if(url!=''){
+		 url=url.substring(0,url.length-1);
+		 var urls= new Array();
+		 var urls=url.split(",");	
+		 var h="";
+		 for (var i=0;i<urls.length ;i++ )  { 
+			 h+="<img src='"+urls[i]+"' class='gallery-pic' style='display:none;'>";
+		 }   
+		 $(".processuUpdImg3").append(h);
+		 if(img!=''){
+			 url=img+","+url;
+		 }
+		 $("#ckimg3").val(url); 
+		 $(".processuUpdImg3").show();
+	}
+}
+</script>

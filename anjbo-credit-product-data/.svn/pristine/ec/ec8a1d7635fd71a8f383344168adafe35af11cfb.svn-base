@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.ProductBusinfoBaseMapper">
+	
+	<!-- 新增产品数据表 -->
+	<insert id="insertProductBusinfoBase" useGeneratedKeys="true" keyProperty="id" parameterType="com.anjbo.bean.product.data.ProductBusinfoDto">
+		<!-- <selectKey resultType="int" keyProperty="id">  
+  		  SELECT LAST_INSERT_ID()  
+  	    </selectKey> -->
+		INSERT INTO ${tblDataName} (
+			createUid,
+			createTime,
+			orderNo,
+			typeId,
+			<if test=" index != null and index != ''">
+			`index`,
+			</if>
+			name,
+			ext,
+			<if test=" isOrder != null and isOrder != ''">
+				isOrder,			
+			</if>
+			url
+		)
+		VALUES
+		(
+			#{createUid},
+			now(),
+			#{orderNo},
+			#{typeId},
+			<if test=" index != null and index != ''">
+			#{index},
+			</if>
+			#{name},
+			#{ext},
+			<if test=" isOrder != null and isOrder != ''">
+			#{isOrder},
+			</if>
+			#{url}
+		)
+	</insert>
+	<insert id="batchInsertProductBusinfoBase" parameterType="java.util.List">
+		<foreach collection="list" item="obj" separator=";">
+			INSERT INTO ${obj.tblDataName} (
+			createUid,
+			createTime,
+			orderNo,
+			typeId,
+			<if test="obj.index != null and obj.index != ''">
+				`index`,
+			</if>
+			name,
+			ext,
+			<if test="obj.isOrder != null and obj.isOrder != ''">
+				isOrder,
+			</if>
+			url,
+			isPs
+			)
+			VALUES
+			(
+			#{obj.createUid},
+			now(),
+			#{obj.orderNo},
+			#{obj.typeId},
+			<if test="obj.index != null and obj.index != ''">
+				#{obj.index},
+			</if>
+			#{obj.name},
+			#{obj.ext},
+			<if test="obj.isOrder != null and obj.isOrder != ''">
+				#{obj.isOrder},
+			</if>
+			#{obj.url},
+			#{obj.isPs}
+			)
+		</foreach>
+	</insert>
+	
+	<select id="selectProductBusinfoBase" parameterType="java.util.Map" resultType="java.util.Map">
+		select 
+			* 
+		from ${tblDataName} where orderNo = #{orderNo}
+		<if test="typeId!=null and typeId!=''">
+			and typeId=#{typeId}
+		</if>
+	</select>
+	
+	<select id="selectLastIndex" parameterType="com.anjbo.bean.product.data.ProductBusinfoDto" resultType="java.lang.Integer">
+	      select max(`index`) from ${tblDataName} where 1=1 
+			<if test="orderNo != null">
+			and orderNo = #{orderNo}
+	        </if>
+			<if test="typeId != null">
+			and typeId = #{typeId}
+	        </if>
+	</select>
+	
+	<!-- 修改订单业务资料 -->
+	<update id="updateProductBusinfo" parameterType="com.anjbo.bean.product.data.ProductBusinfoDto">
+	  	UPDATE ${tblDataName}
+	  	<set>
+	  		<if test="createUid != null and createUid != ''">
+	  			createUid = #{createUid},
+	  		</if>
+	  		<if test="updateUid != null and updateUid != ''">
+	  			updateUid = #{updateUid},
+	  		</if>
+	  		<if test="typeId != null and typeId > 0">
+	  			typeId = #{typeId},
+	  		</if>
+	  		<if test="index != null and index > -1">
+	  			`index` = #{index},
+	  		</if>
+	  		<if test="url != null and url != ''">
+	  			url = #{url},
+	  		</if>
+	  		<if test="isOrder != null and isOrder > 0">
+	  			isOrder = #{isOrder},
+	  		</if>
+	  		updateTime = now()
+	  	</set>
+	  	WHERE id = #{id}
+  	</update>
+  	
+  	<delete id="deleteImgByIds" parameterType="java.util.Map" >
+		delete from ${tblDataName}
+		where id in (${ids})
+		<if test="typeId != null and typeId>0">
+			and typeId = #{typeId}
+      	</if>
+      	<if test=" isOrder != null and isOrder != ''">
+			and isOrder = #{isOrder}
+      	</if>
+	</delete>
+</mapper>

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.yntrust.YntrustRepaymentPlanMapper">
+
+    <sql id="Base_Column_List">
+        id, createUid, createTime, updateUid, updateTime, orderNo, repayDate, borrowingDays,
+        repayPrincipal, repayProfit,partnerScheduleNo,pushStatus,ynProductCode,ynProductName
+    </sql>
+    <select id="select" parameterType="YntrustRepaymentPlanDto" resultType="YntrustRepaymentPlanDto">
+        select
+        <include refid="Base_Column_List" />
+        from tbl_third_yntrust_repayment_plan
+        where orderNo = #{orderNo}
+        <if test="pushStatus!=null">
+            AND pushStatus = #{pushStatus}
+        </if>
+        ORDER BY createTime DESC limit 1
+    </select>
+    <delete id="delete" parameterType="YntrustRepaymentPlanDto">
+        delete from tbl_third_yntrust_repayment_plan
+        where orderNo = #{orderNo}
+    </delete>
+    <insert id="insert" parameterType="YntrustRepaymentPlanDto">
+        insert into tbl_third_yntrust_repayment_plan
+        (
+            createUid,
+            createTime,
+            orderNo,
+            repayDate,
+            borrowingDays,
+            repayPrincipal,
+            repayProfit,
+            partnerScheduleNo,
+            pushStatus,
+            ynProductCode,
+            ynProductName 
+        )
+        values
+        (
+            #{createUid},
+            now(),
+            #{orderNo},
+            #{repayDate},
+            #{borrowingDays},
+            #{repayPrincipal},
+            #{repayProfit},
+            #{partnerScheduleNo},
+            #{pushStatus},
+            #{ynProductCode},
+            #{ynProductName}
+        )
+    </insert>
+
+    <update id="update" parameterType="YntrustRepaymentPlanDto">
+
+        update tbl_third_yntrust_repayment_plan
+        <set>
+            <if test="updateUid != null and updateUid">
+                updateUid = #{updateUid},
+            </if>
+            <if test="repayDate != null">
+                repayDate = #{repayDate},
+            </if>
+            <if test="borrowingDays != null">
+                borrowingDays = #{borrowingDays},
+            </if>
+            <if test="repayPrincipal != null">
+                repayPrincipal = #{repayPrincipal},
+            </if>
+            <if test="repayProfit != null">
+                repayProfit = #{repayProfit},
+            </if>
+            <if test="partnerScheduleNo!=null and partnerScheduleNo!=''">
+                partnerScheduleNo = #{partnerScheduleNo},
+            </if>
+            <if test="pushStatus!=null">
+                pushStatus = #{pushStatus},
+            </if>
+             <if test="ynProductCode != null and ynProductCode!=''">
+                ynProductCode = #{ynProductCode},
+            </if>
+             <if test="ynProductName != null and ynProductName!=''">
+                ynProductName = #{ynProductName},
+            </if> 
+            updateTime = now()
+        </set>
+        where orderNo = #{orderNo}
+    </update>
+
+</mapper>

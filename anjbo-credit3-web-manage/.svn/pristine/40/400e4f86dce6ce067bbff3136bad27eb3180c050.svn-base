@@ -1,0 +1,100 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<ul class="breadcrumb">
+				<li>
+					<a>机构管理 </a> <span class="divider"></span>
+				</li>
+				<li class="active">
+					已签约机构
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<!--row-->
+	<div class="row">
+		<div class="col-md-12"> 
+		    <form class="form-inline" style="margin-left:30px;">
+				<div class="form-group">
+					<label>机构名称</label>
+					<input type="text" class="form-control" ng-model="page.name"/>
+				</div>
+				<div class="form-group">
+					<label>城市</label>
+					<select class="form-control" ng-model="page.openCity" select2 style="min-width: 180px;">
+						<option value="">全部</option>
+						<option ng-repeat="c in cityList" value="{{c.name}}">{{c.name}}</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label>账号状态</label>
+					<select class="form-control" ng-model="page.status" select2 style="min-width: 180px;">
+						<option ng-selected="-1" value="-1">全部</option>
+						<option value="1">解冻</option>
+						<option value="0">冻结</option>
+					</select>
+				</div>
+			    <div class="form-group">
+			        <label>机构类型</label>
+			        <select class="form-control" select2 ng-model="page.agencyType" style="min-width: 180px;">
+		        		<option value="">全部</option>
+						<option ng-repeat="a in agencyType" value="{{a.code}}">{{a.name}}</option>
+			        </select>
+		        </div>
+
+				<div class="form-group">
+		        	<label>渠道经理</label>
+		        	<select class="form-control" ng-model="page.chanlMan" select2 style="min-width: 180px;">
+		        		<option value="">全部</option>
+						<option ng-repeat="user in channelManagerList" value="{{user.uid}}">{{user.name}}</option>
+		         	</select>
+				</div>
+
+				<div class="form-group">
+					<label>合作模式</label>
+					<select class="form-control" select2 ng-model="page.cooperativeModeId" style="min-width: 180px;">
+						<option value="">全部</option>
+						<option ng-repeat="c in cooperativeMode" value="{{c.code}}">{{c.name}}</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label>机构状态</label>
+					<select class="form-control" select2 ng-model="page.signStatus" style="min-width: 180px;">
+						<option value="">全部</option>
+						<option value="3">已解约</option>
+						<option value="2">已签约</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label>联系人手机号</label>
+					<input type="text" class="form-control" ng-model="page.contactTel"/>
+				</div>
+				<div class="form-group">
+					<label>签约日期</label>
+					<input type="text" class="form-control form_date" ng-model="page.startSignDate"/>-
+					<input type="text" class="form-control form_date" ng-model="page.endSignDate"/>
+				</div>
+		    	<button type="submit" class="btn btn-primary icon-search" ng-click="query()" style="margin-right:10px; margin-bottom: 10px;">查询</button>
+				<!--
+				<button type="submit" class="btn btn-primary icon-repeat" ng-click="restart()" style="margin-bottom:10px; margin-right:10px;">重置</button>
+				-->
+				<button type="submit" class="btn btn-primary icon-repeat" ui-sref="agencyList" ui-sref-opts="{reload:'agencyList'}" style="margin-bottom:10px; margin-right:10px;">重置</button>
+				<!--
+				<button type="button" ng-if="meunAuth.indexOf('auth11auth')>=0" class="btn btn-primary fr" ui-sref="agencyEdit({'agencyId':'-1'})" style=" margin-right:10px;  margin-bottom: 10px;">添加机构</button>
+				-->
+			</form>
+		</div>
+	</div>
+	<!--row-->
+
+	<div class="row">
+		<div class="col-md-12">
+			<!--table-->
+			<table bs-table-control="agencyList" id="table"></table>
+			<!--table end-->
+	    </div>
+	</div>
+</div>
+
+ 

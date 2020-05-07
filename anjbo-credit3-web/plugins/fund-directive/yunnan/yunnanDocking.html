@@ -1,0 +1,110 @@
+<div class="lhw-alert-bg2 huarong-view-windon" style="z-index: 1;">
+	<div class="lhw-alert-box" style="width:1158px;">
+		<div class="lhw-alert-tit relative">以下信息推送给资金方{{fundCode}}
+			<div class="lhw-x" ng-click="yunnanClose()"></div>
+		</div>
+		<div class="row">
+			<div class="col-md-12" style="padding:20px 0 30px 0">
+				<ul class="nav nav-tabs" style="border:0">
+					<li ng-class="{'active':yunnanTTitle=='ZLTS'}" ng-init="yunnanTTitle = 'ZLTS'">
+						<a href="javascript:void(0);" ng-click="yunnanTTitle='ZLTS'">资料推送</a>
+					</li>
+					<li ng-class="{'active':yunnanTTitle=='YHKXX'}" ng-show="ynStatus.processStatus">
+						<a href="javascript:void(0);" ng-click="yunnanTTitle='YHKXX'">应还款信息</a>
+					</li>
+					<li ng-class="{'active':yunnanTTitle=='HKXX'}" ng-show="ynStatus.repaymentStatus">
+						<a href="javascript:void(0);" ng-click="yunnanTTitle='HKXX'">回款信息</a>
+					</li>
+					<li ng-class="{'active':yunnanTTitle=='ZFXX'}" ng-show="ynStatus.payStatus">
+						<a href="javascript:void(0);" ng-click="yunnanTTitle='ZFXX'">支付信息</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		
+		<!-- 资料推送 -->
+		<div ng-show="yunnanTTitle=='ZLTS'">
+			<div class="row">
+				<div class="col-md-12" style="padding-top:10px;">
+					<ul class="nav nav-tabs">
+						<li ng-class="{'active':yunnanTitle=='yunNanOrderShow'}" ng-init="yunnanTitle='yunNanOrderShow'">
+							<a href="javascript:void(0);" ng-click="yunnanTitle='yunNanOrderShow'">借款人信息</a>
+						</li>
+						<li ng-class="{'active':yunnanTitle=='yunNanContractShow'}">
+							<a href="javascript:void(0);" ng-click="yunnanTitle='yunNanContractShow'">合同信息</a>
+						</li>
+						<li ng-class="{'active':yunnanTitle=='yunNanImageShow'}">
+							<a href="javascript:void(0);" ng-click="yunnanTitle='yunNanImageShow'">影像资料</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div ng-show="yunnanTitle=='yunNanOrderShow'" style="width:100%;height:490px; overflow-y:scroll;">
+				<form name="kgYunnanOrderForm" id="kgYunnanOrderForm">
+				<div ng-include="'/plugins/fund-directive/yunnan/allocationFundYunnanOrder.html'"></div>
+				</form>
+			</div>
+			<div ng-show="yunnanTitle=='yunNanContractShow'" style="width:100%;height:490px; overflow-y:scroll;">
+				<form name="kgYunnanContractForm">
+				<div ng-include="'/plugins/fund-directive/yunnan/allocationFundYunnanContract.html'"></div>
+				</form>
+			</div>
+			<div ng-show="yunnanTitle=='yunNanImageShow'" style="width:100%;height:490px; overflow-y:scroll;">
+				<div ng-include="'/plugins/fund-directive/yunnan/allocationFundYunnanBusinfo.html'"></div>
+			</div>
+			<div class="lhw-alert-but">
+				<button type="button" class="btn btn-primary" ng-show="ynStatus.processStatus" ng-click="yunnanCancel()">撤回</button>
+				<button type="button" class="btn btn-primary" ng-click="yunnanSave(2)" ng-disabled="ynStatus.processStatus" style="margin-right:80px;">确认并提交</button>
+			</div>
+		</div>
+
+		<!-- 应还款计划 -->
+		<div ng-show="yunnanTTitle=='YHKXX'">
+			<div style="margin-bottom: 20px;margin-left: 50px">
+				资方放款结果：{{ynStatus.processStatus?ynStatus.processStatus.msg:"未放款"}}
+				<a href="javascript:void(0)" ng-click="yunnanRefresh(true)">刷新</a>
+			</div>
+			<div ng-include="'/plugins/fund-directive/yunnan/allocationFundYunnanRepaySchedule.html'"></div>
+			<div class="lhw-alert-but">
+				<button type="button" class="btn btn-primary lhw-alert-ok1" ng-disabled="ynStatus.planStatus&&ynStatus.planStatus.msg!='待推送应还款计划'" ng-click="yunnanRepaySchedule()" style="margin-right:80px;">推送应还款信息</button>
+				<button type="button" class="btn btn-primary lhw-alert-ok1" ng-show="showZhanqi1" ng-click="yunnanUpdateRepaySchedule()" style="margin-right:80px;">推送展期应还款信息</button>
+			</div>
+		</div>
+
+		<!-- 还款计划 -->
+		<div ng-show="yunnanTTitle=='HKXX'">
+			<div style="margin-bottom: 20px;margin-left: 50px">
+				还款状态：{{ynStatus.repaymentStatus.msg}}
+				<a href="javascript:void(0)" ng-click="yunnanRefresh(true)">刷新</a>
+			</div>
+			<div class="row">
+				<div class="col-md-12" style="padding-top:10px;">
+					<ul class="nav nav-tabs">
+						<li ng-class="{'active':YN_HKXXTitle=='HKXX'}">
+							<a href="javascript:void(0);" ng-click="YN_HKXXTitle='HKXX'" ng-init="YN_HKXXTitle='HKXX'">还款信息</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div ng-include="'/plugins/fund-directive/yunnan/allocationFundYunnanRepayment.html'"></div>
+			<div class="lhw-alert-but">
+				<button type="button" class="btn btn-primary" ng-disabled="!(ynStatus.repaymentStatus.msg=='待推送回款计划'  || ynStatus.repaymentStatus.msg=='检验失败')" ng-click="yunnanTTitle='YHKXX';YN_ZLTS=false;YN_YHKXX=true;YN_HKXX=false;YN_ZFXX=false;showZhanqi1=true" style="margin-right:80px;">展期</button>
+				<button type="button" class="btn btn-primary" ng-disabled="!(ynStatus.repaymentStatus.msg=='待推送回款计划'  || ynStatus.repaymentStatus.msg=='检验失败')" ng-click="yunnanRepayment()" style="margin-right:80px;">提交并发送回款信息</button>
+			</div>
+		</div>
+
+		<!-- 支付信息 -->
+		<div ng-show="yunnanTTitle=='ZFXX'">
+			<div style="margin-bottom: 20px;margin-left: 50px">
+				支付状态：{{ynStatus.payStatus.msg}}
+				<a href="javascript:void(0)" ng-click="yunnanRefresh(true)">刷新</a>
+			</div>
+			<div>
+				<div ng-include="'/plugins/fund-directive/yunnan/allocationFundYunnanPay.html'"></div>
+			</div>
+			<div class="lhw-alert-but">
+				<button type="button" class="btn btn-primary" ng-disabled="!(ynStatus.payStatus.msg=='核销失败'||ynStatus.payStatus.msg=='待支付')" ng-click="yunnanPay()" style="margin-right:80px;">提交并发送支付信息</button>
+			</div>
+		</div>
+	</div>
+</div>

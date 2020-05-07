@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.anjbo.dao.CustomerAgencyTypeMapper">	
+	<!-- where条件引用sql-->
+	<sql id="customerAgencyTypeWhereSQL">
+		<where>
+	       		<if test="name != null and name != ''">
+					and `name` like CONCAT('%',#{name},'%') 
+				</if>
+	       		<if test="describe != null and describe != ''">
+					and `describe` = #{describe}
+				</if>
+	       		<if test="isEnable != null and isEnable > 0">
+					and `isEnable` = #{isEnable}
+				</if>
+	       		<if test="createTime != null">
+					and `createTime` = #{createTime}
+				</if>
+	       		<if test="updateTime != null">
+					and `updateTime` = #{updateTime}
+				</if>
+	       		<if test="createUid != null and createUid != ''">
+					and `createUid` = #{createUid}
+				</if>
+	       		<if test="updateUid != null and updateUid != ''">
+					and `updateUid` = #{updateUid}
+				</if>
+	       		<if test="remark != null and remark != ''">
+					and `remark` = #{remark}
+				</if>
+		</where>
+	</sql>
+	<resultMap id="BaseResultMap" type="customerAgencyTypeDto">
+		<id property="id" column="id"/>
+	    <association property="typeCount" column="id" select="getTypeCountById"></association>
+	  </resultMap>
+	<!-- 获取机构类型列表-->
+	<select id="selectCustomerAgencyTypeList" parameterType="customerAgencyTypeDto" resultMap="BaseResultMap">
+		select * from tbl_customer_agency_type 
+		<include refid="customerAgencyTypeWhereSQL" />
+		order by createTime desc 
+		<if test="pageSize>0">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	
+	<!-- 获取机构类型总数-->
+	<select id="selectCustomerAgencyTypeCount" parameterType="customerAgencyTypeDto" resultType="int">
+		select count(*) from tbl_customer_agency_type 
+		<include refid="customerAgencyTypeWhereSQL" />
+	</select>	
+		
+	<!-- 新增机构类型-->
+	<insert id="addCustomerAgencyType" parameterType="customerAgencyTypeDto" >
+		insert	into tbl_customer_agency_type(
+			<trim suffixOverrides=",">
+				<if test="name != null">`name`,</if>
+				<if test="describe != null">`describe`,</if>
+				<if test="isEnable != null">`isEnable`,</if>
+				<if test="createTime != null">`createTime`,</if>
+				<if test="updateTime != null">`updateTime`,</if>
+				<if test="createUid != null">`createUid`,</if>
+				<if test="updateUid != null">`updateUid`,</if>
+				<if test="remark != null">`remark`,</if>
+			</trim>
+		)
+		values(	
+			<trim suffixOverrides=",">
+				<if test="name != null">#{name},</if>
+				<if test="describe != null">#{describe},</if>
+				<if test="isEnable != null">#{isEnable},</if>
+				<if test="createTime != null">#{createTime},</if>
+				<if test="updateTime != null">#{updateTime},</if>
+				<if test="createUid != null">#{createUid},</if>
+				<if test="updateUid != null">#{updateUid},</if>
+				<if test="remark != null">#{remark},</if>
+			</trim>
+		)
+	</insert>
+	
+	<!-- 修改机构类型-->
+	<update id="updateCustomerAgencyType" parameterType="customerAgencyTypeDto" >
+	 update tbl_customer_agency_type
+	<set> 
+			<trim suffixOverrides=",">
+				<if test="name != null">`name` = #{name},</if>
+				<if test="describe != null">`describe` = #{describe},</if>
+				<if test="isEnable != null">`isEnable` = #{isEnable},</if>
+				<if test="createTime != null">`createTime` = #{createTime},</if>
+				<if test="updateTime != null">`updateTime` = #{updateTime},</if>
+				<if test="createUid != null">`createUid` = #{createUid},</if>
+				<if test="updateUid != null">`updateUid` = #{updateUid},</if>
+				<if test="remark != null">`remark` = #{remark},</if>
+			</trim>
+	</set> 
+	 where id = #{id}
+	</update>
+
+	<!-- 根据ID删除机构类型-->
+    <delete id="deleteCustomerAgencyTypeById" parameterType="int">
+		delete	from tbl_customer_agency_type where id = #{0}
+    </delete>
+
+	<!-- 根据ID查询机构类型 -->
+	
+	<select id="selectCustomerAgencyTypeById" parameterType="int" resultType="customerAgencyTypeDto">
+		select	* from tbl_customer_agency_type where id = #{0}
+	</select>
+	
+
+	<!-- 根据名称查询机构类型 -->
+	
+	<select id="selectCustomerAgencyTypeByName" parameterType="customerAgencyTypeDto" resultType="customerAgencyTypeDto">
+		select	* from tbl_customer_agency_type where name = #{name}
+		<if test="id>0">
+		and id != #{id}
+		</if>
+	</select>
+	
+	<select id="getTypeCountById" resultType="int">
+		select count(*) from tbl_customer_agency where type = #{0}
+	</select>
+</mapper>

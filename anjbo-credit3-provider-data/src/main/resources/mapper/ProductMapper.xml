@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.ProductMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and ''!=id"> AND id=#{id}</if>
+		<if test="null!=productCode and ''!=productCode"> AND productCode=#{productCode}</if>
+		<if test="null!=productName and ''!=productName"> AND productName LIKE CONCAT('%', #{productName}, '%')</if>
+		<if test="null!=cityCode and ''!=cityCode"> AND cityCode=#{cityCode}</if>
+		<if test="null!=productDescribe and ''!=productDescribe"> AND productDescribe=#{productDescribe}</if>
+		<if test="null!=type and ''!=type"> AND type=#{type}</if>
+		<if test="null!=createUid and ''!=createUid"> AND createUid=#{createUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=updateUid and ''!=updateUid"> AND updateUid=#{updateUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=remark and ''!=remark"> AND remark=#{remark}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="ProductDto" resultType="ProductDto">    
+	SELECT id, productCode, productName, cityCode, productDescribe, type, createUid, createTime, updateUid, updateTime, remark 
+	FROM tbl_product_product 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="ProductDto" resultType="ProductDto">
+	SELECT id, productCode, productName, cityCode, productDescribe, type, createUid, createTime, updateUid, updateTime, remark
+	FROM tbl_product_product 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="ProductDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_product_product 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="ProductDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_product_product(
+		<if test="null!=productCode">productCode,</if>
+		<if test="null!=productName">productName,</if>
+		<if test="null!=cityCode">cityCode,</if>
+		<if test="null!=productDescribe">productDescribe,</if>
+		<if test="null!=type">type,</if>
+		<if test="null!=createUid">createUid,</if>
+		<if test="null!=createTime">createTime,</if>
+		<if test="null!=updateUid">updateUid,</if>
+		<if test="null!=updateTime">updateTime,</if>
+		<if test="null!=remark">remark</if>
+	) VALUES(
+		<if test="null!=productCode">#{productCode},</if>
+		<if test="null!=productName">#{productName},</if>
+		<if test="null!=cityCode">#{cityCode},</if>
+		<if test="null!=productDescribe">#{productDescribe},</if>
+		<if test="null!=type">#{type},</if>
+		<if test="null!=createUid">#{createUid},</if>
+		<if test="null!=createTime">#{createTime},</if>
+		<if test="null!=updateUid">#{updateUid},</if>
+		<if test="null!=updateTime">#{updateTime},</if>
+		<if test="null!=remark">#{remark}</if>
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="ProductDto" >
+    DELETE FROM tbl_product_product 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="ProductDto" >
+    UPDATE tbl_product_product
+	<set>
+		<if test="null!=productCode">productCode=#{productCode},</if>
+		<if test="null!=productName">productName=#{productName},</if>
+		<if test="null!=cityCode">cityCode=#{cityCode},</if>
+		<if test="null!=productDescribe">productDescribe=#{productDescribe},</if>
+		<if test="null!=type">type=#{type},</if>
+		<if test="null!=createUid">createUid=#{createUid},</if>
+		<if test="null!=createTime">createTime=#{createTime},</if>
+		<if test="null!=updateUid">updateUid=#{updateUid},</if>
+		<if test="null!=updateTime">updateTime=#{updateTime},</if>
+		<if test="null!=remark">remark=#{remark}</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+
+    <!-- 批量增删改 -->
+  <insert id="batchInsert" parameterType="ProductDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_product_product(
+		productCode,
+		productName,
+		cityCode,
+		productDescribe,
+		type,
+		createUid,
+		createTime,
+		updateUid,
+		updateTime,
+		remark
+	) VALUES
+	<foreach collection="list" index="index" item="item" separator="," >
+	(
+		#{item.productCode},
+		#{item.productName},
+		#{item.cityCode},
+		#{item.productDescribe},
+		#{item.type},
+		#{item.createUid},
+		#{item.createTime},
+		#{item.updateUid},
+		#{item.updateTime},
+		#{item.remark}
+	)
+	</foreach>
+  </insert>
+
+
+  <delete id="batchDelete" parameterType="ProductDto" >
+    <foreach collection="list" index="index" item="item" separator=";" >
+    DELETE FROM tbl_product_product 
+	WHERE ID=#{item.id}
+	</foreach>
+  </delete>
+  
+  <update id="batchUpdate" parameterType="ProductDto" >
+    <foreach collection="list" index="index" item="item" separator=";" >
+    UPDATE tbl_product_product
+	<set>
+		<if test="null!=item.productCode">productCode=#{item.productCode},</if>
+		<if test="null!=item.productName">productName=#{item.productName},</if>
+		<if test="null!=item.cityCode">cityCode=#{item.cityCode},</if>
+		<if test="null!=item.productDescribe">productDescribe=#{item.productDescribe},</if>
+		<if test="null!=item.type">type=#{item.type},</if>
+		<if test="null!=item.createUid">createUid=#{item.createUid},</if>
+		<if test="null!=item.createTime">createTime=#{item.createTime},</if>
+		<if test="null!=item.updateUid">updateUid=#{item.updateUid},</if>
+		<if test="null!=item.updateTime">updateTime=#{item.updateTime},</if>
+		<if test="null!=item.remark">remark=#{item.remark}</if>
+	</set>
+	WHERE ID=#{item.id}
+	</foreach>
+  </update>
+
+    
+</mapper>

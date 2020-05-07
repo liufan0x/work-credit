@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.mort.order.TblOrderThirdMapper">
+  
+    <!-- 根据订单类型删除 -->
+ 	<delete id="deleteOrderByType" parameterType="java.lang.Integer">
+ 		DELETE FROM tbl_order_third WHERE type=#{0} and customerType in (1,2,3)
+ 	</delete>
+ 	
+ 	<!-- 删除重复订单 -->
+ 	<delete id="deleteRepeatOrder" parameterType="java.lang.Integer">
+ 		DELETE FROM t1 USING tbl_order_third AS t1,
+		(SELECT MIN(id) AS id,uid,orderNo,COUNT(orderNo) AS count_ FROM tbl_order_third WHERE type=#{0} GROUP BY uid,orderNo HAVING COUNT(orderNo) > 1) t2 
+		WHERE t1.uid = t2.uid
+		AND t1.orderNo = t2.orderNo
+		AND t1.id > t2.id
+ 	</delete>
+ 	
+ 	<!-- 批量新增从赎楼系统获取的订单 -->
+ 	<insert id="insertOrderBatch" parameterType="java.util.List">
+ 		INSERT INTO tbl_order_third 
+			(
+				uid,type,orderNo,name,applyBank,propertyName,
+				progressName,loanAmount,progressId,
+				createDate,isFinish,customerType,idCardNo
+			)
+		VALUES
+		<foreach collection="list" item="obj" index="key" separator=",">
+			(
+				#{obj.uid},#{type},#{obj.orderNo},#{obj.borrowerName},
+				#{obj.applyBank},#{obj.houseName},
+				<choose>
+					<when test="secProgressName!=null and secProgressName!=''">
+						#{obj.secProgressName},
+					</when>
+					<otherwise>
+						#{obj.progressName},
+					</otherwise>
+				</choose>
+				#{obj.loanAmount},
+				#{obj.progressId},#{obj.createTime},#{isFinish},
+				#{obj.customerType},#{idCardNo}
+			)
+		</foreach>
+ 	</insert>
+ 	
+ 	<insert id="insertOrder" parameterType="java.util.Map">
+ 		INSERT INTO tbl_order_third 
+			(
+				uid,type,orderNo,name,applyBank,propertyName,
+				progressName,loanAmount,progressId,
+				createDate,isFinish,customerType,idCardNo
+			)
+		VALUES
+			(
+				#{uid},#{type},#{orderNo},#{borrowerName},
+				#{applyBank},#{houseName},
+				<choose>
+					<when test="secProgressName!=null and secProgressName!=''">
+						#{secProgressName},
+					</when>
+					<otherwise>
+						#{progressName},
+					</otherwise>
+				</choose>
+				#{loanAmount},
+				#{progressId},#{createTime},#{isFinish},
+				#{customerType},#{idCardNo}
+			)
+ 	</insert>
+ 	
+ 	<update id="updateOrder" parameterType="java.util.Map">
+ 		update tbl_order_third 
+ 		<set>
+ 			<if test="name!=null and name!=''">
+ 				name = #{name},
+ 			</if>
+ 			<if test="type>0">
+ 				type = #{type},
+ 			</if>
+ 			<if test="houseName!=null and houseName!=''">
+ 				propertyName = #{houseName},
+ 			</if>
+ 			<if test="applyBank!=null and applyBank!=''">
+ 				applyBank = #{applyBank},
+ 			</if>
+ 			<if test="loanAmount!=null and loanAmount>0">
+ 				loanAmount = #{loanAmount},
+ 			</if>
+ 			<choose>
+					<when test="secProgressName!=null and secProgressName!=''">
+						progressName = #{secProgressName},
+					</when>
+					<otherwise>
+						progressName = #{progressName},
+					</otherwise>
+				</choose>
+ 			<if test="progressId>0">
+ 				progressId = #{progressId},
+ 			</if>
+ 			<if test="isFinish!=null">
+ 				isFinish = #{isFinish},
+ 			</if>
+ 			<if test="customerType>0">
+ 				customerType = #{customerType},
+ 			</if>
+ 			<if test="idCardNo!=null and idCardNo!=''">
+ 				idCardNo = #{idCardNo}
+ 			</if>
+ 		</set>
+ 		where orderNo = #{orderNo} and type=#{type} and customerType=0
+ 	</update>
+ 	
+ 	<select id="findOrderByOrderNo" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT t.*,u.phone FROM tbl_order_third t
+		LEFT JOIN tbl_user u ON u.uid = t.uid
+		WHERE orderNo=#{orderNo} and customerType=0 limit 0,1
+ 	</select>
+</mapper>

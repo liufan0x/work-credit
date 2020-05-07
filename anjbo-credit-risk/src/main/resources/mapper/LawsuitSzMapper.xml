@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.LawsuitSzMapper" >
+  
+   <sql id="Base_Column_List">
+        id, createUid, createTime, updateUid, updateTime, lawsuitId, caseNo, judge, litigant, 
+        registerDate, openCourtDate, closeCourtDate, status,orderNo
+    </sql>
+  
+  <select id="selectByPrimaryKey" resultType="LawsuitSzDto" parameterType="java.lang.Integer" >
+    SELECT 
+    	<include refid="Base_Column_List"/>
+    FROM tbl_risk_lawsuit_sz
+    WHERE id = #{id}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    DELETE FROM tbl_risk_lawsuit_sz
+    WHERE id = #{id}
+  </delete>
+  
+  <insert id="insert" parameterType="LawsuitSzDto"  useGeneratedKeys="true" keyProperty="id" >
+      	insert into tbl_risk_lawsuit_sz 
+      	(
+      		id, createUid, createTime, 
+            updateUid,lawsuitId, 
+            caseNo, judge, litigant, 
+            registerDate, openCourtDate, closeCourtDate, 
+            status,orderNo
+         )
+        values 
+        (
+        	#{id}, #{createUid}, now(), 
+            #{updateUid}, #{lawsuitId}, 
+            #{caseNo}, #{judge}, #{litigant}, 
+            #{registerDate}, #{openCourtDate}, #{closeCourtDate}, 
+            #{status},#{orderNo}
+          )
+  </insert>
+  <insert id="insertSelective" parameterType="LawsuitSzDto"  useGeneratedKeys="true" keyProperty="id" >
+    INSERT INTO tbl_risk_lawsuit_sz
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="createUid != null">
+                createUid,
+            </if>
+            <if test="createTime != null">
+                createTime,
+            </if>
+            <if test="updateUid != null">
+                updateUid,
+            </if>
+            <if test="lawsuitId != null">
+                lawsuitId,
+            </if>
+            <if test="caseNo != null">
+                caseNo,
+            </if>
+            <if test="judge != null">
+                judge,
+            </if>
+            <if test="litigant != null">
+                litigant,
+            </if>
+            <if test="registerDate != null">
+                registerDate,
+            </if>
+            <if test="openCourtDate != null">
+                openCourtDate,
+            </if>
+            <if test="closeCourtDate != null">
+                closeCourtDate,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="orderNo!=null and orderNo!=''">
+            	orderNo,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="createUid != null">
+                #{createUid},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="updateUid != null">
+                #{updateUid},
+            </if>
+            <if test="lawsuitId != null">
+                #{lawsuitId},
+            </if>
+            <if test="caseNo != null">
+                #{caseNo},
+            </if>
+            <if test="judge != null">
+                #{judge},
+            </if>
+            <if test="litigant != null">
+                #{litigant},
+            </if>
+            <if test="registerDate != null">
+                #{registerDate},
+            </if>
+            <if test="openCourtDate != null">
+                #{openCourtDate},
+            </if>
+            <if test="closeCourtDate != null">
+                #{closeCourtDate},
+            </if>
+            <if test="status != null">
+                #{status},
+            </if>
+            <if test="orderNo!=null and orderNo!=''">
+            	#{orderNo},
+            </if>
+        </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="LawsuitSzDto" >
+    UPDATE tbl_risk_lawsuit_sz
+   		<set>
+            <if test="createUid != null and createUid!=''">
+                createUid = #{createUid},
+            </if>
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+            <if test="lawsuitId != null">
+                lawsuitId = #{lawsuitId},
+            </if>
+            <if test="caseNo != null and caseNo!=''">
+                caseNo = #{caseNo},
+            </if>
+            <if test="judge != null and judge!=''">
+                judge = #{judge},
+            </if>
+            <if test="litigant != null and litigant!=''">
+                litigant = #{litigant},
+            </if>
+            <if test="registerDate != null and registerDate!=''">
+                registerDate = #{registerDate},
+            </if>
+            <if test="openCourtDate != null and openCourtDate!=''">
+                openCourtDate = #{openCourtDate},
+            </if>
+            <if test="closeCourtDate != null and closeCourtDate!=''">
+                closeCourtDate = #{closeCourtDate},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+        </set>
+    where id = #{id}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="LawsuitSzDto" >
+    UPDATE tbl_risk_lawsuit_sz
+  	  set 
+    		createUid = #{createUid},
+            updateUid = #{updateUid},
+            lawsuitId = #{lawsuitId},
+            caseNo = #{caseNo},
+            judge = #{judge},
+            litigant = #{litigant},
+            registerDate = #{registerDate},
+            openCourtDate = #{openCourtDate},
+            closeCourtDate = #{closeCourtDate},
+            status = #{status}
+        where id = #{id}
+  </update>
+
+  <select id="getListMap" parameterType="java.util.Map" resultType="java.util.Map" >
+  	SELECT * FROM tbl_risk_lawsuit_sz 
+  	where 1=1 
+  	<if test="id != null and id != 0" >
+	  AND id = ${id} 
+  	</if>
+  	<if test="lawsuitId != null and lawsuitId != 0" >
+	  AND lawsuitId = ${lawsuitId} 
+  	</if>
+  	ORDER BY id
+  </select>
+  
+  <delete id="deleteByMap" parameterType="java.util.Map" >
+    DELETE FROM tbl_risk_lawsuit_sz
+    WHERE lawsuitId = #{lawsuitId}
+  </delete>
+</mapper>

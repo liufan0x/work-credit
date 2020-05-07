@@ -1,0 +1,782 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.ReportStatisticsMapper">
+	<!--
+	<cache eviction="LRU" flushInterval="60000" size="1024" readOnly="true"/>
+	-->
+	<!--查询几天内回款报备统计-->
+	<select id="selectInPayment" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			cityCode,cityName,
+			productCode,productName,
+			sum(loanAmount) AS loanAmount
+		FROM
+			tbl_finance_paymentreport
+		WHERE
+		status IN (0,2)
+			<if test="day==2">
+				<![CDATA[AND DATE_ADD(CURDATE(),INTERVAL 1 DAY) = DATE(estimateInLoanTime)]]>
+			</if>
+			<if test="day!=null and day!=2">
+				<![CDATA[AND DATE_FORMAT(estimateInLoanTime,'%Y-%m-%d') BETWEEN DATE_FORMAT(NOW(),'%Y-%m-%d')  AND DATE_ADD(CURDATE(),INTERVAL #{day} DAY)]]>
+			</if>
+			<if test="cityCode!=null and cityCode!=''">
+				AND cityCode = #{cityCode}
+			</if>
+			<if test="productCode!=null and productCode!=''">
+				AND productCode = #{productCode}
+			</if>
+		GROUP BY cityCode
+
+	</select>
+
+	<!--查询几天内出款报备统计-->
+	<select id="selectOutPayment" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			cityCode,cityName,
+			productCode,productName,
+			sum(loanAmount) AS loanAmount
+		FROM
+			tbl_finance_report
+		WHERE
+		status IN (0,2)
+			<if test="day==2">
+				<![CDATA[AND DATE_ADD(CURDATE(),INTERVAL 1 DAY) = DATE(estimateOutLoanTime)]]>
+			</if>
+			<if test="day!=null and day!=2">
+				<![CDATA[AND DATE_FORMAT(estimateOutLoanTime,'%Y-%m-%d') BETWEEN DATE_FORMAT(NOW(),'%Y-%m-%d')  AND DATE_ADD(CURDATE(),INTERVAL #{day} DAY)]]>
+			</if>
+			<if test="cityCode!=null and cityCode!=''">
+				AND cityCode = #{cityCode}
+			</if>
+			<if test="productCode!=null and productCode!=''">
+				AND productCode = #{productCode}
+			</if>
+		GROUP BY cityCode
+	</select>
+
+	<!--查询今日审批-->
+	<select id="selectToDayOrder" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			count(1) AS `count`,
+			processId
+		FROM
+			tbl_order_list_base
+		WHERE (processId='placeOrder' OR processId='auditFirst' OR processId='auditFinal' OR processId='auditOfficer')
+		AND state!='已关闭' AND productCode!='04'
+		<if test="cityCode!=null and cityCode!=''">
+			AND cityCode = #{cityCode}
+		</if>
+		<if test="productCode!=null and productCode!=''">
+			AND productCode = #{productCode}
+		</if>
+		GROUP BY processId
+	</select>
+
+	<!--查询该机构下的所有指定角色:主要用于创收目标报表-->
+	<select id="selectRoleByAgencyIdRoleName" parameterType="java.util.Map" resultType="UserDto">
+		SELECT
+			u.name,u.deptId,u.deptIdArray,u.cityCode,u.agencyId,u.uid
+		FROM
+			tbl_user_base u
+		LEFT JOIN tbl_user_role r ON r.id = u.roleId
+		WHERE
+			r.agencyId = #{agencyId}
+		AND r.`name` = #{roleName} AND isEnable=0
+		<if test="deptId!=null and deptId>0">
+			AND (u.deptId=#{deptId} OR u.deptIdArray LIKE CONCAT('%',#{deptId},'%'))
+		</if>
+		<if test="cityCode!=null and cityCode!=''">
+			AND u.cityCode = #{cityCode}
+		</if>
+	</select>
+	<!--查询所以城市:主要用于创收目标报表-->
+	<select id="selectCity" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			f.cityCode,f.cityName name
+		FROM  tbl_order_report_income_file f 
+		WHERE 1=1
+		<if test="cityCode!=null and cityCode!=''">
+			AND f.cityCode=#{cityCode}
+		</if>
+		<if test="effective==1">
+			AND f.cityCode IS NOT NULL AND f.effective=1
+		</if>
+		<if test="effective==2">
+			AND (ISNULL(f.cityCode) OR f.effective=2)
+		</if>
+		GROUP BY f.cityCode
+		LIMIT #{start},#{pageSize}
+	</select>
+	
+	<select id="findByCityCount" parameterType="java.util.Map" resultType="java.util.Map">
+			SELECT
+			d.`name`,d.`code`
+			FROM tbl_common_dict d
+			WHERE d.type=#{type} AND (d.pcode ='' OR ISNULL(d.pcode))
+			<if test="cityCode!=null and cityCode!=''">
+				AND d.`code`=#{cityCode}
+			</if>
+			GROUP BY d.`code`
+			<if test="limitType==1">
+			LIMIT #{start},#{pageSize}
+			</if>
+	</select>
+	
+	<select id="selectCityCount" parameterType="java.util.Map" resultType="java.util.Map">
+			SELECT f.cityCode FROM  tbl_order_report_income_file f
+			WHERE 1=1
+			<if test="effective==1">
+				AND f.cityCode IS NOT NULL AND f.effective=1
+			</if>
+			<if test="effective==2">
+				AND (ISNULL(f.cityCode) OR f.effective=2)
+			</if>
+			GROUP BY f.cityCode
+	</select>
+	<!--查询指定机构部门:主要用于创收目标报表-->
+	<select id="selectDept" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			d1.id,d1.name,d1.agencyId,d2.id AS pid ,d2.name AS pname
+		FROM  tbl_user_dept d1,tbl_user_dept d2
+		WHERE d1.agencyId=#{agencyId}
+		AND d1.pid = d2.id
+		<if test="deptId!=null and deptId>0">
+			AND d1.id = #{deptId}
+		</if>
+
+	</select>
+	<!--查询创收目标报表上传的文件-->
+	<select id="selectIncomeFile" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+		*
+		FROM tbl_order_report_income_file
+		WHERE 1=1
+		<if test="effective>0">
+			AND effective = #{effective}
+		</if>
+		<if test="deptId>0">
+			AND deptId = #{deptId}
+		</if>
+		<if test="cityCode!=null and cityCode!=''">
+			AND cityCode = #{cityCode}
+		</if>
+	</select>
+	<select id="selectIncomeFileByCityCode" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			*
+	    FROM tbl_order_report_income_file
+	    WHERE  cityCode = #{cityCode}
+	    ORDER BY createTime DESC limit 1
+	</select>
+	<!--机构报表查询条件-->
+	<sql id="agencyWhere">
+		<if test="productCode!=null and productCode!=''">
+			AND b.productCode=#{productCode}
+		</if>
+		<if test="cooperativeModeId!=null">
+			AND a.cooperativeModeId=#{cooperativeModeId}
+		</if>
+	</sql>
+	<sql id="agencyPayWhere">
+		<if test="startTime!=null and startTime!=''">
+			<![CDATA[  and DATE_FORMAT(f1.payMentAmountDate,'%Y-%m-%d') >= DATE_FORMAT(#{startTime}, '%Y-%m-%d')]]>
+		</if>
+		<if test="endTime!=null and endTime!=''">
+			<![CDATA[  and DATE_FORMAT(f1.payMentAmountDate,'%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')]]>
+		</if>
+		<!--上周-->
+		<if test="timeWhere=='lastWeek'">
+			<![CDATA[ AND YEARWEEK(date_format(f1.payMentAmountDate,'%Y-%m-%d')) = YEARWEEK(now())-1]]>
+		</if>
+		<!--上月-->
+		<if test="timeWhere=='lastMonth'">
+			<![CDATA[ AND PERIOD_DIFF(date_format(now(),'%Y%m') ,date_format(f1.payMentAmountDate,'%Y%m')) =1]]>
+		</if>
+		<!--昨日-->
+		<if test="timeWhere=='yesterday'">
+			<![CDATA[ AND TO_DAYS(NOW( )) - TO_DAYS(f1.payMentAmountDate) = 1]]>
+		</if>
+		<!--本月-->
+		<if test="timeWhere=='thisMonth'">
+			<![CDATA[ AND DATE_FORMAT(f1.payMentAmountDate,'%Y%m') = DATE_FORMAT(CURDATE( ),'%Y%m')]]>
+		</if>
+		<!--去年-->
+		<if test="timeWhere=='lastYear'">
+			<![CDATA[ AND YEAR (f1.payMentAmountDate) = YEAR(date_sub(now(),INTERVAL 1 YEAR ))]]>
+		</if>
+	</sql>
+	<sql id="agencyLoanWhere">
+
+		<if test="startTime!=null and startTime!=''">
+			<![CDATA[  and DATE_FORMAT(l.lendingTime,'%Y-%m-%d') >= DATE_FORMAT(#{startTime}, '%Y-%m-%d')]]>
+		</if>
+		<if test="endTime!=null and endTime!=''">
+			<![CDATA[  and DATE_FORMAT(l.lendingTime,'%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')]]>
+		</if>
+		<!--上周-->
+		<if test="timeWhere=='lastWeek'">
+			<![CDATA[ AND YEARWEEK(date_format(l.lendingTime,'%Y-%m-%d')) = YEARWEEK(now())-1]]>
+		</if>
+		<!--上月-->
+		<if test="timeWhere=='lastMonth'">
+			<![CDATA[ AND PERIOD_DIFF(date_format(now(),'%Y%m') ,date_format(l.lendingTime,'%Y%m')) =1]]>
+		</if>
+		<!--昨日-->
+		<if test="timeWhere=='yesterday'">
+			<![CDATA[ AND TO_DAYS(NOW( )) - TO_DAYS(l.lendingTime) = 1]]>
+		</if>
+		<!--本月-->
+		<if test="timeWhere=='thisMonth'">
+			<![CDATA[ AND DATE_FORMAT(l.lendingTime,'%Y%m') = DATE_FORMAT(CURDATE( ),'%Y%m')]]>
+		</if>
+		<!--去年-->
+		<if test="timeWhere=='lastYear'">
+			<![CDATA[ AND YEAR (l.lendingTime) = YEAR(date_sub(now(),INTERVAL 1 YEAR ))]]>
+		</if>
+	</sql>
+
+	<sql id="listProduct">
+		<if test="productCode!=null and productCode!=''">
+			AND b.productCode = #{productCode}
+		</if>
+	</sql>
+	<sql id="statisticsProduct">
+		<if test="productCode!=null and productCode!=''">
+			AND l.productCode = #{productCode}
+		</if>
+	</sql>
+	<!--机构报表：-->
+	<select id="statisticsAgency" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			a.`name` AS agencyName
+			,a.surplusQuota
+			,a.creditLimit
+			,a.cooperativeModeId
+			,a.id AS agencyId
+		FROM tbl_customer_agency a
+
+		WHERE a.signStatus = 2 AND a.STATUS = 1
+		<if test="cooperativeModeId!=null">
+			AND a.cooperativeModeId=#{cooperativeModeId}
+		</if>
+		ORDER BY 1=1
+		<if test="surplusQuotaSort!=null and surplusQuotaSort!=''">
+			,surplusQuota ${surplusQuotaSort}
+		</if>
+		<if test="creditLimitSort!=null and creditLimitSort!=''">
+			,creditLimit ${creditLimitSort}
+		</if>
+	</select>
+
+	<select id="statisticsAgencyCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT
+			count(1)
+		FROM tbl_customer_agency a
+		WHERE a.signStatus = 2 AND a.STATUS = 1
+		<if test="cooperativeModeId!=null">
+			AND a.cooperativeModeId=#{cooperativeModeId}
+		</if>
+	</select>
+	<!--机构报表:放款额,订单量,创收,回款量,回款额-->
+	<select id="statisticsAgencyOther" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT
+			b.cooperativeAgencyId AS agencyId
+		<if test="loanAmountSort==null or loanAmountSort=='' or orderCountSort==null or orderCountSort=='' or incomeSort==null or incomeSort==''">
+			,SUM(l.lendingAmount) AS loanAmount
+			,COUNT(DISTINCT l.orderNo) AS orderCount
+			,SUM(l.income) AS income
+		</if>
+		<if test="payCountSort==null or payCountSort==''or payMentAmountSort==null or payMentAmountSort==''">
+			,COUNT(DISTINCT f1.orderNo) AS payCount
+			,SUM(f1.payMentAmount) AS payMentAmount
+		</if>
+		FROM tbl_order_list_base b
+		<if test="loanAmountSort==null or loanAmountSort!='' or orderCountSort==null or orderCountSort=='' or incomeSort==null or incomeSort==''">
+			LEFT JOIN tbl_order_lending_statistics l ON l.orderNo=b.orderNo <include refid="agencyLoanWhere"/>
+		</if>
+		<if test="payCountSort==null or payCountSort==''or payMentAmountSort==null or payMentAmountSort==''">
+			LEFT JOIN tbl_finance_receivable_for f1 ON f1.orderNo=b.orderNo <include refid="agencyPayWhere"/>
+		</if>
+		WHERE b.cooperativeAgencyId in (${agencyIds})
+		AND b.productCode!='04' AND b.state!='已关闭'
+		<include refid="listProduct"/>
+		GROUP BY b.cooperativeAgencyId
+	</select>
+	<!--查询机构报表放款与业务单量-->
+	<select id="statisticsAgencyTotalLoan" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT
+			b.cooperativeAgencyId AS agencyId
+			,SUM(l.lendingAmount) AS loanAmount
+			,COUNT(DISTINCT l.orderNo) AS orderCount
+			,SUM(l.income) AS income
+		FROM tbl_order_list_base b
+		RIGHT JOIN tbl_order_lending_statistics l ON l.orderNo=b.orderNo
+		WHERE b.cooperativeAgencyId>0 AND b.cooperativeAgencyId in (${agencyIds})
+		AND b.productCode!='04' AND b.state!='已关闭'
+		<include refid="listProduct"/>
+		<include refid="agencyLoanWhere"/>
+		GROUP BY b.cooperativeAgencyId
+		ORDER BY 1=1
+		<if test="loanAmountSort!=null and loanAmountSort!=''">
+			,loanAmount ${loanAmountSort}
+		</if>
+		<if test="orderCountSort!=null and orderCountSort!=''">
+			,orderCount ${orderCountSort}
+		</if>
+		<if test="incomeSort!=null and incomeSort!=''">
+			,income ${incomeSort}
+		</if>
+	</select>
+
+	<!--查询机构报表回款与回款笔数-->
+	<select id="statisticsAgencyTotalPay" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT
+			b.cooperativeAgencyId AS agencyId
+			,COUNT(DISTINCT f1.orderNo) AS payCount
+			,SUM(f1.payMentAmount) AS payMentAmount
+		FROM tbl_order_list_base b
+		RIGHT JOIN tbl_finance_receivable_for f1 ON f1.orderNo=b.orderNo
+		WHERE b.cooperativeAgencyId>0 AND b.cooperativeAgencyId in (${agencyIds})
+		AND b.productCode!='04' AND b.state!='已关闭'
+		<include refid="listProduct"/>
+		<include refid="agencyPayWhere"/>
+		GROUP BY cooperativeAgencyId
+		ORDER BY 1=1
+		<if test="payCountSort!=null and payCountSort!=''">
+			,payCount ${payCountSort}
+		</if>
+		<if test="payMentAmountSort!=null and payMentAmountSort!=''">
+			,payMentAmount ${payMentAmountSort}
+		</if>
+	</select>
+
+	<!--资金方统计-->
+	<select id="statisticsFund" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT
+			f.id AS fundId,
+			fundName,
+			fundCode
+		FROM tbl_customer_fund f
+		WHERE f.`status`=1
+		GROUP BY f.id
+	</select>
+
+	<select id="statisticsFundCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+		SELECT
+		  count(f.id)
+		FROM tbl_customer_fund f
+		WHERE `status`=1
+	</select>
+
+	<!--资方放款总计-->
+	<select id="statisticsFundLoanTotal" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT
+			COUNT(DISTINCT l.orderNo) AS orderNoCount ,
+			SUM(l.lendingAmount) AS lendingAmount,
+			ff.fundId
+		FROM tbl_risk_allocation_fund ff
+		RIGHT JOIN tbl_order_lending_statistics l ON ff.orderNo = l.orderNo
+		WHERE  l.productCode!='04' AND ff.fundId in (${fundids})
+		<include refid="statisticsProduct"/>
+		<include refid="agencyLoanWhere"/>
+		GROUP BY ff.fundId
+		ORDER BY 1=1
+		<if test="fundLoanAmountSort!=null and fundLoanAmountSort!=''">
+			,lendingAmount ${fundLoanAmountSort}
+		</if>
+		<if test="orderNoCountSort!=null and orderNoCountSort!=''">
+			,orderNoCount ${orderCountSort}
+		</if>
+	</select>
+
+	<!--资金方回款总计-->
+	<select id="statisticsFundPayTotal" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			COUNT(DISTINCT f1.orderNo) AS payCount,
+			SUM(f1.payMentAmount) AS payMentAmount,ff.fundId
+		FROM
+		tbl_risk_allocation_fund ff
+		LEFT JOIN tbl_order_list_base b ON ff.orderNo = b.orderNo
+		RIGHT JOIN tbl_finance_receivable_for f1 ON b.orderNo = f1.orderNo
+		WHERE b.productCode!='04' AND b.state!='已关闭' AND ff.fundId in (${fundids})
+			<if test="productCode!=null and productCode!=''">
+				AND b.productCode = #{productCode}
+			</if>
+			<include refid="agencyPayWhere"/>
+		GROUP BY ff.fundId
+		ORDER BY 1=1
+		<if test="payMentAmountSort!=null and payMentAmountSort">
+			 ,payMentAmount ${payMentAmountSort}
+		</if>
+		<if test="payCountSort!=null and payCountSort!=''">
+			 ,payCount ${payCountSort}
+		</if>
+	</select>
+
+	<select id="statisticsFundUsing" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT
+			f.id,f.fundName,f.fundCode
+		FROM tbl_customer_fund f
+		WHERE f.`status` = 1
+	</select>
+	<insert id="insertIncomFile" parameterType="java.util.Map">
+		INSERT INTO tbl_order_report_income_file
+		 (
+			createTime,
+			createUid,
+			cityCode,
+			cityName,
+			deptId,
+			effective,
+			fileUrl
+		)
+		VALUES
+		(
+			now(),
+			#{createUid},
+			#{cityCode},
+			#{cityName},
+			#{deptId},
+			#{effective},
+			#{fileUrl}
+		)
+	</insert>
+	<update id="updateIncomeFile" parameterType="java.util.Map">
+		UPDATE tbl_order_report_income_file
+		<set>
+			<if test="updateUid!=null and updateUid!=''">
+				updateUid = #{updateUid},
+			</if>
+			<if test="cityCode!=null and cityCode!=''">
+				cityCode = #{cityCode},
+			</if>
+			<if test="cityName!=null and cityName!=''">
+				cityName = #{cityName},
+			</if>
+			<if test="effective>0">
+				effective = #{effective},
+			</if>
+			<if test="fileUrl!=null and fileUrl!=''">
+				fileUrl = #{fileUrl}
+			</if>
+		</set>
+		WHERE id=#{id}
+	</update>
+
+	<insert id="insertPersonalIncome" parameterType="java.util.List">
+		INSERT INTO tbl_order_report_personal_aim
+		(
+			createUid,
+			createTime,
+			uid,
+			`name`,
+            `year`,
+			`month`,
+			loanAim,
+			incomeAim,
+			orderAim,
+			deptId,
+			cityCode,
+			cityName,
+			effective
+		)
+		VALUES
+		<foreach collection="list" item="obj" separator=",">
+			(
+			#{obj.createUid},
+			now(),
+			#{obj.uid},
+			#{obj.name},
+            #{obj.year},
+			#{obj.month},
+			#{obj.loanAim},
+			#{obj.incomeAim},
+			#{obj.orderAim},
+			#{obj.deptId},
+			#{obj.cityCode},
+			#{obj.cityName},
+			1
+			)
+		</foreach>
+	</insert>
+	<update id="updatePersonalIncome" parameterType="java.util.Map">
+		UPDATE tbl_order_report_personal_aim
+		<set>
+			<if test="loanAim!=null">
+				loanAim = #{loanAim},
+			</if>
+			<if test="incomeAim!=null">
+				incomeAim = #{incomeAim},
+			</if>
+			<if test="cityCode!=null and cityCode!=''">
+				cityCode = #{cityCode},
+			</if>
+			<if test="cityName!=null and cityName!=''">
+				cityName = #{cityName},
+			</if>
+			<if test="effective>0">
+				effective = #{effective}
+			</if>
+		</set>
+		WHERE id=#{id}
+	</update>
+	<update id="cancelPersonalIncome" parameterType="java.util.Map">
+		UPDATE tbl_order_report_personal_aim
+		SET effective = 2
+		<if test="updateUid!=null and updateUid!=''">
+			,updateUid = #{updateUid}
+		</if>
+		WHERE effective!=2
+		<if test="deptId!=null and deptId>0">
+			AND deptId=#{deptId}
+		</if>
+		<if test="month!=null and month!=''">
+			AND `month` = #{month}
+		</if>
+		<if test="year!=null and year!=''">
+			AND `year` = #{year}
+		</if>
+		<if test="cityCode!=null and cityCode!=''">
+			AND cityCode = #{cityCode}
+		</if>
+	</update>
+	<update id="cancelIncomeFile" parameterType="java.util.Map">
+		UPDATE tbl_order_report_income_file
+		SET effective = 2
+		<if test="deleteTime!=null">
+			,deleteTime = #{deleteTime}
+		</if>
+		<if test="updateUid!=null and updateUid!=''">
+			,updateUid = #{updateUid}
+		</if>
+		WHERE 1=1
+		<if test="deptId!=null and deptId>0">
+			AND deptId=#{deptId}
+		</if>
+		<if test="cityCode!=null and cityCode!=''">
+			and cityCode = #{cityCode}
+		</if>
+	</update>
+
+	<insert id="insertIncomeFileHistory" parameterType="java.util.Map">
+		INSERT INTO tbl_order_report_income_history
+		(
+			createUid,
+			createTime,
+			cityCode,
+			cityName,
+			deptId,
+			fileUrl
+		)
+		VALUES
+		(
+			#{createUid},
+			now(),
+			${cityCode},
+			#{cityName},
+			#{deptId},
+			#{fileUrl}
+		)
+	</insert>
+
+	<select id="selectIncomeFileHistoryByDeptId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			id,createUid,createTime,cityCode,cityName,deptId,fileUrl
+		FROM  tbl_order_report_income_history
+		WHERE deptId=#{deptId}
+	</select>
+	<select id="selectAllIncomeFileHistory" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT
+			id,createUid,createTime,cityCode,cityName,deptId,fileUrl
+		FROM  tbl_order_report_income_history
+	</select>
+
+	<sql id="personalViewWhere">
+		<if test="productCode!=null and productCode!=''">
+			AND ls.productCode = #{productCode}
+		</if>
+		<if test="startTime!=null and startTime!=''">
+			<![CDATA[  AND DATE_FORMAT(ls.lendingTime,'%Y-%m') =#{startTime}]]>
+		</if>
+		<if test="endTime!=null and endTime!=''">
+			<![CDATA[  AND DATE_FORMAT(ls.lendingTime,'%Y-%m') <= DATE_FORMAT(#{endTime}, '%Y-%m')]]>
+		</if>
+		<!--上周-->
+		<if test="timeWhere=='lastWeek'">
+			<![CDATA[ AND YEARWEEK(date_format(ls.lendingTime,'%Y-%m-%d')) = YEARWEEK(now())-1]]>
+		</if>
+		<!--上月-->
+		<if test="timeWhere=='lastMonth'">
+			<![CDATA[ AND PERIOD_DIFF(date_format(now(),'%Y%m') ,date_format(ls.lendingTime,'%Y%m')) =1]]>
+		</if>
+		<!--昨日-->
+		<if test="timeWhere=='yesterday'">
+			<![CDATA[ AND TO_DAYS(NOW()) - TO_DAYS(ls.lendingTime) = 1]]>
+		</if>
+		<!--本月-->
+		<if test="timeWhere=='thisMonth'">
+			<![CDATA[ AND DATE_FORMAT(ls.lendingTime,'%Y%m') = DATE_FORMAT(CURDATE(),'%Y%m')]]>
+		</if>
+		<!--去年-->
+		<if test="timeWhere=='lastYear'">
+			<![CDATA[ AND YEAR(ls.lendingTime) = YEAR(date_sub(now(),INTERVAL 1 YEAR ))]]>
+		</if>
+	</sql>
+	<sql id="personalViewSort">
+		<if test="orderCountSort!=null and orderCountSort!=''">
+			,orderCount ${orderCountSort}
+		</if>
+		<if test="incomeSort!=null and incomeSort!=''">
+			,income ${incomeSort}
+		</if>
+		<if test="lendingAmountSort!=null and lendingAmountSort!=''">
+			,lendingAmount ${lendingAmountSort}
+		</if>
+		<if test="interestSort!=null and interestSort!=''">
+			,interest ${interestSort}
+		</if>
+		<if test="fineSort!=null and fineSort!=''">
+			,fine ${fineSort}
+		</if>
+		<if test="serviceChargeSort!=null and serviceChargeSort!=''">
+			,serviceCharge ${serviceChargeSort}
+		</if>
+	</sql>
+
+	<!--个人创收概览-->
+	<select id="selectPersonalView" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT
+			ls.channelManagerUid,
+			ls.productCode,
+			ls.productName,
+			ls.cityName AS branchCompany
+			<if test="incomeSort!=null and incomeSort!=''">
+				,SUM(ls.income) AS income
+			</if>
+			<if test="lendingAmountSort!=null and lendingAmountSort!=''">
+				,SUM(ls.lendingAmount) AS lendingAmount
+			</if>
+			<if test="interestSort!=null and interestSort!=''">
+				,SUM(ls.interest) AS interest
+			</if>
+			<if test="fineSort!=null and fineSort!=''">
+				,SUM(ls.fine) AS fine
+			</if>
+			<if test="serviceChargeSort!=null and serviceChargeSort!=''">
+				,SUM(ls.serviceCharge) AS serviceCharge
+			</if>
+			<if test="orderCountSort!=null and orderCountSort!=''">
+				,count(ls.orderNo) AS orderCount
+			</if>
+		FROM
+		tbl_order_lending_statistics ls
+		WHERE  
+		ls.productCode!='04'
+		 <include refid="personalViewWhere"/>
+		and ls.channelManagerUid in
+		<foreach collection="userList" open="(" close=")" item="user" separator=",">
+			#{user.channelManagerUid}
+		</foreach>
+		GROUP BY
+			ls.channelManagerUid
+	</select>
+
+	<select id="selectPersonalIncome" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT
+			am.loanAim,
+			am.incomeAim,
+			am.orderAim,
+			am.uid
+		FROM
+			tbl_order_report_personal_aim am
+		WHERE am.effective = 1
+		<if test="month!=null and month!=''">
+			AND am.`month` = ${month}
+		</if>
+		<if test="year!=null and year!=''">
+			AND am.`year` = ${year}
+		</if>
+		<if test="deptId>0">
+			AND am.deptId = #{deptId}
+		</if>
+	</select>
+	<!--个人创收概览-->
+	<select id="selectPersonalViewOther" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT
+			ls.income,
+			ls.lendingAmount,
+			ls.interest,
+			ls.channelManagerUid,
+			ls.fine,
+			ls.serviceCharge
+		FROM
+			tbl_order_lending_statistics ls
+		WHERE ls.productCode!='04'
+			<include refid="personalViewWhere"/>
+			AND ls.channelManagerUid IN (${channelManagerUid})
+	</select>
+
+	<select id="selectPersonalViewCountOld" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT
+			count(1)
+		FROM
+		(
+			SELECT
+				ls.orderNo
+			FROM
+				tbl_order_lending_statistics ls
+			WHERE ls.productCode!='04'
+				<include refid="personalViewWhere"/>
+			GROUP BY
+			ls.channelManagerUid
+		) t
+	</select>
+
+	<select id="selectPersonalViewCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT
+			count(1)
+		FROM (
+			SELECT
+				u.id
+			FROM
+				tbl_user_base u
+			LEFT JOIN tbl_user_role r ON r.id = u.roleId
+			WHERE u.isEnable=0
+			<if test="agencyId>0">
+				AND u.agencyId = #{agencyId}
+			</if>
+			<if test="roleName!=null and roleName!=''">
+				AND r.`name` = #{roleName}
+			</if>
+			<if test="cityCode!=null and cityCode!=''">
+				AND u.cityCode = #{cityCode}
+			</if>
+			GROUP BY
+			u.uid
+		)t
+	</select>
+	
+		<select id="selectPersonalUser" parameterType="java.util.Map" resultType="java.util.Map">
+			SELECT
+				u.`name` AS channelManagerName,
+				u.uid AS channelManagerUid,
+				u.cityCode
+			
+			FROM
+				tbl_user_base u
+			LEFT JOIN tbl_user_role r ON r.id = u.roleId
+			
+			WHERE
+				u.isEnable=0
+			<if test="agencyId>0">
+				AND u.agencyId = #{agencyId}
+			</if>
+			<if test="roleName!=null and roleName!=''">
+				AND r.`name` = #{roleName}
+			</if>
+			<if test="cityCode!=null and cityCode!=''">
+				AND u.cityCode = #{cityCode}
+			</if>
+	</select>
+</mapper>

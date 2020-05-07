@@ -1,0 +1,25 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<ul class="breadcrumb">
+				<li>
+					<a>审批明细</a>
+					<span class="divider"></span>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12"> 
+			<form class="form-inline" style="margin-bottom:20px;margin-left:30px; ">					
+			</form>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<table bs-table-control="dataList"  id="table"></table>
+		</div>
+	</div>
+</div>
+

@@ -1,0 +1,247 @@
+<style>
+.form-inline.w180 label{width:180px;}
+</style>
+<div class="container-fluid huikanScope ">
+	<place-order-detail></place-order-detail>
+	<div id="viewRow"></div>
+		<div class="col-md-12 detail-right-tit" >&nbsp;&nbsp;回款信息</div>
+		<div class="row detail-row form-inline w180" >
+			<tt ng-init="amountCount=0"></tt>
+				<div class="col-md-6 col-lg-6">
+					<label>放款时间：</label>
+					<span ng-bind="obj.lendingTimeStr"></span>
+				</div>
+				<div class="col-md-6 col-lg-6">
+					<label>放款金额：</label>
+					<span ng-bind="obj.loanAmount"></span> 万
+				</div>
+				
+				<div class="col-md-6 col-lg-6">
+					<label>预计回款时间：</label>
+					<span ng-bind="obj.customerPaymentTimeStr"></span>
+				</div>
+				<div class="col-md-6 col-lg-6" >  
+					<label  >是否一次性回款：</label>
+					<select class="form-control" ng-model="obj.oneTimePay"  ng-disabled="obj.forType==1 || obj.productCode=='02' || obj.isChangLoan==1" >
+						<option value="1" ng-selected="obj.oneTimePay==1">是</option>
+						<option value="2" ng-selected="obj.oneTimePay==2">否</option>
+					</select>
+				</div>
+				
+				<!--非交易类Start  ------->
+				<div ng-if="obj.productCode=='02'">
+					<div ng-repeat = "forlist in obj.forList"  class="col-md-6 col-lg-12">
+						<div class="col-md-6 col-lg-6">
+							<label>实际回款时间：</label>
+							<input  size="16" type="text" readonly  ng-model="forlist.payMentAmountDate"  class="form-control form_dateu">
+						</div>
+						<div class="col-md-6 col-lg-6">
+							<label>回款金额：</label>
+							<input type="text"  class="form-control"  ng-model="forlist.payMentAmount"  onkeyup="value=value.replace(/[^\d.]/g,'')"> 万
+						   	<a href="#"><span data-fancybox="iframe" onclick="updImg(this)" data-src="/plugins/uploadify/upload_image.html?returnFun=returnDatafinancefjy" data-type="iframe" >点此上传截屏照片（可不传）</span></a>
+							<input type="hidden" id="img">
+							  <span class="gallerys processuUpdImg" style="display:none">
+							       <a href="#" class="processuView-pic">查看图片</a>
+							  </span>
+							  <span id="findex" style="display:none;">{{$index}}</span>
+						</div>
+					</div>
+				</div>
+				<!--非交易类 end-------->
+				
+				<!--交易类Start--------->
+				<div ng-if="obj.productCode!='02'">
+				    <span style="display:none"><em  id="forlistSize"  ng-bind="forlistSize"></em></span>
+					<div ng-repeat = "forlist in obj.forList"  class="col-md-6 col-lg-12">
+						<div class="col-md-6 col-lg-6">
+							<label  >实际<tt ng-if="($index==0 || forlist.isFrist==1 || obj.isShow) && obj.oneTimePay!=1">首次</tt>回款时间：</label>
+							<span ng-if="$index<=(le-1)"><span ng-bind="forlist.payMentAmountDate"></span></span>
+							<span ng-if="$index>(le-1)">
+								<input  size="16" type="text" readonly  ng-model="forlist.payMentAmountDate"  class="form-control form_dateu">
+							</span>
+						</div>
+						<div class="col-md-6 col-lg-6">
+							<label>回款金额：</label>
+							<span ng-if="$index<=(le-1)"><span ng-bind="forlist.payMentAmount"></span> 万
+							     <a ng-if="forlist.payMentPic!='' && forlist.payMentPic!=null" href="{{forlist.payMentPic}}" target="回款图片" >图片.jpg</a>
+							</span>
+							<span ng-if="$index>(le-1)">
+							   <input type="text"  class="form-control" ng-change="addPay()" ng-model="forlist.payMentAmount"  onkeyup="value=value.replace(/[^\d.]/g,'')" maxlength="10"> 万
+							</span>
+						   	<a ><span data-fancybox="iframe" onclick="updImg(this)" ng-if="$index>(le-1)"  data-src="/plugins/uploadify/upload_image.html?returnFun=returnDatafinancefjy" data-type="iframe" >点此上传截屏照片（可不传）</span></a>
+							  <input type="hidden" id="img" class="img{{$index}}">
+							  <span class="gallerys processuUpdImg" style="display:none">
+							       <a href="#" class="processuView-pic">查看图片</a>
+							       <img ng-repeat="img in forlist.payMentPic.split(',')" ng-src="{{img}}"  class='gallery-pic' style='display:none;'>
+							  </span>
+							  <span id="findex" style="display:none;">{{$index}}</span>
+						   	<button ng-if="obj.oneTimePay==2 && ($index==(le-1) || (le!=0 && $index==0))" type="button" ng-click="add($index)" class="btn btn-info detail-right-save add-line">添加一行</button>
+						   	<button type="button"  ng-if="$index>(le-1) && $index!=0" class="btn btn-danger del-line" ng-click="del($index)">删除</button>
+						</div>
+					</div>
+				</div>
+				<!--添加一行end-->
+				
+				<div ng-if="obj.oneTimePay==1  ||  obj.loanAmount==payCount">
+						<div class="col-md-6 col-lg-12" ng-if="obj.forList[obj.forList.length-1].payMentAmountDate ==obj.customerPaymentTimeStr">
+							<label>回款结果：</label>准时回款  <input type="hidden" value="1" id="hktype">
+						</div>
+						
+						<div ng-if="obj.forList[obj.forList.length-1].payMentAmountDate > obj.customerPaymentTimeStr ">
+						    <div class="col-md-6 col-lg-6">
+								<label>回款结果：</label>逾期回款<input type="hidden" value="2" id="hktype">
+							</div>
+							<div class="col-md-6 col-lg-6">
+								<label>应付罚息金额：</label>
+								<input type="text"  class="form-control" ng-model="obj.penaltyPayable" onkeyup="value=value.replace(/[^\d.]/g,'')" maxlength="10"> 元
+							</div>
+						</div>
+					
+						<div ng-if="obj.forList[obj.forList.length-1].payMentAmountDate < obj.customerPaymentTimeStr">
+							<div class="col-md-6 col-lg-6">
+								<label>回款结果：</label>提前回款<input type="hidden" value="3" id="hktype">
+							</div>
+							<div class="col-md-6 col-lg-6" ng-init="obj.refund=0">
+								<label>是否退费：</label>
+								<select class="form-control" ng-model="obj.refund">
+									<option value="1" ng-selected="obj.refund==1">是</option>
+									<option value="0"  ng-selected="obj.refund==0">否</option>
+								</select>
+							</div>
+							
+							<div class="col-md-6 col-lg-12" ng-if="obj.refund==1">
+								<label>退费金额：</label>
+								<input type="text"  class="form-control" ng-model="obj.penaltyPayable" onkeyup="value=value.replace(/[^\d.]/g,'')" maxlength="10"> 元
+							</div>
+						</div>
+			    </div>
+		</div>
+		<div class="row">
+			<div class="form-group">
+				<textarea class="form-control" ng-model="obj.remark" rows="5" placeholder="如有特殊说明，请在此处备注（非必填）"/>
+			</div>
+			<div class="col-md-12">
+				<button type="button" ng-if="obj.oneTimePay==1" class="btn btn-primary" ng-click="submit()">提交</button>
+				<button type="button" ng-if="obj.oneTimePay==2" class="btn btn-primary" ng-click="submit2()">提交</button>
+			</div>
+		</div>
+	</div>
+	
+	<!--推送start-->
+	<div class="lhw-alert-bg"  ng-show="rongAnShow" id="tsrongan">
+		<div class="lhw-alert-box" style="width:1100px;">
+			<div class="lhw-alert-tit relative" >以下信息推送给资金方110<div class="lhw-x" ng-click="rongAnShow=false;forShow=true;"></div></div>
+			<div>
+				<div class="row">
+					<div class="col-md-12" style="padding-top:10px;">
+						<ul class="nav nav-tabs">
+							<li ng-class="{'active':title=='forShow'}">
+								<a href="javascript:void(0);" ng-click="title='forShow'">回款信息</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div>
+				    <div class="row form-inline detail-row w147" style="padding:30px 10px; ">
+				        <div class="col-md-6 col-lg-4">
+				            <label>估计还款时间: </label> <input type="text"  readonly ng-model="obj.huaRongDto.repaymentTime" class="form-control form_dateu"/>
+				        </div>
+				        <div class="col-md-6 col-lg-4">
+				            <label>已经还款时间:</label> <input type="text" readonly ng-model="obj.huaRongDto.repaymentYestime" class="form-control form_dateu"/>
+				        </div>
+				        <div class="col-md-6 col-lg-4">
+				            <label>期供金额:</label> <input type="text"  ng-model="obj.huaRongDto.repaymentAccount" class="form-control" onkeyup="value=value.replace(/[^\d.]/g,'')"/>元
+				        </div>
+				         <div class="col-md-6 col-lg-4">
+				            <label>实还金额:</label> <input type="text"  ng-model="obj.huaRongDto.repaymentYesaccount" class="form-control" onkeyup="value=value.replace(/[^\d.]/g,'')"/>元
+				        </div>
+				         <div class="col-md-6 col-lg-4">
+				            <label>逾期天数:</label> <input type="text"  ng-model="obj.huaRongDto.lateDays" class="form-control" onkeyup="value=value.replace(/[^\d.]/g,'')"/>天
+				        </div>
+				        <div class="col-md-6 col-lg-4">
+				            <label>逾期利息:</label> <input type="text"  ng-model="obj.huaRongDto.lateInterest" class="form-control" onkeyup="value=value.replace(/[^\d.]/g,'')"/>元
+				        </div>
+				        <div class="col-md-6 col-lg-4">
+				            <label>应还利息:</label> <input type="text"  ng-model="obj.huaRongDto.interest" class="form-control" onkeyup="value=value.replace(/[^\d.]/g,'')"/>元
+				        </div>
+				        <div class="col-md-6 col-lg-4">
+				            <label>应还本金:</label> <input type="text"  ng-model="obj.huaRongDto.capital" class="form-control" onkeyup="value=value.replace(/[^\d.]/g,'')"/>元
+				        </div>
+				        <div class="col-md-6 col-lg-4">
+				            <label>已还本金:</label> <input type="text"  ng-model="obj.huaRongDto.setlCapital" class="form-control" onkeyup="value=value.replace(/[^\d.]/g,'')"/>元
+				        </div>
+				        <div class="col-md-6 col-lg-4">
+				            <label>已还利息:</label> <input type="text"  ng-model="obj.huaRongDto.setlInterest" class="form-control" onkeyup="value=value.replace(/[^\d.]/g,'')"/>元
+				        </div>
+				        <div class="col-md-6 col-lg-4">
+				            <label>已还罚息:</label> <input type="text"  ng-model="obj.huaRongDto.setlLateInterest" class="form-control" onkeyup="value=value.replace(/[^\d.]/g,'')"/>元
+				        </div>
+				        <div class="col-md-6 col-lg-4">
+				            <label>贷款执行利率:</label> <input type="text"  ng-model="obj.huaRongDto.psIntRate" class="form-control" onkeyup="value=value.replace(/[^\d.]/g,'')"/>%
+				        </div>
+				    </div>
+				</div>
+			</div>
+			<div class="lhw-alert-but">
+				<button type="button" class="btn btn-primary lhw-alert-ok" ng-click="forSubmit(1)" style="margin-right:80px;">提交并发送回款计划</button>
+				<button type="button" class="btn btn-danger lhw-alert-cancel" ng-click="forSubmit(0)">该订单不发送回款计划</button>
+			</div>
+		</div>
+	</div>
+	<!--推送end-->
+<script>
+var dom = "";
+function updImg(dom){
+	this.dom = dom;
+}
+function delZijinPicfjy(a){ 
+  $(".processuUpdImg").find("img").each(function(){ 
+      if($(this).attr("src")==a){
+       $(this).remove();
+    }
+   })
+   var returnPic="";
+   $(".processuUpdImg").find("img").each(function(){
+        returnPic+=returnPic+$(this).attr("src")+",";
+   })
+   $(this.dom).parent("a").next("input").val(returnPic.substring(0,returnPic.length-1)); 
+   
+   var index=$(this.dom).parent("a").next("input").next(".processuUpdImg").next("#findex").html();
+   scope.obj.forList[index].payMentPic = url;
+   $(this.dom).parent("a").next("input").val(returnPic.substring(0,returnPic.length-1));
+   
+   var img=$(this.dom).parent("a").next("input").val();
+   if(img==''){
+	   $(".processuUpdImg").hide() 
+   }
+}
+
+var scope = angular.element(".huikanScope").scope();
+function returnDatafinancefjy(url,smallUrl,name){
+	var img= $(this.dom).parent("a").next("input").val(); 
+	if(url!=''){
+		 url=url.substring(0,url.length-1);
+		 var urls= new Array();
+		 var urls=url.split(",");	
+		 var h="";
+		 for (var i=0;i<urls.length ;i++ )  { 
+			 h+="<img src='"+urls[i]+"' class='gallery-pic' style='display:none;'>";
+		 }  
+		 $(this.dom).parent("a").next("input").next(".processuUpdImg").append(h);
+		 if(img!=''){
+			 url=img+","+url;
+		 }
+		 var index=$(this.dom).parent("a").next("input").next(".processuUpdImg").next("#findex").html();
+		 scope.obj.forList[index].payMentPic = url;
+		 $(this.dom).parent("a").next("input").val(url);
+		 
+		 $(this.dom).parent("a").next("input").next(".processuUpdImg").show();
+	}
+	$(".processuView-pic").click(function(){
+	    $.openPhotoGallery($(this).next("img"),"delZijinPicfjy");
+	})
+}
+
+
+
+</script>

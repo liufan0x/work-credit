@@ -1,0 +1,138 @@
+<div class="form-inline detail-row common-file-refresh">
+	<div class="col-md-8" style="position: relative;">
+		<label style="position: absolute;top:0;left:0;">
+            <span class="text-danger" ng-if="m.isNeed==2">*</span>
+            <span>附件：</span>
+        </label>
+		<table class="table table-bordered" style="margin-left:174px;float:left;width:600px">
+			<thead>
+				<tr>
+					<th>资料名称</th>
+					<th>文档数</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td ng-bind="m.title"></td>
+					<td ng-bind="files.length"></td>
+					<td>
+						<span ng-if="uploadOrDownloadOperate" ng-click="fileUploadShow(true)" class="btn btn-info detail-right-save ng-binding ng-scope">上传</span>
+						<span ng-if="files.length>0" ng-click="deleteOrDownloadFileShow(true,'download','资料名称')" class="btn btn-info detail-right-save ng-binding ng-scope">下载</span>
+						<span ng-if="files.length>0&&uploadOrDownloadOperate" ng-click="deleteOrDownloadFileShow(true,'delete','请选择要删除的文件')" class="btn btn-info detail-right-save ng-binding ng-scope">删除</span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+
+<div class="lhw-alert-bg" ng-if="isdDeleteOrDownloadFileShow" >
+	<div class="lhw-alert-box">
+		<div class="lhw-alert-tit" ng-bind="deleteOrDownloadFileTile"></div>
+		<div style="padding:10px;height:300px;overflow-y:auto;">
+			<div class="row form-inline detail-row" style="padding:0 10px;">
+				<div class="tan-pic">
+					<table class="table">
+						<tbody>
+							<tr ng-repeat="f in files">
+
+								<td class="caozuo chakan-img gallerys" style="text-align: left">
+									<input type="checkbox" name="fileIds" value="{{f.id}}" ng-if="downloadOrDelete=='delete'" />
+									<span ng-if="downloadOrDelete!='download'"><a href="{{f.url}}" ng-bind="f.name" target="_blank"></a></span>&nbsp;&nbsp;
+									<span ng-if="downloadOrDelete=='download'"><a href="{{f.url}}" target="_blank" ng-bind="f.name"></a></span>&nbsp;&nbsp;
+									<span ng-if="downloadOrDelete=='download'"><a href="{{f.url}}" download target="_blank">下载</a></span>&nbsp;&nbsp;
+									<span ng-show="f.type.indexOf('image')>=0" class="gallery-pic-img" title="{{f.url}}"></span>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<div class="clear"></div>
+				</div>
+			</div>
+		</div>
+		<div class="lhw-alert-but" style="height:63px;">
+			<button type="button" ng-if="downloadOrDelete=='delete'" class="btn btn-primary" ng-click="deleteFile()" style="margin-right:80px;">确定</button>
+			<button type="button" ng-if="downloadOrDelete=='delete'" class="btn btn-danger lhw-alert-cancel" ng-click="deleteOrDownloadFileShow(false)">取消</button>
+			<button type="button" ng-if="downloadOrDelete=='download'" class="btn btn-primary lhw-alert-cancel" ng-click="deleteOrDownloadFileShow(false)">关闭</button>
+		</div>
+	</div>
+</div>
+
+<div class="lhw-alert-bg" ng-if="isFileUploadShow"  nv-file-drop uploader="uploader" filters="queueLimit,customFilter">
+	<div class="lhw-alert-box" style="width:1200px;">
+		<div class="lhw-alert-tit">上传文件</div>
+		<div class="row">
+			<div style="width:80%;margin: 10px auto 40px auto;display: block;">
+				<!--
+                    <p>队列长度: {{ uploader.queue.length }}</p>
+                    -->
+				<table class="table">
+					<thead>
+						<tr>
+							<th width="50%">名称</th>
+							<th ng-show="uploader.isHTML5">大小</th>
+							<th ng-show="uploader.isHTML5">进度</th>
+							<th>状态</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="f in uploader.queue">
+							<td><strong>{{ f.file.name }}</strong></td>
+							<td ng-show="uploader.isHTML5" nowrap>{{ f.file.size/1024/1024|number:2 }} MB</td>
+							<td ng-show="uploader.isHTML5">
+								<div class="progress" style="margin-bottom: 0;">
+									<div class="progress-bar" role="progressbar" ng-style="{ 'width': f.progress + '%' }"></div>
+								</div>
+							</td>
+							<td class="text-center">
+								<span ng-show="f.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
+								<span ng-show="f.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
+								<span ng-show="f.isError"><i class="glyphicon glyphicon-remove"></i></span>
+							</td>
+							<td nowrap>
+
+								<button type="button" class="btn btn-success btn-xs" ng-click="f.upload()" ng-disabled="f.isReady || f.isUploading || f.isSuccess">
+                                        <span class="glyphicon glyphicon-upload"></span> 上传
+                                    </button>
+
+								<button type="button" class="btn btn-danger btn-xs" ng-click="f.remove()">
+                                        <span class="glyphicon glyphicon-trash"></span> 删除
+                                    </button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<div>
+					<!--
+                        <div>
+                            队列进度:
+                            <div class="progress" style="">
+                                <div class="progress-bar" role="progressbar" ng-style="{ 'width': uploader.progress + '%' }"></div>
+                            </div>
+                        </div>
+                        -->
+					<div type="button" class="btn btn-success btn-s" style="position: relative">
+						<span class="glyphicon glyphicon-upload"></span>选择文件
+						<input type="file" class="form-group" nv-file-select uploader="uploader" multiple name="file" style="position: absolute;width:100%;top:0;bottom:0;left:0;opacity:0;" />
+					</div>
+					<button type="button" class="btn btn-success btn-s" ng-click="uploader.uploadAll()" ng-disabled="!uploader.getNotUploadedItems().length">
+                            <span class="glyphicon glyphicon-upload"></span>上传所有
+                        </button>
+					<button type="button" class="btn btn-danger btn-s" ng-click="uploader.clearQueue()" ng-disabled="!uploader.queue.length">
+                            <span class="glyphicon glyphicon-trash"></span> 删除所有
+                        </button>
+				</div>
+
+			</div>
+
+		</div>
+		<div class="lhw-alert-but" style="height:63px;">
+			<button type="button" class="btn btn-primary" style="margin-right:80px;" ng-disabled="!uploader.queue.length" ng-click="confirmUpload()">确定上传</button>
+			<button type="button" class="btn btn-danger lhw-alert-cancel" ng-click="fileUploadShow(false)">取消</button>
+		</div>
+	</div>
+</div>

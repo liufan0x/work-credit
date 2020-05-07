@@ -1,0 +1,69 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.anjbo.dao.tools.CalcRateMapper">
+	<!-- 查询计算器利率列表 -->
+	<select id="selectCalcRateList" resultType="com.anjbo.bean.tools.CalcRate">
+		select * from tbl_tools_calc_rate order by sort
+	</select>
+	<!-- 查询计算器利率 -->
+	<select id="selectCalcRate" parameterType="int" resultType="com.anjbo.bean.tools.CalcRate">
+		select * from tbl_tools_calc_rate where id=#{0}
+	</select>
+	<!-- 查询计算器基准利率 -->
+	<select id="selectCalcStandardRate" resultType="com.anjbo.bean.tools.CalcRate">
+		select * from tbl_tools_calc_rate where rate=1 order by sort limit 1
+	</select>
+	<!-- 新增计算器利率 -->
+	<insert id="addCalcRate" parameterType="com.anjbo.bean.tools.CalcRate">
+		insert into tbl_tools_calc_rate(
+			rate,
+			title,
+			sort,
+			sd1,
+			sd1_3,
+			sd3_5,
+			sd5_30,
+			gjj1_5,
+			gjj5_30
+		)values(
+			#{rate},
+			#{title},
+			#{sort},
+			#{sd1},
+			#{sd1_3},
+			#{sd3_5},
+			#{sd5_30},
+			#{gjj1_5},
+			#{gjj5_30}
+		)
+	</insert>
+	<!-- 修改计算器基准利率 -->
+	<update id="updateCalcStandardRate" parameterType="com.anjbo.bean.tools.CalcRate">
+		update tbl_tools_calc_rate set
+			title=#{title},
+			sort=#{sort},
+			sd1=#{sd1},
+			sd1_3=#{sd1_3},
+			sd3_5=#{sd3_5},
+			sd5_30=#{sd5_30},
+			gjj1_5=#{gjj1_5},
+			gjj5_30=#{gjj5_30}
+		where id=#{id}
+	</update>
+	<!-- 修改计算器利率 -->
+	<update id="updateCalcRate" parameterType="com.anjbo.bean.tools.CalcRate">
+		update tbl_tools_calc_rate set
+			title=#{title},
+			sort=#{sort}
+		where id=#{id}
+	</update>
+	<!-- 修改计算器基准利率排序 -->
+	<update id="updateCalcRateSort" parameterType="int">
+		update tbl_tools_calc_rate set
+			sort=#{1}
+		where id=#{0}
+	</update>
+	<delete id="deleteCalcRate" parameterType="int">
+		delete from tbl_tools_calc_rate where id=#{0}
+	</delete>
+</mapper>

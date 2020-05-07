@@ -1,0 +1,146 @@
+<div class="container-fluid">
+	<div class="clear" style="height:10px;"></div>
+	<div class="row">
+		<div class="col-md-12">
+			<ul class="breadcrumb">
+				<li>
+					<a ui-sref="userList">用户列表</a>
+				</li>
+				<li><span ng-if="isAdd">添加用户</span><span ng-if="!isAdd">编辑用户</span></li>
+				<li class="go-back">
+					<a ui-sref="userList">返回上一步</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="row">
+		<form name="userForm" role="form" class="form-inline" novalidate>
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="jigou-span"><span class="text-warning">*</span>姓名：</div>
+					<input ng-if="isAdd" type="text" class="form-control" ng-model="user.name" name="name" required />
+					<input ng-if="!isAdd" type="text" class="form-control" ng-model="user.name" name="name" required disabled="disabled"/>
+					<span style="color:red" ng-show="userForm.name.$dirty && userForm.name.$invalid">
+  						<span ng-show="userForm.name.$error.required">姓名必填</span>
+					</span>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="jigou-span">身份证号：</div>
+					<input type="text" class="form-control" ng-model="user.idCard" name="idCard" ng-pattern="/^[0-9]{14,17}[0-9X]$/"/>
+					<span style="color:red" ng-show="userForm.idCard.$dirty && userForm.idCard.$invalid">
+  						<span ng-show="userForm.idCard.$error ">身份证输入有误</span>
+					</span>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="jigou-span"><span class="text-warning">*</span>手机：</div>
+					<input ng-if="isAdd" type="text" class="form-control" ng-model="user.mobile" name="mobile" required ng-pattern="/^1[0-9]{10}$/"  />
+					<input ng-if="!isAdd" type="text" class="form-control" ng-model="user.mobile" name="mobile" required ng-pattern="/^1[0-9]{10}$/"  disabled="disabled"/>
+					<span style="color:red" ng-show="userForm.mobile.$dirty && userForm.mobile.$invalid">
+  						<span ng-show="userForm.mobile.$error ">手机号错误</span>
+					</span>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="jigou-span">邮箱：</div>
+					<input ng-if="isAdd" type="text" class="form-control" ng-model="user.email"  />
+					<input ng-if="!isAdd" type="text" class="form-control" ng-model="user.email"  disabled="disabled"/>
+				</div>
+			</div>
+			<div class="clear"></div>
+			<div class="jigou-line"></div>
+			<div class="clear"></div>
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="jigou-span"><span class="text-warning">*</span>角色：</div>
+					<select select2 class="form-control" ng-model="user.roleId" name="roleId" style="width: 177px;" required>
+						<option ng-repeat="role in roleList" value="{{role.id}}">{{role.name}}</option>
+					</select>
+					<span style="color:red" ng-show="userForm.roleId.$dirty && userForm.roleId.$invalid">
+  						<span ng-show="userForm.roleId.$error.required">角色必填</span>
+					</span>
+				</div>
+			</div>
+			<div class="col-md-12" ng-if="user.roleId == '5'">
+				<div class="form-group">
+					<div class="jigou-span"><span class="text-warning">&nbsp;</span></div>
+					<input name="appIsShow" type="checkbox" ng-true-value="1" ng-false-value="0" ng-model="user.appIsShow" >展示到快鸽按揭APP(供快鸽按揭App用户提单时选择）
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="jigou-span"><span class="text-warning">*</span>部门：</div>
+					<input ng-if="!isAdd" type="text" class="form-control" ng-model="user.deptName"  disabled="disabled"/>
+					<select ng-if="isAdd" select2 class="form-control" ng-model="user.deptId" name="deptId" style="width:177px;" required > 
+						<option ng-repeat="dept in deptList" value="{{dept.id}}">{{dept.name}}</option>
+					</select>
+					<span ng-if="isAdd" style="color:red" ng-show="userForm.deptId.$dirty && userForm.deptId.$invalid">
+  						<span ng-show="userForm.deptId.$error.required">部门必填</span>
+					</span>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="jigou-span"><span class="text-warning">*</span>所在城市：</div>
+					<select select2 name="cityCode" ng-model="user.cityCode" style="width:177px;" required>
+						<option ng-repeat="x in cityList" value="{{x.code}}">{{x.name}}</option>
+					</select>
+					<span style="color:red" ng-show="userForm.cityCode.$dirty && userForm.cityCode.$invalid">
+  						<span ng-show="userForm.cityCode.$error.required">城市必填</span>
+					</span>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="jigou-span">职务：</div>
+					<input ng-if="isAdd" type="text" class="form-control" ng-model="user.position"  />
+					<input ng-if="!isAdd" type="text" class="form-control" ng-model="user.position"  disabled="disabled"/>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="jigou-span">身份：</div>
+				<span class="detail-row2">
+					<input type="radio" name="optionsRadios" ng-model="user.identity" value="0">普通成员
+					<input type="radio" name="optionsRadios" ng-model="user.identity" value="1">上级
+				</span>
+			</div>
+			<div class="clear"></div>
+			<div class="jigou-line"></div>
+			<div class="clear"></div>
+			<div class="col-md-12" ng-if="isAdd">
+				<div class="form-group">
+					<div class="jigou-span">默认账号：</div>
+					<input type="text" class="form-control" ng-model="user.account" name="account" required disabled/>
+					<button class="btn btn-primary" ng-click="generateAccount()">生成</button>
+					<span style="color:red" ng-show="userForm.account.$dirty && userForm.account.$invalid">
+  						<span ng-show="userForm.account.$error.required">用户账号错误</span>
+					</span>
+				</div>
+			</div>
+			<div class="col-md-12" ng-if="isAdd">
+				<div class="form-group">
+					<div class="jigou-span">默认密码：</div>
+					<input type="text" class="form-control" ng-model="user.password" name="password" required/>
+					<span style="color:red" ng-show="userForm.password.$dirty && userForm.password.$invalid">
+  						<span ng-show="userForm.password.$error.required">密码必填</span>
+					</span>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<div class="clear" style="height:15px;"></div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="jigou-span">&nbsp;</div>
+			<button type="button" class="btn btn-success" ng-if="isAdd" ng-click="addOrEdit(true)">保存并继续添加</button>
+			<button type="button" class="btn btn-primary" ng-click="addOrEdit(false)">保存</button>
+			<button type="button" class="btn btn-default" ng-click="cancel()">取消</button>
+		</div>
+	</div>
+</div>

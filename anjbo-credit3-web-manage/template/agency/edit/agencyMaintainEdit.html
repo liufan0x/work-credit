@@ -1,0 +1,61 @@
+<div class="container-fluid" style="position: absolute;z-index: -1;width:100%;">
+ 
+	<div class="row">
+		<div class="col-md-12">
+			 <ul class="breadcrumb">
+				 <li><span>机构管理</span></li>
+				 <li><a ui-sref="agencyList">已签约机构</a></li>
+				 <li><span>维护</span></li>
+				 <li class="go-back"> <a ui-sref="agencyList" >返回上一步</a></li>
+			 </ul>
+		</div>
+	</div>
+
+	<!--导航-->
+	<div class="row">
+		<div class="col-md-12">
+			<ul class="nav nav-tabs">
+				<li ng-class="{'active':showView==1}" >
+					<a ng-click="showView=1">机构信息</a>
+				</li>
+				<li ng-class="{'active':showView==2}" >
+					<a ng-click="showView=2">影像资料</a>
+				</li>
+				<li class="pull-right" ng-if="agencyDto.signStatus==2">
+					<button type="button" class="btn btn-primary" ng-click="frozenOrRelieve(false)"><span ng-bind="buttonTitle"></span></button>
+					<button type="button" ng-if="agencyDto.status==1" class="btn btn-primary" ng-click="restartPassworld()">重置密码</button>
+					<button type="button" class="btn btn-primary" ng-click="relieveCooperation(false)">解除合作</button>
+					<button type="button" class="btn btn-primary" ng-click="agencyEdit()">保存</button>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<!--导航 end-->
+	<agency-info-edit ng-show="showView==1" ></agency-info-edit>
+
+	<businfo-edit ng-show="showView==2"></businfo-edit>
+
+</div>
+<div ng-show="false" id="panelProductProcess" style="width: 600px;">
+	<div class="row">
+		<div style="margin:6px; text-align:left;"><span ng-bind="productName"></span></div>
+	</div>
+	<div class="row">
+		<table class="table table-hover table-bordered">
+			<thead>
+			<tr>
+				<th>序号</th>
+				<th style="width:100px">节点</th>
+				<th>节点描述</th>
+			</tr>
+			</thead>
+			<tbody>
+			<tr ng-repeat="node in listProProcess" ng-if="node.showAgency==1">
+				<td ng-bind="$index+1"></td>
+				<td ng-bind="node.processName"></td>
+				<td ng-bind="node.processDescribe" style="text-align:left;"></td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+</div>

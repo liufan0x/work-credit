@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.ProductProcessMapper">
+	
+	<select id="selectProductProcessList" resultType="ProductProcessDto" parameterType="ProductProcessDto">
+		select * from tbl_product_process   where 1 = 1 
+		<if test="productId != null and productId != ''">
+			and productId = #{productId} 
+		</if>
+		<if test="showAgency != null and showAgency != ''">
+			and showAgency = #{showAgency} 
+		</if>
+		 ORDER BY IFNULL(sort, 999) 
+		<if test="start!=null">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	
+	<select id="selectProductProcessCount" resultType="int" parameterType="ProductProcessDto">
+		select count(1) from tbl_product_process   where 1 = 1 
+		<if test="productId != null and productId != ''">
+			and productId = #{productId} 
+		</if>
+		<if test="null!=showAgency and showAgency>0">
+			and showAgency = #{showAgency} 
+		</if>
+	</select>
+	
+</mapper>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.OrderBaseCustomerShareholderMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=orderNo and ''!=orderNo"> AND orderNo=#{orderNo}</if>
+	</where>
+  </sql>
+    
+  <!-- 查询 -->
+  <select id="search" parameterType="OrderBaseCustomerShareholderDto" resultType="OrderBaseCustomerShareholderDto">
+	SELECT id, orderNo, shareholderName, contributionMethod, contributionAmount, contributionProportion, createUid, createTime, updateUid, updateTime
+	FROM tbl_order_base_customer_shareholder 
+	<include refid="sqlwhereSearch"/>
+	ORDER BY id
+  </select>
+  
+  <!-- 获取实体 -->
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="OrderBaseCustomerShareholderDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_order_base_customer_shareholder(
+		<if test="null!=orderNo">orderNo,</if>
+		<if test="null!=shareholderName">shareholderName,</if>
+		<if test="null!=contributionMethod">contributionMethod,</if>
+		<if test="null!=contributionAmount">contributionAmount,</if>
+		<if test="null!=contributionProportion">contributionProportion,</if>
+		<if test="null!=createUid">createUid,</if>
+		createTime
+	) VALUES(
+		<if test="null!=orderNo">#{orderNo},</if>
+		<if test="null!=shareholderName">#{shareholderName},</if>
+		<if test="null!=contributionMethod">#{contributionMethod},</if>
+		<if test="null!=contributionAmount">#{contributionAmount},</if>
+		<if test="null!=contributionProportion">#{contributionProportion},</if>
+		<if test="null!=createUid">#{createUid},</if>
+		NOW()
+	)	
+  </insert>
+  <insert id="batchInsert" parameterType="java.util.List">  
+       INSERT INTO tbl_order_base_customer_shareholder(orderNo,shareholderName,contributionMethod,contributionAmount,contributionProportion,createUid,createTime) VALUES   
+       <foreach collection="list" index="index" item="item" separator="," >  
+          (#{item.orderNo},#{item.shareholderName},#{item.contributionMethod},#{item.contributionAmount},#{item.contributionProportion},#{item.createUid}, NOW())  
+       </foreach>  
+  </insert> 
+  
+  <delete id="deleteByOrderNo" parameterType="string" >
+    DELETE FROM tbl_order_base_customer_shareholder WHERE orderNo=#{orderNo}
+  </delete>
+  
+  <!-- 修改订单客户企业股东信息 -->
+	<update id="updateCustomerShareholderNull" parameterType="OrderBaseCustomerShareholderDto">
+	  	UPDATE tbl_order_base_customer_shareholder 
+	  	SET
+	  			updateUid = #{updateUid},
+	  			shareholderName = #{shareholderName},
+	  			contributionMethod = #{contributionMethod},
+	  			contributionAmount = #{contributionAmount},
+	  			contributionProportion = #{contributionProportion},
+	  			<if test="isFinish != null and isFinish > 0">
+	  			isFinish = #{isFinish},
+	  			</if>
+	  			updateTime = now()
+	  	WHERE id = #{id}
+  	</update>
+  	
+	<!-- 查询订单客户企业股东信息 -->
+	<select id="selectCustomerShareholderByOrderNo" parameterType="java.lang.String" resultType="OrderBaseCustomerShareholderDto">
+  		select 
+  			id,
+  			createUid,
+			createTime,
+			updateUid,
+			updateTime,
+			orderNo,
+			shareholderName,
+			contributionMethod,
+			contributionAmount,
+			contributionProportion,
+			isFinish
+  		from tbl_order_base_customer_shareholder where orderNo=#{orderNo}
+    </select>
+    
+    <!-- 查询订单客户企业股东信息 -->
+	<select id="selectCustomerShareholderById" parameterType="int" resultType="OrderBaseCustomerShareholderDto">
+  		select 
+  			id,
+  			createUid,
+			createTime,
+			updateUid,
+			updateTime,
+			orderNo,
+			shareholderName,
+			contributionMethod,
+			contributionAmount,
+			contributionProportion,
+			isFinish
+  		from tbl_order_base_customer_shareholder where id=#{id}
+    </select>
+    
+    <!-- 删除客户企业股东信息 -->
+    <delete id="deleteCustomerShareholderById" parameterType="int">
+    	delete from tbl_order_base_customer_shareholder
+    	where id =#{0}
+    </delete>
+    
+    <!-- 删除客户企业股东信息 -->
+    <delete id="deleteCustomerShareholderOrderNo" parameterType="string">
+    	delete from tbl_order_base_customer_shareholder
+    	where orderNo =#{0}
+    </delete>
+    
+</mapper>

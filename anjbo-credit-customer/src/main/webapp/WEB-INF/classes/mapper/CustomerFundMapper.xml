@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.anjbo.dao.CustomerFundMapper">	
+	<!-- where条件引用sql-->
+	<sql id="customerFundWhereSQL">
+		<where>
+	       		<if test="fundName != null and fundName != ''">
+					and `fundName` like CONCAT('%',#{fundName},'%') 
+				</if>
+	       		<if test="fundDesc != null">
+					and `fundDesc` = #{fundDesc}
+				</if>
+	       		<if test="status != null and status > 0">
+					and `status` = #{status}
+				</if>
+	       		<if test="fundCode != null and fundCode != ''">
+					and `fundCode` = #{fundCode}
+				</if>
+	       		<if test="contactMan != null and contactMan != ''">
+					and `contactMan` = #{contactMan}
+				</if>
+	       		<if test="contactTel != null and contactTel != ''">
+					and `contactTel` = #{contactTel}
+				</if>
+	       		<if test="createTime != null">
+					and `createTime` = #{createTime}
+				</if>
+	       		<if test="updateTime != null">
+					and `updateTime` = #{updateTime}
+				</if>
+	       		<if test="createUid != null and createUid != ''">
+					and `createUid` = #{createUid}
+				</if>
+	       		<if test="updateUid != null and updateUid != ''">
+					and `updateUid` = #{updateUid}
+				</if>
+	       		<if test="remark != null and remark != ''">
+					and `remark` = #{remark}
+				</if>
+		</where>
+	</sql>
+	<!-- 获取合作资金方列表-->
+	<select id="selectCustomerFundList" parameterType="customerFundDto" resultType="customerFundDto">
+		select * from tbl_customer_fund 
+		<include refid="customerFundWhereSQL" />
+		order by createTime desc 
+		<if test="pageSize>0">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	
+	<!-- 获取合作资金方总数-->
+	<select id="selectCustomerFundCount" parameterType="customerFundDto" resultType="int">
+		select count(*) from tbl_customer_fund 
+		<include refid="customerFundWhereSQL" />
+	</select>	
+		
+	<!-- 新增合作资金方-->
+	<insert id="addCustomerFund" parameterType="customerFundDto" useGeneratedKeys="true" keyProperty="id">
+		insert	into tbl_customer_fund(
+			<trim suffixOverrides=",">
+				<if test="fundName != null">`fundName`,</if>
+				<if test="fundDesc != null">`fundDesc`,</if>
+				<if test="status != null">`status`,</if>
+				<if test="fundCode != null">`fundCode`,</if>
+				<if test="contactMan != null">`contactMan`,</if>
+				<if test="contactTel != null">`contactTel`,</if>
+				<if test="createTime != null">`createTime`,</if>
+				<if test="updateTime != null">`updateTime`,</if>
+				<if test="createUid != null">`createUid`,</if>
+				<if test="updateUid != null">`updateUid`,</if>
+				<if test="remark != null">`remark`,</if>
+				<if test="managerUid != null">`managerUid`,</if>
+				<if test="managerStatus != null">`managerStatus`,</if>
+			</trim>
+		)
+		values(	
+			<trim suffixOverrides=",">
+				<if test="fundName != null">#{fundName},</if>
+				<if test="fundDesc != null">#{fundDesc},</if>
+				<if test="status != null">#{status},</if>
+				<if test="fundCode != null">#{fundCode},</if>
+				<if test="contactMan != null">#{contactMan},</if>
+				<if test="contactTel != null">#{contactTel},</if>
+				<if test="createTime != null">#{createTime},</if>
+				<if test="updateTime != null">#{updateTime},</if>
+				<if test="createUid != null">#{createUid},</if>
+				<if test="updateUid != null">#{updateUid},</if>
+				<if test="remark != null">#{remark},</if>
+				<if test="managerUid != null">#{managerUid},</if>
+				<if test="managerStatus != null">#{managerStatus},</if>
+			</trim>
+		)
+	</insert>
+	
+	<!-- 修改合作资金方-->
+	<update id="updateCustomerFund" parameterType="customerFundDto" >
+	 update tbl_customer_fund
+	<set> 
+			<trim suffixOverrides=",">
+				<if test="fundName != null">`fundName` = #{fundName},</if>
+				<if test="fundDesc != null">`fundDesc` = #{fundDesc},</if>
+				<if test="status != null">`status` = #{status},</if>
+				<if test="fundCode != null">`fundCode` = #{fundCode},</if>
+				<if test="contactMan != null">`contactMan` = #{contactMan},</if>
+				<if test="contactTel != null">`contactTel` = #{contactTel},</if>
+				<if test="createTime != null">`createTime` = #{createTime},</if>
+				<if test="updateTime != null">`updateTime` = #{updateTime},</if>
+				<if test="createUid != null">`createUid` = #{createUid},</if>
+				<if test="updateUid != null">`updateUid` = #{updateUid},</if>
+				<if test="remark != null">`remark` = #{remark},</if>
+				<if test="managerUid != null">`managerUid` = #{managerUid},</if>
+				<if test="managerStatus != null">`managerStatus` = #{managerStatus},</if>
+			</trim>
+	</set> 
+	 where id = #{id}
+	</update>
+
+	<!-- 根据ID删除合作资金方-->
+    <delete id="deleteCustomerFundById" parameterType="int">
+		delete	from tbl_customer_fund where id = #{0}
+    </delete>
+
+	<!-- 根据ID查询合作资金方 -->	
+	<select id="selectCustomerFundById" parameterType="int" resultType="customerFundDto">
+		SELECT cf.*,cfa.auths from tbl_customer_fund cf 
+		LEFT JOIN tbl_customer_fund_auth cfa ON cfa.id=cf.id
+		WHERE cf.id=#{0}
+	</select>
+	
+	<!-- 根据代号查询合作资金方 -->
+	<select id="selectCustomerFundByFundCode" parameterType="java.lang.String" resultType="customerFundDto">
+		select	* from tbl_customer_fund where fundCode = #{0}
+	</select>
+	
+</mapper>

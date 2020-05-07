@@ -1,0 +1,66 @@
+<div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+            <ul class="breadcrumb">
+              <li>
+                <a>报表管理</a>
+                <span class="divider"></span>
+              </li>
+              <li class="active">
+                创收目标报表
+              </li>
+            </ul>
+          </div>
+        </div><!--row-->
+        <button ng-click="test()" ng-show=0>测试</button>
+        <div class="row">
+          <div class="col-md-12"> 
+            <form class="form-inline search" style="margin-bottom:20px;margin-left:30px; ">
+              <div class="form-group" >
+                
+                <select  class="form-control selectcity0001"  ng-model="page.cityCode" >
+                  <option  ng-repeat="city in orderCitys" ng-value='city.code'>{{city.name}}</option>
+                </select>  
+                  <label>报表状态:</label>
+                  <select class="form-control" ng-model = 'page.effective'>
+                  <option value="">全部</option>
+                  <option value="1">已上传</option>
+                  <option value="2">未上传</option>
+                </select>
+                <button ng-click="query()">查询</button>
+              
+            </div>
+        </form>
+            </div>
+        </div>
+        <!--row-->
+        <div class="row" style="margin-bottom: 10px">
+            <div class="col-md-12" id="tableWrap">
+                 <table    id="downloadTable" data-show-export="false" style="min-width:1000px;"></table>
+            </div>
+        </div>
+        <!--row-->
+        <table id="sjs-table" ng-show=0>
+          <tr><th>一级部门</th><th>二级级部门</th><th>姓名</th><th>放款量目标（万）</th><th>创收目标（万）</th></tr>
+          <tr ng-repeat="row in data" ng-show="$index !=0">
+            <td>{{row.__EMPTY}}</td>
+            <td>{{row.__EMPTY_1}}</td>
+            <td>{{row.__EMPTY_2}}</td>
+            <td>{{row.__EMPTY_3}}</td>
+            <td>{{row.__EMPTY_4}}</td>
+          </tr>
+        </table>
+        <div class="lhw-alert-bg ng-scope"  ng-show="showModel">
+          <div class="lhw-alert-box" style="width:663px">
+            <!-- <div class="lhw-alert-tit">删除</div> -->
+            <div class="lhw-alert-con">
+              确认删除已上传的报表吗？
+            </div>
+            <div class="lhw-alert-but">
+              <button ng-click="delete()" type="button" class="btn btn-primary lhw-alert-ok" style="margin-right:80px;">确  定</button>
+              <button ng-click="cancel()" type="button" class="btn btn-default lhw-alert-cancel">取  消</button>
+            </div>
+          </div>
+        </div>
+        </div><!--container-fluid-->
+         

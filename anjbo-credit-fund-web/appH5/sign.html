@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>面签</title>
+<!--标准mui.css-->
+<link rel="stylesheet" href="./css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="./css/order.css" />
+<link href="./css/mui.picker.min.css" rel="stylesheet" />
+
+</head>
+<body>
+ <form id="myform">
+	<div class="form-box">
+	     <div class="inp-div">
+	           <span class="inp-span mi">面签日期</span><span class="inp-r icon-d"> &nbsp;</span>
+	           <input type="text" value="" id="faceSignTime" readonly class="inp-box date" data-options='{"type":"date"}'  placeholder="请选择">
+	     </div>
+		
+		 <div class="inp-div">
+	           <span class="inp-span mi">添加面签照片</span><span class="inp-r arrow"> &nbsp;</span>
+	           <a href="#"><input type="text" value="" readonly class="inp-box file-upload" id="nImg" ></a>
+                <input type="hidden" id="faceSignPhoto">
+	     </div>
+	     <div class="clear"></div>
+	</div>
+	
+	<div class="form-box">
+	    <div class="clear"> </div>
+		<div class="inp-div no-border">
+	           <span class="inp-span">备注</span>
+	     </div>
+	     <textarea rows="5" placeholder="如有特殊说明，请在此备注（非必填）。" id="remark"  class="textarea-box"></textarea>
+		 <div class="clear"></div>
+	     <div class="sub-but" onclick="signAdd()">确认</div>
+	     <br>
+	</div>
+</form>
+<!--上传图片-->
+<div class="file-box">
+     <div class="file-but">立即上传</div>
+	 <div class="img-box">
+	    <div class="file-add"><input type="file" class="file-inp" name="file" id="file"></div>
+	 </div>
+</div>
+<script src="./js/mui.min.js"></script>
+<script src="./js/mui.picker.min.js"></script>
+<script src="./js/jquery.min.js"></script>
+<script src="./js/process.js"></script>
+<script>
+$(function(){
+	 //图片上传
+	$(".file-upload").on("click",function(){
+	    $(".file-box").show();
+	})
+	$(".file-but").on("click",function(){
+		var picAll='';
+        $(".img").each(function(){
+		   picAll+=$(this).attr("src")+",";
+		}) 
+	    $(this).parent(".file-box").hide();
+		if(picAll==""){
+		  $(".file-upload").val("请上传图片");
+		}else{
+		  picAll=picAll.substring(0,picAll.length-1);
+		  //alert(picAll);
+		   $("#faceSignPhoto").val(picAll);
+		  $(".file-upload").val("已上传");
+		}
+	})
+	
+	$(".file-inp").change(function(){
+        var formData = new FormData();
+        formData.append("file",$("#file")[0].files[0]);
+        $.ajax({ 
+		type:'post',
+	    url: "http://fs.anjbo.com/fs/img/upload", 
+		processData : false,
+		contentType: false,
+		data: formData, 
+		success: function(data){
+			var picUrl=data.url;
+			var ss='<div class="file-img"><img src="'+picUrl+'" class="img"><div class="mui-icon mui-icon-minus file-del"></div></div>';
+            $(".img-box").append(ss);
+			$(".file-del").on("click",function(){
+	            $(this).parent(".file-img").remove();
+	        })
+         },
+		 error:function(xhr,type,errorThrown){
+					console.log(type);
+		}
+	  });	 
+	})
+	//图片上传end
+
+	 var orderNo = GetQueryString("orderNo");
+	 $.ajax({ 
+		 url:'/credit/process/facesign/v/detail',
+		 data:JSON.stringify({"orderNo":orderNo}), 
+        type: 'post' ,
+        dataType: 'json',  
+        contentType:'application/json;charset=utf-8',
+		 success: function(data){
+			var obj= data.data;
+			$("#faceSignTime").val(obj.faceSignTimeStr);
+			$("#remark").val(obj.remark);
+			var img = obj.faceSignPhoto;
+		    if(img!=null && img!=''){
+		    	 $("#nImg").val("已上传");
+		    }
+			if(obj.faceSignPhoto){	
+				$(".file-upload").val("已上传");
+			    arrImg=obj.faceSignPhoto.split(",");
+				for(var i=0; i<arrImg.length;i++){
+				   var ss='<div class="file-img"><img src="'+arrImg[i]+'" class="img"><div class="mui-icon mui-icon-minus file-del"></div></div>';
+				   $(".file-box").find(".img-box").append(ss); 
+				}
+				 $(".file-del").on("click",function(){
+	                      $(this).parent(".file-img").remove();
+	              })
+			  }else{
+			     $(".file-upload").val("请上传图片");
+			  }
+        }
+	   });
+})
+
+	function signAdd(){
+		var orderno=GetQueryString("orderNo");
+		var faceSignTime=$("#faceSignTime").val();
+		if(faceSignTime==''){
+			alert("面签时间不能为空！");
+			return false;
+		}
+		var faceSignPhoto = $("#faceSignPhoto").val();
+		if(faceSignPhoto==''){
+			alert("面签照片不能为空！");
+			return false;
+		}
+		var faceSignDto = {
+				"orderNo":orderno,"faceSignTime":$("#faceSignTime").val(),"remark":$("#remark").val(),
+				"faceSignPhoto": $("#faceSignPhoto").val(),"uid":GetQueryString("uid"),"deviceId":GetQueryString("deviceId")
+	        };
+		$.ajax({ 
+	         url: "/credit/process/facesign/v/add", 
+	         type: 'post' ,
+	         dataType: 'json',  
+	         contentType:'application/json;charset=utf-8',
+		     data:JSON.stringify(faceSignDto), 
+			 success: function(data){
+				alert(data.msg);
+	         }
+		   });
+	}
+	
+	mui.init();
+	mui.ready(function() {
+	  $(".sel").click(function(){
+		  var userPicker = new mui.PopPicker();
+		  userPicker.setData([{
+			value: 'yes',
+			text: '是'
+		  }, {
+			value: 'no',
+			text: '否'
+		  }]);
+		  var _this=$(this);
+	      userPicker.show(function(items) {
+				_this.val((items[0].text));
+				//返回 false 可以阻止选择框的关闭
+				//return false;
+			});
+	 
+	  });
+	               
+	  $(".date").on("click",function(){
+		  var _this=$(this);
+		  var optionsJson = _this.attr('data-options') || '{}';
+		  var options = JSON.parse(optionsJson);
+	                   var  picker = new mui.DtPicker(options);
+	      picker.show(function(rs) {
+			  _this.val(rs.text);
+			   picker.dispose();
+			});
+	 
+	  });
+	});
+</script>
+</body>
+</html>

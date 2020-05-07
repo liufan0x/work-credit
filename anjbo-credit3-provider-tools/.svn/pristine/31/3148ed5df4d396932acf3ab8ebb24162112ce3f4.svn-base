@@ -1,0 +1,3 @@
+FROM frolvlad/alpine-oraclejdk8:slim
+ADD /anjbo-credit3-provider-tools.jar //
+ENTRYPOINT ["java", "-jar", "/anjbo-credit3-provider-tools.jar"]

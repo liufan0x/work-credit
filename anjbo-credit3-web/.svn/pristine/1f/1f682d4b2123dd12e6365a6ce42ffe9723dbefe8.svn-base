@@ -1,0 +1,38 @@
+<div class="lhw-alert-bg2" style="z-index: 1;">
+	<div class="lhw-alert-box" style="width:1158px;">
+		<div class="lhw-alert-tit relative">确认推送给资方的看单信息
+			<div class="lhw-x" ng-click="ordinaryClose()"></div>
+		</div>
+		<div>
+			<div class="row">
+				<div class="col-md-12" style="padding-top:10px;">
+					<ul class="nav nav-tabs">
+						<li ng-class="{'active':ordinaryTitle=='orderOrdinaryShow'}" ng-init="ordinaryTitle='orderOrdinaryShow'">
+							<a href="javascript:void(0);" ng-click="ordinaryTitle='orderOrdinaryShow'">借款信息</a>
+						</li>
+						<li ng-show="isAuditShow" ng-class="{'active':ordinaryTitle=='auditFirstOrdinaryShow'}">
+							<a href="javascript:void(0);" ng-click="ordinaryTitle='auditFirstOrdinaryShow'">审批意见</a>
+						</li>
+						<li ng-class="{'active':ordinaryTitle=='imageOrdinaryShow'}">
+							<a href="javascript:void(0);" ng-click="ordinaryTitle='imageOrdinaryShow'">影像资料</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div ng-show="ordinaryTitle=='orderOrdinaryShow'" style="width:100%;height:490px; overflow-y:scroll;">
+				<div ng-include="'/plugins/fund-directive/ordinary/allocationFundOrdinaryOrder.html'"></div>
+			</div>
+			<div ng-show="ordinaryTitle=='auditFirstOrdinaryShow'" style="width:100%;height:490px; overflow-y:scroll;">
+				<div ng-include="'/plugins/fund-directive/ordinary/allocationFundOrdinaryAudit.html'"></div>
+			</div>
+			<div ng-show="ordinaryTitle=='imageOrdinaryShow'" style="width:100%;height:490px; overflow-y:scroll;">
+				<div ng-include="'/plugins/fund-directive/ordinary/allocationFundOrdinaryBusinfo.html'"></div>
+			</div>
+		</div>
+
+		<div class="lhw-alert-but">
+			<button type="button" class="btn btn-primary" ng-click="ordinarySave()" style="margin-right:80px;">确认</button>
+			<button type="button" class="btn btn-danger lhw-alert-cancel" ng-click="ordinaryClose()">取消</button>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.AuditMapper" >
+    
+  <select id="selectAudit" parameterType="java.lang.String" resultType="AuditDto">
+      select * from tbl_finance_audit where orderNo=#{orderNo} order by createTime desc limit 1
+  </select>
+  
+  <delete id="deleteAudit" parameterType="java.lang.String">
+      delete  from tbl_finance_audit where  orderNo=#{0} 
+  </delete>	
+  
+  <insert id="addAudit" parameterType="AuditDto">
+      INSERT INTO `tbl_finance_audit`(
+     `createTime`, `createUid`, `updateUid`,  `orderNo`, `remark`
+      )VALUES (
+        NOW(), #{createUid}, #{updateUid}, #{orderNo},#{remark}
+      );
+  </insert>
+  	
+</mapper>

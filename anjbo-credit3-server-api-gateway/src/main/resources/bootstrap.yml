@@ -1,0 +1,20 @@
+eureka:  
+  client:
+    service-url:
+      defaultZone: http://server-eureka001:60100/eureka/
+server:
+  port: 60190
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: anjbo-credit3-server-api-gateway
+  cloud:
+    config:
+      profile: ${spring.profiles.active}
+      label: master
+      name: ${spring.application.name},anjbo-credit3-common
+      discovery:
+        service-id: anjbo-credit3-server-config
+        enabled: true

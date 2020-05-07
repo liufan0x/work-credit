@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.LawsuitCnMapper" >
+
+	<resultMap id="BaseResultMap" type="LawsuitCnDto">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="createUid" jdbcType="VARCHAR" property="createUid" />
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="updateUid" jdbcType="VARCHAR" property="updateUid" />
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="lawsuitId" jdbcType="INTEGER" property="lawsuitId" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="date" jdbcType="VARCHAR" property="date" />
+        <result column="caseNo" jdbcType="VARCHAR" property="caseNo" />
+        <result column="detailId" jdbcType="VARCHAR" property="detailId" />
+    </resultMap>
+
+	<sql id="Base_Column_List">
+        id, createUid, createTime, updateUid, updateTime, lawsuitId, name, date, caseNo, 
+        detailId,orderNo
+    </sql>
+
+  <select id="selectByPrimaryKey" resultType="LawsuitCnDto" parameterType="java.lang.Integer" >
+    select 
+    *
+    from tbl_risk_lawsuit_cn
+    where id = #{id}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from tbl_risk_lawsuit_cn
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="LawsuitCnDto"  useGeneratedKeys="true" keyProperty="id" >
+   		insert into tbl_risk_lawsuit_cn 
+   		(
+   			id, createUid, createTime, 
+            updateUid,lawsuitId, 
+            name, date, caseNo, 
+            detailId,orderNo
+         )
+        values 
+        (
+        	#{id}, #{createUid}, now(), 
+            #{updateUid},#{lawsuitId}, 
+            #{name}, #{date}, #{caseNo}, 
+            #{detailId},#{orderNo}
+           )
+  </insert>
+  <insert id="insertSelective" parameterType="LawsuitCnDto"  useGeneratedKeys="true" keyProperty="id" >
+    insert into tbl_risk_lawsuit_cn
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="createUid != null">
+                createUid,
+            </if>
+            <if test="createTime != null">
+                createTime,
+            </if>
+            <if test="updateUid != null">
+                updateUid,
+            </if>
+            <if test="lawsuitId != null">
+                lawsuitId,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="date != null">
+                date,
+            </if>
+            <if test="caseNo != null">
+                caseNo,
+            </if>
+            <if test="detailId != null">
+                detailId,
+            </if>
+            <if test="orderNo!=null and orderNo!=''">
+            	orderNo,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="createUid != null">
+                #{createUid},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="updateUid != null">
+                #{updateUid},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+            <if test="lawsuitId != null">
+                #{lawsuitId},
+            </if>
+            <if test="name != null">
+                #{name},
+            </if>
+            <if test="date != null">
+                #{date},
+            </if>
+            <if test="caseNo != null">
+                #{caseNo},
+            </if>
+            <if test="detailId != null">
+                #{detailId},
+            </if>
+             <if test="orderNo!=null and orderNo!=''">
+            	#{orderNo}
+            </if>
+        </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="LawsuitCnDto" >
+    update tbl_risk_lawsuit_cn
+    <set >
+      <if test="lawsuitId != null and lawsuitId!=''" >
+        lawsuitId = #{lawsuitId},
+      </if>
+      <if test="name != null and name!=''" >
+        name = #{name},
+      </if>
+      <if test="date != null and date!=''" >
+        date = #{date},
+      </if>
+      <if test="caseNo != null and caseNo!=''" >
+        caseNo = #{caseNo},
+      </if>
+      <if test="detailId != null and detailId!=''" >
+        detailId = #{detailId},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  
+  <update id="updateByPrimaryKey" parameterType="LawsuitCnDto" >
+    update tbl_risk_lawsuit_cn
+      set 
+      		createUid = #{createUid},
+            updateUid = #{updateUid},
+            lawsuitId = #{lawsuitId},
+            name = #{name},
+            date = #{date},
+            caseNo = #{caseNo},
+            detailId = #{detailId}
+        where id = #{id}
+  </update>
+  
+  <select id="getListMap" parameterType="java.util.Map" resultType="java.util.Map" >
+  	select * from tbl_risk_lawsuit_cn 
+  	where 1=1 
+  	<if test="id != null and id != 0" >
+	  AND id = #{id} 
+  	</if>
+  	<if test="lawsuitId != null and lawsuitId != 0" >
+	  AND lawsuitId = #{lawsuitId} 
+  	</if>
+  	<if test="orderNo!=null and orderNo!=''">
+  		and orderNo = #{orderNo}
+  	</if>
+  	ORDER BY id
+  </select>
+
+  <delete id="deleteByMap" parameterType="java.util.Map" >
+    delete from tbl_risk_lawsuit_cn
+    where lawsuitId = ${lawsuitId}
+  </delete>
+</mapper>

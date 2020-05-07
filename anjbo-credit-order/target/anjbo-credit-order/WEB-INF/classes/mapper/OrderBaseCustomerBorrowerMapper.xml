@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.OrderBaseCustomerBorrowerMapper" >
+	
+	<!-- 添加订单共同借款人信息 -->
+	<insert id="saveOrderCustomerBorrower" parameterType="OrderBaseCustomerBorrowerDto">
+		INSERT INTO tbl_order_base_customer_borrower (
+			createUid,
+			createTime,
+			orderNo,
+			borrowerName,
+			borrowerPhone,
+			borrowerCardType,
+			borrowerCardNumber,
+			borrowerMarriageState,
+			borrowerWifeName,
+			borrowerWifeCardType,
+			borrowerWifeCardNumber,
+			borrowerRelationship,
+			<if test="isFinish != null and isFinish > 0">
+			isFinish,
+			</if>
+			borrowerIsPropertyProle
+		)
+		VALUES
+		(
+			#{createUid},
+			now(),
+			#{orderNo},
+			#{borrowerName},
+			#{borrowerPhone},
+			#{borrowerCardType},
+			#{borrowerCardNumber},
+			#{borrowerMarriageState},
+			#{borrowerWifeName},
+			#{borrowerWifeCardType},
+			#{borrowerWifeCardNumber},
+			#{borrowerRelationship},
+			<if test="isFinish != null and isFinish > 0">
+			#{isFinish},
+			</if>
+			#{borrowerIsPropertyProle}
+		)
+	</insert>
+	
+	<!-- 修改订单共同借款人信息 -->
+	<update id="updateOrderCustomerBorrow" parameterType="OrderBaseCustomerBorrowerDto">
+	  	UPDATE tbl_order_base_customer_borrower 
+	  	<set>
+	  		<if test="createUid != null and createUid != ''">
+	  			createUid = #{createUid},
+	  		</if>
+	  		<if test="updateUid != null and updateUid != ''">
+	  			updateUid = #{updateUid},
+	  		</if>
+	  		<if test="borrowerName != null and borrowerName != ''">
+	  			borrowerName = #{borrowerName},
+	  		</if>
+	  		<if test="borrowerPhone != null and borrowerPhone != ''">
+	  			borrowerPhone = #{borrowerPhone},
+	  		</if>
+	  		<if test="borrowerCardType != null and borrowerCardType != ''">
+	  			borrowerCardType = #{borrowerCardType},
+	  		</if>
+	  		<if test="borrowerCardNumber != null and borrowerCardNumber != ''">
+	  			borrowerCardNumber = #{borrowerCardNumber},
+	  		</if>
+	  		<if test="borrowerMarriageState != null and borrowerMarriageState != ''">
+	  			borrowerMarriageState = #{borrowerMarriageState},
+	  		</if>
+	  		<if test="borrowerWifeName != null and borrowerWifeName != ''">
+	  			borrowerWifeName = #{borrowerWifeName},
+	  		</if>
+	  		<if test="borrowerWifeCardType != null and borrowerWifeCardType != ''">
+	  			borrowerWifeCardType = #{borrowerWifeCardType},
+	  		</if>
+	  		<if test="borrowerWifeCardNumber != null and borrowerWifeCardNumber != ''">
+	  			borrowerWifeCardNumber = #{borrowerWifeCardNumber},
+	  		</if>
+	  		<if test="borrowerRelationship != null and borrowerRelationship != ''">
+	  			borrowerRelationship = #{borrowerRelationship},
+	  		</if>
+	  		<if test="borrowerIsPropertyProle != null and borrowerIsPropertyProle != ''">
+	  			borrowerIsPropertyProle = #{borrowerIsPropertyProle},
+	  		</if>
+	  		<if test="isFinish != null and isFinish != 0">
+	  			isFinish = #{isFinish},
+	  		</if>
+	  		updateTime = now()
+	  	</set>
+	  	WHERE id = #{id}
+  	</update>
+  	
+  	<!-- 修改订单共同借款人信息 -->
+	<update id="updateOrderCustomerBorrowNull" parameterType="OrderBaseCustomerBorrowerDto">
+	  	UPDATE tbl_order_base_customer_borrower 
+	  	SET
+	  			updateUid = #{updateUid},
+	  			borrowerName = #{borrowerName},
+	  			borrowerPhone = #{borrowerPhone},
+	  			borrowerCardType = #{borrowerCardType},
+	  			borrowerCardNumber = #{borrowerCardNumber},
+	  			borrowerMarriageState = #{borrowerMarriageState},
+	  			borrowerWifeName = #{borrowerWifeName},
+	  			borrowerWifeCardType = #{borrowerWifeCardType},
+	  			borrowerWifeCardNumber = #{borrowerWifeCardNumber},
+	  			borrowerRelationship = #{borrowerRelationship},
+	  			borrowerIsPropertyProle = #{borrowerIsPropertyProle},
+	  			<if test="isFinish != null and isFinish > 0">
+	  			isFinish = #{isFinish},
+	  			</if>
+	  			updateTime = now()
+	  	WHERE id = #{id}
+  	</update>
+	<!-- 查询订单共同借款人信息 -->
+	<select id="selectOrderCustomerBorrowerByOrderNo" parameterType="java.lang.String" resultType="OrderBaseCustomerBorrowerDto">
+  		select 
+  			id,
+  			createUid,
+			createTime,
+			updateUid,
+			updateTime,
+			orderNo,
+			borrowerName,
+			borrowerPhone,
+			borrowerCardType,
+			borrowerCardNumber,
+			borrowerMarriageState,
+			borrowerWifeName,
+			borrowerWifeCardType,
+			borrowerWifeCardNumber,
+			borrowerRelationship,
+			borrowerIsPropertyProle,
+			isFinish
+  		from tbl_order_base_customer_borrower where orderNo=#{orderNo}
+  		ORDER BY id
+    </select>
+    
+    <!-- 查询订单共同借款人信息 -->
+	<select id="selectOrderCustomerBorrowerById" parameterType="int" resultType="OrderBaseCustomerBorrowerDto">
+  		select 
+  			id,
+  			createUid,
+			createTime,
+			updateUid,
+			updateTime,
+			orderNo,
+			borrowerName,
+			borrowerPhone,
+			borrowerCardType,
+			borrowerCardNumber,
+			borrowerMarriageState,
+			borrowerWifeName,
+			borrowerWifeCardType,
+			borrowerWifeCardNumber,
+			borrowerRelationship,
+			borrowerIsPropertyProle,
+			isFinish
+  		from tbl_order_base_customer_borrower where id=#{id} limit 1
+    </select>
+    
+    <!-- 批量删除借款人信息 -->
+    <delete id="deleteBorrowerBacthId" parameterType="OrderBaseCustomerDto">
+    	delete from tbl_order_base_customer_borrower
+    	where id in
+    	<foreach collection="orderBaseCustomerBorrowerDto" item="obj" open="(" close=")" separator=",">
+    		#{obj.id}
+    	</foreach>
+    </delete>
+    
+    <!-- 删除借款人信息 -->
+    <delete id="deleteBorrowerById" parameterType="int">
+    	delete from tbl_order_base_customer_borrower
+    	where id =#{0}
+    </delete>
+    
+    <!-- 删除借款人信息 -->
+    <delete id="deleteBorrowerByOrderNo" parameterType="string">
+    	delete from tbl_order_base_customer_borrower
+    	where orderNo =#{0}
+    </delete>
+	
+</mapper>

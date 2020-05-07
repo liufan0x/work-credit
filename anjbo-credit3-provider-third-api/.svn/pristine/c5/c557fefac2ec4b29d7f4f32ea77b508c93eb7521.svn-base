@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.hrtrust.HrtrustKgIndivMapper">
+	<select id="getKgIndiv" parameterType="String" resultType="map">
+		select * from tbl_third_hrtrust_kg_indiv where orderNo=#{orderNo}
+		order by id DESC limit 0,1
+	</select>
+	
+	<update id="updateMap" parameterType="java.util.Map">
+        update tbl_third_hrtrust_kg_indiv
+        <set>
+            <if test="applSeq != null and applSeq!=''">
+                applSeq = #{applSeq},
+            </if>
+
+            <if test="respStatus != null and respStatus !=''">
+                respStatus = #{respStatus},
+            </if>
+            <if test="custName != null and custName!=''">
+                custName = #{custName},
+            </if>
+            <if test="docType != null and docType!=''">
+                docType = #{docType},
+            </if>
+            <if test="docNo !=null and docNo !=''">
+                docNo = #{docNo},
+            </if> 
+            <if test="mobile != null and mobile !=''">
+                mobile = #{mobile},
+            </if> 
+            <if test="marStatus !=null and marStatus != ''">
+                marStatus = #{marStatus},
+            </if>
+            <if test="sCustName !=null and sCustName != ''">
+                sCustName = #{sCustName},
+            </if>
+             <if test="marStatus !=null and marStatus != ''">
+                marStatus = #{marStatus},
+            </if>
+             <if test="sDocType !=null and sDocType != ''">
+                sDocType = #{sDocType},
+            </if> 
+            <if test="sDocNo !=null and sDocNo != ''">
+                sDocNo = #{sDocNo},
+            </if>
+             <if test="sMobile !=null and sMobile != ''">
+                sMobile = #{sMobile},
+            </if>
+            <if test="sMarStatus !=null and sMarStatus != ''">
+                sMarStatus = #{sMarStatus},
+            </if>
+            <if test="cardLife !=null and cardLife != ''">
+                cardLife = #{cardLife},
+            </if>
+            <if test="totalPremises !=null and totalPremises != ''">
+                totalPremises = #{totalPremises},
+            </if>
+            <if test="totalCredit !=null and totalCredit != ''">
+                totalCredit = #{totalCredit},
+            </if>
+            <if test="debtRatio !=null and debtRatio != ''">
+                debtRatio = #{debtRatio},
+            </if>
+            <if test="overdueCredit !=null and overdueCredit != ''">
+                overdueCredit = #{overdueCredit},
+            </if>
+            <if test="yIsBank !=null and yIsBank != ''">
+                yIsBank = #{yIsBank},
+            </if>
+            <if test="loanYear !=null and loanYear != ''">
+                loanYear = #{loanYear},
+            </if>
+            <if test="houseNum !=null and houseNum != ''">
+                houseNum = #{houseNum},
+            </if>
+            <if test="quotaUsed !=null and quotaUsed != ''">
+                quotaUsed = #{quotaUsed},
+            </if>
+            <if test="loanAmount !=null and loanAmount != ''">
+                loanAmount = #{loanAmount},
+            </if>
+            <if test="creditFindNum !=null and creditFindNum != ''">
+                creditFindNum = #{creditFindNum},
+            </if>
+            <if test="xIsBank !=null and xIsBank != ''">
+                xIsBank = #{xIsBank},
+            </if>
+            <if test="defaultRate !=null and defaultRate != ''">
+                defaultRate = #{defaultRate},
+            </if>
+            <if test="overdraft !=null and overdraft != ''">
+                overdraft = #{overdraft},
+            </if>
+            <if test="totalCreditLia !=null and totalCreditLia != ''">
+                totalCreditLia = #{totalCreditLia},
+            </if>
+            <if test="foreclosureRate !=null and foreclosureRate != ''">
+                foreclosureRate = #{foreclosureRate},
+            </if>
+            <if test="companyRight !=null and companyRight != ''">
+                companyRight = #{companyRight},
+            </if>
+            <if test="rightMortgage !=null and rightMortgage != ''">
+                rightMortgage = #{rightMortgage},
+            </if>
+            <if test="remark !=null and remark != ''">
+                remark = #{remark},
+            </if>
+        </set>
+        where orderNo = #{orderNo}
+    </update>
+    
+    
+	<!-- 添加订单共同担保人信息 -->
+	<insert id="saveKgIndiv" parameterType="Map">
+		INSERT INTO
+		tbl_third_hrtrust_kg_indiv (
+		applSeq,
+		orderNo,
+		custName,
+		docType,
+		docNo,
+		mobile,
+		marStatus,
+		sCustName,
+		sDocType,
+		sDocNo,
+		sMobile,
+		sMarStatus,
+		cardLife,
+		totalPremises,
+		totalCredit,
+		debtRatio,
+		overdueCredit,
+		yIsBank,
+		loanYear,
+		houseNum,
+		quotaUsed,
+		loanAmount,
+		creditFindNum,
+		xIsBank,
+		defaultRate,
+		overdraft,
+		totalCreditLia,
+		foreclosureRate,
+		companyRight,
+		rightMortgage,
+		remark
+		)
+		VALUES
+		(
+		#{applSeq},
+		#{orderNo},
+		#{custName},
+		#{docType},
+		#{docNo},
+		#{mobile},
+		#{marStatus},
+		#{sCustName},
+		#{sDocType},
+		#{sDocNo},
+		#{sMobile},
+		#{sMarStatus},
+		#{cardLife},
+		#{totalPremises},
+		#{totalCredit},
+		#{debtRatio},
+		#{overdueCredit},
+		#{yIsBank},
+		#{loanYear},
+		#{houseNum},
+		#{quotaUsed},
+		#{loanAmount},
+		#{creditFindNum},
+		#{xIsBank},
+		#{defaultRate},
+		#{overdraft},
+		#{totalCreditLia},
+		#{foreclosureRate},
+		#{companyRight},
+		#{rightMortgage},
+		#{remark}
+		)
+	</insert>
+
+</mapper>

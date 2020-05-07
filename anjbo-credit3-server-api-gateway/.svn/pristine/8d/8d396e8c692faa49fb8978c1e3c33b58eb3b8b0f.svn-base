@@ -1,0 +1,7 @@
+com\anjbo\config\RedisHttpSessionConfiguration.class
+com\anjbo\filter\AccessFilter.class
+com\anjbo\config\domain\ZuulRoute.class
+com\anjbo\config\LocalConfiguration.class
+com\anjbo\controller\ApidocController.class
+com\anjbo\filter\AccessFilter$1.class
+com\anjbo\BootApplication.class

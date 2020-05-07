@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.anjbo.dao.dingtalk.ThirdDingtalkBpmsTempMapper">		
+	
+	<!-- 获取列表-->
+	<select id="search" parameterType="ThirdDingtalkBpmsTempDto" resultType="ThirdDingtalkBpmsTempDto">
+		select * from tbl_third_dingtalk_bpms_temp 		
+		order by createTime desc
+	</select>
+	
+	<!-- 明细-->
+	<select id="getEntity" parameterType="long" resultType="ThirdDingtalkBpmsTempDto">
+		select * from tbl_third_dingtalk_bpms_temp where id = #{id}
+	</select>
+	
+	<select id="getEntityByCode" parameterType="string" resultType="ThirdDingtalkBpmsTempDto">
+		select * from tbl_third_dingtalk_bpms_temp where code = #{code}
+	</select>
+		
+	<!-- 修改-->
+	<update id="edit" parameterType="ThirdDingtalkBpmsTempDto" >
+	 update tbl_third_dingtalk_bpms_temp
+	 <set> 
+			<trim suffixOverrides=",">
+				<if test="agentId != null">`agentId` = #{agentId},</if>
+				<if test="processCode != null">`processCode` = #{processCode},</if>
+				<if test="approvers != null">approvers=#{approvers}, approversName=#{approversName}, </if>
+				ccList=#{ccList}, ccListName=#{ccListName},
+				<if test="formComponent != null">`formComponent` = #{formComponent},</if>				
+				<if test="updateUid != null">`updateUid` = #{updateUid},</if>
+				updateTime = NOW()
+			</trim>
+	 </set> 
+	 where id = #{id}
+	</update>
+	
+</mapper>

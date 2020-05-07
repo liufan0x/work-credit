@@ -1,0 +1,187 @@
+<div class="container-fluid">
+ 
+	<div class="row">
+		<div class="col-md-12">
+			 <ul class="breadcrumb">
+				 <li><a ui-sref="agencyList">机构列表 </a></li>
+				 <li><span ng-if="isAdd">添加机构</span><span ng-if="!isAdd">编辑机构</span></li>			
+				 <li class="go-back"> <a ui-sref="agencyList" >返回上一步</a></li>
+			 </ul>
+		</div>
+	</div>
+
+	<div class="row">
+		<form name="agencyForm" role="form" class="form-inline">
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="jigou-span"><span class="text-warning">*</span>机构名称：</div>
+					<input type="text" class="form-control" ng-model="agencyDto.name" name="name" required/>（如“深圳快鸽互联网金融有限公司”)
+					<span style="color:red" ng-show="agencyForm.name.$dirty && agencyForm.name.$invalid">
+  						<span ng-show="agencyForm.name.$error.required">必填</span>
+					</span>
+				</div> 
+			</div>
+
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="jigou-span"><span class="text-warning">*</span>机构简称：</div>
+					<input type="text" class="form-control" ng-model="agencyDto.simName" name="simName" required />（如“快鸽按揭”)
+					<span style="color:red" ng-show="agencyForm.simName.$dirty && agencyForm.simName.$invalid">
+  						<span ng-show="agencyForm.simName.$error.required">必填</span>
+					</span>
+				</div> 
+			</div>
+
+
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="jigou-span"><span class="text-warning">*</span>机构类型：</div>
+					<select class="form-control" ng-model="agencyDto.type" name="type" required>
+		        		<option value="">请选择</option>
+						<option ng-repeat="agencyType in agencyTypeList" value="{{agencyType.id}}">{{agencyType.name}}</option>
+					</select>
+					<span style="color:red" ng-show="agencyForm.type.$dirty && agencyForm.type.$invalid">
+  						<span ng-show="agencyForm.type.$error.required">必选</span>
+					</span>
+				</div> 
+			</div>
+
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="jigou-span"><span class="text-warning">*</span>渠道经理：</div>
+					<select class="form-control"  ng-model="agencyDto.chanlMan" name="chanlMan" required>
+		        		<option value="">请选择</option>
+						<option ng-repeat="channelManager in channelManagerList" value="{{channelManager.uid}}">{{channelManager.name}}</option>
+	         		</select>
+	         		<span style="color:red" ng-show="agencyForm.chanlMan.$dirty && agencyForm.chanlMan.$invalid">
+  						<span ng-show="agencyForm.chanlMan.$error.required">必选</span>
+					</span>
+				</div>
+			</div>
+
+			<div class="col-md-12">
+				<div class="form-group detail-row">
+					<div class="jigou-span">关联受理员：</div>
+					<select class="form-control" style="width: 400px;" data="{{acceptListValue}}" select-multiple ng-model="tempAcceptList">
+						<option ng-repeat="accept in acceptList" value="{{accept.id}}">{{accept.name}}</option>
+	         		</select>
+				</div>
+			</div>
+
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="jigou-span"><span class="text-warning">*</span>联系人：</div>
+					<input type="text" class="form-control" ng-model="agencyDto.contactMan" name="contactMan" required/> 
+					<span style="color:red" ng-show="agencyForm.contactMan.$dirty && agencyForm.contactMan.$invalid">
+  						<span ng-show="agencyForm.contactMan.$error.required">必填</span>
+					</span>
+				</div> 
+			</div>
+
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="jigou-span"><span class="text-warning">*</span>联系电话：</div>
+					<input type="text" class="form-control" ng-model="agencyDto.contactTel"  name="contactTel" required ng-pattern="/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/"/> 
+					<span style="color:red" ng-show="agencyForm.contactTel.$dirty && agencyForm.contactTel.$invalid">
+  						<span ng-show="agencyForm.contactTel.$error.required">必填</span>
+					</span>
+					<span style="color:red" ng-show="agencyForm.contactTel.$dirty && !(agencyForm.contactTel.$error.required) && !agencyForm.contactTel.$valid">联系电话格式有误</span>
+				</div> 
+			</div>
+
+			<div class="clear"></div>
+			<div class="jigou-line"></div>
+			<div class="clear"></div>
+
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="jigou-span"><span class="text-warning">*</span>最低收费标准：</div>
+					<input type="text" class="form-control" ng-model="agencyDto.chargeStandard"  name="chargeStandard" min=0 ng-pattern="/^(([0-9]|([1-9][0-9]{0,9}))((\.[0-9]{1,5})?))$/" required/> 元
+					<span style="color:red" ng-show="agencyForm.chargeStandard.$dirty && agencyForm.chargeStandard.$invalid">
+  						<span ng-show="agencyForm.chargeStandard.$error.required">必填</span>
+					</span>
+					<span style="color:red" ng-show="agencyForm.chargeStandard.$dirty && !(agencyForm.chargeStandard.$error.required) && !agencyForm.chargeStandard.$valid">最低收费标准格式有误</span>
+				</div> 
+			</div>
+
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="jigou-span"><span class="text-warning">*</span>是否有保证金：</div>
+					<select class="form-control" ng-model="agencyDto.isBond" name="isBond" required>
+						<option value="0">是</option>
+						<option value="1">否</option>
+					</select>
+					<span style="color:red" ng-show="agencyForm.isBond.$dirty && agencyForm.isBond.$invalid">
+  						<span ng-show="agencyForm.isBond.$error.required">必填</span>
+					</span>
+				</div>
+			</div>
+
+			<div class="col-md-12" ng-show="agencyDto.isBond==0">
+				<div class="form-group">
+					<div class="jigou-span"><span class="text-warning">*</span>责任承担比例：</div>
+					<input type="text" class="form-control" ng-model="agencyDto.proportionResponsibility"  name="proportionResponsibility" ng-pattern="/^(?:0|[1-9][0-9]?|100)$/" required/> %
+					<span style="color:red" ng-show="agencyForm.proportionResponsibility.$dirty && agencyForm.proportionResponsibility.$invalid">
+  						<span ng-show="agencyForm.proportionResponsibility.$error.required">必填</span>
+					</span>
+					<span style="color:red" ng-show="agencyForm.proportionResponsibility.$dirty && !(agencyForm.proportionResponsibility.$error.required) && !agencyForm.proportionResponsibility.$valid">责任承担比例格式有误</span>
+				</div>
+			</div>
+
+			<div class="col-md-12" ng-show="agencyDto.isBond==0">
+				<div class="form-group">
+					<div class="jigou-span"><span class="text-warning">*</span>保证金：</div>
+					<input type="text" class="form-control" ng-model="agencyDto.bond"  name="bond" min=0 ng-pattern="/^(([0-9]|([1-9][0-9]{0,9}))((\.[0-9]{1,5})?))$/" required/> 元
+					<span style="color:red" ng-show="agencyForm.bond.$dirty && agencyForm.bond.$invalid">
+  						<span ng-show="agencyForm.bond.$error.required">必填</span>
+					</span>
+					<span style="color:red" ng-show="agencyForm.bond.$dirty && !(agencyForm.bond.$error.required) && !agencyForm.bond.$valid">保证金格式有误</span>
+				</div>
+			</div>
+
+			<div class="col-md-12" ng-show="agencyDto.isBond==0">
+				<div class="form-group">
+					<div class="jigou-span"><span class="text-warning">*</span>授信额度：</div>
+					<input type="text" class="form-control" ng-model="agencyDto.creditLimit"  name="creditLimit" min=0 ng-pattern="/^(([0-9]|([1-9][0-9]{0,9}))((\.[0-9]{1,5})?))$/" required/> 万元
+					<span style="color:red" ng-show="agencyForm.creditLimit.$dirty && agencyForm.creditLimit.$invalid">
+  						<span ng-show="agencyForm.creditLimit.$error.required">必填</span>
+					</span>
+					<span style="color:red" ng-show="agencyForm.creditLimit.$dirty && !(agencyForm.creditLimit.$error.required) && !agencyForm.creditLimit.$valid">授信额度格式有误</span>
+				</div>
+			</div>
+		 
+			<div class="clear"></div>
+			<div class="jigou-line" ng-if="isAdd" ></div>
+			<div class="clear" ng-if="isAdd" ></div>
+
+
+			<div class="col-md-12" ng-if="isAdd" >
+				<div class="form-group">
+					<div class="jigou-span">管理账号：</div>
+					<input type="text" class="form-control" ng-model="agencyDto.manageAccount" disabled/>
+					<button type="button" class="btn btn-primary" ng-click="generateAccount()">生成并发送短信</button>
+				</div> 
+			</div>
+
+			<div class="col-md-12" ng-if="isAdd" >
+				<div class="form-group">
+					<div class="jigou-span">默认密码：</div>
+					<input type="text" class="form-control" ng-model="agencyDto.managePass"/>
+				</div> 
+			</div>
+
+		</form>
+	</div>
+
+	<div class="clear" style="height:15px;"></div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<div class="jigou-span">&nbsp;</div>
+			<button type="button" class="btn btn-success" ng-if="isAdd" ng-click="addOrEdit(true)">保存并继续添加</button>
+			<button type="button" class="btn btn-primary" ng-click="addOrEdit(false)">保存</button>
+			<button type="button" class="btn btn-default" ng-click="cancel()">取消</button> 
+		</div>
+	</div>
+
+</div>

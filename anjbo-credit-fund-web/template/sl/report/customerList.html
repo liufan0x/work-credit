@@ -1,0 +1,72 @@
+<div class="container-fluid">
+<div class="row">
+  <div class="col-md-12">
+    <ul class="breadcrumb">
+      <li>
+        <a>报表管理</a>
+        <span class="divider"></span>
+      </li>
+      <li class="active">
+        全部订单
+      </li>
+    </ul>
+  </div>
+</div><!--row-->
+<div class="row">
+  <div class="col-md-12"> 
+    <form class="form-inline search" style="margin-bottom:20px;margin-left:30px; ">
+      <div class="form-group">
+	        <label>报表类型：</label>
+	          <select ng-model="reportType" class="form-control">
+	             <option  value="0">客户信息明细表</option>
+	             <option  value="1">风控审批统计表</option>
+	             <option  value="2">订单退回统计表</option>
+	          </select>
+      </div>
+      <br></br>
+      <div class="form-group" >
+       <label id="timeShow">放款时间：{{page.days}}</label>
+          <button type="button" ng-init="page.days='0'" class="btn" ng-click="page.days='0'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page.days=='0']">全部</button>
+          <button type="button" class="btn" ng-click="page.days='7'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page.days=='7']">7天</button>
+          <button type="button" class="btn" ng-click="page.days='15'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page.days=='15']">15天</button>
+          <button type="button" class="btn" ng-click="page.days='30'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page.days=='30']">1个月</button>
+      </div>
+      
+      <div class="form-group">
+        <label>自定义<span id="zdyShow">放款</span>时间：</label>
+        <input  size="16" type="text" readonly  class="form-control form_date" ng-model="page.startTime">
+   		 <span class="clear-date" ng-click="clearDate($event)">X</span>	     
+            &nbsp;&nbsp;至
+        <input  size="16" type="text" readonly  class="form-control form_date" ng-model="page.endTime">
+         <span class="clear-date" ng-click="clearDate($event)">X</span>
+      </div>
+      <button type="submit" class="btn btn-default" ng-click="query()" style="margin-bottom:10px; margin-right:10px;">查询</button>
+</form>
+	</div>
+</div>
+<!--row-->
+<div class="row" id="customer" ng-show="reportType==0">
+	<div class="col-md-12">
+         <table  bs-table-control="customerList" id="customerTable" data-show-export="true" style="min-width:2200px;"></table>
+	</div>
+</div>
+<!--row-->
+
+<!--row-->
+<div class="row" id="returnBack" ng-show="reportType==1">
+	<div class="col-md-12">
+         <table  bs-table-control="managementList" id="managementTable" data-show-export="true"></table>
+	</div>
+</div>
+<!--row-->
+
+<!-- row -->
+<div class="row" id="management" ng-show="reportType==2">
+	<div class="col-md-12">
+         <table  bs-table-control="returnBackList" id="returnBackTable" data-show-export="true"></table>
+	</div>
+</div>
+<!-- row -->
+
+</div><!--container-fluid-->
+ 

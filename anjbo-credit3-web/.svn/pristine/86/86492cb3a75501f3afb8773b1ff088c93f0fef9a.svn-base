@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="robots" content="index, follow" />
+		<meta name="googlebot" content="index, follow" />
+
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=8,IE=9,IE=10" />
+
+		<meta http-equiv="expires" content="0">
+		<meta http-equiv="pragma" content="no-cache">
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="cache-control" content="no-store">
+
+		<!-- uc强制竖屏 -->
+		<meta name="screen-orientation" content="portrait">
+		<!-- QQ强制竖屏 -->
+		<meta name="x5-orientation" content="portrait">
+		<title>借公章审批详情</title>
+		<link rel="stylesheet" href="../other/aui/css/aui.2.0.css" />
+		<link rel="stylesheet" href="../other/mui/mui.min.css" />
+		<link rel="stylesheet" href="../css/mui.css" />
+		<link rel="stylesheet" href="../css/common.css" />
+	<!-- 	<script type="text/javascript">
+			function browserRedirect() {
+                if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {  
+				    //alert("iphone!");    
+				} else if (/(Android)/i.test(navigator.userAgent)) {  
+				    //alert("andriod");   
+				} else {  
+				    document.write('<div style="background:lightgrey;position:fixed;height:100%;width:100%;">请在app或钉钉手机客户端打开该页面!</div>');
+                	if (!!(window.attachEvent && !window.opera)) { 
+                		document.execCommand("stop"); 
+                	} else { 
+                		window.stop(); 
+                	}  
+				};  
+            }
+            browserRedirect(); 
+		</script> -->
+<style>
+#seals p{margin:0;}
+.zh p{color:#ddd;}
+div#approSealDetailCtrl>div.contentPart>div:nth-child(2)>div p{
+	padding-left:1rem !important;
+}
+div#approSealDetailCtrl>div.contentPart>div:nth-child(2)>div p span{
+	width:.75rem;
+	height:.75rem;
+	border-radius:50%;
+	top:.65rem;
+	left:0;
+	background: url(../img/choice.png) no-repeat center center;
+	background-size: 100% auto;
+}
+	div#approSealDetailCtrl>div.contentPart>div:nth-child(2)>div.zh p span{
+				background:transparent;
+				border:.05rem solid #dcdcdc;
+			}
+			#twobut{
+				display: flex;
+					justify-content:center;
+			}
+			#twobut span{
+				flex:1;
+			}
+ 
+			#tiaozhuanbut div,#twobut{
+				line-height:40px;
+				text-align:center;
+				color:#0cbbd3;
+				font-size:15px;
+				width:100%;
+			}
+			div#approSealDetailCtrl div.headerPart>span.cx_icon {
+				background: url(../img/cx.png)no-repeat center center;
+				background-size: 100% auto;
+			}
+			div#approSealDetailCtrl div.cell p{
+				padding-bottom:0;
+			}
+			.line-box{
+				line-height:2rem;
+				padding:0 !important;
+				margin:0 !important;
+			}
+			.line-box b{
+				display: block;
+				font-weight: normal;
+				float:right;
+			}
+			.yanchang{
+				display:none;
+			}
+			div#approSealDetailCtrl>div.contentPart>div:nth-child(2)>div p.csr-name{
+				padding:0 !important;
+				margin:0;
+				line-height:2rem;
+				font-size:.6rem;
+				text-align: center;
+			}
+</style>
+	</head>
+
+	<body>
+		<div id="approSealDetailCtrl">
+			<div class="headerPart">
+				<div>
+					<p style="font-size: .75rem;">
+						<font id="applierName"></font>
+					</p>
+					<p style="font-size: .6rem;padding-top: .25rem;">
+						<font class="color_999" id="myState"></font>
+					</p>
+
+					<span class="heafImgContainer" id="applierHead">
+						<font class="no_img"></font>
+					</span>
+				</div>
+				<div>
+					<p>
+						公章所属部门
+						<font id="sealDepartment" style="padding-left:2rem"></font>
+					</p>
+				</div>
+				<!--图标状态  class :  succ_icon 成功    fail_icon 拒绝 -->
+			</div>
+
+			<div class="contentPart">
+				<div>申请借用的公章</div>
+				<div id="seals">
+
+					<!-- 公章列表 -->
+
+				</div>
+			</div>
+
+
+			<div class="contentPart">
+				
+				<div>借用公章原因</div>
+				
+				<div>
+				   <div style="padding:.8rem 1.2rem;border-bottom:1px solid #e6e6e6;font-size:.7rem;">
+				     <span>用印文件名称</span>
+				     
+				     <span id="fileToSeal" style="float:right;min-height:1rem !important;"></span>
+
+				   </div>
+				   
+				   
+				   <div style="padding:.8rem 1.2rem;border-bottom:1px solid #e6e6e6;font-size:.7rem;">
+				     
+				     <span>文件份数</span>
+				     
+				     <span id="sealFileCount" style="float:right;min-height:1rem !important;"></span>
+				   </div>
+				   
+				   
+				   <div style="padding:.8rem 1.2rem;border-bottom:1px solid #e6e6e6;font-size:.7rem;">
+				    
+				     <span>文件类别</span>
+				     
+				     <span id="fileType" style="float:right;min-height:1rem !important;"></span>
+
+				   </div>
+				</div>
+				
+				<div class="cell" style="border-bottom:0;">
+					<div style="border: 0;margin: 0;min-height:5rem;padding:0 .75rem;">
+					    <p style="padding-left:.4rem;color:#555;">补充说明</p>
+						<span style="overflow:auto;min-height:6rem;padding:0 .4rem;font-size:.7rem;" id="reason" >无!</span>
+					</div>
+				</div>
+				
+				<div style="padding:0 .75rem;">
+				  	<div style="padding:.8rem 1.2rem;font-size:.7rem;border-top:1px solid #e6e6e6;">
+				     <span>文件图片</span>
+				   </div>
+				</div>
+			
+			</div>
+			
+			<div class="contentPart" style="padding:0;margin-top:0;overflow:hidden;">
+			     <div id="imgs" style="overflow:auto;padding:0;"></div>
+			</div>
+			
+			<div class="contentPart">
+				   <div id="timetit">借用公章时间</div>
+           <div class="cell">
+           		<p class="line-box">开始时间<b id="startTime"></b></p>
+           </div>
+					 <div class="cell">
+					 	<p class="line-box">结束时间<b id="endTime"></b></p>
+					 </div>
+					 <div class="cell">
+					 <p class="line-box">借用时长<b id="borrowDay"></b></p>
+					 </div>
+			</div>
+
+			<div class="contentPart">
+				<div>审批意见</div>
+				<div class="userList"  id="auditors">
+					<!-- 审批人列表 -->
+				</div>
+			</div>
+
+			
+			<!--新公章借用-->
+			<div class="contentPart yanchang">
+						<div id="timetit">新公章借用时间</div>
+						<div class="cell">
+								<p class="line-box">开始时间<b id="startTime2"></b></p>
+						</div>
+						<div class="cell">
+								<p class="line-box">结束时间<b id="endTime2"></b></p>
+						</div>
+						<div class="cell">
+								<p class="line-box">借用时长<b id="borrowDay2"></b></p>
+						</div>
+			</div>
+			<div class="contentPart yanchang">
+						<div id="timetit2">延长公章借用时间的原因</div>
+						<div class="cell">
+							<div style="border: 0;margin: 0;padding: .5rem 0;">
+								<span id="reason2" style="font-size: .75rem;"><font class="color_999">该申请未填写原因!</font></span>
+							</div>
+						</div>
+			</div>
+			<div class="contentPart yanchang">
+				<div>审批意见</div>
+				<div class="userList" id="auditors3">
+					<!-- 审批人列表 -->
+				</div>
+			</div>
+			<!--新公章借用end-->
+			
+			<div class="contentPart" id="copyContainer">
+							<div>抄送人<span style="font-size:12px;display:inline-block;padding-left:10px;color:#999;">审批通过后，通知抄送人</span></div>
+			
+							<div class="cell text_center">
+								<div style="border: 0;margin: 0;">
+									<div class="aui-row" style="padding: .75rem 0;" id="copyList">
+										<!-- 抄送人列表 -->
+									</div>
+								</div>
+							</div>
+						</div>
+						
+			<div id="auditors2"></div>
+			<div id="tiaozhuanbut"></div>
+			<div id="twobut"></div>
+		</div>
+
+
+<!--	
+<script src="../other/js/jquery.min.js"></script>
+<script src="../other/mui/mui.min.js"></script>
+<script src="../other/mui/mui.previewimage.js"></script>
+<script src="../other/mui/mui.zoom.js"></script>
+<script src="../js/common.js"></script>
+<script src="../js/approval_seal_detail.js"></script>
+-->
+<script src="../build/approval_seal.js"></script>
+</body>
+</html>

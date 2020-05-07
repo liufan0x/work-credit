@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.monitor.dao.MonitorArchiveMapper">
+	
+	<insert id="insertMonitorArchive" parameterType="com.anjbo.monitor.entity.MonitorArchiveDto" >
+		insert into
+		tbl_monitor_archive
+		(
+		createUid,
+		type,
+		estateType,
+		<if test="yearNo != null and yearNo != ''">
+			yearNo,
+		</if>
+		estateNo,
+		identityNo,
+		createTime,
+		startTime,
+		endTime,
+		queryFrequency,
+		phone,
+		archiveId,
+		message,
+		propertyStatus,
+		name,
+		agencyId
+		)
+		values
+		(
+		#{createUid},
+		#{type},
+		#{estateType},
+		<if test="yearNo != null and yearNo != ''">
+			#{yearNo},
+		</if>
+		#{estateNo},
+		#{identityNo},
+		now(),
+		#{startTime},
+		#{endTime},
+		#{queryFrequency},
+		#{phone},
+		#{archiveId},
+		#{message},
+		#{propertyStatus},
+		#{name},
+		#{agencyId}
+		)
+		ON DUPLICATE KEY UPDATE
+		phone = #{phone},
+		 updateTime=now()
+	</insert>
+	 <!-- 更新监控任务 -->
+	<update id="updateMonitorArchive" parameterType="com.anjbo.monitor.entity.MonitorArchiveDto" >
+		update tbl_monitor_archive
+		<set>
+			<if test="startTime != null" >
+				startTime = #{startTime},
+			</if>
+			<if test="endTime != null" >
+				endTime = #{endTime},
+			</if>
+			<if test="queryFrequency != null" >
+				queryFrequency = #{queryFrequency},
+			</if>
+			<if test="phone != null" >
+				phone = #{phone},
+			</if>
+			<if test="message!=null and message!=''">
+				message = #{message},
+			</if>
+			<if test=" propertyStatus != null and propertyStatus != '' ">
+				propertyStatus = #{propertyStatus},
+			</if>
+			<if test="changeRecord != null" >
+				changeRecord=#{changeRecord},
+			</if>
+			updateTime = now()
+		</set>
+		where 
+			id=#{id}
+	</update>
+	
+	<select id="selectArchiveListAll" parameterType="com.anjbo.monitor.entity.MonitorArchiveDto" resultType="com.anjbo.monitor.entity.MonitorArchiveDto">
+	    select m.*,date_format(m.startTime ,'%Y-%m-%d') as startTimeStr,date_format(m.endTime ,'%Y-%m-%d') as endTimeStr from tbl_monitor_archive as m
+	</select>
+	
+	<select id="selectArchiveList" parameterType="com.anjbo.monitor.entity.MonitorArchiveDto" resultType="com.anjbo.monitor.entity.MonitorArchiveDto">
+	    select m.*,date_format(startTime ,'%Y-%m-%d') as startTimeStr,date_format(endTime ,'%Y-%m-%d') as endTimeStr from tbl_monitor_archive as m
+	    where 1=1
+		<if test="startTime!=null and startTime!=''">
+			<![CDATA[ and m.updateTime >= #{startTime} ]]>
+		</if>
+		<if test="endTime!=null and endTime!=''">
+			<![CDATA[  and DATE_FORMAT(m.updateTime,'%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')]]>
+		</if>
+	    <if test="identityNo!=null and identityNo!=''">
+	       and m.identityNo like CONCAT('%',#{identityNo},'%')
+	    </if>
+	    <if test="estateNo!=null and estateNo!=''">
+	       and m.estateNo like CONCAT('%',#{estateNo},'%')
+	    </if>
+	    <if test="type!=null and type >0">
+	      and m.type=#{type}
+	    </if>
+	    <if test="queryFrequency!=null and queryFrequency>0">
+	     and  m.queryFrequency=#{queryFrequency}
+	    </if>
+	    <if test="estateType!=null">
+	        and  m.estateType=#{estateType}
+	    </if>
+	    <if test="yearNo!=null">
+	       and m.yearNo=#{yearNo}
+	    </if>
+	    and agencyId=#{agencyId} 
+	    order by 1=1
+	    ,createTime desc 
+	    limit #{offset},#{limit}
+	</select>
+	<select id="selectArchiveCount" parameterType="com.anjbo.monitor.entity.MonitorArchiveDto" resultType="java.lang.Integer">
+	   select count(*) from tbl_monitor_archive as m
+	    where 1=1
+		<if test="startTime!=null and startTime!=''">
+			<![CDATA[ and m.updateTime >= #{startTime} ]]>
+		</if>
+		<if test="endTime!=null and endTime!=''">
+			<![CDATA[  and DATE_FORMAT(m.updateTime,'%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')]]>
+		</if>
+	    <if test="identityNo!=null and identityNo!=''">
+	       and m.identityNo like CONCAT('%',#{identityNo},'%')
+	    </if>
+	    <if test="estateNo!=null and estateNo!=''">
+	       and m.estateNo like CONCAT('%',#{estateNo},'%')
+	    </if>
+	    <if test="type!=null and type >0">
+	      and m.type=#{type}
+	    </if>
+	    <if test="queryFrequency!=null and queryFrequency>0">
+	     and  m.queryFrequency=#{queryFrequency}
+	    </if>
+	    <if test="estateType!=null">
+	        and  m.estateType=#{estateType}
+	    </if>
+	    <if test="yearNo!=null">
+	       and m.yearNo=#{yearNo}
+	    </if>
+	    and agencyId=#{agencyId} 
+	</select>
+    <select id="findBymonitor" parameterType="com.anjbo.monitor.entity.MonitorArchiveDto" resultType="com.anjbo.monitor.entity.MonitorArchiveDto">
+         select *,date_format(startTime ,'%Y-%m-%d') as startTimeStr,date_format(endTime ,'%Y-%m-%d') as endTimeStr,date_format(updateTime ,'%Y-%m-%d %H:%i:%S') as updateTimeStr
+          from tbl_monitor_archive where id=#{id}  order by createTime desc limit 1
+    </select>
+	
+	<!-- 删除监控 -->
+	<delete id="deleteMonitorArchiveById" parameterType="java.lang.String" >
+		delete from tbl_monitor_archive where id in (${ids})
+	</delete>
+	
+	<!-- 根据查档id查询房产监控 -->
+	<select id="selectArchiveByArchiveId" parameterType="com.anjbo.monitor.entity.MonitorArchiveDto" resultType="com.anjbo.monitor.entity.MonitorArchiveDto">
+	  SELECT 
+	   	*
+	   FROM tbl_monitor_archive WHERE archiveId = #{archiveId} order by createTime desc LIMIT 1
+	</select>
+	
+	<!-- 根据身份证姓名查询房产监控 -->
+	<select id="selectArchiveByIdentityNo" parameterType="com.anjbo.monitor.entity.MonitorArchiveDto" resultType="com.anjbo.monitor.entity.MonitorArchiveDto">
+	  SELECT 
+	   	*
+	   FROM tbl_monitor_archive WHERE identityNo = #{identityNo} and estateNo=#{estateNo} order by createTime desc LIMIT 1
+	</select>
+	
+</mapper>

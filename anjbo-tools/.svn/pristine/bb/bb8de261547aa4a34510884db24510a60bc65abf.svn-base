@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.mort.EnquiryDetailMapper" >
+ 	<select id="selectCountByMarketPropertyName" parameterType="java.util.Map" resultType="java.lang.Integer">
+ 		select count(1) from tbl_enquiry_detail_market_bargain where propertyName = #{propertyName}
+ 		<if test="minArea != '' and minArea != null">
+ 			<![CDATA[and area >= #{minArea}]]>
+ 		</if>
+ 		<if test="maxArea != '' and maxArea != null">
+ 			<![CDATA[and area < #{maxArea}]]>
+ 		</if>
+ 	</select>
+ 	
+ 	<select id="selectCountByNetworkPropertyName" parameterType="java.util.Map" resultType="java.lang.Integer">
+ 		select count(1) from tbl_enquiry_detail_network_offer where label = #{propertyName}
+ 		<if test="minArea != '' and minArea != null">
+ 			<![CDATA[and area >= #{minArea}]]>
+ 		</if>
+ 		<if test="maxArea != '' and maxArea != null">
+ 			<![CDATA[and area < #{maxArea}]]>
+ 		</if>
+ 	</select>
+ 	
+ 	<select id="selectAvgByMarket" parameterType="java.util.Map" resultType="java.lang.Double">
+ 		select avg(signPrice) as price from tbl_enquiry_detail_market_bargain where propertyName = #{propertyName}
+ 		<if test="minArea != '' and minArea != null">
+ 			<![CDATA[and area >= #{minArea}]]>
+ 		</if>
+ 		<if test="maxArea != '' and maxArea != null">
+ 			<![CDATA[and area < #{maxArea}]]>
+ 		</if>
+ 	</select>
+ 	
+ 	<select id="selectAvgByNetwork" parameterType="java.util.Map" resultType="java.lang.Double">
+ 		select avg(price) as price from tbl_enquiry_detail_network_offer where label = #{propertyName}
+ 		<if test="minArea != '' and minArea != null">
+ 			<![CDATA[and area >= #{minArea}]]>
+ 		</if>
+ 		<if test="maxArea != '' and maxArea != null">
+ 			<![CDATA[and area < #{maxArea}]]>
+ 		</if>
+ 	</select>
+	<select id="selectPhoneByUid" parameterType="java.lang.String" resultType="java.lang.String">
+		select phone from tbl_user where uid=#{0}
+	</select>
+</mapper>

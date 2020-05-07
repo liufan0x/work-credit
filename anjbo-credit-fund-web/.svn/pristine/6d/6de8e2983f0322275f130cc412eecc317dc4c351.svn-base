@@ -1,0 +1,121 @@
+<form name="huarongKgLoanForm">
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;放款数据</div>
+    <div class="row form-inline detail-row w112" style="padding:0 10px;">
+        <div class="col-md-6 col-lg-4">
+            <label>申请人姓名: </label> <input type="text" name="kgLoanCustName" ng-model="kgLoan.custName" class="form-control" required/>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanCustName.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>证件类型:</label>
+            <select class="form-control" name="kgLoanIdType" choice-dict-name="hrIdType" ng-disabled="all" ng-model="kgLoan.idType" required style="width:179px;">
+                <option value="">请选择</option>
+            </select>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanIdType.$error.required">必选</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>证件号: </label> <input type="text" name="kgLoanIdNo" ng-model="kgLoan.idNo" class="form-control" required/>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanIdNo.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>贷款申请金额: </label> <input type="text" string-to-number name="kgLoanApplyAmt" ng-model="kgLoan.applyAmt" class="form-control" required/> 万元
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanApplyAmt.$error.required">必填</error>
+		    </span>
+        </div>
+        <!--new-->
+        <div class="col-md-6 col-lg-4">
+            <label>审批通过金额: </label> <input type="text" string-to-number name="kgLoanApprvAmt" ng-model="kgLoan.apprvAmt" class="form-control" required/> 万元
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanApprvAmt.$error.required">必填</error>
+		    </span>
+        </div>
+        <!--new-->
+        <div class="col-md-6 col-lg-4">
+            <label>申请期限单位:</label>
+            <select class="form-control" name="kgLoanApplyTnrUnit" choice-dict-name="hrApplyTnrUnit" ng-disabled="all" ng-model="kgLoan.applyTnrUnit" required style="width:179px;">
+                <option value="">请选择</option>
+            </select>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanApplyTnrUnit.$error.required">必选</error>
+		    </span>
+        </div>
+
+
+        <div class="col-md-6 col-lg-4">
+            <label>申请期限: </label> <input type="text" string-to-number name="kgLoanApplyTnr" ng-model="kgLoan.applyTnr" class="form-control" required/> <span ng-bind="kgLoan.applyTnrUnit"></span>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanApplyTnr.$error.required">必填</error>
+		    </span>
+        </div>
+        <!--new-->
+        <div class="col-md-6 col-lg-4">
+            <label>还款方式:</label>
+            <select class="form-control" name="kgLoanMtdCde" choice-dict-name="hrMtdCde" ng-disabled="all" ng-model="kgLoan.mtdCde" required style="width:179px;">
+                <option value="">请选择</option>
+            </select>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanMtdCde.$error.required">必选</error>
+		    </span>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <label>借款人利率: </label> <input type="text" string-to-number name="kgLoanApr" ng-model="kgLoan.apr" class="form-control" required/> %/天
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanApr.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>罚息执行利率: </label> <input type="text" string-to-number name="kgLoanOdIntRate" ng-model="kgLoan.odIntRate" class="form-control" required/> %/天
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanOdIntRate.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>合作商贴息比例: </label> <input type="text" string-to-number name="kgLoanSysbPct" ng-model="kgLoan.sysbPct" class="form-control" required/>%
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanSysbPct.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>合作商贴息金额: </label> <input type="text" string-to-number name="kgLoanSysbAmt" ng-model="kgLoan.sysbAmt" class="form-control" required/>元
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanSysbAmt.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>助贷商贴息比例: </label> <input type="text" string-to-number name="kgLoanHrdPct" ng-model="kgLoan.hrdPct" class="form-control" required/>%
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanHrdPct.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>助贷商贴息金额: </label> <input type="text" string-to-number name="kgLoanHrdAmt" ng-model="kgLoan.hrdAmt" class="form-control" required/>元
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanHrdAmt.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>是否差额打款:</label>
+            <select class="form-control" name="kgLoanIfCeOut" ng-model="kgLoan.ifCeOut" required style="width:179px;">
+                <option value="Y">是</option>
+                <option value="N">否</option>
+            </select>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanIfCeOut.$error.required">必选</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>起息日: </label>
+            <input size="16" type="text" name="kgLoanRepaymentTime" ng-model="kgLoan.repaymentTime" ng-disabled="all" class="form-control form_date"/>
+        </div>
+
+    </div>
+</div>
+</form>

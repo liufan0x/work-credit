@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.BorrowElementMapper">
+
+
+    <insert id="insertBorrowElementRecorde" parameterType="java.util.List">
+       	INSERT INTO tbl_element_borrow_element (
+		elementId,
+		elementOperationId,
+		beginBorrowElementTime,
+		endBorrowElementTime,
+		borrowDay,
+		dbId,
+		orderNo
+		)
+		VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.elementId},
+			#{item.elementOperationId},
+			#{item.beginBorrowElementTime},
+			#{item.endBorrowElementTime},
+			#{item.borrowDay},
+			#{item.dbId},
+			#{item.orderNo}
+			)
+		</foreach>
+    </insert>
+    
+    <!-- 根据ID删除借要件记录-->
+    <delete id="deleteBorrowElementRecorde" parameterType="String">
+		delete	from tbl_element_borrow_element where elementId=#{id}
+    </delete>
+    
+    <select id="selectBorrowElementByOrderNo" parameterType="java.util.Map" resultType="java.util.Map">
+    	select * from tbl_element_borrow_element WHERE orderNo=#{orderNo}
+    	<if test="elementId != null and elementId != ''">
+    		and elementId in (#{elementId})
+    	</if>
+    	<if test="status != null and status >-1">
+    		and status = #{status}
+    	</if>
+    </select>
+    
+    <select id="selectBorrowElementByDbId" parameterType="java.util.Map" resultType="java.util.Map">
+    	select * from tbl_element_borrow_element WHERE dbId=#{dbId}
+    </select>
+    
+    <update id ="updateBorrowElement" parameterType="java.util.Map">
+    	 update tbl_element_borrow_element 
+	           set status=#{status}
+	           <if test="hasMarkOverTime!=null and hasMarkOverTime>-1">
+	           	 ,hasMarkOverTime=#{hasMarkOverTime}
+	           </if>
+         where elementId in (${ids})
+    </update>
+    <!-- 取消超时未还检查 -->
+     <update id ="updateHasMarkOverTime" parameterType="java.util.Map">
+    	 update tbl_element_borrow_element 
+	           set hasMarkOverTime=1,hasSendMsg=2
+         where dbId=#{dbId}
+    </update>
+    
+</mapper>

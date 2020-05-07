@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.process.AppNotarizationMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(notarizationTimeBegin)"> AND notarizationTime >= #{notarizationTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(notarizationTimeEnd)"> AND notarizationTime &lt;= #{notarizationTimeEnd}</if>
+		-->
+		<if test="null!=notarizationImg and ''!=notarizationImg"> AND `notarizationImg`=#{notarizationImg}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(estimatedTimeBegin)"> AND estimatedTime >= #{estimatedTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(estimatedTimeEnd)"> AND estimatedTime &lt;= #{estimatedTimeEnd}</if>
+		-->
+		<if test="null!=notarizationAddressCode and ''!=notarizationAddressCode"> AND `notarizationAddressCode`=#{notarizationAddressCode}</if>
+		<if test="null!=notarizationAddress and ''!=notarizationAddress"> AND `notarizationAddress`=#{notarizationAddress}</if>
+		<if test="null!=remark and ''!=remark"> AND `remark`=#{remark}</if>
+		<if test="null!=notarizationType and ''!=notarizationType"> AND `notarizationType`=#{notarizationType}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="AppNotarizationDto" resultType="AppNotarizationDto">    
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `notarizationTime`, `notarizationImg`, `estimatedTime`, `notarizationAddressCode`, `notarizationAddress`, `remark`, `notarizationType` 
+	FROM tbl_process_app_notarization 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="AppNotarizationDto" resultType="AppNotarizationDto">
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `notarizationTime`, `notarizationImg`, `estimatedTime`, `notarizationAddressCode`, `notarizationAddress`, `remark`, `notarizationType`
+	FROM tbl_process_app_notarization 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="AppNotarizationDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_process_app_notarization 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="AppNotarizationDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_process_app_notarization(
+		`createUid`,
+		`createTime`,
+		`updateUid`,
+		`updateTime`,
+		`orderNo`,
+		`notarizationTime`,
+		`notarizationImg`,
+		`estimatedTime`,
+		`notarizationAddressCode`,
+		`notarizationAddress`,
+		`remark`,
+		`notarizationType`
+	) VALUES(
+		#{createUid},
+		now(),
+		#{createUid},
+		now(),
+		#{orderNo},
+		#{notarizationTime},
+		#{notarizationImg},
+		#{estimatedTime},
+		#{notarizationAddressCode},
+		#{notarizationAddress},
+		#{remark},
+		#{notarizationType}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="AppNotarizationDto" >
+    DELETE FROM tbl_process_app_notarization 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="AppNotarizationDto" >
+    UPDATE tbl_process_app_notarization
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=notarizationTime">`notarizationTime`=#{notarizationTime},</if>
+		<if test="null!=notarizationImg">`notarizationImg`=#{notarizationImg},</if>
+		<if test="null!=estimatedTime">`estimatedTime`=#{estimatedTime},</if>
+		<if test="null!=notarizationAddressCode">`notarizationAddressCode`=#{notarizationAddressCode},</if>
+		<if test="null!=notarizationAddress">`notarizationAddress`=#{notarizationAddress},</if>
+		<if test="null!=remark">`remark`=#{remark},</if>
+		<if test="null!=notarizationType">`notarizationType`=#{notarizationType},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

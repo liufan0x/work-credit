@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.AfterLoanListMapper">
+
+    <sql id="Base_Column_List">
+        id, createTime, createUid, updateTime, updateUid, cityCode, cityName, productCode,
+        productName, contractNo, borrowerName, loanAmount, borrowingPeriods, lendingTime, channelManagerUid,
+        channelManagerName, acceptMemberUid, acceptMemberName, overdueDay, newRepayment, 
+        repaymentStatus, repaymentStatusName, orderNo,rate,overdueRate,repaymentType,repaymentName,phoneNumber,
+        channelManagerPhone,overflow,branchCompany
+    </sql>
+
+    <sql id="listWhere">
+        <if test="cityCode!=null and cityCode!=''">
+            AND cityCode = #{cityCode}
+        </if>
+        <if test="repaymentStatus!=null">
+            AND repaymentStatus = #{repaymentStatus}
+        </if>
+        <if test="borrowerName!=null and borrowerName!=''">
+            AND borrowerName LIKE CONCAT('%', #{borrowerName},'%')
+        </if>
+        <if test="channelManagerName!=null and channelManagerName!=''">
+            AND channelManagerName LIKE CONCAT('%', #{channelManagerName},'%')
+        </if>
+        <if test="acceptMemberName!=null and acceptMemberName!=''">
+            AND acceptMemberName LIKE CONCAT('%', #{acceptMemberName},'%')
+        </if>
+        <if test="startLendingTime!=null">
+            <![CDATA[  and DATE_FORMAT(lendingTime,'%Y-%m-%d') >= DATE_FORMAT(#{startLendingTime}, '%Y-%m-%d')]]>
+        </if>
+        <if test="endLendingTime!=null">
+            <![CDATA[  and DATE_FORMAT(lendingTime,'%Y-%m-%d') <= DATE_FORMAT(#{endLendingTime}, '%Y-%m-%d')]]>
+        </if>
+        <if test="startNewRepayment!=null">
+            <![CDATA[  and DATE_FORMAT(newRepayment,'%Y-%m-%d') >= DATE_FORMAT(#{startNewRepayment}, '%Y-%m-%d')]]>
+        </if>
+        <if test="endNewRepayment!=null">
+            <![CDATA[  and DATE_FORMAT(newRepayment,'%Y-%m-%d') <= DATE_FORMAT(#{endNewRepayment}, '%Y-%m-%d')]]>
+        </if>
+    </sql>
+
+    <select id="list" parameterType="AfterLoanListDto" resultType="AfterLoanListDto">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM tbl_finance_afterloan_list
+        WHERE 1=1
+        <include refid="listWhere"/>
+        ORDER BY CASE WHEN repaymentStatus=7 THEN 7 ELSE 1 END ASC
+        <choose>
+            <when test="newRepaymentOrderBy==null or overdueDayOrderBy==null or lendingTimeOrderBy==null or loanAmountOrderBy==null">
+                ,newRepayment ASC
+            </when>
+            <otherwise>
+                <if test="newRepaymentOrderBy!=null and newRepaymentOrderBy!=''">
+                    ,newRepayment ${newRepaymentOrderBy}
+                </if>
+                <if test="overdueDayOrderBy!=null and overdueDayOrderBy!=''">
+                    ,overdueDay ${overdueDayOrderBy}
+                </if>
+                <if test="lendingTimeOrderBy!=null and lendingTimeOrderBy!=''">
+                    ,lendingTime ${lendingTimeOrderBy}
+                </if>
+                <if test="loanAmountOrderBy!=null and loanAmountOrderBy!=''">
+                    ,loanAmount ${loanAmountOrderBy}
+                </if>
+            </otherwise>
+        </choose>
+        limit #{start},#{pageSize}
+    </select>
+
+    <select id="select" parameterType="AfterLoanListDto" resultType="AfterLoanListDto">
+        SELECT
+         <include refid="Base_Column_List" />
+        FROM tbl_finance_afterloan_list
+        WHERE orderNo = #{orderNo}
+    </select>
+    <select id="listCount" parameterType="AfterLoanListDto" resultType="java.lang.Integer">
+        SELECT
+         count(1)
+        FROM tbl_finance_afterloan_list
+        WHERE 1=1
+        <include refid="listWhere"/>
+    </select>
+
+    <insert id="insert" parameterType="com.anjbo.bean.finance.AfterLoanListDto">
+        INSERT INTO tbl_finance_afterloan_list
+        (
+            createTime,
+            createUid,
+            cityCode,
+            cityName,
+            productCode,
+            productName,
+            contractNo,
+            borrowerName,
+            loanAmount,
+            borrowingPeriods,
+            lendingTime,
+            channelManagerUid,
+            channelManagerName,
+            acceptMemberUid,
+            acceptMemberName,
+            overdueDay,
+            newRepayment,
+            repaymentStatus,
+            repaymentStatusName,
+            orderNo,
+            rate,
+            overdueRate,
+            repaymentType,
+            repaymentName,
+            phoneNumber,
+            channelManagerPhone,
+            overflow,
+            branchCompany
+        )
+        VALUES
+        (
+            now(),
+            #{createUid},
+            #{cityCode},
+            #{cityName},
+            #{productCode},
+            #{productName},
+            #{contractNo},
+            #{borrowerName},
+            #{loanAmount},
+            #{borrowingPeriods},
+            #{lendingTime},
+            #{channelManagerUid},
+            #{channelManagerName},
+            #{acceptMemberUid},
+            #{acceptMemberName},
+            #{overdueDay},
+            #{newRepayment},
+            #{repaymentStatus},
+            #{repaymentStatusName},
+            #{orderNo},
+            #{rate},
+            #{overdueRate},
+            #{repaymentType},
+            #{repaymentName},
+            #{phoneNumber},
+            #{channelManagerPhone},
+            #{overflow},
+            #{branchCompany}
+        )
+    </insert>
+
+    <update id="update" parameterType="AfterLoanListDto">
+        update tbl_finance_afterloan_list
+        <set>
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+            <if test="cityCode != null and cityCode!=''">
+                cityCode = #{cityCode},
+            </if>
+            <if test="cityName != null and cityName!=''">
+                cityName = #{cityName},
+            </if>
+            <if test="productCode != null and productCode!=''">
+                productCode = #{productCode},
+            </if>
+            <if test="productName != null and productName!=''">
+                productName = #{productName},
+            </if>
+            <if test="contractNo != null and contractNo!=''">
+                contractNo = #{contractNo},
+            </if>
+            <if test="borrowerName != null and borrowerName!=''">
+                borrowerName = #{borrowerName},
+            </if>
+            <if test="loanAmount != null">
+                loanAmount = #{loanAmount},
+            </if>
+            <if test="borrowingPeriods != null">
+                borrowingPeriods = #{borrowingPeriods},
+            </if>
+            <if test="lendingTime != null">
+                lendingTime = #{lendingTime},
+            </if>
+            <if test="channelManagerUid != null and channelManagerUid!=''">
+                channelManagerUid = #{channelManagerUid},
+            </if>
+            <if test="channelManagerName != null and channelManagerName!=''">
+                channelManagerName = #{channelManagerName},
+            </if>
+            <if test="acceptMemberUid != null and acceptMemberUid!=''">
+                acceptMemberUid = #{acceptMemberUid},
+            </if>
+            <if test="acceptMemberName != null and acceptMemberName!=''">
+                acceptMemberName = #{acceptMemberName},
+            </if>
+            <if test="overdueDay != null">
+                overdueDay = #{overdueDay},
+            </if>
+            <if test="newRepayment != null">
+                newRepayment = #{newRepayment},
+            </if>
+            <if test="repaymentStatus != null">
+                repaymentStatus = #{repaymentStatus},
+            </if>
+            <if test="repaymentStatusName != null and repaymentStatusName!=''">
+                repaymentStatusName = #{repaymentStatusName},
+            </if>
+            <if test="rate>0">
+                rate = #{rate},
+            </if>
+            <if test="overdueRate>0">
+                overdueRate = #{overdueRate},
+            </if>
+            <if test="repaymentType>0">
+                repaymentType = #{repaymentType},
+            </if>
+            <if test="repaymentName!=null and repaymentName!=''">
+                repaymentName = #{repaymentName},
+            </if>
+            <if test="phoneNumber!=null and phoneNumber!=''">
+                phoneNumber = #{phoneNumber},
+            </if>
+            <if test="channelManagerPhone!=null and channelManagerPhone!=''">
+                channelManagerPhone = #{channelManagerPhone},
+            </if>
+            <if test="overflow!=null">
+                overflow = #{overflow},
+            </if>
+            <if test="branchCompany!=null and branchCompany!=''">
+                branchCompany = #{branchCompany},
+            </if>
+        </set>
+        where orderNo = #{orderNo}
+    </update>
+
+    <delete id="delete" parameterType="AfterLoanListDto">
+        DELETE FROM tbl_finance_afterloan_list WHERE orderNo = #{orderNo}
+    </delete>
+
+    <select id="allLoan" resultType="AfterLoanListDto" parameterType="java.lang.String">
+        SELECT
+          <include refid="Base_Column_List"/>
+        FROM tbl_finance_afterloan_list
+        WHERE orderNo in (${orderNo})
+    </select>
+
+    <select id="selectInOrderNo" parameterType="java.lang.String" resultType="AfterLoanListDto">
+        SELECT
+          orderNo,repaymentStatus,branchCompany
+        FROM tbl_finance_afterloan_list
+        WHERE orderNo in (${orderNo})
+    </select>
+</mapper>

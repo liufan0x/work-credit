@@ -1,0 +1,73 @@
+<div class="container-fluid">
+<style>
+.form-inline.w138 label{width:150px;}
+</style>
+	<form method="post" name="ynForm" id="ynForm" class="form-inline element-supplement  detail-row">
+	<div class="row detail-row form-inline w138">
+	    <div class="col-md-12" style="color:#4a77ac"> &nbsp;&nbsp;业务信息：</div>
+		<div class="col-md-6  col-lg-4">
+			<label>借款人姓名：</label><span ng-bind="ynctObj.shortName"></span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>放款金额：</label><span ng-bind="ynctObj.amount"></span> 元
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>贷款执行利率：</label><span ng-bind="ynctObj.signDayRate"></span> 天
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>逾期利率：</label><span ng-bind="ynctObj.overdueDayRate"></span> 天
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>签订日期：</label><span ng-bind="ynctObj.signDate|date:'yyyy-MM-dd'"></span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>开始日期：</label><span ng-bind="ynctObj.beginDate|date:'yyyy-MM-dd'"></span> 
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>付息周期 ：</label><span ng-bind="ynctObj.repaymentCycleName"></span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>还款方式：</label><span ng-bind="ynctObj.repaymentModeName"></span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>还款期数：</label><span ng-bind="ynctObj.repaymentPeriod"></span>期
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>借款期限：</label><span ng-bind="ynctObj.borrowingDays"></span> 天
+		</div>
+		<div class="col-md-6 col-lg-4">
+		    <label>合同归属地：</label><span ng-bind="ynctObj.address"></span>
+		</div>
+		<div class="col-md-12" style="color:#4a77ac"> &nbsp;&nbsp;放款卡信息：</div>
+		
+		<div class="col-md-12">
+			<label>开户行名称：</label><span ng-bind="ynctObj.bankName"></span> - <span ng-bind="ynctObj.branchbankname"></span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>银行卡归属地：</label><span ng-bind="ynctObj.bankcardAttributionProvinceName"></span> - <span ng-bind="ynctObj.bankcardAttributionCityName"></span> - <span ng-bind="ynctObj.bankcardAttributionCountyName"></span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>银行对象类型：</label><span ng-bind="ynctObj.typeName"></span> 
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>银行户名：</label><span ng-bind="ynctObj.accountname"></span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>银行账号：</label><span ng-bind="ynctObj.accountno"></span> 
+		</div>
+		<div class="col-md-12" style="color:#4a77ac"> &nbsp;&nbsp;回款卡信息：</div>
+		<div class="col-md-12">
+			<label>开户行名称：</label><span ng-bind="ynctObj.paymentsBankName"></span> - <span ng-bind="ynctObj.paymentsSubBankName"></span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>银行卡归属地：</label><span ng-bind="ynctObj.paymentsBankAttributionProvinceName"></span> - <span ng-bind="ynctObj.paymentsBankAttributionCityName"></span> - <span ng-bind="ynctObj.paymentsBankAttributionCountyName"></span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>银行户名：</label><span ng-bind="ynctObj.paymentsBankAccountName"></span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>银行账号：</label><span ng-bind="ynctObj.paymentsBankAccount"></span> 
+		</div>
+	</div>
+  </form>
+</div>

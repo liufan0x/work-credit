@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.order.BaseHouseMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<if test="null!=oldHouseLoanAmount and oldHouseLoanAmount>0"> AND `oldHouseLoanAmount`=#{oldHouseLoanAmount}</if>
+		<if test="null!=oldHouseLoanBalance and oldHouseLoanBalance>0"> AND `oldHouseLoanBalance`=#{oldHouseLoanBalance}</if>
+		<if test="null!=houseDealPrice and houseDealPrice>0"> AND `houseDealPrice`=#{houseDealPrice}</if>
+		<if test="null!=houseDealDeposit and houseDealDeposit>0"> AND `houseDealDeposit`=#{houseDealDeposit}</if>
+		<if test="null!=houseSuperviseAmount and houseSuperviseAmount>0"> AND `houseSuperviseAmount`=#{houseSuperviseAmount}</if>
+		<if test="null!=houseLoanAmount and houseLoanAmount>0"> AND `houseLoanAmount`=#{houseLoanAmount}</if>
+		<if test="null!=remark and ''!=remark"> AND `remark`=#{remark}</if>
+		<if test="null!=isFinish and isFinish>0"> AND `isFinish`=#{isFinish}</if>
+		<if test="null!=bussinessType and bussinessType>0"> AND `bussinessType`=#{bussinessType}</if>
+		<if test="null!=mortgageIsBank and mortgageIsBank>0"> AND `mortgageIsBank`=#{mortgageIsBank}</if>
+		<if test="null!=mortgageAddress and ''!=mortgageAddress"> AND `mortgageAddress`=#{mortgageAddress}</if>
+		<if test="null!=customerMgr and ''!=customerMgr"> AND `customerMgr`=#{customerMgr}</if>
+		<if test="null!=customerMgrPhone and ''!=customerMgrPhone"> AND `customerMgrPhone`=#{customerMgrPhone}</if>
+		<if test="null!=mortgageCycleStart and ''!=mortgageCycleStart"> AND `mortgageCycleStart`=#{mortgageCycleStart}</if>
+		<if test="null!=mortgageCycleEnd and ''!=mortgageCycleEnd"> AND `mortgageCycleEnd`=#{mortgageCycleEnd}</if>
+		<if test="null!=amountLoan and amountLoan>0"> AND `amountLoan`=#{amountLoan}</if>
+		<if test="null!=amountLoanSurplus and amountLoanSurplus>0"> AND `amountLoanSurplus`=#{amountLoanSurplus}</if>
+		<if test="null!=lendingCycleStart and ''!=lendingCycleStart"> AND `lendingCycleStart`=#{lendingCycleStart}</if>
+		<if test="null!=lendingCycleEnd and ''!=lendingCycleEnd"> AND `lendingCycleEnd`=#{lendingCycleEnd}</if>
+		<if test="null!=paidType and paidType>0"> AND `paidType`=#{paidType}</if>
+		<if test="null!=mortgageBankId and ''!=mortgageBankId"> AND `mortgageBankId`=#{mortgageBankId}</if>
+		<if test="null!=mortgageSubBankId and ''!=mortgageSubBankId"> AND `mortgageSubBankId`=#{mortgageSubBankId}</if>
+		<if test="null!=mortgageBankName and ''!=mortgageBankName"> AND `mortgageBankName`=#{mortgageBankName}</if>
+		<if test="null!=mortgageSubBankName and ''!=mortgageSubBankName"> AND `mortgageSubBankName`=#{mortgageSubBankName}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="BaseHouseDto" resultType="BaseHouseDto">    
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `oldHouseLoanAmount`, `oldHouseLoanBalance`, `houseDealPrice`, `houseDealDeposit`, `houseSuperviseAmount`, `houseLoanAmount`, `remark`, `isFinish`, `bussinessType`, `mortgageIsBank`, `mortgageAddress`, `customerMgr`, `customerMgrPhone`, `mortgageCycleStart`, `mortgageCycleEnd`, `amountLoan`, `amountLoanSurplus`, `lendingCycleStart`, `lendingCycleEnd`, `paidType`, `mortgageBankId`, `mortgageSubBankId`, `mortgageBankName`, `mortgageSubBankName` 
+	FROM tbl_order_base_house 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="BaseHouseDto" resultType="BaseHouseDto">
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `oldHouseLoanAmount`, `oldHouseLoanBalance`, `houseDealPrice`, `houseDealDeposit`, `houseSuperviseAmount`, `houseLoanAmount`, `remark`, `isFinish`, `bussinessType`, `mortgageIsBank`, `mortgageAddress`, `customerMgr`, `customerMgrPhone`, `mortgageCycleStart`, `mortgageCycleEnd`, `amountLoan`, `amountLoanSurplus`, `lendingCycleStart`, `lendingCycleEnd`, `paidType`, `mortgageBankId`, `mortgageSubBankId`, `mortgageBankName`, `mortgageSubBankName`
+	FROM tbl_order_base_house 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="BaseHouseDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_order_base_house 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="BaseHouseDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_order_base_house(
+		`createUid`,
+		`createTime`,
+		`updateUid`,
+		`updateTime`,
+		`orderNo`,
+		`oldHouseLoanAmount`,
+		`oldHouseLoanBalance`,
+		`houseDealPrice`,
+		`houseDealDeposit`,
+		`houseSuperviseAmount`,
+		`houseLoanAmount`,
+		`remark`,
+		`isFinish`,
+		`bussinessType`,
+		`mortgageIsBank`,
+		`mortgageAddress`,
+		`customerMgr`,
+		`customerMgrPhone`,
+		`mortgageCycleStart`,
+		`mortgageCycleEnd`,
+		`amountLoan`,
+		`amountLoanSurplus`,
+		`lendingCycleStart`,
+		`lendingCycleEnd`,
+		`paidType`,
+		`mortgageBankId`,
+		`mortgageSubBankId`,
+		`mortgageBankName`,
+		`mortgageSubBankName`
+	) VALUES(
+		#{createUid},
+		now(),
+		#{createUid},
+		now(),
+		#{orderNo},
+		#{oldHouseLoanAmount},
+		#{oldHouseLoanBalance},
+		#{houseDealPrice},
+		#{houseDealDeposit},
+		#{houseSuperviseAmount},
+		#{houseLoanAmount},
+		#{remark},
+		#{isFinish},
+		#{bussinessType},
+		#{mortgageIsBank},
+		#{mortgageAddress},
+		#{customerMgr},
+		#{customerMgrPhone},
+		#{mortgageCycleStart},
+		#{mortgageCycleEnd},
+		#{amountLoan},
+		#{amountLoanSurplus},
+		#{lendingCycleStart},
+		#{lendingCycleEnd},
+		#{paidType},
+		#{mortgageBankId},
+		#{mortgageSubBankId},
+		#{mortgageBankName},
+		#{mortgageSubBankName}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="BaseHouseDto" >
+    DELETE FROM tbl_order_base_house 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="BaseHouseDto" >
+    UPDATE tbl_order_base_house
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=oldHouseLoanAmount">`oldHouseLoanAmount`=#{oldHouseLoanAmount},</if>
+		<if test="null!=oldHouseLoanBalance">`oldHouseLoanBalance`=#{oldHouseLoanBalance},</if>
+		<if test="null!=houseDealPrice">`houseDealPrice`=#{houseDealPrice},</if>
+		<if test="null!=houseDealDeposit">`houseDealDeposit`=#{houseDealDeposit},</if>
+		<if test="null!=houseSuperviseAmount">`houseSuperviseAmount`=#{houseSuperviseAmount},</if>
+		<if test="null!=houseLoanAmount">`houseLoanAmount`=#{houseLoanAmount},</if>
+		<if test="null!=remark">`remark`=#{remark},</if>
+		<if test="null!=isFinish">`isFinish`=#{isFinish},</if>
+		<if test="null!=bussinessType">`bussinessType`=#{bussinessType},</if>
+		<if test="null!=mortgageIsBank">`mortgageIsBank`=#{mortgageIsBank},</if>
+		<if test="null!=mortgageAddress">`mortgageAddress`=#{mortgageAddress},</if>
+		<if test="null!=customerMgr">`customerMgr`=#{customerMgr},</if>
+		<if test="null!=customerMgrPhone">`customerMgrPhone`=#{customerMgrPhone},</if>
+		<if test="null!=mortgageCycleStart">`mortgageCycleStart`=#{mortgageCycleStart},</if>
+		<if test="null!=mortgageCycleEnd">`mortgageCycleEnd`=#{mortgageCycleEnd},</if>
+		<if test="null!=amountLoan">`amountLoan`=#{amountLoan},</if>
+		<if test="null!=amountLoanSurplus">`amountLoanSurplus`=#{amountLoanSurplus},</if>
+		<if test="null!=lendingCycleStart">`lendingCycleStart`=#{lendingCycleStart},</if>
+		<if test="null!=lendingCycleEnd">`lendingCycleEnd`=#{lendingCycleEnd},</if>
+		<if test="null!=paidType">`paidType`=#{paidType},</if>
+		<if test="null!=mortgageBankId">`mortgageBankId`=#{mortgageBankId},</if>
+		<if test="null!=mortgageSubBankId">`mortgageSubBankId`=#{mortgageSubBankId},</if>
+		<if test="null!=mortgageBankName">`mortgageBankName`=#{mortgageBankName},</if>
+		<if test="null!=mortgageSubBankName">`mortgageSubBankName`=#{mortgageSubBankName},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.huarong.UtilBorrowIdMapper" >
+	<!-- 获取borrowid -->
+	<select id="getBorrowId"  resultType="long">
+	select borrowId from tbl_third_hr_number_library
+	</select>
+	<update id="updateBorrowId" parameterType="long">
+	update tbl_third_hr_number_library set borrowId=#{bid}
+	</update>
+	<!-- 获取BatchNo -->
+	<select id="getBatchNo"  resultType="long">
+	select batchNo from tbl_third_hr_number_library
+	</select>
+	<update id="updateBatchNo" parameterType="long">
+	update tbl_third_hr_number_library set batchNo=#{bno}
+	</update>
+	<!-- 获取ApplSeq -->
+	<select id="getApplSeq"  resultType="long">
+	select applSeq from tbl_third_hr_number_library
+	</select>
+	<update id="updateApplSeq" parameterType="long">
+	update tbl_third_hr_number_library set applSeq=#{aeq}
+	</update>
+	
+	<!-- 根据订单号查批次号 -->
+	<select id="findBatchNoByOrderNo" parameterType="String" resultType="String">
+	select  batchNo  from tbl_third_hr_borrow_lend where orderNo=#{orderNo} order by id DESC limit 0,1
+	</select>
+	
+	<!-- 根据订单号查borrowId -->
+	<select id="findBorrowIdByOrderNo" parameterType="String" resultType="String">
+	select  borrowId  from tbl_third_hr_borrow_lend where orderNo=#{orderNo} order by id DESC limit 0,1
+	</select>
+	<!-- 根据订单号查流水号 -->
+	<select id="findApplSeqByOrderNo" parameterType="String" resultType="String">
+	select  applSeq  from tbl_third_hr_lc_appoint where orderNo=#{orderNo} order by id DESC limit 0,1
+	</select>
+	
+	
+	
+</mapper>

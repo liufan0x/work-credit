@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.OfficerAuditMapper">
+    <resultMap id="BaseResultMap" type="OfficerAuditDto">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="createUid" jdbcType="VARCHAR" property="createUid" />
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="updateUid" jdbcType="VARCHAR" property="updateUid" />
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="orderNo" jdbcType="VARCHAR" property="orderNo" />
+        <result column="auditTime" jdbcType="TIMESTAMP" property="auditTime" />
+        <result column="isShow" jdbcType="INTEGER" property="isShow" />
+    </resultMap>
+   
+    <sql id="Base_Column_List">
+        
+        id, createUid, createTime, updateUid, updateTime, orderNo, auditTime, isShow,remark,auditStatus,handleUid,justiceUid
+    </sql>
+  
+   <select id="detail" resultType="OfficerAuditDto" parameterType="java.lang.String">
+   		select
+   			<include refid="Base_Column_List"/>
+   		from tbl_risk_audit_officer where orderNo = #{orderNo} ORDER BY createTime DESC LIMIT 1
+   </select>
+  
+    <insert id="insert" parameterType="OfficerAuditDto">
+        insert into tbl_risk_audit_officer 
+        (
+        	id, createUid, createTime, 
+            updateUid, orderNo, 
+            auditTime, isShow, remark,auditStatus,handleUid,justiceUid
+        )
+        values 
+        (
+        	null, #{createUid}, now(), 
+            #{updateUid}, #{orderNo}, 
+            #{auditTime}, #{isShow}, #{remark},#{auditStatus},#{handleUid},#{justiceUid}
+         )
+    </insert>
+    
+    <update id="update" parameterType="OfficerAuditDto">
+        update tbl_risk_audit_officer
+        <set>
+            <if test="createUid != null and createUid!=''">
+                createUid = #{createUid},
+            </if>
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+            <if test="auditTime != null">
+                auditTime = #{auditTime},
+            </if>
+            <if test="isShow != null">
+                isShow = #{isShow},
+            </if>
+            <if test="remark != null and remark!=''">
+                remark = #{remark},
+            </if>
+            <if test="auditStatus!=null">
+            	auditStatus = #{auditStatus},
+            </if>
+            <if test="handleUid!=null and handleUid!=''">
+            	handleUid = #{handleUid},
+            </if>
+            <if test="justiceUid!=null and justiceUid!=''">
+               justiceUid = #{justiceUid},
+            </if>
+        </set>
+        where orderNo = #{orderNo} ORDER BY createTime DESC LIMIT 1
+    </update>
+   
+</mapper>

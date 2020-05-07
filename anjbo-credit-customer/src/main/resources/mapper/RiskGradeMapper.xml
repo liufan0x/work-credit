@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.RiskGradeMapper">
+	
+	<!-- 根据机构类型ID查询风控等级 -->
+   <select id="selectRiskGradeByAgencyTypeId" parameterType="int" resultType="map">
+		SELECT
+			t4.grade as riskGradeId
+		FROM
+			tbl_customer_agency_type t1
+		LEFT JOIN tbl_customer_agency t2 ON t1.id = t2.type
+		LEFT JOIN tbl_customer_agency_feescale t3 ON t1.id = t3.agencyTypeId
+		LEFT JOIN tbl_customer_agency_feescale_riskcontrol t4 ON t3.id = t4.feescaleid
+		WHERE
+			t3.productionid = #{productId}
+		AND t2.id = #{cooperativeAgencyId}
+		AND t1.isEnable = 0
+   </select>
+   
+    <!-- 根据产品与机构类型获取固定/关外/其他等费用 -->
+   <select id="selectPoundageByProductAndAgencyTypeId" resultType="java.util.Map" parameterType="java.util.Map">
+   		SELECT
+			t2.isBond,
+			t2.proportionResponsibility,
+			t2.bond,
+			t2.chargeStandard,
+			t3.servicefee as serviceFees,
+			t3.counterfee as poundageFees,
+			t3.otherfee as otherFees		
+		FROM tbl_customer_agency t2 
+		LEFT JOIN tbl_customer_agency_feescale t3 ON t3.agencyTypeId=t2.id
+		WHERE t3.productionid=#{productId} AND t2.id=#{cooperativeAgencyId}<if test="null!=riskGradeId and riskGradeId>0"> AND t3.riskGradeId=#{riskGradeId}</if> LIMIT 1
+		<!-- SELECT
+			t2.isBond,
+			t2.proportionResponsibility,
+			t2.bond,
+			t2.chargeStandard,
+			t3.servicefee as serviceFees,
+			t3.counterfee as poundageFees,
+			t3.otherfee as otherFees
+		FROM
+			tbl_customer_agency_type t1
+		LEFT JOIN tbl_customer_agency t2 ON t1.id = t2.type
+		LEFT JOIN tbl_customer_agency_feescale t3 ON t1.id = t3.agencyTypeId
+		WHERE
+			t3.productionid = #{productId}
+		AND t2.id = #{cooperativeAgencyId}
+		LIMIT 1 -->
+   </select>
+   
+    <!-- 获取指定机构类型的阶段费率 -->
+  <select id="findStageRate" parameterType="java.util.Map" resultType="java.util.Map"> 
+		SELECT
+			t7.rate,t7.feescaleid,t7.overdueRate,t7.modeid,t7.field,t7.maxfield, t6.section
+		<!-- FROM
+			tbl_customer_agency_type t1
+		LEFT JOIN tbl_customer_agency t2 ON t1.id = t2.type
+		LEFT JOIN tbl_customer_agency_feescale t3 ON t1.id = t3.agencyTypeId -->
+		FROM tbl_customer_agency t2
+		LEFT JOIN tbl_customer_agency_feescale t3 ON t3.agencyTypeId=t2.id
+		LEFT JOIN (
+			SELECT
+				sectionid,
+				raskcontrolid,
+				rate,
+				feescaleid,
+				overdueRate,
+				modeid,
+				field,
+				maxfield
+			FROM
+				tbl_customer_agency_feescale_detail
+			WHERE
+				<![CDATA[field < #{borrowingDays} 
+			AND maxfield = 0]]>
+			UNION
+				SELECT
+					sectionid,
+					raskcontrolid,
+					rate,
+					feescaleid,
+					overdueRate,
+					modeid,
+					field,
+					maxfield
+				FROM
+					tbl_customer_agency_feescale_detail
+				WHERE
+					<![CDATA[field < #{borrowingDays} 
+				AND maxfield >= #{borrowingDays} ]]>
+		) t7 ON t7.feescaleid = t3.id
+		LEFT JOIN tbl_customer_agency_feescale_riskcontrol t5 ON t5.id = t7.raskcontrolid
+		LEFT JOIN tbl_customer_agency_feescale_section t6 ON t6.id = t7.sectionid
+		WHERE
+			t5.grade = #{riskGradeId}
+		AND t3.productionid =  #{productId} 
+		AND t2.id = #{cooperativeAgencyId}
+		ORDER BY
+			t6.section DESC,t6.id desc
+  </select>
+  
+  <select id="searchRiskGradeListByAgency" resultType="map">
+		SELECT DISTINCT cgfr.grade AS riskGradeId
+		FROM tbl_customer_agency_feescale cgf
+		INNER JOIN tbl_customer_agency_feescale_riskcontrol cgfr ON cgfr.feescaleid=cgf.id
+		WHERE cgf.agencyTypeId=#{agencyId} AND cgf.productionid=#{productId}
+   </select>
+	
+</mapper>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.LendingMapper" >
+   
+  <insert id="addLending" parameterType="LendingDto">
+    insert into tbl_finance_lending(
+       createUid,
+       orderNo,
+       updateUid,
+       lendingTime,
+       lendingImg,
+       customerPaymentTime,
+       remark,
+       receivableForUid,
+       createTime
+    )values(
+      #{createUid},
+      #{orderNo},
+      #{updateUid},
+      #{lendingTime},
+      #{lendingImg},
+      #{customerPaymentTime},
+      #{remark},
+      #{receivableForUid},
+      now()
+    )
+  </insert>
+  <update id="updateLending" parameterType="LendingDto">
+      update tbl_finance_lending set updateUid=#{updateUid},
+      lendingTime=#{lendingTime},lendingImg=#{lendingImg},customerPaymentTime=#{customerPaymentTime},remark=#{remark},receivableForUid=#{receivableForUid}
+      where id = #{id}
+  </update>
+ 
+  <select id="findByLending" parameterType="LendingDto" resultType="LendingDto">
+     select l.*,DATE_FORMAT(l.lendingTime,'%Y-%m-%d') as lendingTimeStr from tbl_finance_lending l
+      where l.orderNo=#{orderNo} order by l.createTime desc limit 1
+  </select>
+  <delete id="deleteLending" parameterType="java.lang.String">
+       delete  from tbl_finance_lending where status=0 and orderNo=#{0} order by createTime desc limit 1
+  </delete>
+  
+	<update id="updwithdraw" parameterType="LendingDto" >
+  	     update tbl_finance_lending set status=#{status} , lendingTime = null where orderNo=#{orderNo} and status=1 order by updateTime desc limit 1
+  	</update>
+  	
+  	<select id="selectLendingTime" parameterType="java.lang.String" resultType="LendingDto">
+  	   select orderNo,lendingTime ,lendingImg,customerPaymentTime,DATE_FORMAT(lendingTime,'%Y-%m-%d') as lendingTimeStr,DATE_FORMAT(customerPaymentTime,'%Y-%m-%d') as customerPaymentTimeStr FROM tbl_finance_lending where orderNo =#{0}
+  	</select>
+  	
+  	<select id="selectOrderNo" resultType="String">
+  		select orderNo from tbl_finance_lending
+  	</select>
+  	<update id="updatereceivableForUid" parameterType="LendingDto">
+  	   update tbl_finance_lending set receivableForUid=#{receivableForUid} where orderNo=#{orderNo}
+  	</update>
+</mapper>

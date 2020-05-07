@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.tools.TokenMapper">
+
+	<select id="findByType" resultType="TokenDto" parameterType="java.lang.String">
+		select * from tbl_token where type=#{type} order by createTime desc
+	</select>
+	<insert id="addToken" parameterType="TokenDto">
+		insert into tbl_token
+		(uid,token,type,createTime,sid,deviceId)
+		values (#{uid}, #{token},#{type},now(),#{sid},#{deviceId})
+	</insert>
+
+	<select id="findByToken" resultType="TokenDto" parameterType="java.lang.String">
+		select * from tbl_token where token=#{0} and uid=#{1}
+	</select>
+	
+	<update id="updateById" parameterType="Map">
+		update tbl_token set uid=#{uid} where id=#{id}
+	</update>
+	
+	<update id="updateSid" parameterType="TokenDto">
+		update tbl_token set sid=#{sid} where deviceId=#{deviceId} and uid=#{uid}
+	</update>
+	
+	<update id="updateDeviceId" parameterType="java.lang.String">
+		update tbl_token set deviceId=#{1} where sid=#{0}
+	</update>
+	
+	<update id="updateToken" parameterType="TokenDto">
+		update tbl_token set sid=#{sid},deviceId=#{deviceId} where id=#{id}
+	</update>
+	
+	<select id="findByUid" parameterType="java.lang.String" resultType="TokenDto">
+		select * from tbl_token where uid=#{uid}
+	</select>
+
+  <insert id="addMessage" parameterType="MessageDto">
+      insert into tbl_message(
+          title,
+          type,
+          content,
+          userId,
+          createTime,
+          isRead
+      )values(
+          #{title},
+          #{type},
+          #{content},
+          #{userId},
+          now(),
+          #{isRead}
+      )
+  </insert>
+</mapper>

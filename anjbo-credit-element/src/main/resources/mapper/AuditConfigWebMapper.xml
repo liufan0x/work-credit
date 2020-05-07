@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.AuditConfigWebMapper">
+
+    <!--新增-->
+    <insert id="save"  parameterType="java.util.Map">
+        <selectKey keyProperty="id" resultType="java.lang.Integer" order="AFTER" >
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        INSERT INTO tbl_element_audit_config
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+                type,city,
+            <if test="degree1 != null and degree1 !=''" >
+                degree1,
+            </if>
+            <if test="degree2 != null and degree2 !=''" >
+                degree2,
+            </if>
+            <if test="degree3 != null and degree3 !=''" >
+                degree3,
+            </if>
+            <if test="degree4 != null and degree4 !=''" >
+                degree4,
+            </if>
+            <if test="degree5 != null and degree5 !=''" >
+                degree5,
+            </if>
+            <if test="describ1 != null and describ1 !=''" >
+                describ1,
+            </if>
+            <if test="describ2 != null and describ2 !=''" >
+                describ2,
+            </if>
+            <if test="describ3 != null and describ3 !=''" >
+                describ3,
+            </if>
+            <if test="describ4 != null and describ4 !=''" >
+                describ4,
+            </if>
+            <if test="describ5 != null and describ5 !=''" >
+                describ5,
+            </if>
+            <if test="other != null and other !=''" >
+                other,
+            </if>
+            createTime,lastUpdateTime,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+                #{type},#{city},
+            <if test="degree1 != null and degree1 !=''" >
+                #{degree1},
+            </if>
+            <if test="degree2 != null and degree2 !=''" >
+                #{degree2},
+            </if>
+            <if test="degree3 != null and degree3 !=''" >
+                #{degree3},
+            </if>
+            <if test="degree4 != null and degree4 !=''" >
+                #{degree4},
+            </if>
+            <if test="degree5 != null and degree5 !=''" >
+                #{degree5},
+            </if>
+            <if test="describ1 != null and describ1 !=''" >
+                #{describ1},
+            </if>
+            <if test="describ2 != null and describ2 !=''" >
+                #{describ2},
+            </if>
+            <if test="describ3 != null and describ3 !=''" >
+                #{describ3},
+            </if>
+            <if test="describ4 != null and describ4 !=''" >
+                #{describ4},
+            </if>
+            <if test="describ5 != null and describ5 !=''" >
+                #{describ5},
+            </if>
+            <if test="other != null and other !=''" >
+                #{other},
+            </if>
+            now(),now(),
+        </trim>
+    </insert>
+    <!-- 修改 -->
+    <update id="edit"  parameterType="java.util.Map">
+        UPDATE tbl_element_audit_config
+        <set >
+            degree1 = #{degree1},
+            degree2 = #{degree2},
+            degree3 = #{degree3},
+            degree4 = #{degree4},
+            degree5 = #{degree5},
+            describ1 = #{describ1},
+            describ2 = #{describ2},
+            describ3 = #{describ3},
+            describ4 = #{describ4},
+            describ5 = #{describ5},
+            other = #{other},
+            lastUpdateTime = now(),
+        </set>
+        WHERE id = #{id}
+    </update>
+    
+    <update id="editState"  parameterType="java.util.Map">
+    	update tbl_element_audit_config set state=#{state} where id=#{id}
+    </update>
+
+    <!--审批流程详情-->
+    <select id="selectAuditConfigDetail" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        id,
+        city,
+        type,
+        degree1,
+        degree2,
+        degree3,
+        degree4,
+        degree5,
+        describ1,
+        describ2,
+        describ3,
+        describ4,
+        describ5,
+        other
+        FROM
+        tbl_element_audit_config
+        WHERE id = #{id}
+    </select>
+
+    <!--查询已有的审批城市-->
+    <select id="selectAuditConfigHaveCityList" resultType="java.lang.String">
+        SELECT DISTINCT
+        city
+        FROM
+            tbl_element_audit_config
+    </select>
+    <!-- 查询所有城市审批类型 -->
+    <select id="selectAllCityType" resultType="java.util.Map">
+        SELECT DISTINCT
+        *
+        FROM
+            tbl_element_audit_config where state=1
+    </select>
+
+    <!--查询已有的审批类型、审批城市-->
+    <select id="selectAuditConfigTypeList" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+        type
+        FROM
+        tbl_element_audit_config
+        WHERE city = #{city} and state=1
+    </select>
+
+    <!--审批流程 数量-->
+    <select id="selectAuditConfigCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+        COUNT(1)
+        FROM
+        tbl_element_audit_config
+        <where>
+            <if test="city!='' and city !=null ">
+                city = #{city}
+            </if>
+            <if test="configType!='' and configType !=null ">
+                AND type = #{configType}
+            </if>
+        </where>
+    </select>
+    <!--审批流程 列表-->
+    <select id="selectAuditConfigList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+      	 *
+        FROM
+        tbl_element_audit_config
+        <where>
+            <if test="city!='' and city !=null ">
+                city = #{city}
+            </if>
+            <if test="configType!='' and configType !=null ">
+                AND type = #{configType}
+            </if>
+        </where>
+        ORDER BY city,type
+        limit #{start},#{pageSize}
+    </select>
+</mapper>

@@ -1,0 +1,157 @@
+<style>
+	.inp-boxx {
+		padding-left: 20px;
+		position: relative;
+		float: left;
+		line-height: 30px;
+	}
+	
+	input.inp-boxx {
+		margin-left: 20px;
+	}
+	
+	input.three-inp {
+		width: 70px !important;
+	}
+	
+	input.two-inp {
+		width: 100px !important;
+	}
+	
+	.red-word {
+		color: #FF0000;
+		cursor: pointer;
+	}
+	
+	.blue-word {
+		color: #337AB7;
+		cursor: pointer;
+	}
+</style>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<ul class="breadcrumb">
+				<li>工具管理 <span class="divider"></span></li>
+				<li class="active">套打合同</li>
+				<li class="active">字段管理</li>
+				<li class="go-back">
+					<a onclick="history.go(-1);">返回上一步</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="row" style="">
+		<div class="col-md-12" style="text-align:right; margin-bottom: 6px;">&nbsp;
+			<div class="btn-group">
+				<button type="button" class="btn btn-primary" ng-click="addGroupShow()">添加分组</button>
+			</div>
+		</div>
+	</div>
+	<div class="row" ng-repeat="group in groupList">
+		<form name="fieldForm" role="form" class="form-inline">
+			<div class="col-md-12">
+				<ul class="breadcrumb">
+					<li style="color:#337AB7" ng-bind="group.name"></li>
+					<img src="/images/u6978.svg" width="15" ng-click="addGroupShow(groupList,$index)" style="margin:0 10px;cursor: pointer;" />
+					<span class="red-word" ng-click="delGroupShow(groupList,$index)">删除分组</span>&nbsp;&nbsp;&nbsp;
+					<span class="blue-word fr" style="cursor:pointer" ng-click="up(groupList,$index)" ng-if="groupList.length-1 != $index">下移</span>
+					<span class="blue-word fr">&nbsp;&nbsp;&nbsp;</span>
+					<span class="blue-word fr" style="cursor:pointer" ng-click="down(groupList,$index)" ng-if="0 != $index">上移</span>
+					<span class="blue-word fr">&nbsp;&nbsp;&nbsp;</span>
+					<span class="blue-word fr" style="cursor:pointer" ng-click="addFieldShow(group)">添加字段</span>
+				</ul>
+			</div>
+			<div class="col-md-12" ng-repeat="field in group.fileList">
+				<div class="form-group">
+					<div class="jigou-span" style="width: 190px;">{{field.name}}：</div>
+					<temp ng-repeat="input in field.inputs">
+						<div class="inp-boxx" ng-if="!input.type && ((field.type == '1' && $index%2==0) || (field.type == '2' && $index%2!=0))">
+							<input type="text" disabled="true" class="form-control" ng-class="{'two-inp':field.inputs.length==3||field.inputs.length==4,'three-inp':field.inputs.length > 4}" ng-model="input.value" />
+							<img style="cursor:pointer" src="/images/u6978.svg" width="15" ng-click="editInputShow(field.inputs,$index)" />
+						</div>
+						<div class="inp-boxx" ng-if="!input.type && ((field.type == '2' && $index%2==0 )|| (field.type == '1' && $index%2!=0)) ">
+							<span ng-bind="input.value"></span>
+						</div>
+						<input type="text" ng-if="input.type" class="form-control inp-boxx" ng-model="input.value" />
+					</temp>
+				</div>
+				<div class="form-group relative" ng-if="field.inputs.length>1" style="height:33px;">
+					<span class="jian-but" ng-click="jian(field)"></span> &nbsp;&nbsp;
+				</div>
+				<div class="form-group relative" ng-if="field.isShowGou" style="height:33px;">
+					<span class="gou-but" ng-click="gou(field)"></span> &nbsp;&nbsp;
+				</div>
+				<div class="form-group relative" ng-if="!field.isShowGou" style="height:33px;">
+					<span class="jia-but" ng-click="jia(field)"></span>
+				</div>
+				<div class="form-group relative" style="line-height:33px;padding-left: 10px;">
+					<span style="cursor:pointer" class="blue-word" ng-click="addFieldShow(group,group.fileList,$index)">编辑字段</span>
+				</div>
+				<div class="form-group relative" style="line-height:33px;padding-left: 10px;">
+					<span style="cursor:pointer" class="red-word" ng-click="delFieldShow(group,group.fileList,$index)">删除字段</span>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+<div ng-show="false" id="groupEditId">
+	<div class="row">
+		<div class="col-md-14">
+			<form class="form-inline" id="frmGroup" name="frmGroup">
+				<div class="form-group">
+					<label><span class="text-warning">*</span>分组名称：</label>
+					<input type="text" class="form-control" name="name" ng-model="groupDto.name" required>
+					<span class="inputError" ng-show="isAudit"><error class="text-danger" ng-show="frmGroup.name.$error.required">必填</error></span>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div ng-show="false" id="fieldEditId">
+	<div class="row">
+		<div class="col-md-14">
+			<form class="form-inline" id="frmField" name="frmField">
+				<div class="form-group">
+					<label><span class="text-warning">*</span>字段名称：</label>
+					<input type="text" class="form-control" name="name" ng-model="fieldDto.name" required>
+					<span class="inputError" ng-show="isAudit"><error class="text-danger" ng-show="frmField.name.$error.required">必填</error></span>
+				</div>
+				<div class="form-group">
+					<input type="checkbox" class="form-control" ng-true-value="2" ng-false-value="1" name="type" ng-model="fieldDto.type"> 从既定文字开始
+				</div>
+				<div class="form-group" ng-show="fieldDto.type == '2'">
+					<label><span class="text-warning">*</span>开始文字：</label>
+					<input type="text" class="form-control" name="value" ng-model="fieldDto.value" required>
+					<span class="inputError" ng-show="isAudit"><error class="text-danger" ng-show="frmField.value.$error.required">必填</error></span>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div ng-show="false" id="inputEditId">
+	<div class="row">
+		<div class="col-md-14">
+			<form class="form-inline" id="frmInput" name="frmInput">
+				<div class="form-group" style="margin-right:0px;">
+					<label>来源：</label>
+					<temp class="pSourceList">
+					</temp>
+					-
+					<temp class="sourceList">
+					</temp>
+					<span class="inputError" ng-show="isAudit"><error class="text-danger" ng-show="frmField.value.$error.required">必填</error></span>
+				</div>
+				<div class="form-group">
+					<label><span class="text-warning">*</span>代号：</label>
+					<input type="text" class="form-control" name="value" ng-model="inputDto.value" required>
+					<span class="inputError" ng-show="isAudit"><error class="text-danger" ng-show="frmField.value.$error.required">必填</error></span>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

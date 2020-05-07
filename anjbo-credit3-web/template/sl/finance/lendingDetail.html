@@ -1,0 +1,161 @@
+<div class="container-fluid" id="lending">
+	<!--标题-->
+	<div class="row">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;放款信息
+		<a ng-show="!isEdit" style="display:inline-block;float:right;padding-right: 10px;" ui-sref="orderList" >返回上一步</a>
+		<span ng-show="isEdit" class="detail-trash2 text-danger" ng-click="deleteDetail('lending-detail')" >隐藏</span>
+		<div style="position:absolute;right:400px;top:0px;">
+			  <span id="elementFlag" ng-bind="elementFlag">是否已收到要件：是</span>
+			  <span><a id="elementInfo" ng-bind="elementInfo" ng-click="showDetail('elementEntrance');">要件详情</a></span>
+		</div>
+		</div>
+	</div>
+	<!--标题 end-->
+	<div class="row detail-row detail-lhw" >
+		<div class="col-md-6 col-lg-4"><label>放款金额：</label><span ng-bind="obj.loanAmount"></span> 万元</div>
+		<div class="col-md-6 col-lg-4"><label>放款银行-开户银行：</label><span ng-bind="obj.lendingBank"></span> - <span ng-bind="obj.openingBank"></span></div>
+		<div class="col-md-6 col-lg-4"><label>银行卡户名：</label><span ng-bind="obj.bankName"></span></div>
+		<div class="col-md-6 col-lg-4"><label>银行卡账号：</label><span ng-bind="obj.bankAccount"></span></div>
+		<div class="col-md-6 col-lg-4"><label>放款时间：</label><span ng-bind="obj.lendingTime| date:'yyyy-MM-dd' "></span>
+<!-- 		 <span ng-if="obj.lendingImg!='' && obj.lendingImg!=null"><a ng-repeat="img in obj.imgs" href="{{img}}" target="放款时间" >图片.jpg &nbsp;</a></span> -->
+		 <!--图片 放大插件-->
+			 <span class=" gallerys" ng-if="obj.lendingImg!='' && obj.lendingImg!=null">
+			    <a class="view-pic" onclick="laa(this)">查看图片</a>
+				<img ng-repeat="img in obj.imgs" src="{{img}}"   class="detail-img gallery-pic" style="display:none">
+			</span>
+			<!--图片end--> 
+		</div>
+		<input type="hidden" value="{{obj.orderNo}}" id="orderNo">
+		<div class="col-md-6 col-lg-4" ng-if="productCode!='04'"><label>还款计划表：</label>
+		<a target="_bank" href="/credit/finance/{{obj.orderNo}}.doc" style="color:blue;cursor:pointer">下载</a>
+		</div>
+<!-- 		<div class="col-md-6 col-lg-4"><label>还款计划表：</label><span onclick="ondowns()" style="color:blue;cursor:pointer">下载</span></div> -->
+	
+		<div class="col-md-6 col-lg-4" ng-if="isHuaRongShow && audit!=null">
+		  <label>资方勾兑结果：</label>
+          <span class="form-group" style="color:red;">
+               <span ng-if="fund.grantStatus == 111">待处理</span>
+               <span ng-if="fund.grantStatus == 997">勾兑成功</span>
+               <span ng-if="fund.grantStatus == 998">勾兑否决</span> 
+		  </span>
+		</div>
+		<div class="col-md-6 col-lg-4" ng-if="isHuaRongShow && audit!=null"><label>资方勾兑时间：</label>
+			<span  ng-bind="fund.lendingTime|date:'yyyy-MM-dd HH:mm'"></span>
+		</div>
+		<div class="col-md-6 col-lg-4" ng-if="audit!=null && audit.id !='0' && isHuaRongShow && hasFundList && productCode!='04'">
+		   <label>推送信息：</label><a onclick="ab()">查看</a>
+		</div>
+		<div class="col-md-6 col-lg-4" ng-if="isYunNan && productCode!='04'">
+		    <label>推送信息：</label><a onclick="yn()" ng-if="hasFundList">查看</a>
+		</div>
+	</div>
+	<!--备注-->
+	<div class="row relative" ng-if="obj.remark!='' && obj.remark!=null">
+		<span class="remark-span remark-lhw ">备注：</span>
+		<textarea class="remark-p remark-lhw-p textarea-lhw" ng-bind="obj.remark" readonly="readonly"  > </textarea>
+	</div>
+	<!--备注end-->
+</div>
+
+<!--推送start-->
+	<div class="lhw-alert-bg fktsShow"  style="display:none">
+		<div class="lhw-alert-box" style="width:1100px;">
+			<div class="lhw-alert-tit relative" >以下信息推送给资金方110<div class="lhw-x" ></div></div>
+				<div class="row">
+					<div class="col-md-12" style="padding-top:10px;">
+						<ul class="nav nav-tabs"><li><a href="javascript:void(0);">应还款计划</a></li></ul>
+					</div>
+				</div>
+				<div>
+				    <div class="row form-inline detail-row w147" style="padding:30px 10px; ">
+				        <div class="col-md-6 col-lg-6">
+				            <label>应还款时间: </label> <span ng-bind="audit.repaymentTime|date:'yyyy-MM-dd'"></span>
+				        </div>
+				        <div class="col-md-6 col-lg-6">
+				            <label style="width: 190px;">期供金额（本金+利息）:</label>  <span ng-bind="audit.repaymentAccount"></span>&nbsp;元
+				        </div>
+				        <div class="col-md-6 col-lg-6">
+				            <label>应还利息:</label>  <span ng-bind="audit.interest"></span>&nbsp;元
+				        </div>
+				        <div class="col-md-6 col-lg-6">
+				            <label>应还本金:</label>  <span ng-bind="audit.capital"></span>&nbsp;元
+				        </div>
+				        <div class="col-md-6 col-lg-6">
+				            <label>剩余本金:</label>  <span ng-bind="audit.psRemPrcp"></span>&nbsp;元
+				        </div>
+				        <div class="col-md-6 col-lg-6">
+				            <label>贷款执行利率:</label>  <span ng-bind="audit.psIntRate"></span>&nbsp;%
+				        </div>
+				    </div>
+				</div>
+			</div>
+		</div>
+<!--推送end-->
+<!--推送start-->
+	<div class="lhw-alert-bg ynShow"  style="display:none">
+		<div class="lhw-alert-box" style="width:1100px;">
+			<div class="lhw-alert-tit relative" >以下信息推送给资金方<div class="lhw-x" ></div></div>
+				<div class="row">
+					<div class="col-md-12" style="padding-top:10px;">
+						<ul class="nav nav-tabs"><li><a href="javascript:void(0);">应还款计划</a></li></ul>
+					</div>
+				</div>
+				<div>
+				    <div class="row form-inline detail-row w147" style="padding:30px 10px; ">
+				        <div class="col-md-6 col-lg-6">
+				            <label>计划还款时间: </label> <span ng-bind="yunnanAudit.repayDate| date:'yyyy-MM-dd HH:mm'"></span>
+				        </div>
+				        <div class="col-md-6 col-lg-6">
+				            <label>借款期限:</label>  <span ng-bind="yunnanAudit.borrowingDays"></span>&nbsp;天
+				        </div>
+				        <div class="col-md-6 col-lg-6">
+				            <label>计划还款本金:</label>  <span ng-bind="yunnanAudit.repayPrincipal"></span>&nbsp;元
+				        </div>
+				        <div class="col-md-6 col-lg-6">
+				            <label>计划还款利息:</label>  <span ng-bind="yunnanAudit.repayProfit"></span>&nbsp;元
+				        </div>
+				    </div>
+				</div>
+			</div>
+		</div>
+<!--推送end-->
+
+<script> 
+function ab(){	
+	$(".fktsShow").show();
+}
+$(".lhw-x").click(function(){
+	$(".fktsShow").hide();
+})
+
+function yn(){
+	$(".ynShow").show();
+}
+$(".lhw-x").click(function(){
+	$(".ynShow").hide();
+})
+
+ function laa(a){  
+	$.openPhotoGallery($(a).next("img"));
+}
+ function ondowns(){
+	var orderNo= $("#orderNo").val(); //2017071416292200013;//
+	alert("还款计划表正在下载中，请稍等！");
+	 $.ajax({ 
+		 url:"/credit/finance/lending/v/downloadPlan" ,
+		 data:JSON.stringify({"orderNo":orderNo}), 
+	     type: 'post' ,
+	     dataType: 'json',  
+	     contentType:'application/json;charset=utf-8',
+		 success: function(data){
+			 if(data.code=="SUCCESS"){
+				 window.open(data.data);  
+				 alert("下载已完成！如无文档，可复制此链接打开下载："+data.data);
+			 }else{
+				 alert(data.msg);
+			 }
+		 }
+	   });
+ }
+ 
+</script>

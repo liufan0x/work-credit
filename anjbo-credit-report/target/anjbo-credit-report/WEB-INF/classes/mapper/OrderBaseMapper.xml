@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.OrderBaseMapper">
+
+
+	<!-- 查询华融订单列表 -->
+	<select id="fundOrderList" parameterType="java.util.Map"
+		resultType="OrderListDto">
+		SELECT
+		a.orderNo,
+		b.cityName,
+		b.cityCode,
+		b.productName,
+		b.productCode,
+		b.customerType,
+		b.customerName,
+		b.relationOrderNo,
+		c.applyTnr as borrowingDay,
+		c.applyAmt as borrowingAmount,
+		b.state
+		FROM
+		`anjbo-server-order`.tbl_risk_allocation_fund a
+		LEFT OUTER JOIN `anjbo-server-third-api`.tbl_third_hrtrust_loan c on
+		(a.orderNo = c.orderNo )
+		LEFT OUTER JOIN `anjbo-server-order`.tbl_order_list_base b on (a.orderNo =
+		b.orderNo )
+		LEFT OUTER JOIN `anjbo-server-risk`.tbl_risk_allocation_fund_audit d on
+		(a.orderNo = d.orderNo )
+		LEFT OUTER JOIN `anjbo-server-product`.tbl_product_process e on
+		(b.processId = e.processId ) 
+		where 
+		<include refid="selectOrderWhere" />
+		GROUP BY orderNo
+		ORDER BY 
+		<if test="sortName !=null and sortName !=''">
+			${sortName} ${sortOrder},
+		</if>
+		previousHandleTime desc 
+		limit #{start},#{pageSize}
+	</select>
+	<!-- 查询华融借款信息中的借款金额和期限 -->
+	<select id="queryHRBorrow" parameterType="java.util.Map"
+		resultType="OrderBaseBorrowDto">
+		select *,applyTnr as borrowingDays,applyAmt as loanAmount from `anjbo-server-third-api`.tbl_third_hrtrust_loan where orderNo = #{orderNo}
+	</select>
+	<select id="fundOrderCount" parameterType="java.util.Map"
+		resultType="int">
+		SELECT
+		count(DISTINCT(a.orderNo)) 
+		FROM
+		`anjbo-server-order`.tbl_risk_allocation_fund a
+		LEFT OUTER JOIN `anjbo-server-third-api`.tbl_third_hrtrust_loan c on
+		(a.orderNo = c.orderNo )
+		LEFT OUTER JOIN `anjbo-server-order`.tbl_order_list_base b on (a.orderNo =
+		b.orderNo )
+		LEFT OUTER JOIN `anjbo-server-risk`.tbl_risk_allocation_fund_audit d on
+		(a.orderNo = d.orderNo ) 
+		LEFT OUTER JOIN `anjbo-server-product`.tbl_product_process e on
+		(b.processId = e.processId ) 
+		where 
+		<include refid="selectOrderWhere" />
+	</select>
+	
+	<!-- 查询华安订单列表 -->
+	<select id="fundHAOrderList" parameterType="java.util.Map"
+		resultType="OrderListDto">
+		SELECT
+		a.orderNo,
+		b.cityName,
+		b.cityCode,
+		b.productName,
+		b.productCode,
+		b.customerType,
+		b.customerName,
+		b.relationOrderNo,
+		c.applicationPeriod as borrowingDay,
+		c.loanAmount as borrowingAmount,
+		b.state
+		FROM
+		`anjbo-server-order`.tbl_risk_allocation_fund a
+		LEFT OUTER JOIN `anjbo-server-risk`.tbl_risk_huaan c on
+		(a.orderNo = c.orderNo )
+		LEFT OUTER JOIN `anjbo-server-order`.tbl_order_list_base b on (a.orderNo =
+		b.orderNo )
+		LEFT OUTER JOIN `anjbo-server-risk`.tbl_risk_allocation_fund_audit d on
+		(a.orderNo = d.orderNo )
+		LEFT OUTER JOIN `anjbo-server-product`.tbl_product_process e on
+		(b.processId = e.processId ) 
+		where 
+		<include refid="selectOrderWhere" />
+		GROUP BY orderNo
+		ORDER BY 
+		<if test="sortName !=null and sortName !=''">
+			${sortName} ${sortOrder},
+		</if>
+		previousHandleTime desc 
+		limit #{start},#{pageSize}
+	</select>
+	<!-- 查询华安借款信息中的借款金额和期限 -->
+	<select id="queryHABorrow" parameterType="java.util.Map"
+		resultType="OrderBaseBorrowDto">
+		select *,applicationPeriod as borrowingDays,loanAmount from `anjbo-server-risk`.tbl_risk_huaan where orderNo = #{orderNo}
+	</select>
+	<!-- 查询华安订单列表 -->
+	<select id="fundHAOrderCount" parameterType="java.util.Map"
+		resultType="int">
+		SELECT
+		count(DISTINCT(a.orderNo)) 
+		FROM
+		`anjbo-server-order`.tbl_risk_allocation_fund a
+		LEFT OUTER JOIN `anjbo-server-risk`.tbl_risk_huaan c on
+		(a.orderNo = c.orderNo )
+		LEFT OUTER JOIN `anjbo-server-order`.tbl_order_list_base b on (a.orderNo =
+		b.orderNo )
+		LEFT OUTER JOIN `anjbo-server-risk`.tbl_risk_allocation_fund_audit d on
+		(a.orderNo = d.orderNo ) 
+		LEFT OUTER JOIN `anjbo-server-product`.tbl_product_process e on
+		(b.processId = e.processId ) 
+		where 
+		<include refid="selectOrderWhere" />
+	</select>
+	
+	<!-- 查询其他资方订单列表 -->
+	<select id="fundOtherOrderList" parameterType="java.util.Map"
+		resultType="OrderListDto">
+		SELECT
+		a.orderNo,
+		b.cityName,
+		b.cityCode,
+		b.productName,
+		b.productCode,
+		b.customerType,
+		b.customerName,
+		b.relationOrderNo,
+		if(a.fundId = '37',b.borrowingDay,c.borrowingDays) AS borrowingDay,
+		if(a.fundId = '37',b.borrowingAmount,c.loanAmount) AS borrowingAmount,
+		b.state
+		FROM
+		`anjbo-server-order`.tbl_risk_allocation_fund a
+		LEFT OUTER JOIN `anjbo-server-risk`.tbl_risk_audit_fundDocking_ordinary c on
+		(a.orderNo = c.orderNo )
+		LEFT OUTER JOIN `anjbo-server-order`.tbl_order_list_base b on (a.orderNo =
+		b.orderNo )
+		LEFT OUTER JOIN `anjbo-server-risk`.tbl_risk_allocation_fund_audit d on
+		(a.orderNo = d.orderNo )
+		LEFT OUTER JOIN `anjbo-server-product`.tbl_product_process e on
+		(b.processId = e.processId ) 
+		where 
+		<include refid="selectOrderWhere" />
+		GROUP BY orderNo
+		ORDER BY 
+		<if test="sortName !=null and sortName !=''">
+			${sortName} ${sortOrder},
+		</if>
+		previousHandleTime desc 
+		limit #{start},#{pageSize}
+	</select>
+	<!-- 查询其他资方借款信息中的借款金额和期限 -->
+	<select id="queryOtherBorrow" parameterType="java.util.Map"
+		resultType="OrderBaseBorrowDto">
+		select *,borrowingDays,loanAmount from `anjbo-server-risk`.tbl_risk_audit_fundDocking_ordinary where orderNo = #{orderNo}
+	</select>
+	<!-- 查询其他资方订单列表 -->
+	<select id="fundOtherOrderCount" parameterType="java.util.Map"
+		resultType="int">
+		SELECT
+		count(DISTINCT(a.orderNo)) 
+		FROM
+		`anjbo-server-order`.tbl_risk_allocation_fund a
+		LEFT OUTER JOIN `anjbo-server-risk`.tbl_risk_audit_fundDocking_ordinary c on
+		(a.orderNo = c.orderNo )
+		LEFT OUTER JOIN `anjbo-server-order`.tbl_order_list_base b on (a.orderNo =
+		b.orderNo )
+		LEFT OUTER JOIN `anjbo-server-risk`.tbl_risk_allocation_fund_audit d on
+		(a.orderNo = d.orderNo ) 
+		LEFT OUTER JOIN `anjbo-server-product`.tbl_product_process e on
+		(b.processId = e.processId ) 
+		where 
+		<include refid="selectOrderWhere" />
+	</select>
+	
+	<sql id="selectOrderWhere">
+		<!-- fundId = '31' -->
+		1 = 1
+		<if test="fundId !=null and fundId != ''">
+			and a.fundId = #{fundId} 
+		</if>
+		<if test="fundId !=null and fundId != '' and fundId != 31">
+			and sort > 10
+		</if>
+		<if test="customerName !=null and customerName != ''">
+			and customerName like CONCAT('%',#{customerName},'%')
+		</if>
+		<if test="customerType!=null and customerType!=0"> 
+			and customerType=#{customerType}
+		</if>
+		<if test="cityCode !=null and cityCode!=''">
+			and cityCode = #{cityCode} 
+		</if>
+		<if test="productCode != null and  productCode != '' ">
+			and productCode = #{productCode} 
+		</if>
+		<if test="state !=null and state != '' and state == '待分配资金' ">
+			and (`state` = '待分配资金' or `state` = '待分配订单')
+		</if>
+		<if test="state !=null and state != '' and state == '待指派还款专员' ">
+			and (`state` = '待指派还款专员' or `state` = '待资料推送')
+		</if>
+		<if test="state !=null and state != '' and state == '待放款' ">
+			and (`state` = '待放款' or `state` = '待核实后置费用' or `state` = '待收利息' or `state` = '待核实利息')
+		</if>
+		<if test="state !=null and state != '' and state == '待结清原贷款' ">
+			and (`state` = '待结清原贷款' or `state` = '待扣回后置费用')
+		</if>
+		<if test="state !=null and state != '' and state == '待要件退还' ">
+			and (`state` = '待要件退还' or `state` = '待回款（首期）' or `state` = '待抵押' or `state` = '待回款' or `state` = '待回款（尾期）')
+		</if>
+		<if test="state !=null and state != '' and state == '已完结' ">
+			and (`state` = '已完结' or `state` = '待返佣')
+		</if>
+		<if test="state !=null and state != '' and state != '待分配资金' and state != '待指派还款专员' and state != '待放款' and state != '待结清原贷款' and state != '待要件退还' and state != '已完结'">
+			and `state` = #{state}
+		</if>
+		and `state`!= '已关闭'
+	</sql>
+
+	
+	<!-- 查询用户资方id -->
+	<select id="selectFundByUid" parameterType="java.lang.String" resultType="CustomerFundDto">
+		select * from `anjbo-server-customer`.tbl_customer_fund where managerUid = #{uid}
+	</select>
+
+	<!--查询报表客户信息-->
+	<select id="selectOrderList" parameterType="java.util.Map" resultType="StatisticsDto">
+		SELECT
+			l.*,
+			b.rate,b.loanBankName,
+			b.oldLoanBankName,
+			b.isOldLoanBank,b.isLoanBank,
+			b.oldLoanBankNameId,b.oldLoanBankSubNameId,
+			b.loanBankNameId,b.loanSubBankNameId
+		FROM tbl_order_list_base l
+		LEFT JOIN tbl_order_base_borrow b ON  b.orderNo=l.orderNo
+		WHERE state != '已关闭'
+		<include refid="selectCustomerOrderWhere"/>
+		LIMIT #{start},#{pageSize}
+	</select>
+
+	<select id="selectOrderCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT
+			count(1)
+		FROM tbl_order_list_base
+		WHERE state != '已关闭'
+		<include refid="selectCustomerOrderWhere"/>
+	</select>
+	<sql id="selectCustomerOrderWhere">
+		<if test="startTime!=null">
+			AND <![CDATA[ lendingTime >= #{startTime} ]]>
+		</if>
+		<if test="endTime!=null">
+			AND <![CDATA[ lendingTime <= #{endTime} ]]>
+		</if>
+	</sql>
+	<!--查询报表风控审批信息-->
+	<select id="selectRiskList" parameterType="java.util.Map" resultType="StatisticsDto">
+		SELECT
+			l.*,
+			fs.auditTime AS firstAuditTime,
+			fi.auditTime AS finalAuditTime,
+			m.auditTime,
+			DATE_FORMAT(fs.auditTime,'%Y-%m-%d %H:%i:%s') as auditTimeStr
+		FROM `anjbo-server-risk`.tbl_risk_audit_first fs
+		LEFT JOIN tbl_order_list_base l ON fs.orderNo = l.orderNo
+		LEFT JOIN `anjbo-server-risk`.tbl_risk_audit_final fi ON  fi.orderNo = fs.orderNo
+		LEFT JOIN `anjbo-server-process`.tbl_process_audit_manager m ON m.orderNo = fs.orderNo
+		WHERE 1=1
+		<include refid="selectRiskWhere"/>
+		LIMIT #{start},#{pageSize}
+	</select>
+
+	<select id="selectRiskCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT
+			count(1)
+		FROM `anjbo-server-risk`.tbl_risk_audit_first fs
+		WHERE 1=1
+		<include refid="selectRiskWhere"/>
+	</select>
+
+	<sql id="selectRiskWhere">
+		<if test="startTime!=null">
+			AND <![CDATA[ fs.auditTime >= #{startTime} ]]>
+		</if>
+		<if test="endTime!=null">
+			AND <![CDATA[ fs.auditTime <= #{endTime} ]]>
+		</if>
+		<if test="state!=null and state!=''">
+			AND state = #{state}
+		</if>
+	</sql>
+
+	<!--查询报表退回订单信息-->
+	<select id="selectBackList" parameterType="java.util.Map" resultType="StatisticsDto">
+		SELECT
+			f.updateUid,
+			f.createUid,
+			f.orderNo,
+			f.handleTime as backTime,
+			f.backReason,
+			DATE_FORMAT(f.handleTime,'%Y-%m-%d %H:%i:%s') as bankTimeStr,
+			f.returnType,
+			b.cityName,
+			b.productName,
+			b.branchCompany,
+			b.customerName,
+			b.borrowingAmount,
+			b.borrowingDay,
+			b.channelManagerName,
+			b.acceptMemberName,
+			b.state,
+			b.currentHandler
+		FROM tbl_order_flow f
+		LEFT JOIN tbl_order_list_base b ON b.orderNo = f.orderNo
+		WHERE  f.backReason IS  NOT NULL AND f.backReason !=''
+		<include refid="selectBackWhere"/>
+		LIMIT #{start},#{pageSize}
+	</select>
+	<select id="selectBackCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+		SELECT
+			count(1)
+		FROM tbl_order_flow f
+		WHERE  f.backReason IS  NOT NULL AND f.backReason !=''
+		<include refid="selectBackWhere"/>
+	</select>
+	<sql id="selectBackWhere">
+		<if test="startTime!=null">
+			AND <![CDATA[ handleTime >= #{startTime} ]]>
+		</if>
+		<if test="endTime!=null">
+			AND <![CDATA[ handleTime <= #{endTime} ]]>
+		</if>
+	</sql>
+
+	<select id="selectHandTime" resultType="java.lang.String" parameterType="java.util.Map">
+		select DATE_FORMAT(handleTime,'%Y-%m-%d %H:%i:%s') as beginHandleTimeStr from tbl_order_flow where id=(
+		select min(id) from tbl_order_flow where handleTime>#{handleTime} and orderNo =#{orderNo}
+		)
+	</select>
+	
+	<select id="selectSendRiskInfo" resultType="java.util.Map" parameterType="java.util.Map">
+		select * from `anjbo-server-risk`.`tbl_risk_audit_fundDocking_ordinary_audit` where orderNo = #{orderNo} and fundId = #{fundId}
+	</select>
+
+	<!-- 查询订单列表(供统计) -->
+	<select id="selectOrderBorrowList" parameterType="OrderBaseBorrowDto" resultType="OrderBaseBorrowDto">
+		SELECT
+			orderNo,
+			cityName,
+			productName,
+			branchCompany,
+			borrowerName,
+			loanAmount,
+			borrowingDays,
+			rate,
+			agencyName,
+			acceptMemberUid,
+			channelManagerUid,
+			oldLoanBankName,
+			oldLoanBankSubName,
+			oldLoanBankNameId,
+			oldLoanBankSubNameId,
+			loanBankName,
+			loanSubBankName,
+			loanBankNameId,
+			loanSubBankNameId
+		FROM
+			tbl_order_base_borrow
+		WHERE
+			orderNo IN (${orderNo})
+	</select>
+	
+	
+	<!--查看要件数量-->
+	<select id="selectElementCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+        COUNT(1)
+        FROM
+        `anjbo-server-element`.tbl_element_access_flow t1
+        LEFT JOIN `anjbo-server-element`.tbl_element_list t2 ON t1.orderNo = t2.orderNo
+        LEFT JOIN  `anjbo-server-order`.tbl_risk_allocation_fund  t3 ON t2.orderNo = t3.orderNo
+        <where>
+            <if test="currentHandlerUid != null and currentHandlerUid != '' ">
+                (
+                t2.currentHandlerUid in (${currentHandlerUid})
+                or t2.previousHandlerUid = #{updateUid}
+                or t2.notarialUid in (${currentHandlerUid})
+                or t2.facesignUid in (${currentHandlerUid})
+                or t2.acceptMemberUid in  (${currentHandlerUid})
+                or t2.channelManagerUid in (${currentHandlerUid})
+                <if test="orderNo != '' and orderNo != null">
+                    or t2.orderNo in (${orderNo})
+                </if>
+                )
+            </if>
+            <if test="fundId !=null and fundId != ''">
+			and t3.fundId = #{fundId}              <!--需要改动的位置-->
+		    </if>
+            <if test="city!='' and city !=null ">
+                AND t2.cityName = #{city}
+            </if>
+            <if test='orderType=="3"'>
+                AND t2.orderType = 3
+            </if>
+            <if test='orderType=="1"'>
+                AND (t2.orderType = 1 or t2.orderType = 2)
+            </if>
+            <if test="customerName!='' and customerName !=null ">
+                AND t2.customerName like CONCAT('%',#{customerName},'%')
+            </if>
+            <if test="applierName!='' and applierName !=null ">
+                AND t1.applierName like CONCAT('%',#{applierName},'%')
+            </if>
+            <if test="orderStatus!='' and orderStatus !=null ">
+                AND t2.orderStatus = #{orderStatus}
+            </if>
+            <if test="boxNo!='' and boxNo !=null ">
+                AND t2.boxNo like CONCAT('%',#{boxNo},'%')
+            </if>
+            <if test="startTime!='' and startTime !=null ">
+                AND <![CDATA[ DATE_FORMAT(t1.operationTime, '%Y-%m-%d') >= #{startTime} ]]>
+            </if>
+            <if test="endTime!='' and endTime !=null ">
+                AND <![CDATA[ DATE_FORMAT(t1.operationTime, '%Y-%m-%d') <= #{endTime} ]]>
+            </if>
+        </where>
+    </select>
+	<!--查看要件关联信息-->
+    <select id="selectElementList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        t1.id,
+        t1.orderNo,
+        t2.cityName,
+        t2.orderType,
+        t2.boxNo,
+        t2.customerName,
+        t1.elementSet,
+        t1.currentBoxElementSet,
+        t1.operationType,
+        t1.currentHandler,
+        t1.applierName,
+        t2.orderStatus,
+        t1.operationTime
+        FROM
+        `anjbo-server-element`.tbl_element_access_flow t1
+        LEFT JOIN `anjbo-server-element`.tbl_element_list t2 ON t1.orderNo = t2.orderNo
+        LEFT JOIN  `anjbo-server-order`.tbl_risk_allocation_fund  t3 ON t2.orderNo = t3.orderNo 
+        <where>
+            <if test="currentHandlerUid != null and currentHandlerUid != '' ">
+                (
+                t2.currentHandlerUid in (${currentHandlerUid})
+                or t2.previousHandlerUid = #{updateUid}
+                or t2.notarialUid in (${currentHandlerUid})
+                or t2.facesignUid in (${currentHandlerUid})
+                or t2.acceptMemberUid in  (${currentHandlerUid})
+                or t2.channelManagerUid in (${currentHandlerUid})
+                <if test="orderNo != '' and orderNo != null">
+                    or t2.orderNo in (${orderNo})
+                </if>
+                )
+            </if>
+            <if test="fundId !=null and fundId != ''">
+			and t3.fundId = #{fundId}              <!--需要改动的位置-->
+		    </if>
+            <if test="city!='' and city !=null ">
+                AND t2.cityName = #{city}
+            </if>
+            <if test='orderType=="3"'>
+                AND t2.orderType = 3
+            </if>
+            <if test='orderType=="1"'>
+                AND (t2.orderType = 1 or t2.orderType = 2)
+            </if>
+            <if test="customerName!='' and customerName !=null ">
+                AND t2.customerName like CONCAT('%',#{customerName},'%')
+            </if>
+            <if test="applierName!='' and applierName !=null ">
+                AND t1.applierName like CONCAT('%',#{applierName},'%')
+            </if>
+            <if test="orderStatus!='' and orderStatus !=null ">
+                AND t2.orderStatus = #{orderStatus}
+            </if>
+            <if test="boxNo!='' and boxNo !=null ">
+                AND t2.boxNo like CONCAT('%',#{boxNo},'%')
+            </if>
+            <if test="startTime!='' and startTime !=null ">
+                AND <![CDATA[ DATE_FORMAT(t1.operationTime, '%Y-%m-%d') >= #{startTime} ]]>
+            </if>
+            <if test="endTime!='' and endTime !=null ">
+                AND <![CDATA[ DATE_FORMAT(t1.operationTime, '%Y-%m-%d') <= #{endTime} ]]>
+            </if>
+        </where>
+        ORDER BY t1.operationTime DESC,t1.id DESC
+        limit #{start},#{pageSize}
+    </select>
+     <!-- 查询要件表信息 -->
+    <select id="selectAllElementList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        id,
+        elementType,
+        cardType,
+        cardNumber,
+        cardCustomer,
+        boxNo,
+        bankName,
+        bankSubName,
+        type,
+        orderNo,
+        status
+        FROM
+        `anjbo-server-element`.tbl_element_element_file
+    </select>
+</mapper>

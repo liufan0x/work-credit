@@ -1,0 +1,34 @@
+
+<form class="form-inline"  >
+	<div class="form-group" style="text-align:left;">
+	    <div class="col-md-12">
+	    <label>退回类型：</label>
+		<select class="form-control" name="reason" ng-model="returnType" select-multiple required data="1" style="width:310px">
+		   <option value="补充资料">补充资料</option>	
+		   <option value="拒单">拒单</option>
+		   <option value="系统修改">系统修改</option>
+		   <option value="其他">其他</option>
+	    </select>
+	    </div>
+	    <div class="col-md-12" style="padding-top:10px">
+	    <label>退回对象：</label>
+		<select class="form-control"  ng-model="processIndex" >
+			<option value="" >请选择退回的流程</option>
+			<option value="{{$index}}" ng-repeat="process in processList" >{{process.currentProcessName}}</option>
+		</select>
+		-
+		<select class="form-control" disabled="false" >
+			<option>{{processName}}</option>
+		</select>
+		</div>
+		<div class="col-md-12" style="padding-top:10px">
+	    <label>是否重走流程：</label>
+		<select class="form-control" ng-model="isNewWalkProcess" ng-disabled="!isDisabled">
+			<option value="1"> 是  </option>	
+		    <option value="2"> 否  </option>
+		</select>
+		</div>
+	</div>
+	 
+	 <textarea ng-model="backReason" class="form-control" rows="5" style="margin-left:10px;max-height: 180px;" cols="45" placeholder="如有特殊说明，请在此处备注（必填）"/>
+</form>

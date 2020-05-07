@@ -1,0 +1,134 @@
+<style>
+	input.three-inp {
+		width: 70px !important;
+	}
+	
+	input.two-inp {
+		width: 100px !important;
+	}
+</style>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12" style="position: relative">
+			<ul class="breadcrumb">
+				<li>工具</li>
+				<li style="color: #0099cc">套打合同</li>
+				<li style="color: #0099cc">新增套打</li>
+				<li class="go-back fr">
+					<a onclick="history.go(-1);">返回上一步</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<button type="button" ng-click="qieTab(true)" class="btn" ng-class="{true:'btn-primary',false:''}[taodahetong]" style="margin-left:50px;">合同套打</button>
+			<button type="button" ng-click="qieTab(false)" class="btn" ng-class="{true:'btn-primary',false:''}[!taodahetong]" style="margin-left:50px;">操作记录</button>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12">
+			<ul class="breadcrumb">
+				<li style="color:#337AB7">关联订单信息</li>
+			</ul>
+		</div>
+		<div ng-show="selectedOrder" class="col-md-12" style="padding-left: 15px;">
+			关联订单:&nbsp;&nbsp;{{selectedOrder.customerName}}&nbsp;,&nbsp;{{selectedOrder.productName}}&nbsp;,&nbsp;{{selectedOrder.borrowingAmount}}万&nbsp;,&nbsp;{{selectedOrder.borrowingDay}}天&nbsp;,&nbsp;{{selectedOrder.state}}&nbsp;&nbsp;
+			<a href="javascript:void(0)" ng-click="showRelatedContract()">查看订单</a>
+		</div>
+		<div ng-show="!selectedOrder" class="col-md-12" style="padding-left: 15px;">
+			无
+		</div>
+		<div class="col-md-12">
+			<ul class="breadcrumb" style="color:#337AB7">
+				<li>合同信息</li>
+			</ul>
+		</div>
+	</div>
+
+	<temp ng-if="taodahetong">
+		<div class="col-md-12" style="padding:0 40px;margin-top:10px;">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th style="width: 180px;">&nbsp;</th>
+						<th>合同名称</th>
+					</tr>
+				</thead>
+				<tbody ng-repeat="contractGroup in contractGroupList">
+					<tr>
+						<td colspan="3">
+							<input class="fl" type="checkbox" ng-true-value="true" ng-false-value="false" ng-model="contractGroup.isCheck" ng-click="checkAll(contractGroup)" />
+							<span class="fl" ng-bind="contractGroup.name"></span>
+						</td>
+					</tr>
+					<tr ng-repeat="contract in contractGroup.contractList">
+						<td>
+							<input type="checkbox" ng-click="initFieldGroup(contractGroup)" ng-true-value="true" ng-false-value="false" ng-model="contract.isCheck">
+						</td>
+						<td>
+							<span class="fl" ng-bind="contract.name"></span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<div class="row" ng-repeat="group in groupList" style="padding:0 40px" ng-if="group.isShow">
+			<form name="fieldForm" role="form" class="form-inline">
+				<div class="col-md-12">
+					<ul class="breadcrumb">
+						<li style="color:#337AB7" ng-bind="group.name"></li>
+					</ul>
+				</div>
+				<div class="col-lg-6" ng-class="{'col-md-12':field.inputs.length > 6,'col-md-6':field.inputs.length <= 6}" ng-repeat="field in group.fileList" ng-if="field.isShow">
+					<div class="form-group">
+						<label class="fl" style="width: 190px;">{{field.name}}：</label>
+						<temp ng-repeat="input in field.inputs">
+							<input type="text" ng-if="!input.type && ((field.type == '1' && $index%2==0) || (field.type == '2' && $index%2!=0))" class="form-control" ng-class="{'two-inp':field.inputs.length==3||field.inputs.length==4,'three-inp':field.inputs.length > 4}" ng-model="input.modelValue" />
+							<span ng-if="!input.type && ((field.type == '2' && $index%2==0 )|| (field.type == '1' && $index%2!=0)) " ng-bind="input.value"></span>
+						</temp>
+					</div>
+				</div>
+			</form>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12 form-inline">
+				<button type="button" ng-click="save(1)" class="btn btn-primary" style="margin-left:50px;">保存</button>
+				<button type="button" ng-click="saveShow(2)" class="btn btn-primary" style="margin-left:50px;">预览</button>
+				<button type="button" ng-click="saveShow(3)" class="btn btn-primary" style="margin-left:50px;">下载</button>
+				<button type="button" ng-click="saveShow(4)" class="btn btn-primary" style="margin-left:50px;">打印</button>
+				<button type="button" ng-click="reset()" class="btn btn-warning" style="margin-left:50px;">重置</button>
+				<span  style="position: relative;left: -7px; top: 5px;" class="tooltip-toggle" data-toggle="tooltip-toggle" title="" data-original-title="重新同步提单信息，未录入订单的字段将被清空"><span class="help"></span></span>
+				<br><br>
+				<br><br>
+			</div>
+		</div>
+	</temp>
+
+	<temp ng-if="!taodahetong">
+		<div class="row">
+			<div class="col-md-12">
+				<table bs-table-control="testTable" id="testTable" data-show-export="false" style="min-width:1000px;"></table>
+			</div>
+		</div>
+	</temp>
+</div>
+<iframe ng-src="{{pdf | trustAsResourceUrl}}" style="display: none;" id="printIframe" ></iframe>
+
+<div ng-show="false" id="saveShow">
+	<div class="row">
+		<div class="col-md-14">
+			<form class="form-inline" id="frmGroup" name="frmGroup">
+				<div class="form-group">
+					<input type="radio" class="form-control" ng-checked="true" value="1" ng-model="tempType.type" required>普通模板
+					<input type="radio" class="form-control" value="2" ng-model="tempType.type" required>无文本模板
+					<span class="inputError" ng-show="isAudit"><error class="text-danger" ng-show="frmGroup.name.$error.required">必填</error></span>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

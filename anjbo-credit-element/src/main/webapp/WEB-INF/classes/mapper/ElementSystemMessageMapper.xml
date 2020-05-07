@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.anjbo.dao.ElementSystemMessageMapper">	
+		
+	<!-- 新增系统消息表-->
+	<insert id="addElementSystemMessage" parameterType="elementSystemMessageDto" useGeneratedKeys="true" keyProperty="id">
+		insert	into tbl_element_system_message(
+			<trim suffixOverrides=",">
+				<if test="dbId != null">`dbId`,</if>
+				<if test="messageType != null">`messageType`,</if>
+				<if test="customerName != null">`customerName`,</if>
+				<if test="applicantName != null">`applicantName`,</if>
+				<if test="applicantUid != null">`applicantUid`,</if>
+				<if test="orderNo != null">`orderNo`,</if>
+				<if test="riskElement != null">`riskElement`,</if>
+				<if test="receivableElements != null">`receivableElements`,</if>
+				<if test="beginBorrowElementTime != null">`beginBorrowElementTime`,</if>
+				<if test="endBorrowElementTime != null">`endBorrowElementTime`,</if>
+				<if test="hasRead != null">`hasRead`,</if>
+				<if test="auditState != null">`auditState`,</if>
+				<if test="receiverUid != null">`receiverUid`,</if>
+				<if test="title != null">`title`,</if>
+				<if test="createTime != null">`createTime`,</if>
+				<if test="publicSeal != null">`publicSeal`,</if>
+				<if test="elementOperationId != null">`elementOperationId`,</if>
+			</trim>
+		)
+		values(	
+			<trim suffixOverrides=",">
+				<if test="dbId != null">#{dbId},</if>
+				<if test="messageType != null">#{messageType},</if>
+				<if test="customerName != null">#{customerName},</if>
+				<if test="applicantName != null">#{applicantName},</if>
+				<if test="applicantUid != null">#{applicantUid},</if>
+				<if test="orderNo != null">#{orderNo},</if>
+				<if test="riskElement != null">#{riskElement},</if>
+				<if test="receivableElements != null">#{receivableElements},</if>
+				<if test="beginBorrowElementTime != null">#{beginBorrowElementTime},</if>
+				<if test="endBorrowElementTime != null">#{endBorrowElementTime},</if>
+				<if test="hasRead != null">#{hasRead},</if>
+				<if test="auditState != null">#{auditState},</if>
+				<if test="receiverUid != null">#{receiverUid},</if>
+				<if test="title != null">#{title},</if>
+				<if test="createTime != null">#{createTime},</if>
+				<if test="publicSeal != null">#{publicSeal},</if>
+				<if test="elementOperationId != null">#{elementOperationId},</if>
+			</trim>
+		)
+	</insert>
+	
+	<!-- 修改系统消息表-->
+	<update id="updateElementSystemMessage" parameterType="elementSystemMessageDto" >
+	 update tbl_element_system_message
+	<set> 
+			<trim suffixOverrides=",">
+				<if test="hasRead != null">`hasRead` = #{hasRead},</if>
+				<if test="auditState != null">`auditState` = #{auditState},</if>
+			</trim>
+	</set> 
+	 where id = #{id}
+	</update>
+
+	<!-- 根据ID删除系统消息表-->
+    <delete id="deleteElementSystemMessageById" parameterType="int">
+		delete	from tbl_element_system_message where id = #{0}
+    </delete>
+    
+	<!-- 根据审批ID删除系统消息表-->
+	<delete id="deleteByDbId" parameterType="int">
+		delete	from tbl_element_system_message where dbId = #{0}
+    </delete>
+	
+	<!-- 根据ID查询系统消息表 -->
+	
+	<select id="selectElementSystemMessageById" parameterType="int" resultType="elementSystemMessageDto">
+		select	* from tbl_element_system_message where id = #{0}
+	</select>
+	
+	<select id="selectUnreadCount" resultType="integer">
+		select count(*) from tbl_element_system_message WHERE receiverUid=#{uid} AND hasRead=0 AND messageType=1
+	</select>
+	
+	<select id="selectUnreadCopyAuditCount" resultType="integer">
+		select count(*) from tbl_element_system_message WHERE receiverUid=#{uid} AND hasRead=0 AND messageType=3
+	</select>
+	
+	<update id="updateAuditMsgState">
+		update tbl_element_system_message set auditState=#{state},hasRead=1 
+		WHERE receiverUid=#{uid} AND dbId=#{id} AND messageType=2
+	</update>
+	
+	<update id="updateCopyMsgState">
+		update tbl_element_system_message set hasRead=1 
+		WHERE receiverUid=#{uid} AND dbId=#{id} AND messageType=3
+	</update>
+	
+	<select id="listByUid" resultType="systemMsgVO">
+		select msg.*,audit.type auditType from tbl_element_system_message msg LEFT JOIN tbl_element_audit_base audit
+			ON audit.id=msg.dbId WHERE msg.receiverUid=#{uid} AND msg.messageType=1
+			<where>
+				<if test="elementOperationId != null">AND elementOperationId=#{elementOperationId}</if>
+			</where>
+		ORDER BY createTime DESC 
+		<if test="pageSize != null and pageSize > 0">
+		LIMIT ${start},${pageSize}
+		</if>
+	</select>
+	<select id="unreadApplayCount" resultType="integer">
+		select count(*) from tbl_element_system_message WHERE receiverUid = #{uid} AND messageType = 4 AND hasRead = 0
+	</select>
+	
+	<update id="updateMessageHasRead" parameterType="java.util.Map">
+		update tbl_element_system_message set hasRead=1 WHERE id=#{msgId}
+	</update>
+	
+	<select id="selectTitle" resultType="string">
+		select title from tbl_element_system_message
+		<where>
+			<if test="receiverUid != null">AND receiverUid=#{receiverUid}</if>
+			<if test="elementOperationId != null">AND elementOperationId=#{elementOperationId}</if>
+			<if test="dbId != null">AND dbId=#{dbId}</if>
+			<if test="messageType != null">AND messageType=#{messageType}</if>
+		</where>
+		ORDER BY createTime DESC LIMIT 0,1
+	</select>
+	
+</mapper>

@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.DocumentsMapper">
+    <resultMap id="BaseResultMap" type="DocumentsDto">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="createUid" jdbcType="VARCHAR" property="createUid" />
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="updateUid" jdbcType="VARCHAR" property="updateUid" />
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="orderNo" jdbcType="VARCHAR" property="orderNo" />
+        <result column="status" jdbcType="INTEGER" property="status" />
+        <result column="greenStatus" jdbcType="INTEGER" property="greenStatus" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, createUid, createTime, updateUid, updateTime, orderNo, status,greenStatusImgUrl,elementUrl,remark,handleUid
+    </sql>
+    <select id="detail" parameterType="java.lang.String"  resultType="DocumentsDto">
+        select 
+        <include refid="Base_Column_List" />
+        from tbl_element_documents
+        where orderNo = #{orderNo} ORDER BY createTime DESC LIMIT 1
+    </select>
+   
+    <insert id="insert" parameterType="DocumentsDto">
+        insert into tbl_element_documents 
+        (
+        	id, createUid, createTime, 
+            updateUid, orderNo, 
+            status,greenStatusImgUrl,elementUrl,remark,handleUid
+         )
+        values
+        (
+        	null, #{createUid}, now(), 
+            #{updateUid}, #{orderNo}, 
+            #{status},#{greenStatusImgUrl},#{elementUrl},#{remark},#{handleUid}
+         )
+    </insert>
+    
+     <insert id="insertByMap" parameterType="java.util.Map">
+        insert into tbl_element_documents 
+        (
+        	id, createUid, createTime, 
+            updateUid, orderNo, 
+            status,greenStatusImgUrl,elementUrl,remark,handleUid
+         )
+        values
+        (
+        	null, #{createUid}, now(), 
+            #{updateUid}, #{orderNo}, 
+            #{status},#{greenStatusImgUrl},#{elementUrl},#{remark},#{handleUid}
+         )
+    </insert>
+   
+    <update id="update" parameterType="DocumentsDto">
+        update tbl_element_documents
+        <set>
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="greenStatusImgUrl!=null and greenStatusImgUrl!=''">
+            	greenStatusImgUrl = #{greenStatusImgUrl},
+            </if>
+            <if test="elementUrl!=null and elementUrl!=''">
+            	elementUrl = #{elementUrl},
+            </if>
+            <if test="remark!=null and remark!=''">
+            	remark = #{remark},
+            </if>
+            <if test="handleUid!=null and handleUid!=''">
+            	handleUid = #{handleUid}
+            </if>
+        </set>
+        where orderNo = #{orderNo} ORDER BY createTime DESC LIMIT 1
+    </update>
+    
+     <update id="updateByMap" parameterType="java.util.Map">
+        update tbl_element_documents
+        <set>
+            <if test="createUid != null and createUid!=''">
+                createUid = #{createUid},
+            </if>
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="greenStatusImgUrl!=null and greenStatusImgUrl!=''">
+            	greenStatusImgUrl = #{greenStatusImgUrl},
+            </if>
+            <if test="elementUrl!=null and elementUrl!=''">
+            	elementUrl = #{elementUrl},
+            </if>
+            <if test="remark!=null and remark!=''">
+            	remark = #{remark}
+            </if>
+        </set>
+        where orderNo = #{orderNo} ORDER BY createTime DESC LIMIT 1
+    </update>
+    
+    <update id="updateNotValidate" parameterType="DocumentsDto">
+        update tbl_element_documents SET
+                createUid = #{createUid},
+                updateUid = #{updateUid},
+                status = #{status},
+            	greenStatusImgUrl = #{greenStatusImgUrl},
+            	elementUrl = #{elementUrl},
+            	remark = #{remark}
+        where orderNo = #{orderNo} ORDER BY createTime DESC LIMIT 1
+    </update>
+   
+   
+	<update id="updateForeclosureType" parameterType="ForeclosureTypeDto">
+		UPDATE tbl_element_foreclosure_type
+		<set>
+			<if test="foreclosureType!=null and foreclosureType!=''">
+			foreclosureType = #{foreclosureType},
+			</if>
+			<if test="accountType!=null and accountType!=''">
+			accountType = #{accountType},
+			</if>
+			<if test="bankName!=null and bankName!=''">
+			bankName = #{bankName},
+			</if>
+			<if test="bankSubName!=null and bankSubName!=''">
+			bankSubName = #{bankSubName},
+			</if>
+			<if test="bankCardMaster!=null and bankCardMaster!=''">
+			bankCardMaster = #{bankCardMaster},
+			</if>
+			<if test="bankNo!=null and bankNo!=''">
+			bankNo = #{bankNo},
+			</if>
+			<if test="idCard!=null and idCard!=''">
+			idCard = #{idCard},
+			</if>
+			<if test="isMobleBank!=null">
+			isMobleBank = #{isMobleBank},
+			</if>
+			<if test="isNetBank!=null">
+			isNetBank = #{isNetBank},
+			</if>
+			<if test="isUpdateBankCardPWD!=null">
+			isUpdateBankCardPWD = #{isUpdateBankCardPWD},
+			</if>
+			<if test="isReceiveCompanyStamp!=null">
+			isReceiveCompanyStamp = #{isReceiveCompanyStamp},
+			</if>
+			<if test="isReceiveFinanceStamp!=null">
+			isReceiveFinanceStamp = #{isReceiveFinanceStamp},
+			</if>
+			<if test="isReceivePrivateStamp!=null">
+			isReceivePrivateStamp = #{isReceivePrivateStamp},
+			</if>
+			<if test="isReceiveIdCard!=null">
+			isReceiveIdCard = #{isReceiveIdCard},
+			</if>
+			<if test="isReceiveBusinessLicence!=null">
+			isReceiveBusinessLicence = #{isReceiveBusinessLicence},
+			</if>
+			<if test="bankNameId!=null">
+			bankNameId = #{bankNameId},
+			</if>
+			<if test="bankSubNameId!=null">
+			bankSubNameId = #{bankSubNameId},
+			</if>
+			<if test="remark !=null">
+			remark = #{remark}
+			</if>
+		</set>
+		WHERE orderNo = #{orderNo} ORDER BY id DESC LIMIT 1
+  </update>
+  
+  <update id="updateForeclosureTypeByMap" parameterType="java.util.Map">
+		UPDATE tbl_element_foreclosure_type
+		set
+		foreclosureType = #{foreclosureType},
+		accountType = #{accountType},
+		bankName = #{bankName},
+		bankSubName = #{bankSubName},
+		bankCardMaster = #{bankCardMaster},
+		bankNo = #{bankNo},
+		idCard = #{idCard},
+		isMobleBank = #{isMobleBank},
+		isNetBank = #{isNetBank},
+		isUpdateBankCardPWD = #{isUpdateBankCardPWD},
+		isReceiveCompanyStamp = #{isReceiveCompanyStamp},
+		isReceiveFinanceStamp = #{isReceiveFinanceStamp},
+		isReceivePrivateStamp = #{isReceivePrivateStamp},
+		isReceiveIdCard = #{isReceiveIdCard},
+		isReceiveBusinessLicence = #{isReceiveBusinessLicence},
+		bankNameId = #{bankNameId},
+		bankSubNameId = #{bankSubNameId},
+		remark = #{remark} 
+		WHERE orderNo = #{orderNo} ORDER BY id DESC LIMIT 1
+  </update>
+  
+  <update id="updateForeclosureTypeNotValidate" parameterType="ForeclosureTypeDto">
+		UPDATE tbl_element_foreclosure_type
+		set
+		foreclosureType = #{foreclosureType},
+		accountType = #{accountType},
+		bankName = #{bankName},
+		bankSubName = #{bankSubName},
+		bankCardMaster = #{bankCardMaster},
+		bankNo = #{bankNo},
+		idCard = #{idCard},
+		isMobleBank = #{isMobleBank},
+		isNetBank = #{isNetBank},
+		isUpdateBankCardPWD = #{isUpdateBankCardPWD},
+		isReceiveCompanyStamp = #{isReceiveCompanyStamp},
+		isReceiveFinanceStamp = #{isReceiveFinanceStamp},
+		isReceivePrivateStamp = #{isReceivePrivateStamp},
+		isReceiveIdCard = #{isReceiveIdCard},
+		isReceiveBusinessLicence = #{isReceiveBusinessLicence},
+		bankNameId = #{bankNameId},
+		bankSubNameId = #{bankSubNameId},
+		remark = #{remark} 
+		WHERE orderNo = #{orderNo} ORDER BY id DESC LIMIT 1
+  </update>
+
+	
+	<update id="updatePaymentType" parameterType="PaymentTypeDto">
+		UPDATE tbl_element_payment_type
+		<set>
+			<if test="paymentMode!=null and paymentMode!=''">
+			paymentMode = #{paymentMode},
+			</if>
+			<if test="paymentaccountType!=null and paymentaccountType!=''">
+			paymentaccountType = #{paymentaccountType},
+			</if>
+			<if test="paymentBankName!=null and paymentBankName!=''">
+			paymentBankName = #{paymentBankName},
+			</if>
+			<if test="paymentBankSubName!=null and paymentBankSubName!=''">
+			paymentBankSubName = #{paymentBankSubName},
+			</if>
+			<if test="paymentBankCardName!=null and paymentBankCardName!=''">
+			paymentBankCardName = #{paymentBankCardName},
+			</if>
+			<if test="paymentBankCardPwdState!=null">
+			paymentBankCardPwdState = #{paymentBankCardPwdState},
+			</if>
+			<if test="paymentBankNumber!=null and paymentBankNumber!=''">
+			paymentBankNumber = #{paymentBankNumber},
+			</if>
+			<if test="paymentIdCardNo!=null and paymentIdCardNo!=''">
+			paymentIdCardNo = #{paymentIdCardNo},
+			</if>
+			<if test="paymentmobileBankState!=null">
+			paymentmobileBankState = #{paymentmobileBankState},
+			</if>
+			<if test="paymentOnlineBankState!=null">
+			paymentOnlineBankState = #{paymentOnlineBankState},
+			</if>
+			<if test="paymentOfficialSealState!=null">
+			paymentOfficialSealState = #{paymentOfficialSealState},
+			</if>
+			<if test="paymentFinanceSealState!=null">
+			paymentFinanceSealState = #{paymentFinanceSealState},
+			</if>
+			<if test="paymentPrivateSealState!=null">
+			paymentPrivateSealState = #{paymentPrivateSealState},
+			</if>
+			<if test="paymentLegalPersonIdCardState!=null">
+			paymentLegalPersonIdCardState = #{paymentLegalPersonIdCardState},
+			</if>
+			<if test="paymentBusinessLicenseState!=null">
+			paymentBusinessLicenseState = #{paymentBusinessLicenseState},
+			</if>
+			<if test="netBankLoginName!=null and netBankLoginName!=''">
+			netBankLoginName = #{netBankLoginName},
+			</if>
+			<if test="quota!=null">
+			quota = #{quota},			
+			</if>
+			<if test="isNetBankLoginPwd!=null">
+			isNetBankLoginPwd = #{isNetBankLoginPwd},
+			</if>
+			<if test="verfuyNetBankPwd!=null">
+			verfuyNetBankPwd = #{verfuyNetBankPwd},
+			</if>
+			<if test="paymentBankNameId!=null">
+			paymentBankNameId = #{paymentBankNameId},
+			</if>
+			<if test="paymentBankSubNameId!=null">
+			paymentBankSubNameId = #{paymentBankSubNameId},
+			</if>
+			<if test="bankProducts !=null">
+			  bankProducts=#{bankProducts}
+			</if>
+		</set>
+		WHERE orderNo = #{orderNo} ORDER BY id DESC LIMIT 1
+	</update>
+	
+	<update id="updatePaymentTypeNotValidate" parameterType="PaymentTypeDto">
+		UPDATE tbl_element_payment_type
+		set
+		paymentMode = #{paymentMode},
+		paymentaccountType = #{paymentaccountType},
+		paymentBankName = #{paymentBankName},
+		paymentBankSubName = #{paymentBankSubName},
+		paymentBankCardName = #{paymentBankCardName},
+		paymentBankCardPwdState = #{paymentBankCardPwdState},
+		paymentBankNumber = #{paymentBankNumber},
+		paymentIdCardNo = #{paymentIdCardNo},
+		paymentmobileBankState = #{paymentmobileBankState},
+		paymentOnlineBankState = #{paymentOnlineBankState},
+		paymentOfficialSealState = #{paymentOfficialSealState},
+		paymentFinanceSealState = #{paymentFinanceSealState},
+		paymentPrivateSealState = #{paymentPrivateSealState},
+		paymentLegalPersonIdCardState = #{paymentLegalPersonIdCardState},
+		paymentBusinessLicenseState = #{paymentBusinessLicenseState},
+		netBankLoginName = #{netBankLoginName},
+		quota = #{quota},
+		isNetBankLoginPwd = #{isNetBankLoginPwd},
+		verfuyNetBankPwd = #{verfuyNetBankPwd},
+		paymentBankNameId = #{paymentBankNameId},
+		paymentBankSubNameId = #{paymentBankSubNameId},
+		bankProducts=#{bankProducts}
+		WHERE orderNo = #{orderNo} ORDER BY id DESC LIMIT 1
+	</update>
+	
+	<update id="updatePaymentTypeByMap" parameterType="java.util.Map">
+		UPDATE tbl_element_payment_type
+		set
+		paymentMode = #{paymentMode},
+		paymentaccountType = #{paymentaccountType},
+		paymentBankName = #{paymentBankName},
+		paymentBankSubName = #{paymentBankSubName},
+		paymentBankCardName = #{paymentBankCardName},
+		paymentBankCardPwdState = #{paymentBankCardPwdState},
+		paymentBankNumber = #{paymentBankNumber},
+		paymentIdCardNo = #{paymentIdCardNo},
+		paymentmobileBankState = #{paymentmobileBankState},
+		paymentOnlineBankState = #{paymentOnlineBankState},
+		paymentOfficialSealState = #{paymentOfficialSealState},
+		paymentFinanceSealState = #{paymentFinanceSealState},
+		paymentPrivateSealState = #{paymentPrivateSealState},
+		paymentLegalPersonIdCardState = #{paymentLegalPersonIdCardState},
+		paymentBusinessLicenseState = #{paymentBusinessLicenseState},
+		netBankLoginName = #{netBankLoginName},
+		quota = #{quota},
+		isNetBankLoginPwd = #{isNetBankLoginPwd},
+		verfuyNetBankPwd = #{verfuyNetBankPwd},
+		paymentBankNameId = #{paymentBankNameId},
+		paymentBankSubNameId = #{paymentBankSubNameId},
+		bankProducts =#{bankProducts}
+		WHERE orderNo = #{orderNo} ORDER BY id DESC LIMIT 1
+	</update>
+	
+	
+	<insert id="insertPaymentType" parameterType="paymentTypeDto">
+		INSERT INTO
+		tbl_element_payment_type
+		(
+			orderNo,paymentMode,paymentaccountType,paymentBankName,paymentBankSubName,
+			paymentBankCardName,paymentBankCardPwdState,paymentBankNumber,paymentIdCardNo,
+			paymentmobileBankState,paymentOnlineBankState,paymentOfficialSealState,paymentFinanceSealState,
+			paymentPrivateSealState,paymentLegalPersonIdCardState,paymentBusinessLicenseState,
+			netBankLoginName,quota,isNetBankLoginPwd,verfuyNetBankPwd,paymentBankNameId,paymentBankSubNameId,bankProducts
+		)
+		VALUES
+		(
+			#{orderNo},#{paymentMode},#{paymentaccountType},#{paymentBankName},#{paymentBankSubName},
+			#{paymentBankCardName},#{paymentBankCardPwdState},#{paymentBankNumber},#{paymentIdCardNo},
+			#{paymentmobileBankState},#{paymentOnlineBankState},#{paymentOfficialSealState},#{paymentFinanceSealState},
+			#{paymentPrivateSealState},#{paymentLegalPersonIdCardState},#{paymentBusinessLicenseState},
+			#{netBankLoginName},#{quota},#{isNetBankLoginPwd},#{verfuyNetBankPwd},#{paymentBankNameId},#{paymentBankSubNameId},#{bankProducts}
+		)
+  	</insert>
+  	
+  	<insert id="insertPaymentTypeByMap" parameterType="java.util.Map">
+		INSERT INTO
+		tbl_element_payment_type
+		(
+			orderNo,paymentMode,paymentaccountType,paymentBankName,paymentBankSubName,
+			paymentBankCardName,paymentBankCardPwdState,paymentBankNumber,paymentIdCardNo,
+			paymentmobileBankState,paymentOnlineBankState,paymentOfficialSealState,paymentFinanceSealState,
+			paymentPrivateSealState,paymentLegalPersonIdCardState,paymentBusinessLicenseState,
+			netBankLoginName,quota,isNetBankLoginPwd,verfuyNetBankPwd,paymentBankNameId,paymentBankSubNameId,bankProducts
+		)
+		VALUES
+		(
+			#{orderNo},#{paymentMode},#{paymentaccountType},#{paymentBankName},#{paymentBankSubName},
+			#{paymentBankCardName},#{paymentBankCardPwdState},#{paymentBankNumber},#{paymentIdCardNo},
+			#{paymentmobileBankState},#{paymentOnlineBankState},#{paymentOfficialSealState},#{paymentFinanceSealState},
+			#{paymentPrivateSealState},#{paymentLegalPersonIdCardState},#{paymentBusinessLicenseState},
+			#{netBankLoginName},#{quota},#{isNetBankLoginPwd},#{verfuyNetBankPwd},#{paymentBankNameId},#{paymentBankSubNameId},#{bankProducts}
+		)
+  	</insert>
+
+	
+	<insert id="insertForeclosureType" parameterType="foreclosureTypeDto">
+		INSERT INTO
+		tbl_element_foreclosure_type
+		(
+			orderNo,accountType,foreclosureType,bankName,bankSubName,
+			bankCardMaster,bankNo,idCard,isMobleBank,isNetBank,isUpdateBankCardPWD,
+			isReceiveCompanyStamp,isReceiveFinanceStamp,isReceivePrivateStamp,
+			isReceiveIdCard,isReceiveBusinessLicence,bankNameId,bankSubNameId,remark
+		)
+		VALUES
+		(
+			#{orderNo},#{accountType},#{foreclosureType},#{bankName},#{bankSubName},
+			#{bankCardMaster},#{bankNo},#{idCard},#{isMobleBank},#{isNetBank},#{isUpdateBankCardPWD},
+			#{isReceiveCompanyStamp},#{isReceiveFinanceStamp},#{isReceivePrivateStamp},
+			#{isReceiveIdCard},#{isReceiveBusinessLicence},#{bankNameId},#{bankSubNameId},#{remark}
+		)
+  	</insert>
+  	
+  	<insert id="insertForeclosureTypeByMap" parameterType="java.util.Map">
+		INSERT INTO
+		tbl_element_foreclosure_type
+		(
+			orderNo,accountType,foreclosureType,bankName,bankSubName,
+			bankCardMaster,bankNo,idCard,isMobleBank,isNetBank,isUpdateBankCardPWD,
+			isReceiveCompanyStamp,isReceiveFinanceStamp,isReceivePrivateStamp,
+			isReceiveIdCard,isReceiveBusinessLicence,bankNameId,bankSubNameId,remark
+		)
+		VALUES
+		(
+			#{orderNo},#{accountType},#{foreclosureType},#{bankName},#{bankSubName},
+			#{bankCardMaster},#{bankNo},#{idCard},#{isMobleBank},#{isNetBank},#{isUpdateBankCardPWD},
+			#{isReceiveCompanyStamp},#{isReceiveFinanceStamp},#{isReceivePrivateStamp},
+			#{isReceiveIdCard},#{isReceiveBusinessLicence},#{bankNameId},#{bankSubNameId},#{remark}
+		)
+  	</insert>
+   
+    <!-- 获取赎楼方式信息 -->
+	  <select id="detailForeclosureType" resultType="ForeclosureTypeDto" parameterType="java.lang.String">
+	  	select 
+	  		*
+	  	from tbl_element_foreclosure_type t
+	  	where orderNo = #{orderNo} ORDER BY id DESC LIMIT 1
+	  </select>
+   
+   
+	    <!-- 获取回款方式信息 -->
+	  <select id="detailPaymentType" resultType="PaymentTypeDto" parameterType="java.lang.String">
+	  	select 
+	  		*
+	  	from tbl_element_payment_type t
+	  	where orderNo=#{orderNo} ORDER BY id DESC LIMIT 1
+	  </select>
+	  
+	 <update id="updateDocumentImg" parameterType="DocumentsDto">
+        update tbl_element_documents set greenStatusImgUrl = #{greenStatusImgUrl} 
+        where orderNo = #{orderNo}
+    </update>
+</mapper>

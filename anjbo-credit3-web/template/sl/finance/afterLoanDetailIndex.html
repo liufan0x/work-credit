@@ -1,0 +1,825 @@
+<style>
+	p.after-t{
+		width:90%;
+		margin:0 auto;
+		clear:both;
+		line-height:40px;
+		font-size:15px;
+		color:#777;
+		font-weight:bold;
+
+	}
+	.after-p{
+		color:blue;
+		line-height: 50px;
+		clear:both;
+		height:50px;
+        padding-left:30px
+	}
+	.after-form .form-group{min-width:200px;line-height: 30px;}
+	.after-loan-dashed{
+		width:100%;
+		margin:12px auto;
+		border-bottom:2px dashed #ddd;
+	}
+	.after-loan-form label{
+	   width:130px;
+	}
+	.after-loan-form .form-group{
+      min-width:33%;
+	  margin-right:0;
+	}
+	.after-loan-form label span{
+		color:red;
+	}
+	.after-loan-form .form-group .rel{
+     position: relative;
+	 display: inline-block;
+	}
+	.after-loan-form .form-group .rel span{
+     position: absolute;
+	 right:5px;
+	 top:5px;
+	 display: inline-block;
+	}
+	.after-loan-pop .lhw-alert-tit{height:50px;padding:0;}
+	.after-loan-pop .lhw-alert-tit span{
+		display: block;
+		float:left;
+		height:34px;
+		line-height: 34px;
+		cursor:pointer;
+		border-top-left-radius:3px;
+        border-top-right-radius:3px;
+		width:120px;
+		text-align: center;
+		margin-top:16px;
+		margin-left:16px;
+	}
+	.after-loan-pop .lhw-alert-tit span.on{
+		background:#f5f5f5;
+		color:#4a77ac;
+	}
+	.after-loan-butactive{color:blue;cursor: pointer;}
+</style>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<ul class="breadcrumb relative">
+				<li>
+					<a href="javascript:void(0);" ui-sref="afterLoanList">贷后管理</a>
+					<span class="divider"></span>
+				</li>
+				<li class="active">
+					<a href="javascript:void(0);" ui-sref="afterLoanList">全部订单</a>
+					<span class="divider"></span>
+				</li>
+				<li>贷后详情</li> 
+			</ul>
+		</div>
+	</div>
+
+	<!--导航-->
+	<div class="row">
+		<form role="form" class="form-inline">
+			<div class="col-md-12">
+				<ul class="nav nav-tabs">
+					<li ng-class="{'active':showView==1}" >
+						<a ng-click="changeView(1)">还款管理</a>
+					</li>
+					<li ng-class="{'active':showView==2}" >
+						<a ng-click="changeView(2)">贷后日志</a>
+					</li>
+					<li ng-class="{'active':showView==3}" >
+						<a ng-click="changeView(3)">询价/查档/诉讼</a>
+					</li>
+					<li class="pull-right">
+						<button type="button" class="btn btn-primary" ng-if=showView==2 ng-click="addClick()">+&nbsp;添加事件 </button>
+					</li>
+				</ul>
+			</div>
+		</form>
+	</div>
+
+	<after-loan-detail ng-show=showView==1></after-loan-detail>
+	<after-loan-log ng-show=showView==2></after-loan-log>
+	<enquiry-edit ng-show=showView==3></enquiry-edit>
+	<common-file-upload></common-file-upload>
+	<common-file-detail></common-file-detail>
+</div>
+<!-- 正常还款 -->
+<div class="lhw-alert-bg2 after-loan-pop"  ng-show="repaymentShow" style="z-index: 1">
+		<div class="lhw-alert-box" style="width:1080px;">
+			<div class="lhw-alert-tit">
+				<span ng-class="{'on':isOnline}" ng-click="changePop(0)">线上还款</span>
+				<span ng-class="{'on':!isOnline}" ng-click="changePop(1)">线下还款</span>
+				<div class="x-box" ng-click="repaymentShow=false"></div>
+			</div>
+			 <div class="clear" style="height:20px;"></div>
+			<form class="form-inline ng-pristine ng-valid after-loan-form" name="repaymentFrom">
+				<div class="form-group">
+					<label>客户姓名：</label><input class="form-control"   type="text" value="{{afterLoanListDto.borrowerName}}" disabled />
+				</div>
+				<div class="form-group">
+					<label>还款方式：</label><input class="form-control"   type="text" value="{{afterLoanListDto.repaymentName}}" disabled />
+				</div>
+				
+				<span ng-show="isOnline">
+					<div class="form-group">
+						<label>扣款类型：</label><input class="form-control"   type="text" value="{{chargebacks}}" disabled />
+					</div>
+					<div class="form-group">
+						<label>扣款银行：</label><input class="form-control"   type="text" value="{{bankData.paymentBankName}}" disabled />
+					</div>
+					<div class="form-group">
+						<label>扣款账号：</label><input class="form-control"   type="text" value="{{bankData.paymentBankAccount}}" disabled />
+					</div>
+					<!-- <div class="form-group">
+						<label>扣款渠道：</label><input class="form-control"   type="text" disabled />
+					</div> -->
+				</span>
+				<span ng-show="!isOnline">
+					<div class="form-group">
+						<label>实收类型：</label><input class="form-control"   type="text" value="线下正常还款" disabled />
+					</div>
+					<div class="form-group"> 
+						<label><span>*</span>线下收款标记：</label>
+						<select class="form-control" ng-model="offlineReceivingTag" name="offlineReceivingTag" >
+							<option value="1">已进信托专户</option>
+							<option value="2">未进信托专户</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label><span>*</span>银行实际 &nbsp;&nbsp;<br>到账日期：</label>
+						<input size="16" type="text"   ng-model="bankActualDate" name="bankActualDate"   class="form-control form_date" />
+					</div>
+					<div class="form-group">
+						<label><span>*</span>专户银行 &nbsp;&nbsp;<br>流水号：</label>
+						<input size="16" type="text"   ng-model="serialNumber" name="serialNumber"   class="form-control"/>
+					</div>         
+				</span>
+				
+				<div class="after-loan-dashed"></div>
+				<div class="form-group">
+					<label>当期期次：</label>
+					<input type="text" disabled  class="form-control"  value="{{choseData.repaymentPeriods}}期"/> 
+				</div>
+				<div class="form-group">
+					<label>应还款日期：</label>
+					<input type="text"  disabled class="form-control"  value="{{choseData.repaymentDateStr | limitTo:10  }}"/> 
+				</div>
+				<div class="form-group">
+					<label><span>*</span>实际还款日期：</label>
+					<input size="16" type="text"  ng-model="actualRepayment" name="actualRepayment"  class="form-control form_date" >
+				</div> 
+				<div class="form-group">
+					<label>应收本金：</label>
+					<div class="rel"> <input type="text" disabled  class="form-control"  value="{{choseData.repayPrincipal | currency:''}}"/><span>元</span> </div>
+				</div>
+				<div class="form-group">
+					<label>应收利息：</label>
+					<div class="rel"> <input type="text" disabled  class="form-control"  value="{{choseData.repayInterest | currency:''}}"/> <span>元</span></div>
+				</div>
+				<div class="form-group">
+					<label>期供金额：</label>
+					<div class="rel"> <input type="text" disabled  class="form-control"  value="{{choseData.repayAmount | currency:''}}"/> <span>元</span></div>
+				</div>
+				<div class="form-group">
+					<label><span>*</span>实收本金：</label>
+					<div class="rel"><input type="text" ng-model="receivedPrincipal" class="form-control"  ng-change="receivedValChange('receivedPrincipal')"/><span>元</span></div> 
+				</div>
+				<div class="form-group">
+					<label><span>*</span>实收利息：</label>
+					<div class="rel"> <input type="text" ng-model="receivedInterest"  class="form-control" ng-change="receivedValChange('receivedInterest')"/> <span>元</span></div> 
+				</div>
+				<div class="form-group">
+					<label> 实收罚息：</label>
+					<div class="rel"> <input type="text"  ng-model="receivedDefaultInterest" class="form-control" ng-change="receivedValChange('receivedDefaultInterest')"/> <span>元</span></div> 
+				</div>
+				<div class="form-group">
+					<label>减免本金：</label>
+					<div class="rel"> <input type="text"   ng-model="remissionPrincipal" class="form-control"  ng-change="receivedValChange('remissionPrincipal')"/> <span>元</span></div> 
+				</div>
+				<div class="form-group">
+					<label>减免利息：</label>
+					<div class="rel"> <input type="text" ng-model="remissionInterest"  class="form-control" ng-change="receivedValChange('remissionInterest')"/> <span>元</span></div> 
+				</div>
+				<div class="form-group">
+					<label>减免罚息：</label>
+					<div class="rel"> <input type="text"  ng-model="remissionDefaultInterest"  class="form-control" ng-change="receivedValChange('remissionDefaultInterest')" /> <span>元</span></div> 
+				</div>
+				<div class="form-group" ng-show="isOnline">
+					<label>扣款总金额</label>
+					<div class="rel"> <input type="text"  disabled  class="form-control"  value="{{totalDeductionAmount}}"/> <span>元</span></div> 
+				</div>
+				<div class="form-group" ng-show="!isOnline">
+					<label>实收总金额</label>
+					<div class="rel"> <input type="text"  disabled  class="form-control"  value="{{totalAmountReceived}}"/> <span>元</span></div> 
+				</div>
+				<!-- <div class="col-md-12 col-lg-12">
+					<label>备注：</label>
+					<div class="form-group">
+						<textarea class="form-control ng-pristine ng-isolate-scope ng-empty ng-invalid ng-invalid-required ng-touched" rows="2" ng-model="repayment.remark" name="remark" placeholder="请在此处输入备注" style="width: 493px; height: 101px; overflow-y: auto;" initattrh="54"></textarea>
+					</div>
+				</div>
+				<div style="clear: both;height: 1px"></div>
+				<p class="after-p">
+					<a href="javascript:void(0);" ng-click="uploadshow()">上传附件</a> > &nbsp;&nbsp;
+					<a href="javascript:void(0);" ng-show="files.length>0" ng-click="showfile(files)">查看</a>
+				</p> -->
+			</form>
+			<div class="lhw-alert-but">
+				<button type="button" class="btn btn-primary lhw-alert-ok" style="margin-right:80px;" ng-click="confirmRepayment();">提交</button>
+				<button type="button" class="btn btn-default lhw-alert-cancel"  ng-click="repaymentShow=false">取消</button>
+			</div>
+		</div>
+	</div>
+<!-- 正常还款end -->
+<!-- 提前清贷 -->
+<div class="lhw-alert-bg2 after-loan-pop"  ng-show="prepayShow" style="z-index: 1">
+	<div class="lhw-alert-box" style="width:1080px;">
+		<div class="lhw-alert-tit">
+			<span ng-class="{'on':isOnline}" ng-click="changePop(0)">线上还款</span>
+			<span ng-class="{'on':!isOnline}" ng-click="changePop(1)">线下还款</span>
+			<span style="width:466px; font-size:18px;margin-top:10px"><b>提前清贷</b></span>
+			<div class="x-box" ng-click="prepayShow=false"></div>
+		</div>
+		 <div class="clear" style="height:20px;"></div>
+		<form class="form-inline ng-pristine ng-valid after-loan-form" name="repaymentFrom"  style="width:1080px; height: 300px;" >
+			<!-- <div class="form-group">
+				<label>客户姓名：</label><input class="form-control"   type="text" value="{{afterLoanListDto.borrowerName}}" disabled />
+			</div> -->
+			<!-- <div class="form-group">
+				<label>还款方式：</label><input class="form-control"   type="text" value="{{afterLoanListDto.repaymentName}}" disabled />
+			</div> -->
+			<div class="form-group">
+				<label><span>*</span>实际 &nbsp;&nbsp;<br>清贷日期：</label>
+				<input size="16" type="text"   name="actualRepayment2" ng-model="actualRepayment2"  class="form-control form_date">
+			</div>
+			<div class="form-group">
+				<label>当期期次：</label>
+				<input type="text" disabled  class="form-control"  value="{{ret.currentPeriod}}期"/> 
+			</div>
+			<div class="form-group">
+				<label>实收类型：</label>
+				<input class="form-control"   type="text" value="线上提前清贷"  ng-show="isOnline" disabled />
+				<input class="form-control"   type="text" value="线下提前清贷" ng-show="!isOnline"  disabled />
+			</div>
+			<div class="form-group">
+				<label>应收本金：</label>
+				<div class="rel"> <input type="text" disabled  class="form-control"  value="{{ret.receivablePrincipal | currency:''}}"/><span>元</span> </div>
+				
+			</div>
+            <div class="form-group">
+				<label>应收利息：</label>
+				<div class="rel"> <input type="text" disabled  class="form-control"  value="{{ret.receivableInterest| currency:''}}"/> <span>元</span></div>
+			</div>
+			<div class="form-group">
+				<label>应收罚息：</label>
+				<div class="rel"> <input type="text" disabled  class="form-control"  value="{{ret.receivableDefaultInterest | currency:''}}"/> <span>元</span></div>
+			</div>
+
+		
+				<div class="form-group">
+					<label>扣款银行：</label><input class="form-control"   type="text" value="{{bankData.paymentBankName}}" disabled />
+				</div>
+				<div class="form-group">
+					<label>扣款账号：</label><input class="form-control"   type="text" value="{{bankData.paymentBankAccount}}" disabled />
+				</div>
+				<!-- <div class="form-group">
+					<label>扣款渠道：</label><input class="form-control"   type="text" value="" disabled />
+				</div> -->
+		
+			<div class="form-group">
+				<label><span>*</span>实收本金总计：</label>
+				<div class="rel"><input type="number"  step="0.01" class="form-control" ng-model="ret.receivedPrincipalTotal"  ng-change="receivedValChange2('ret.receivedPrincipalTotal',2)"/><span>元</span></div> 
+			</div>
+            <div class="form-group">
+				<label><span>*</span>实收利息总计：</label>
+				<div class="rel"> <input type="number"  step="0.01"  class="form-control"  ng-model="ret.receivedInterestTotal"    ng-change="receivedValChange2('ret.receivedInterestTotal',2)"/> <span>元</span></div> 
+			</div>
+			<div class="form-group">
+				<label><span>*</span>实收罚息总计：</label>
+				<div class="rel"> <input type="number"  step="0.01"  class="form-control" ng-model="ret.receivedDefaultInterestTotal"   ng-change="receivedValChange2('ret.receivedDefaultInterestTotal',2)"/> <span>元</span></div> 
+			</div>
+			<div class="form-group">
+				<label>减免本金：</label>
+				<div class="rel"> <input type="number"  step="0.01"   ng-model="remissionPrincipal2" class="form-control"  ng-change="receivedValChange2('remissionPrincipal2',2)"/> <span>元</span></div> 
+			</div>
+			<div class="form-group">
+				<label>减免利息：</label>
+				<div class="rel"> <input type="number"  step="0.01" ng-model="remissionInterest2"  class="form-control" ng-change="receivedValChange2('remissionInterest2',2)"/> <span>元</span></div> 
+			</div>
+			<div class="form-group">
+				<label>减免罚息：</label>
+				<div class="rel"> <input type="number"  step="0.01" ng-model="remissionDefaultInterest2"  class="form-control" ng-change="receivedValChange2('remissionDefaultInterest2',2)" /> <span>元</span></div> 
+			</div>
+            <span ng-show="!isOnline">
+				<div class="form-group"> 
+					<label><span>*</span>线下收款标记：</label>
+					<select class="form-control" ng-model="offlineReceivingTag" name="offlineReceivingTag" >
+						<option value="1">已进信托专户</option>
+						<option value="2">未进信托专户</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label><span>*</span>专户银行 &nbsp;&nbsp;<br>流水号：</label>
+					<input size="16" type="text"   ng-model="ret.specialAccountBankSerialNumber" name="serialNumber" value="ret.specialAccountBankSerialNumber"  class="form-control"/>
+				</div>         
+			</span>
+			<div class="form-group">
+				<label ng-show="!isOnline" >实收总金额：</label>
+				<label ng-show="isOnline" >扣款总金额：</label>
+				<div class="rel"> <input type="text"  disabled  class="form-control"  value="{{totalNum}}"/> <span>元</span></div> 
+			</div>
+		</form>
+		<div class="lhw-alert-but">
+			<button type="button" class="btn btn-primary lhw-alert-ok" style="margin-right:80px;" ng-click="submitPrepay();">提交</button>
+			<button type="button" class="btn btn-default lhw-alert-cancel"  ng-click="prepayShow=false">取消</button>
+		</div>
+	</div>
+</div>
+<!-- 提前清贷end -->
+
+<div class="lhw-alert-bg2" ng-show="logShow" style="z-index: 1">
+	<div class="lhw-alert-box" style="width:700px;">
+		<div class="lhw-alert-tit">添加事件
+			<div class="x-box" ng-click="logShow=false"></div>
+		</div>
+		<form class="form-inline ng-pristine ng-valid" name="eventFrom" style="margin:20px; ">
+			<div class="form-group">
+				<label style="width: 122px">事件类型：</label>
+				<select class="form-control"  ng-model="log.eventType" name="eventType" required>
+					<option value="{{list.id}}" ng-repeat="list in eventList">{{list.name}}</option>
+				</select>
+				<span style="color:red" ng-show="eventFrom.eventType.$dirty && eventFrom.eventType.$invalid">
+					<span ng-show="eventFrom.eventType.$error.required">必填</span>
+				</span>
+			</div>
+			<div class="form-group">
+				<label>操作时间：</label>
+				<input size="16" type="text" ng-disabled="all" ng-model="log.operateTime" required name="operateTime" class="form-control form_datetime">
+				<span style="color:red" ng-show="eventFrom.operateTime.$dirty && eventFrom.operateTime.$invalid">
+					<span ng-show="eventFrom.operateTime.$error.required">必填</span>
+				</span>
+			</div>
+
+			<div class="col-md-12 col-lg-12">
+				<div class="form-group">
+					<textarea class="form-control ng-pristine ng-isolate-scope ng-empty ng-invalid ng-invalid-required ng-touched" rows="2" ng-model="log.remark" required name="remark" placeholder="请在此处输入备注" style="width: 636px; height: 131px; overflow-y: auto;" initattrh="54"></textarea>
+				</div>
+				<span style="color:red" ng-show="verif&&eventFrom.remark.$dirty && eventFrom.remark.$invalid">
+					<span ng-show="eventFrom.remark.$error.required">必填</span>
+				</span>
+			</div>
+			<div style="clear: both;height: 1px"></div>
+			<p class="after-p">
+				<a href="javascript:void(0);" ng-click="uploadshow()">上传附件</a> >&nbsp;&nbsp;
+				<a href="javascript:void(0);" ng-show="files.length>0" ng-click="showfile(files)">查看</a>
+			</p>
+		</form>
+		<div class="lhw-alert-but">
+			<button type="button" class="btn btn-primary lhw-alert-ok" style="margin-right:80px;" ng-click="addLog()">确  定</button>
+			<button type="button" class="btn btn-default lhw-alert-cancel" ng-click="logShow=false">取消</button>
+		</div>
+	</div>
+</div>
+
+<div class="lhw-alert-bg2" ng-show="logRemarkDetailShow" style="z-index: 1">
+	<div class="lhw-alert-box" style="width:700px;">
+		<div class="lhw-alert-tit">事件详情
+			<div class="x-box" ng-click="logRemarkDetailShow=false"></div>
+		</div>
+		<form class="form-inline ng-pristine ng-valid" style="margin:20px; ">
+			<div class="form-group">
+				<label style="width: 122px">事件类型：</label>
+				<span ng-bind="log.eventTypeName"></span>
+			</div>
+			<div class="form-group">
+				<label>操作时间：</label>
+				<span ng-bind="log.operateTime | date:'yyyy-MM-dd HH:mm'"></span>
+			</div>
+
+			<div class="col-md-12 col-lg-12">
+				<label>备注：</label>
+				<div class="form-group">
+					<textarea class="form-control ng-pristine ng-isolate-scope ng-empty ng-invalid ng-invalid-required ng-touched" readonly rows="5" ng-model="log.remark" required="" name="remark" placeholder="请在此处输入备注" style="width: 493px; height: 101px; overflow-y: auto;" initattrh="54"></textarea>
+				</div>
+			</div>
+			<div style="clear: both;height: 1px"></div>
+			<p class="after-p" ng-if="log.file.length>0"><a href="javascript:void(0);"  ng-click="showfile(log.file)">查看附件</a> > </p>
+		</form>
+		<div class="lhw-alert-but">
+			<button type="button" class="btn btn-primary lhw-alert-ok" style="margin-right:80px;" ng-click="logRemarkDetailShow=false">确  定</button>
+		</div>
+	</div>
+</div>
+
+<div class="lhw-alert-bg2"  ng-show="repaymentDetailShow"  style="z-index: 1">
+	<div class="lhw-alert-box" style="width:960px;">
+		<div class="lhw-alert-tit">还款详情
+			<div class="x-box" ng-click="repaymentDetailShow=false"></div>
+		</div>
+		<p class="after-t">第<span ng-bind="log.currentPeriod"></span>期</p>
+		<form class="form-inline ng-pristine ng-valid after-loan-form" style="margin-bottom:20px;margin-top:10px;">
+			<div>
+                <div class="form-group">
+					<label>还款方式：</label>
+					<span>{{log.deductionsType==1?'正常还款':'提前清贷'}}_{{log.lineflag==1?'线上':'线下'}}</span>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label>应收本金：</label>
+				<span ng-bind="log.receivablePrincipal"></span>元
+			</div>
+			<div class="form-group">
+				<label>应收利息：</label>
+				<span ng-bind="log.receivableInterest"></span>元
+			</div>
+			<div class="form-group" ng-show="log.deductionsType==1">
+				<label>期供金额：</label>
+				<span ng-bind="log.periodAmount"></span>元
+			</div>
+            <div class="form-group" ng-show="log.deductionsType==2">
+				<label>应收罚息：</label>
+				<span ng-bind="log.receivableDefaultInterest"></span>元
+			</div>
+			<div ng-show="log.deductionsType==1">
+                <div class="form-group">
+					<label>实收本金：</label>
+					<span ng-bind="log.receivedPrincipal"></span>元
+				</div>
+				<div class="form-group">
+					<label>实收利息：</label>
+					<span ng-bind="log.receivedInterest"></span>元
+				</div>
+				<div class="form-group">
+					<label>实收罚息：</label>
+					<span ng-bind="log.receivedDefaultInterest"></span>元
+				</div>
+			</div>
+			<div ng-show="log.deductionsType==2">
+                <div class="form-group">
+					<label>实收本金总计：</label>
+					<span ng-bind="log.receivedPrincipalTotal"></span>元
+				</div>
+				<div class="form-group">
+					<label>实收利息总计：</label>
+					<span ng-bind="log.receivedInterestTotal"></span>元
+				</div>
+				<div class="form-group">
+					<label>实收罚息总计：</label>
+					<span ng-bind="log.receivedDefaultInterestTotal"></span>元
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label>减免本金：</label>
+				<span ng-bind="log.remissionPrincipal"></span>元
+			</div>
+			<div class="form-group">
+				<label>减免利息：</label>
+				<span ng-bind="log.remissionInterest"></span>元
+			</div>
+			<div class="form-group">
+				<label>减免罚息：</label>
+				<span ng-bind="log.remissionDefaultInterest"></span>元
+			</div>
+			<div ng-show="log.lineflag==2">
+                <div class="form-group">
+					<label>线下收款标识：</label>
+					<span ng-bind="log.offlineReceivingTag"></span>
+				</div>
+				<div class="form-group">
+					<label style="width:140px;">银行实际到账日期：</label>
+					<span ng-bind="log.bankActualDate"></span>
+				</div>
+				<div class="form-group">
+					<label>专户银行流水号：</label>
+					<span ng-bind="log.specialAccountBankSerialNumber"></span>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label>实收总金额：</label>
+				<span>{{log.totalAmountReceived?log.totalAmountReceived:log.totalDeductionAmount}}</span>元
+			</div> 
+			<!-- <div class="form-group">
+				<label>收款方式：</label>
+				<span ng-if="log.repayType==1">手动录入</span>
+				<span ng-if="log.repayType==2">代扣</span>
+			</div> -->
+			<div class="form-group">
+				<label>实际还款日期：</label>
+				<span ng-bind="log.repaymentDate"></span>
+			</div>
+			<!-- <div class="form-group">
+				<label>应还逾期费：</label>
+				<span ng-bind="log.repayOverdue"></span>元
+			</div>
+			<div class="form-group">
+				<label>已还逾期费：</label>
+				<span ng-bind="log.givePayOverdue"></span>元
+			</div>
+			<div class="form-group">
+				<label>已还本金：</label>
+				<span ng-bind="log.givePayPrincipal"></span>元
+			</div>
+			<div class="form-group">
+				<label>已还利息：</label>
+				<span ng-bind="log.givePayInterest"></span>元
+			</div>
+			<div class="col-md-12 col-lg-12">
+				<label>备注：</label>
+				<div class="form-group">
+					<textarea class="form-control ng-pristine ng-isolate-scope ng-empty ng-invalid ng-invalid-required ng-touched" readonly rows="5" ng-model="log.remark" required="" name="remark" placeholder="请在此处输入备注" style="width: 493px; height: 101px; overflow-y: auto;" initattrh="54"></textarea>
+				</div>
+			</div> -->
+			<div style="clear: both;height: 1px"></div>
+			<p class="after-p"  ng-if="log.file.length>0"><a href="javascript:void(0);" ng-click="showfile(log.file)">查看附件</a> > </p>
+		</form>
+		<div class="lhw-alert-but">
+			<button type="button" class="btn btn-primary lhw-alert-ok" style="margin-right:80px;" ng-click="repaymentDetailShow=false">确  定</button>
+		</div>
+	</div>
+</div>
+
+<!-- 提前清贷查看详情 -->
+<div class="lhw-alert-bg2 after-loan-pop"  ng-show="prepayShowDetail" style="z-index: 1">
+	<div class="lhw-alert-box" style="width:1080px;">
+		<div class="lhw-alert-tit">
+			    <span   ng-show="isOnline">线上还款信息</span>
+				<span  ng-show="!isOnline">线下还款信息</span>
+			<span style="width:466px; font-size:18px;margin-top:10px"><b>提前清贷</b></span>
+				<div class="x-box"  ng-click="prepayShowDetail=false"></div>
+		</div>
+		 <div class="clear" style="height:20px;"></div>
+		<form class="form-inline ng-pristine ng-valid after-loan-form" name="repaymentFrom"  style="width:1080px; height: 400px;" >
+	
+			<div class="form-group">
+				<label><span>*</span>实际 &nbsp;&nbsp;<br>清贷日期：</label>
+				<input type="text"   disabled class="form-control"  value="{{ret.repaymentDate | limitTo:10  }}" /> 
+				
+			</div>
+			<div class="form-group">
+				<label>清贷当期期次：</label>
+					<input type="text" disabled  class="form-control"  value="{{ret.currentPeriod}}期"/> 
+			</div>
+			<div class="form-group">
+				<label>扣款类型：</label><input class="form-control"   type="text" value="{{chargebacks2}}" disabled />
+			</div>
+			<div class="form-group">
+				<label>应收本金：</label>
+				<div class="rel"> <input type="text" disabled  class="form-control"  value="{{ret.receivablePrincipal}}"/><span>元</span> </div>
+				
+			</div>
+            <div class="form-group">
+				<label>应收利息：</label>
+			<div class="rel"> <input type="text" disabled  class="form-control"  value="{{ret.receivableInterest}}"/> <span>元</span></div>
+			</div>
+			<div class="form-group">
+				<label>应收罚息：</label>
+			<div class="rel"> <input type="text" disabled  class="form-control"  value="{{ret.receivableDefaultInterest}}"/> <span>元</span></div>
+			</div>
+
+		
+				<div class="form-group">
+					<label>扣款银行：</label><input class="form-control"   type="text" value="{{bankData.paymentBankName}}" disabled />
+				</div>
+				<div class="form-group">
+					<label>扣款账号：</label><input class="form-control"   type="text" value="{{bankData.paymentBankAccount}}" disabled />
+				</div>
+				<!-- <div class="form-group">
+					<label>扣款渠道：</label><input class="form-control"   type="text" value="" disabled />
+				</div> -->
+		
+			<div class="form-group">
+				<label><span>*</span>实收本金总计：</label>
+			<div class="rel"> <input type="text" disabled  class="form-control"  value="{{ret.receivedPrincipalTotal}}"/> <span>元</span></div>
+			</div>
+            <div class="form-group">
+				<label><span>*</span>实收利息总计：</label>
+			<div class="rel"> <input type="text" disabled  class="form-control"  value="{{ret.receivedInterestTotal}}"/> <span>元</span></div>
+			</div>
+			<div class="form-group">
+				<label><span>*</span>实收罚息总计：</label>
+			<div class="rel"> <input type="text" disabled  class="form-control"  value="{{ret.receivedDefaultInterestTotal}}"/> <span>元</span></div>
+			</div>
+			<div class="form-group">
+				<label>减免本金：</label>
+			<div class="rel"> <input type="text" disabled  class="form-control"  value="{{ret.remissionPrincipal}}"/> <span>元</span></div>
+			</div>
+			<div class="form-group">
+				<label>减免利息：</label>
+			<div class="rel"> <input type="text" disabled  class="form-control"  value="{{ret.remissionInterest}}"/> <span>元</span></div>
+			</div>
+			<div class="form-group">
+				<label>减免罚息：</label>
+			<div class="rel"> <input type="text" disabled  class="form-control"  value="{{ret.remissionDefaultInterest}}"/> <span>元</span></div>
+			</div>
+            <span ng-show="!isOnline">
+				<div class="form-group"> 
+					<label><span>*</span>线下收款标记：</label>
+					<select class="form-control" disabled ng-model="offlineReceivingTag" name="offlineReceivingTag" >
+						<option value="1">已进信托专户</option>
+						<option value="2">未进信托专户</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label><span>*</span>专户银行 &nbsp;&nbsp;<br>流水号：</label>
+						<input size="16" type="text"   ng-model="ret.specialAccountBankSerialNumber" name="ret.specialAccountBankSerialNumber"   class="form-control" value="{{ret.specialAccountBankSerialNumber}}" disabled/>
+				</div>         
+			</span>
+			<div class="form-group">
+				<label ng-show="!isOnline" >实收总金额：</label>
+				<div class="rel"  ng-show="!isOnline"> <input type="text"  disabled  class="form-control"  value="{{ret.totalAmountReceived}}"/> <span>元</span></div> 
+				<label ng-show="isOnline" >扣款总金额：</label>
+				<div class="rel" ng-show="isOnline"> <input type="text"  disabled  class="form-control"  value="{{ret.totalDeductionAmount}}"/> <span>元</span></div> 
+				
+				
+			</div>
+					<div class="form-group">
+					<label>处理状态:</label>
+					<div class="rel" ng-show="ret.extendField5=='处理失败'">
+					
+					    <font color="red">{{ret.extendField5}}</font>
+					
+					</div> 
+					<div class="rel" ng-show="ret.extendField5!='处理失败'">
+					
+					    <font color="green">{{ret.extendField5}}</font>
+					
+					</div> 
+						<a href="javascript:void(0)" ng-click="repaymentStatusRefresh();">刷新</a>
+					
+				</div>
+				 <div class="col-md-12 col-lg-12">
+					<label>失败原因：</label>
+					<div class="form-group">
+						<textarea class="form-control ng-pristine ng-isolate-scope ng-empty ng-invalid ng-invalid-required ng-touched" rows="2"  name="remark" placeholder="请在此处输入备注" style="width: 493px; height: 101px; overflow-y: auto;" initattrh="54">{{ret.failMsg}}</textarea>
+					</div>
+				</div>
+			
+		</form>
+		<div class="lhw-alert-but">
+			<button type="button" class="btn btn-default lhw-alert-cancel"  ng-click="prepayShowDetail=false">取消</button>
+		</div>
+	</div>
+</div>
+<!-- 提前清贷查看详情end -->
+
+
+<div class="lhw-alert-bg2 after-loan-pop"  ng-show="repaymentONlineSearchs" style="z-index: 1; "  >
+		<div class="lhw-alert-box" style="width:1080px;height: 600px">
+			<div class="lhw-alert-tit">
+				<span   ng-show="isOnline">线上还款信息</span>
+				<span  ng-show="!isOnline">线下还款信息</span>
+				<div class="x-box" ng-click="repaymentONlineSearchs=false"></div>
+			</div>
+			 <div class="clear" style="height:20px;"></div>
+			<form class="form-inline ng-pristine ng-valid after-loan-form" name="repaymentFrom"style="height:500px;" >
+				<div class="form-group">
+					<label>合同号：</label><input class="form-control"   type="text" value="{{ret.extendField4}}" disabled />
+				</div>
+			  <div class="form-group" >
+			       <label ng-show="!isOnline" >实收总金额</label>
+					<div class="rel" ng-show="!isOnline" > <input type="text"  disabled ng-model="ret.totalAmountReceived"  class="form-control"  value="{{ret.totalAmountReceived}}"  /> <span>元</span></div> 
+			
+			
+					<label ng-show="isOnline">扣款总金额</label>
+					<div class="rel"   ng-show="isOnline"> <input type="text" disabled ng-model="ret.totalDeductionAmount"  class="form-control"  value="{{ret.totalDeductionAmount }}"  /> <span>元</span></div> 
+				 </div>    
+			
+				
+					<div class="form-group">
+					<label>交易流水号：</label><input class="form-control"   type="text" value="{{ret.extendField3}}" disabled />
+				</div>
+					<div class="form-group">
+						<label>扣款类型：</label><input class="form-control"   type="text" value="{{chargebacks}}" disabled />
+					</div>
+				<div class="form-group">
+					<label>期供金额：</label>
+					<div class="rel"> <input type="text" disabled  class="form-control"  value="{{ret.periodAmount}}"/> <span>元</span></div>
+				</div>
+				
+				<span ng-show="!isOnline">
+					<div class="form-group">
+						<label>还款方式：</label><input class="form-control"   type="text" value="线下正常还款" disabled />
+					</div>
+				
+					<div class="form-group">
+						<label><span>*</span>银行实际 &nbsp;&nbsp;<br>到账日期：</label>
+					   <input type="text"  disabled class="form-control"  value="{{ret.bankActualDate | limitTo:10  }}"/> 
+					
+					</div>
+					<div class="form-group">
+						<label><span>*</span>专户银行 &nbsp;&nbsp;<br>流水号：</label>
+						<input size="16" type="text"   ng-model="ret.specialAccountBankSerialNumber" name="ret.specialAccountBankSerialNumber"   class="form-control" value="{{ret.specialAccountBankSerialNumber}}" disabled/>
+					</div>    
+						<div class="form-group"> 
+						<label><span>*</span>线下收款标记：</label>
+						<select class="form-control" ng-model="ret.offlineReceivingTag" name="ret.offlineReceivingTag"  value="{{ret.offlineReceivingTag}}" disabled>
+							<option value="1">已进信托专户</option>
+							<option value="2">未进信托专户</option>
+						</select>
+					</div>     
+				</span>
+				
+				<div class="after-loan-dashed"></div>
+				<div class="form-group">
+					<label>当期期次：</label>
+					<input type="text" disabled  class="form-control"  value="{{ret.currentPeriod}}期"/> 
+				</div>
+				<div class="form-group">
+					<label>应还款日期：</label>
+					<input type="text"  disabled class="form-control"  value="{{ret.dueDate | limitTo:10  }}"/> 
+				</div>
+				<div class="form-group">
+					<label><span></span>实际还款日期：</label>
+					<input type="text"   ng-disabled="ret.extendField5=='处理成功' || ret.extendField5=='处理中'" class="form-control"  value="{{ret.repaymentDate | limitTo:10  }}"/> 
+				</div> 
+				<div class="form-group">
+					<label>应收本金：</label>
+					<div class="rel"> <input type="text" disabled  class="form-control"  value="{{ret.receivablePrincipal}}"/><span>元</span> </div>
+				</div>
+				<div class="form-group">
+					<label>应收利息：</label>
+					<div class="rel"> <input type="text" disabled  class="form-control"  value="{{ret.receivableInterest}}"/> <span>元</span></div>
+				</div>
+			<div class="form-group">
+					<label>应收罚息：</label>                                                             
+					<div class="rel"> <input type="text" disabled  class="form-control"  value="{{ret.receivableDefaultInterest}}"/> <span>元</span></div>
+				</div>
+				<div class="form-group">
+					<label><span></span>实收本金：</label>
+					<div class="rel"><input type="text"  ng-disabled="ret.extendField5=='处理成功' || ret.extendField5=='处理中' "  ng-model="ret.receivedPrincipal"  class="form-control"   value="{{ret.receivedPrincipal }}"   ng-change="receivedValChange('receivedPrincipal')"/><span>元</span></div> 
+				</div>
+				<div class="form-group">
+					<label><span></span>实收利息：</label>
+					<div class="rel"> <input type="text"  ng-disabled="ret.extendField5=='处理成功' || ret.extendField5=='处理中' "  ng-model="ret.receivedInterest"  class="form-control" value="{{ret.receivedInterest }}" ng-change="receivedValChange('receivedInterest')"/> <span>元</span></div> 
+				</div>
+				<div class="form-group">
+					<label> 实收罚息：</label>
+					<div class="rel"> <input type="text"  ng-disabled="ret.extendField5=='处理成功' || ret.extendField5=='处理中'" ng-model="ret.receivedDefaultInterest" class="form-control"  value="{{ret.receivedDefaultInterest }}" ng-change="receivedValChange('receivedDefaultInterest')"/> <span>元</span></div> 
+				</div>
+				<div class="form-group">
+					<label>减免本金：</label>
+					<div class="rel"> <input type="text"  ng-disabled="ret.extendField5=='处理成功' || ret.extendField5=='处理中'" ng-model="ret.remissionPrincipal" class="form-control"  value="{{ret.remissionPrincipal }}" ng-change="receivedValChange('remissionPrincipal')"/> <span>元</span></div> 
+				</div>
+				<div class="form-group">
+					<label>减免利息：</label>
+					<div class="rel"> <input type="text"  ng-disabled="ret.extendField5=='处理成功'|| ret.extendField5=='处理中'" ng-model="ret.remissionInterest"  class="form-control" value="{{ret.remissionInterest }}"   ng-change="receivedValChange('remissionInterest')"/> <span>元</span></div> 
+				</div>
+				<div class="form-group">
+					<label>减免罚息：</label>
+					<div class="rel"> <input type="text"  ng-disabled="ret.extendField5=='处理成功' || ret.extendField5=='处理中'" ng-model="ret.remissionDefaultInterest"  class="form-control"  value="{{ret.remissionDefaultInterest }}" ng-change="receivedValChange('remissionDefaultInterest')" /> <span>元</span></div> 
+				</div>
+				<div class="form-group" >
+					<label ng-show="isOnline" >扣款总金额</label>
+					<label ng-show="!isOnline">实收总金额</label>
+					<div class="rel"  ng-show="isOnline"> <input type="text"   disabled  class="form-control"  value="{{ret.totalDeductionAmount}}"/><span>元</span></div> 
+				   <div class="rel"  ng-show="!isOnline"> <input type="text"   disabled  class="form-control"  value="{{ret.totalAmountReceived}}"/> <span>元</span></div> 
+					
+					
+					
+				</div>
+				
+				<div class="form-group">
+					<label>处理状态:</label>
+					<div class="rel" ng-show="ret.extendField5=='处理失败'">
+					
+					    <font color="red">{{ret.extendField5}}</font>
+					
+					</div> 
+					<div class="rel" ng-show="ret.extendField5!='处理失败'">
+					
+					    <font color="green">{{ret.extendField5}}</font>
+					
+					</div> 
+						<a href="javascript:void(0)" ng-click="repaymentStatusRefresh();">刷新</a>
+					
+				</div>
+				 <div class="col-md-12 col-lg-12">
+					<label>失败原因：</label>
+					<div class="form-group">
+						<textarea class="form-control ng-pristine ng-isolate-scope ng-empty ng-invalid ng-invalid-required ng-touched" rows="2"  name="remark" placeholder="请在此处输入备注" style="width: 493px; height: 101px; overflow-y: auto;" initattrh="54">{{ret.failMsg}}</textarea>
+					</div>
+				</div>
+				<!--
+				<div style="clear: both;height: 1px"></div>
+				<p class="after-p">
+					<a href="javascript:void(0);" ng-click="uploadshow()">上传附件</a> > &nbsp;&nbsp;
+					<a href="javascript:void(0);" ng-show="files.length>0" ng-click="showfile(files)">查看</a>
+				</p> -->
+			</form>
+			<div class="lhw-alert-but">
+				<button type="button" class="btn btn-primary lhw-alert-ok"  ng-disabled="ret.extendField5=='处理成功'  " style="margin-right:80px;" ng-click="rePush();">重新推送</button>
+				<button type="button" class="btn btn-default lhw-alert-cancel"  ng-click="repaymentONlineSearchs=false">取消</button>
+			</div>
+		</div>
+
+</div>
+
+
+</html>

@@ -1,0 +1,142 @@
+<div class="container-fluid">
+<style>
+.form-inline.w138 label{width:150px;}
+</style>
+	<form method="post" name="ordinaryAuditForm" id="ordinaryAuditForm" class="form-inline element-supplement  detail-row">
+	<div class="row detail-row form-inline w138" ng-if="productCode!='03' && relationOrderNo=='0'">
+	    <div class="col-md-12" style="color:#4a77ac"> &nbsp;&nbsp;1)业务概况：</div>
+		<div class="col-md-6  col-lg-4">
+			<label>业务类型：</label><span ng-bind="firstObj.productName"></span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>借款金额：</label><span ng-bind="firstObj.loanAmount"></span> 万元
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>负债比例：</label><span ng-bind="firstObj.debtRatio"></span> %
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>借款成数：</label><span ng-bind="firstObj.loanPoportion"></span> %
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>债务置换贷款成数：</label><span ng-bind="firstObj.productLoanPoportion"></span> %
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>房产产权人 ：</label><span ng-bind="firstObj.propertyOwner"></span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>物业名称：</label><span ng-bind="firstObj.propertyName"></span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>建筑面积：</label><span ng-bind="firstObj.area"></span> ㎡ 
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>评估总值：</label><span ng-bind="firstObj.assessment"></span> 元
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>抵押情况：</label><span ng-bind="firstObj.mortgageSituation"></span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>原贷款地点：</label><span ng-bind="firstObj.addressOld"></span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>原贷款金额：</label><span ng-bind="firstObj.amountOld"></span> 万元
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>新贷款地点：</label><span ng-bind="firstObj.addressNew"></span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>新贷款金额：</label><span ng-bind="firstObj.amountNew"></span> 万元
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>近6个月查询次数：</label><span ng-bind="firstObj.monthNum"></span> 次
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>近两年逾期次数：</label><span ng-bind="firstObj.yearNum"></span> 次
+		</div>
+		<div class="row detail-row form-inline w138" style="padding-top:30px;">
+		     <div class="col-md-12 col-lg-12" style="position:relative">
+		        <label style="position:absolute;left:0;">概况：</label>
+		        <p ng-bind-html="firstObj.remark"  style="margin-left:143px;padding-right:20px;"></p>
+			</div>
+	  </div>
+	</div>
+	<div class="row detail-row form-inline w138" ng-if="productCode!='03' && relationOrderNo=='0'">
+	    <div class="col-md-12" style="color:#4a77ac;"> &nbsp;&nbsp;2)初审意见：</div>
+		<div class="col-md-12 ">
+			<label>1.业务标准：</label><span ng-if="firstObj.business==1">标准</span><span ng-if="firstObj.business==2">非标准</span>
+		</div>
+		<div class="col-md-12">
+			<label>2.出款金额：</label><span ng-bind="firstObj.sunMoney"></span> 万元
+		</div>
+		<div class="col-md-12" > <label>3.出款银行信息：</label></div>
+		<div class="col-md-6 col-lg-4">
+			<label>开户名：</label><span ng-bind="firstObj.loanName"></span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>账号：</label><span ng-bind="firstObj.loanAccount"></span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>银行-支行：</label><span ng-bind="firstObj.loanBankName"></span> - <span ng-bind="firstObj.loanBankSubName"></span>
+		</div>
+		<div class="col-md-12" > <label>4.回款银行信息：</label></div>
+		<div class="col-md-6 col-lg-4">
+			<label>开户名：</label><span ng-bind="firstObj.paymentName"></span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>账号：</label><span ng-bind="firstObj.paymentAccount"></span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>银行-支行：</label><span ng-bind="firstObj.paymentBankName"></span> - <span ng-bind="firstObj.paymentBankSubName"></span>
+		</div>
+<!-- 		<div class="col-md-6 col-lg-4"> -->
+<!-- 			<label>5.建议费率：</label><span ng-bind="firstObj.rate"></span> %/天 -->
+<!-- 		</div> -->
+<!-- 		<div class="col-md-6 col-lg-4"> -->
+<!-- 			<label>建议逾期费率：</label><span ng-bind="firstObj.overdueRate"></span> %/天 -->
+<!-- 		</div> -->
+<!-- 		<div class="col-md-12" > &nbsp;&nbsp;<span style="padding-left:45px;">&nbsp;</span>6.严格控制相关账号账户要件，并更改密码</div> -->
+<!-- 		<div class="col-md-12" > &nbsp;&nbsp;<span style="padding-left:45px;">&nbsp;</span>7.严控流程节点并及时反馈相关节点信息操作</div> -->
+		<div class="row detail-row form-inline w138" style="padding-top:30px;">
+		     <div class="col-md-12 col-lg-12" style="position:relative;">
+		            <label style="position:absolute;left:0;">其 他 ：</label>
+		            <p ng-bind-html="firstObj.other"  style="margin-left:150px;padding-right:20px;"></p>
+			</div>
+	    </div>
+	    <div class="row detail-row form-inline w138" style="padding-top:30px;">
+		     <div class="col-md-12 col-lg-12" style="position:relative;">
+		            <label style="position:absolute;left:0;">终审审批意见 ：</label>
+		            <p ng-bind-html="firstObj.spareField1"  style="margin-left:150px;padding-right:20px;"></p>
+			</div>
+	    </div>
+	    <div class="row detail-row form-inline w138" style="padding-top:30px;">
+		     <div class="col-md-12 col-lg-12" style="position:relative;">
+		            <label style="position:absolute;left:0;">首席风险审批意见 ：</label>
+		            <p ng-bind-html="firstObj.spareField1"  style="margin-left:150px;padding-right:20px;"></p>
+			</div>
+	    </div>
+	    
+	</div>
+	<div class="row detail-row form-inline w138" ng-if="productCode=='03' ||  relationOrderNo!='0'">
+	   <div class="row detail-row form-inline w138" style="padding-top:30px;">
+	     <div class="col-md-12 col-lg-12">
+				<div class="form-group">
+						 <label style="position:absolute;left:0;">初审审批意见 ：</label>	
+						<p ng-bind-html="firstObj.remark"  style="margin-left:143px; padding-right:20px;"></p>
+				</div>
+		</div>
+	  </div>
+	  <div class="row detail-row form-inline w138" style="padding-top:30px;">
+		     <div class="col-md-12 col-lg-12" style="position:relative;">
+		            <label style="position:absolute;left:0;">终审审批意见 ：</label>
+		            <p ng-bind-html="firstObj.spareField1"  style="margin-left:150px;padding-right:20px;"></p>
+			</div>
+	    </div>
+	    <div class="row detail-row form-inline w138" style="padding-top:30px;">
+		     <div class="col-md-12 col-lg-12" style="position:relative;">
+		            <label style="position:absolute;left:0;">首席风险审批意见 ：</label>
+		            <p ng-bind-html="firstObj.spareField2"  style="margin-left:150px;padding-right:20px;"></p>
+			</div>
+	    </div>
+	</div>
+  </form>
+</div>

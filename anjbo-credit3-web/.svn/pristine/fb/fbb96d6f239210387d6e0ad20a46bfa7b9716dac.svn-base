@@ -1,0 +1,296 @@
+<div>
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;快鸽提单信息--借款人信息
+	 <button type="button" ng-click="saveA(3)" class="btn btn-info detail-right-save"  >保存</button>
+	</div>
+	<div class="row form-inline detail-row" style="padding:0 10px;">
+		<div class="col-md-6 col-lg-4">
+			<label>借款人姓名: </label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" name="kgIndivCustName" ng-model="huaRongDto.kgIndiv.custName" class="form-control" required/>
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgIndivForm.kgIndivCustName.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>证件类型:</label>
+			<select ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" class="form-control" name="kgIndivDocType" ng-disabled="all" ng-model="huaRongDto.kgIndiv.docType" required style="width:179px;">
+				<option value="">请选择</option>
+				<option value="二代身份证">二代身份证</option>
+				<option value="军官证">军官证</option>
+				<option value="护照">护照</option>
+				<option value="回乡证">回乡证</option>
+				<option value="营业执照">营业执照</option>
+				<option value="港澳居民来往内地通行证">港澳居民来往内地通行证</option>
+			</select>
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgIndivForm.kgIndivDocType.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>证件号码:</label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" name="kgIndivDocNo" ng-model="huaRongDto.kgIndiv.docNo" class="form-control" required/>
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgIndivForm.kgIndivDocNo.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>手机号:</label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" name="kgIndivMobile" ng-model="huaRongDto.kgIndiv.mobile" class="form-control" required/>
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgIndivForm.kgIndivMobile.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>婚姻状况:</label>
+			<select ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" class="form-control" name="kgIndivMarStatus" ng-model="huaRongDto.kgIndiv.marStatus" required style="width:179px;">
+				<option value="">请选择</option>
+				<option value="未婚">未婚</option>
+				<option value="已婚有子女">已婚有子女</option>
+				<option value="已婚无子女">已婚无子女</option>
+				<option value="离异">离异</option>
+				<option value="丧偶">丧偶</option>
+				<option value="未婚">未婚</option>
+				<option value="已婚有子女">已婚有子女</option>
+				<option value="已婚无子女">已婚无子女</option>
+				<option value="离异">离异</option>
+				<option value="丧偶">丧偶</option>
+			</select>
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgIndivForm.kgIndivMarStatus.$error.required">必选</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4" ng-if="huaRongDto.kgIndiv.marStatus=='已婚无子女'
+             ||huaRongDto.kgIndiv.marStatus=='已婚有子女'
+             ||huaRongDto.kgIndiv.marStatus=='复婚'">
+			<label>配偶姓名:</label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" name="kgIndivScustName" ng-model="huaRongDto.kgIndiv.sCustName" class="form-control" required/>
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgIndivForm.kgIndivScustName.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4" ng-if="huaRongDto.kgIndiv.marStatus=='已婚无子女'
+             ||huaRongDto.kgIndiv.marStatus=='已婚有子女'
+             ||huaRongDto.kgIndiv.marStatus=='复婚'">
+			<label>配偶证件类型:</label>
+			<select ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" class="form-control" name="kgIndivSdocType" ng-disabled="all" ng-model="huaRongDto.kgIndiv.sDocType" required style="width:179px;">
+				<option value="">请选择</option>
+				<option value="二代身份证">二代身份证</option>
+				<option value="军官证">军官证</option>
+				<option value="护照">护照</option>
+				<option value="回乡证">回乡证</option>
+				<option value="营业执照">营业执照</option>
+				<option value="二代身份证">二代身份证</option>
+				<option value="军官证">军官证</option>
+				<option value="护照">护照</option>
+				<option value="回乡证">回乡证</option>
+				<option value="营业执照">营业执照</option>
+				<option value="港澳居民来往内地通行证">港澳居民来往内地通行证</option>
+			</select>
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgIndivForm.kgIndivSdocType.$error.required">必选</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4" ng-if="huaRongDto.kgIndiv.marStatus=='已婚无子女'
+             ||huaRongDto.kgIndiv.marStatus=='已婚有子女'
+             ||huaRongDto.kgIndiv.marStatus=='复婚'">
+			<label>配偶证件号码:</label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" name="kgIndivSdocNo" ng-model="huaRongDto.kgIndiv.sDocNo" class="form-control" required/>
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgIndivForm.kgIndivSdocNo.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4" ng-if="huaRongDto.kgIndiv.marStatus=='已婚无子女'
+             ||huaRongDto.kgIndiv.marStatus=='已婚有子女'
+             ||huaRongDto.kgIndiv.marStatus=='复婚'">
+			<label>配偶手机号:</label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" name="kgIndivSmobile" ng-model="huaRongDto.kgIndiv.sMobile" class="form-control" required/>
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgIndivForm.kgIndivSmobile.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4" ng-if="huaRongDto.kgIndiv.marStatus=='已婚无子女'
+             ||huaRongDto.kgIndiv.marStatus=='已婚有子女'
+             ||huaRongDto.kgIndiv.marStatus=='复婚'">
+			<label>配偶婚姻状况:</label>
+			<select ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" class="form-control" name="kgIndivSmarStatus" ng-model="huaRongDto.kgIndiv.sMarStatus" required style="width:179px;">
+				<option value="">请选择</option>
+				<option value="未婚">未婚</option>
+				<option value="已婚有子女">已婚有子女</option>
+				<option value="已婚无子女">已婚无子女</option>
+				<option value="离异">离异</option>
+				<option value="丧偶">丧偶</option>
+				<option value="未婚">未婚</option>
+				<option value="已婚有子女">已婚有子女</option>
+				<option value="已婚无子女">已婚无子女</option>
+				<option value="离异">离异</option>
+				<option value="丧偶">丧偶</option>
+			</select>
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgIndivForm.kgIndivSmarStatus.$error.required">必填</error>
+		    </span>
+		</div>
+	</div>
+</div>
+
+<div>
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;快鸽提单信息--征信信息</div>
+	<div class="row form-inline detail-row w154" style="padding:0 10px;">
+		<div class="col-md-6 col-lg-4">
+			<label>信用卡年限: </label>
+			<select ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" class="form-control" name="kgIndivCardLife" ng-model="huaRongDto.kgIndiv.cardLife" required style="width:150px;">
+				<option value="">请选择</option>
+				<option value="4年以上">4年以上</option>
+				<option value="2～4年（含）">2～4年（含）</option>
+				<option value="2年（含）以下">2年（含）以下</option>
+				<option value="无信用卡记录">无信用卡记录</option>
+			</select>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="huarongKgIndivForm.kgIndivCardLife.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>所有房产评估总值: </label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="number" ng-pattern="/^([1-9]\d{0,6}|0)([.]?|(\.\d{1,4})?)$/" ng-model="huaRongDto.kgIndiv.totalPremises" name="kgIndivTotalPremises" class="form-control" required/>万元
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgIndivForm.kgIndivTotalPremises.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>授信总额: </label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" ng-pattern="/^([1-9]\d{0,6}|0)([.]?|(\.\d{1,4})?)$/" ng-model="huaRongDto.kgIndiv.totalCredit" name="kgIndivTotalCredit" class="form-control" required/> 万元
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgIndivForm.kgIndivTotalCredit.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>负债比例: </label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" ng-pattern="/^([1-9]\d{0,6}|0)([.]?|(\.\d{1,4})?)$/" ng-model="huaRongDto.kgIndiv.debtRatio" name="kgIndivDebtRatio" class="form-control" required/>%
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgIndivForm.kgIndivDebtRatio.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>近两年征信报告逾期: </label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" ng-pattern="/^[0-9]{0,4}$/" ng-model="huaRongDto.kgIndiv.overdueCredit" name="kgIndivOverdueCredit" class="form-control" required/>次
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgIndivForm.kgIndivOverdueCredit.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>原贷款是否银行:</label>
+			<select ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" class="form-control" name="kgIndivYisBank" ng-model="huaRongDto.kgIndiv.yIsBank" required style="width:150px;">
+				<option value="是">是</option>
+				<option value="否">否</option>
+			</select>
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgIndivForm.kgIndivYisBank.$error.required">必选</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>个人贷款记录年限: </label>
+			<select ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" class="form-control" name="kgIndivLoanYear" ng-model="huaRongDto.kgIndiv.loanYear" required style="width:150px;">
+				<option value="">请选择</option>
+				<option value="5年以上">5年以上</option>
+				<option value="3～5年（含）">3～5年（含）</option>
+				<option value="1～3年（含）">1～3年（含）</option>
+				<option value="1年（含）以下">1年（含）以下</option>
+				<option value="无个人贷款记录">无个人贷款记录</option>
+			</select>
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgIndivForm.kgIndivLoanYear.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>房产套数: </label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" ng-pattern="/^[0-9]{0,4}$/" ng-model="huaRongDto.kgIndiv.houseNum" name="kgIndivHouseNum" class="form-control" required/>套
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgIndivForm.kgIndivHouseNum.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>已用额度: </label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" ng-pattern="/^([1-9]\d{0,6}|0)([.]?|(\.\d{1,4})?)$/" ng-model="huaRongDto.kgIndiv.quotaUsed" name="kgIndivQuotaUsed" class="form-control" required/> 万元
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgIndivForm.kgIndivQuotaUsed.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>借款成数: </label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" ng-model="huaRongDto.kgIndiv.loanAmount" name="kgIndivLoanAmount" class="form-control" required/>%
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgIndivForm.kgIndivLoanAmount.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>近半年征信查询次数: </label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" ng-pattern="/^[0-9]{0,4}$/" ng-model="huaRongDto.kgIndiv.creditFindNum" name="kgIndivCreditFindNum" class="form-control" required/>&nbsp;次
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgIndivForm.kgIndivCreditFindNum.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>新贷款是否银行:</label>
+			<select ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" class="form-control" name="kgIndivXisBank" ng-model="huaRongDto.kgIndiv.xIsBank" required style="width:150px;">
+				<option value="是">是</option>
+				<option value="否">否</option>
+			</select>
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgIndivForm.kgIndivXisBank.$error.required">必选</error>
+		    </span>
+		</div>
+
+		<div class="col-md-6 col-lg-4">
+			<label>信用卡半年月均透支额: </label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" ng-model="huaRongDto.kgIndiv.overdraft" name="kgIndivOverdraft" class="form-control" required/>万元
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgIndivForm.kgIndivOverdraft.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>征信总负债: </label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" ng-model="huaRongDto.kgIndiv.totalCreditLia" name="kgIndivTotalCreditLia" class="form-control" required/> 万元
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgIndivForm.kgIndivTotalCreditLia.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>债务置换贷款成数: </label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" ng-model="huaRongDto.kgIndiv.foreclosureRate" name="kgIndivForeclosureRate" class="form-control" required/>%
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgIndivForm.kgIndivForeclosureRate.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>是否公司产权:</label>
+			<select ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" class="form-control" name="kgIndivCompanyRight" ng-model="huaRongDto.kgIndiv.companyRight" required style="width:150px;">
+				<option value="是">是</option>
+				<option value="否">否</option>
+			</select>
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgIndivForm.kgIndivCompanyRight.$error.required">必选</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>产权抵押情况:</label>
+			<select ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" class="form-control" name="kgIndivRightMortgage" ng-model="huaRongDto.kgIndiv.rightMortgage" required style="width:150px;">
+				<option value="">请选择</option>
+				<option value="抵押符合借款合同无查封">抵押符合借款合同无查封</option>
+				<option value="抵押不符合借款">抵押不符合借款</option>
+			</select>
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgIndivForm.kgIndivRightMortgage.$error.required">必选</error>
+		    </span>
+		</div>
+		<div class="col-md-12 col-lg-12">
+			<label style="width:309px;">个人贷款，信用卡累计有效违约率: </label>
+			<select ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" class="form-control" name="kgIndivDefaultRate" ng-model="huaRongDto.kgIndiv.defaultRate" required style="width:150px;">
+				<option value="">请选择</option>
+				<option value="等于0">等于0</option>
+				<option value="低于或等于4％">低于或等于4％</option>
+				<option value="低于或等于9％">低于或等于9％</option>
+				<option value="低于或等于13％">低于或等于13％</option>
+				<option value="低于或等于17％">低于或等于17％</option>
+				<option value="低于或等于21％">低于或等于21％</option>
+				<option value="低于或等于25％">低于或等于25％</option>
+				<option value="低于或等于29％">低于或等于29％</option>
+				<option value="低于33％">低于33％</option>
+				<option value="无信用记录">无信用记录</option>
+				<option value="不确定">不确定</option>
+			</select>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="huarongKgIndivForm.kgIndivDefaultRate.$error.required">必填</error>
+		    </span>
+		</div>
+	</div>
+</div>
+
+<div>
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;</div>
+	<div class="clear" style="width:100%; height:1px; clear:both;"></div>
+	<div class="row relative ng-scope">
+		<span class="remark-span remark-lhw">备注：</span>
+		<textarea style="border:1px solid #ddd;width:82%;" class="remark-p remark-lhw-p textarea-lhw ng-binding ng-isolate-scope" ng-model="huaRongDto.kgIndiv.remark" name="kgIndivRemark"> </textarea>
+	</div>
+</div>

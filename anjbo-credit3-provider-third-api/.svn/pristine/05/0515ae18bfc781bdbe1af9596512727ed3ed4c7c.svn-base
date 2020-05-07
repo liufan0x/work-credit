@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.sgtong.DictionariesMapper" >
+     <select id="findDic" parameterType="DictionariesDto" resultType="java.lang.String">    
+	SELECT  `code`
+	FROM `anjbo-server-common`.`tbl_common_dictionaries` 
+	where `name` like CONCAT('%',#{name},'%')
+   </select> 
+</mapper>

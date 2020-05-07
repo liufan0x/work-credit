@@ -1,0 +1,234 @@
+<div class="container-fluid">
+	<style>
+		.form-inline.w138 label {
+			width: 150px;
+		}
+	</style>
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;快鸽提单信息--业务信息
+	<button type="button" ng-click="submitContract(3)" class="btn btn-info detail-right-save">保存</button>
+	</div>
+	<form method="post" name="ordinaryAuditForm" id="ordinaryAuditForm" class="form-inline element-supplement  detail-row">
+		<div class="row detail-row form-inline w138" >
+			<div class="col-md-6 col-lg-4">
+				<label>借款人电话号码：</label>
+				<input type="text" class="form-control" name="borrowerMobile" ng-model="customer.phoneNumber" required>
+				<span class="a-span">&nbsp;</span>
+				<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="customer.phoneNumber.$error.required">必填</error>
+				</span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4">
+				<label>借款人姓名：</label>
+				<input type="text" class="form-control" name="customerName" ng-model="customer.customerName" required>
+				<span class="a-span">&nbsp;</span>
+				<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="customerForm.customerName.$error.required">必填</error>
+				</span>
+			</div>
+				
+			<div class="col-md-6 col-lg-4"><label>借款人证件类型：</label>
+				<select class="form-control" style="width:178px;" name="borrowerIdType" choice-dict-name="cardType" ng-model="customer.customerCardType" required>
+					<option value="">请选择</option>
+				</select>
+				<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="customerForm.customerCardType.$error.required">必选</error>
+				</span>
+			</div>
+				
+			<div class="col-md-6 col-lg-4"><label>借款人身份证：</label>
+				<input type="text" class="form-control" name="borrowerIdCard" ng-model="customer.customerCardNumber" required>
+				<span class="a-span">&nbsp;</span>
+				<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="customerForm.customerCardNumber.$error.required">必填</error>
+				</span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>收款人/企业账号：</label>
+				<input type="text" class="form-control" name="payeeAccount" ng-model="customer.payeeAccount" required>
+				<span class="a-span">&nbsp;</span>
+				<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="customerForm.customerCardNumber.$error.required">必填</error>
+				</span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>收款人/企业电话号码：</label>
+				<input type="text" class="form-control" name="payeeMobile" ng-model="customer.payeeMobile" required>
+				<span class="a-span">&nbsp;</span>
+				<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="customerForm.customerCardNumber.$error.required">必填</error>
+				</span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>收款人/企业姓名：</label>
+				<input type="text" class="form-control" name="payeeName" ng-model="customer.payeeName" required>
+				<span class="a-span">&nbsp;</span>
+				<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="customerForm.customerCardNumber.$error.required">必填</error>
+				</span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>收款人/企业身份证：</label>
+				<input type="text" class="form-control" name="payeeIdCard" ng-model="customer.payeeIdCard" required>
+				<span class="a-span">&nbsp;</span>
+				<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="customerForm.customerCardNumber.$error.required">必填</error>
+				</span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>还款方式：</label>
+				<select class="form-control" style="width:178px;" name="repaymentType" choice-dict-name="cardType" ng-model="customer.repaymentType" required>
+					<option value="">请选择</option>
+				</select>
+				<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="customerForm.customerCardType.$error.required">必选</error>
+				</span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>借款利率(即有利率)：</label>
+				<input type="text" class="form-control" name="loanRate" ng-model="customer.loanRate" required>
+				<span class="a-span">&nbsp;</span>
+				<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="customerForm.customerCardNumber.$error.required">必填</error>
+				</span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>借款人邮箱：</label>
+				<input type="text" class="form-control" name="email" ng-model="customer.email" required>
+				<span class="a-span">&nbsp;</span>
+				<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="customerForm.customerCardNumber.$error.required">必填</error>
+				</span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>银行名称：</label>
+				<input type="text" class="form-control" name="bankName" ng-model="customer.bankName" required>
+				<span class="a-span">&nbsp;</span>
+				<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="customerForm.customerCardNumber.$error.required">必填</error>
+				</span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>还款账号：</label>
+				<input type="text" class="form-control" name="bankCardNo" ng-model="customer.bankCardNo" required>
+				<span class="a-span">&nbsp;</span>
+				<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="customerForm.bankCardNo.$error.required">必填</error>
+				</span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>开户行号：</label>
+				<input type="text" class="form-control" name="accountBankId" ng-model="customer.accountBankId" required>
+				<span class="a-span">&nbsp;</span>
+				<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="customerForm.bankCardNo.$error.required">必填</error>
+				</span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>账户所属客户名称：</label>
+				<input type="text" class="form-control" name="accountOwnerName" ng-model="customer.accountOwnerName" required>
+				<span class="a-span">&nbsp;</span>
+				<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="customerForm.accountOwnerName.$error.required">必填</error>
+				</span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>账户所属客户手机号：</label>
+				<input type="text" class="form-control" name="accountOwnerPhone" ng-model="customer.accountOwnerPhone" required>
+				<span class="a-span">&nbsp;</span>
+				<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="customerForm.accountOwnerPhone.$error.required">必填</error>
+				</span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>账户所属客户身份证号：</label>
+				<input type="text" class="form-control" name="accountOwnerId" ng-model="customer.accountOwnerId" required>
+				<span class="a-span">&nbsp;</span>
+				<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="customerForm.accountOwnerId.$error.required">必填</error>
+				</span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>学历：</label>
+				<input type="text" class="form-control" name="education" ng-model="customer.education" required>
+				<span class="a-span">&nbsp;</span>
+				<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="customerForm.education.$error.required">必填</error>
+				</span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>婚姻状况：</label>
+				<input type="text" class="form-control" name="maritalStatus" ng-model="customer.maritalStatus" required>
+				<span class="a-span">&nbsp;</span>
+				<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="customerForm.maritalStatus.$error.required">必填</error>
+				</span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>工作状况：</label>
+				<input type="text" class="form-control" name="workCondition" ng-model="customer.workCondition" required>
+				<span class="a-span">&nbsp;</span>
+				<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="customerForm.workCondition.$error.required">必填</error>
+				</span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>收入范围：</label>
+				<input type="text" class="form-control" name="incomeRange" ng-model="customer.incomeRange" required>
+				<span class="a-span">&nbsp;</span>
+				<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="customerForm.incomeRange.$error.required">必填</error>
+				</span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>借款人所在省：</label>
+				<input type="text" class="form-control" name="affProvinceName" ng-model="customer.affProvinceName" required>
+				<span class="a-span">&nbsp;</span>
+				<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="customerForm.affProvinceName.$error.required">必填</error>
+				</span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>借款人所在市：</label>
+				<input type="text" class="form-control" name="affCityName" ng-model="customer.affCityName" required>
+				<span class="a-span">&nbsp;</span>
+				<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="customerForm.affCityName.$error.required">必填</error>
+				</span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>借款人所在区：</label>
+				<input type="text" class="form-control" name="affAreaName" ng-model="customer.affAreaName" required>
+				<span class="a-span">&nbsp;</span>
+				<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="customerForm.affAreaName.$error.required">必填</error>
+				</span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>联系人姓名：</label>
+			<input type="text" class="form-control" name="contactName" ng-model="customer.contactName" required>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="customerForm.contactName.$error.required">必填</error>
+			</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>联系人电话：</label>
+			<input type="text" class="form-control" name="contactPhone" ng-model="customer.contactPhone" required>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="customerForm.contactPhone.$error.required">必填</error>
+			</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>关系：</label>
+			<input type="text" class="form-control" name="contactRelation" ng-model="customer.contactRelation" required>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="customerForm.contactRelation.$error.required">必填</error>
+			</span>
+		</div>
+		</div>
+	</form>
+	
+</div>		

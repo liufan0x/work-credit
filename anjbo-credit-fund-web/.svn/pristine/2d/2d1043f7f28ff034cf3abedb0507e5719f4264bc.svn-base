@@ -1,0 +1,47 @@
+  body{
+   background:#efefef;
+  }
+   .img-box{
+	   display:block;
+	   width:28%;
+	   margin:30px auto;
+	 }
+	 h1{
+	   text-align:center;
+	   font-weight:normal;
+	   color:#4d4d4d;
+       font-size:22px;
+	   margin:25px 0;
+	 }
+	 p{
+	   line-height:29px;
+	   text-align:center;
+	   font-size:15px;
+	   width:90%;
+	   color:#909090;
+	   margin:0 auto;
+	 }
+	 .ok-but{
+	     width:90%;
+   height:41px;
+   line-height:41px;
+   text-align:center;
+   color:#4ab1ce;
+   border:1px solid #4ab1ce;
+   background:#fff;
+   margin:30px auto 20px auto;
+   font-size:15px;
+   border-radius:3px;
+	 }
+	 	 .cancel-but{
+	     width:90%;
+   height:41px;
+   line-height:41px;
+   text-align:center;
+  color:#e54738;
+   border:1px solid #999;
+   background:#fff;
+   margin:30px auto 20px auto;
+   font-size:15px;
+   border-radius:3px;
+	 }

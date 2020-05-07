@@ -1,0 +1,281 @@
+<div class="container-fluid">
+	<place-order-detail></place-order-detail>
+	
+	<!-- 预匹配资方信息 -->
+	<div class="row">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;预匹配资方信息</div>
+		<div class="col-md-12 col-lg-12">
+			<label>预匹配资方：</label>
+			<span ng-bind="fundName"></span>
+			<span ng-show = "fundName != null" class="tooltip-toggle" data-toggle="tooltip-toggle" title="" data-original-title="此处将提单信息与资方的部分准入标准进行匹配，分配资方的最终结果已推送金融机构的节点详情为准">
+				<a ng-show = "fundName != null" class="result" ng-click="model=true">匹配结果</a>
+			<span class="help"></span></span>
+			<span ng-show="fundName == null" >无</span>
+			<div class="lhw-alert-bg2 ng-scope" ng-show="model">
+            	<div class="lhw-alert-box" style="width:1158px;">
+            	
+            	<div class="lhw-alert-tit relative">
+			      <div class="lhw-x" ng-click="model=false;"></div>
+			    </div>
+            	
+            	<div class="row">
+			        <div class="col-md-12">
+			            <table class="table table-bordered">
+							<thead>
+								<tr>
+									<th>序号</th>
+									<th>项目</th>
+									<th>准入标准</th> 
+									<th>订单信息</th>
+									<th>匹配结果</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="obj in preFundModelList" >
+								    <td>
+								       <label ng-bind="$index+1"></label>
+								    </td>
+									<td>
+									   <label ng-bind="obj.project"></label>
+									</td>
+						            <td> 
+			                           <label ng-bind="obj.auditFirstResult"></label>
+						            </td>
+						            <td>
+								       <label ng-bind="obj.orderInfo"></label>
+								    </td>
+								    <td>
+								       <label ng-if="obj.orderInfo=='--'">--</label>
+								       <label ng-if="obj.orderInfo!='--'">√</label>
+								    </td>
+								</tr>
+							</tbody>
+						</table>
+			        </div>
+			    </div>
+            	
+            	</div>
+            </div>
+			
+		</div>
+	</div>
+	
+	<div id="viewRow">
+		
+	</div>
+
+
+	<!--表格-->
+	<div class="row" ng-show="fundShow">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;分配资金方信息</div>
+		<div class="col-md-12">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>说明</th>
+						<th>账户余额（单位：万元）</th>
+						<th>资金方代号</th> 
+						<th>放款金额</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td rowspan="{{dataList.length+1}}">按资金成本从低往高排列 </td>
+					</tr>
+					<tr ng-repeat="obj in dataList">
+					    <td>
+					       <label ng-if="obj.fundCode!='114'&&obj.fundCode!='115'&&obj.fundCode!='1000'">-</label>
+						   <label ng-if="obj.fundCode=='114'"><span  style="color:red">一期: {{ynAccoumt114.Balance}}</span><a href="javascript:void(0)" ng-click="yunNanAccoumt(obj.fundCode,1)">刷新</a></label>
+						   <label ng-if="obj.fundCode=='115'"><span  style="color:red">二期：{{ynAccoumt115.Balance}}</span><a href="javascript:void(0)" ng-click="yunNanAccoumt(obj.fundCode,1)">刷新</a></label>
+						    <label ng-if="obj.fundCode=='1000'"><span  style="color:red">陕国投：{{sgtAccoumts.acctBal/10000}}</span><a href="javascript:void(0)" ng-click="sgtAccoumt(1)">刷新</a></label>
+					    </td>
+						<td>
+							<label><input type="checkbox"  ng-model="obj.isCheck">{{obj.fundDesc}}</label>
+							<span ng-show="obj.fundCodeShow">
+								<font color="#FF4500">请选择资金方</font>
+							</span>
+						</td>
+			            <td> 
+						    <div class="form-inline">
+                                 <label>放款金额：</label><input type="text" ng-model="obj.loanAmount" class="form-control" style="width:150px">万
+								   <span ng-show="obj.loanAmountShow">
+										<font color="#FF4500">请填写放款金额</font>
+								   </span>
+			                 </div>
+			            </td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="form-group">
+			<textarea class="form-control" rows="5" ng-model="remark" placeholder="如有特殊说明，请在此处备注（非必填）"/>
+		</div>
+		<div class="col-md-12">
+			<button type="button" class="btn btn-primary" ng-click="checkFund();">提交</button>
+			<button type="button" class="btn btn-warning" ng-show="!orderIsBack" ng-click="showBack();">退回</button>
+		</div>
+	</div>
+	<!--表格end-->
+
+	<!--推送start华安-->
+	<div class="lhw-alert-bg2"  ng-show="huanShow">
+		<div class="lhw-alert-box" style="width:1158px;">
+			<div class="lhw-alert-tit relative" >以下信息推送给资金方105<div class="lhw-x" ng-click="huanShow=false;fundShow=true;"></div></div>
+				<div>
+					<div class="row">
+						<div class="col-md-12" style="padding-top:10px;">
+							<ul class="nav nav-tabs">
+								<li ng-class="{'active':title=='orderShow'}">
+									<a href="javascript:void(0);" ng-click="title='orderShow'">订单信息</a>
+								</li>
+								<li ng-class="{'active':title=='imageShow'}">
+									<a href="javascript:void(0);" ng-click="title='imageShow'">影像资料</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+					<div ng-show="title=='orderShow'"  style="width:100%;height:490px; overflow-y:scroll;">
+						<allocation-fund-huaan-order></allocation-fund-huaan-order>
+					</div>
+					<div ng-show="title=='imageShow'"  style="width:100%;height:490px; overflow-y:scroll;">
+						<allocation-fund-huaan-businfo></allocation-fund-huaan-businfo>
+					</div>
+				</div>
+
+				<div class="lhw-alert-but">
+					<button type="button" class="btn btn-primary" ng-click="pushShow()" style="margin-right:80px;">确认并提交</button>
+					<button type="button" class="btn btn-danger lhw-alert-cancel" ng-click="financeShow();">该订单不推送</button>
+				</div>
+		</div>
+	</div>
+	<!--推送end-->
+
+	<!--推送start华融-->
+	<div class="lhw-alert-bg2 huarong-view-windon"  ng-show="huarongShow">
+		<div class="lhw-alert-box" style="width:1158px;">
+			<div class="lhw-alert-tit relative" >以下信息推送给资金方<span ng-bind="huarongCode"/><div class="lhw-x" ng-click="huarongShow=false;fundShow=true;"></div></div>
+			<div>
+				<div class="row">
+					<div class="col-md-12" style="padding-top:10px;">
+						<ul class="nav nav-tabs">
+							<li ng-class="{'active':huarongTitle=='huarongOrderShow'}">
+								<a href="javascript:void(0);" ng-click="huarongTitle='huarongOrderShow'">申请信息</a>
+							</li>
+							<li ng-class="{'active':huarongTitle=='huarongKgAppointShow'}">
+								<a href="javascript:void(0);" ng-click="huarongTitle='huarongKgAppointShow'">业务信息</a>
+							</li>
+							<li ng-class="{'active':huarongTitle=='huarongKgIndivShow'}">
+								<a href="javascript:void(0);" ng-click="huarongTitle='huarongKgIndivShow'">借款人信息</a>
+							</li>
+							<li ng-class="{'active':huarongTitle=='huarongKgHouseShow'}">
+								<a href="javascript:void(0);" ng-click="huarongTitle='huarongKgHouseShow'">房产信息</a>
+							</li>
+							<li ng-class="{'active':huarongTitle=='huarongKgApprovalShow'}">
+								<a href="javascript:void(0);" ng-click="huarongTitle='huarongKgApprovalShow'">审批信息</a>
+							</li>
+							<li ng-class="{'active':huarongTitle=='huarongImageShow'}">
+								<a href="javascript:void(0);" ng-click="huarongTitle='huarongImageShow'">影像资料</a>
+							</li>
+							<li ng-class="{'active':huarongTitle=='huarongLoanShow'}">
+								<a href="javascript:void(0);" ng-click="huarongTitle='huarongLoanShow'">放款数据</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div ng-show="huarongTitle=='huarongOrderShow'"  style="width:100%;height:490px; overflow-y:scroll;">
+					<allocation-fund-huarong-order></allocation-fund-huarong-order>
+				</div>
+				<div ng-show="huarongTitle=='huarongKgAppointShow'"  style="width:100%;height:490px; overflow-y:scroll;">
+					<allocation-fund-huarong-appoint></allocation-fund-huarong-appoint>
+				</div>
+				<div ng-show="huarongTitle=='huarongKgIndivShow'"  style="width:100%;height:490px; overflow-y:scroll;">
+					<allocation-fund-huarong-indiv></allocation-fund-huarong-indiv>
+				</div>
+				<div ng-show="huarongTitle=='huarongKgHouseShow'"  style="width:100%;height:490px; overflow-y:scroll;">
+					<allocation-fund-huarong-house></allocation-fund-huarong-house>
+				</div>
+				<div ng-show="huarongTitle=='huarongKgApprovalShow'"  style="width:100%;height:490px; overflow-y:scroll;">
+					<allocation-fund-huarong-approval></allocation-fund-huarong-approval>
+				</div>
+				<div ng-show="huarongTitle=='huarongImageShow'"  style="width:100%;height:490px; overflow-y:scroll;">
+					<allocation-fund-huarong-businfo></allocation-fund-huarong-businfo>
+				</div>
+				<div ng-show="huarongTitle=='huarongLoanShow'"  style="width:100%;height:490px; overflow-y:scroll;">
+					<allocation-fund-huarong-loan></allocation-fund-huarong-loan>
+				</div>
+			</div>
+
+			<div class="lhw-alert-but" ng-show="isSubmitShow">
+				<button type="button" class="btn btn-primary" ng-click="huarongSave()" style="margin-right:80px;">确认并提交</button>
+				<button type="button" class="btn btn-danger lhw-alert-cancel" ng-click="financeShow();">该订单不推送</button>
+			</div>
+		</div>
+	</div>
+	<!--推送end-->
+
+</div>
+
+<!--弹框start-->
+<div class="lhw-alert-bg2"  ng-show="isDelImgShow">
+	<div class="lhw-alert-box" style="width:480px;">
+		<div class="lhw-alert-tit">请选择要删除的图片</div>
+		<div>
+			<span>全选/反选:<input type='checkbox' ng-click="selectAllImg()" ng-checked="allCheck"></span>
+			<div class="row form-inline detail-row" style="padding:0 10px;">
+				<div class="tan-pic">
+					<div class="tan-pic-box" ng-repeat="img in imgList">
+						<label>
+							<img src="{{img.url}}" style="width: 120px;height:120px">
+							<div class="squaredFour">
+								<input type="checkbox" ng-model="img.check" ng-click="checkImg(imgList)">
+								<span></span>
+							</div>
+						</label>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+		</div>
+		<div class="lhw-alert-but">
+			<button type="button" class="btn btn-primary" style="margin-right:80px;" ng-click="delImg()">确定</button>
+			<button type="button" class="btn btn-danger lhw-alert-cancel" ng-click="isDelImgShow=false">取消</button>
+		</div>
+	</div>
+</div>
+
+<!--弹框end-->
+
+<!--华融删除图片弹框start-->
+<div class="lhw-alert-bg2"  ng-show="isDelHrImgShow">
+	<div class="lhw-alert-box" style="width:480px;">
+		<div class="lhw-alert-tit">请选择要删除的图片</div>
+		<div>
+			<span>全选/反选:<input type='checkbox' ng-click="selectHrAllImg()" ng-checked="allCheck"></span>
+			<div class="row form-inline detail-row" style="padding:0 10px;">
+				<div class="tan-pic">
+					<div class="tan-pic-box" ng-repeat="img in imgObject.listImgs">
+						<label>
+							<img src="{{img.url}}" style="width: 120px;height:120px">
+							<div class="squaredFour">
+								<input type="checkbox" ng-model="img.check" ng-click="checkImg(imgObject.listImgs)">
+								<span></span>
+							</div>
+						</label>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+		</div>
+		<div class="lhw-alert-but">
+			<button type="button" class="btn btn-primary" style="margin-right:80px;" ng-click="delHrImg()">确定</button>
+			<button type="button" class="btn btn-danger lhw-alert-cancel" ng-click="isDelHrImgShow=false">取消</button>
+		</div>
+	</div>
+</div>
+
+<!--弹框end-->
+
+
+
+
+

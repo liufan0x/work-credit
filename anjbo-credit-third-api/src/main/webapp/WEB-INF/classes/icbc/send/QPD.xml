@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="GBK"?>
+<CMS>
+	<eb>
+		<pub>
+			<TransCode>QPD</TransCode>
+			<CIS>400090001604411</CIS>
+			<BankCode>102</BankCode>
+			<ID>rp.y.4000</ID>
+			<TranDate>%s</TranDate>
+			<TranTime>%s</TranTime>
+			<fSeqno>%s</fSeqno>
+		</pub>
+		<in>
+			<AccNo>4000023029200124946</AccNo>
+			<AreaCode></AreaCode>
+			<MinAmt>0</MinAmt>
+			<MaxAmt>10000000000</MaxAmt>
+			<BeginTime></BeginTime>
+			<EndTime></EndTime>
+			<NextTag>%s</NextTag>
+			<ReqReserved1></ReqReserved1>
+			<ReqReserved2></ReqReserved2>
+		</in>
+	</eb>
+</CMS>

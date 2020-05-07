@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.signature.SignatureMapper">
+
+    <sql id="Base_Column_List">
+        id,createTime,createUid,
+        updateTime,updateUid,customerName,
+        customerCardNumber,customerCardType,accountId,url,customerType
+    </sql>
+
+    <select id="select" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+          <include refid="Base_Column_List"/>
+        FROM  tbl_third_signature
+        WHERE customerCardNumber = #{customerCardNumber}
+    </select>
+
+    <select id="list" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM  tbl_third_signature
+        WHERE customerCardNumber IN (${customerCardNumber})
+    </select>
+
+    <insert id="insert" parameterType="java.util.Map">
+        INSERT INTO tbl_third_signature
+        (
+          createTime,
+          createUid,
+          customerName,
+          customerCardNumber,
+          customerCardType,
+          accountId,
+          url,
+          customerType
+        )
+        VALUES
+        (
+          now(),
+          #{createUid},
+          #{customerName},
+          #{customerCardNumber},
+          #{customerCardType},
+          #{accountId},
+          #{url},
+          #{customerType}
+        )
+    </insert>
+
+    <insert id="batchInsert" parameterType="java.util.List">
+        (
+          createTime,
+          createUid,
+          customerName,
+          customerCardNumber,
+          customerCardType,
+          accountId,
+          url,
+          customerType
+        )
+        VALUES
+        <foreach collection="list" separator="," item="obj">
+            (
+                now(),
+                #{obj.createUid},
+                #{obj.customerName},
+                #{obj.customerCardNumber},
+                #{obj.customerCardType},
+                #{obj.accountId},
+                #{obj.url},
+                #{obj.customerType}
+            )
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="java.util.Map">
+        UPDATE tbl_third_signature
+        <set>
+            <if test="updateUid!=null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+            <if test="accountId!=null and accountId!=''">
+                accountId = #{accountId},
+            </if>
+            <if test="customerName!=null and customerName!=''">
+                customerName = #{customerName},
+            </if>
+            <if test="url!=null and url!=''">
+                url = #{url},
+            </if>
+            <if test="customerCardType!=null">
+                customerCardType = #{customerCardType},
+            </if>
+            <if test="customerType!=null">
+                customerType = #{customerType}
+            </if>
+        </set>
+        WHERE customerCardNumber = #{customerCardNumber}
+    </update>
+</mapper>

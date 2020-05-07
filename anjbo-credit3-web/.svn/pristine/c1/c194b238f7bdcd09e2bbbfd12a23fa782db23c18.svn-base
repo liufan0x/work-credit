@@ -1,0 +1,387 @@
+ <style>
+ .w150 label{width:150px;line-height:37px;}
+ </style>
+<div class="container-fluid" id="receivableFor">
+	<!--标题-->
+	<div class="row">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;回款信息
+			<a ng-show="!isEdit" style="display:inline-block;float:right;padding-right: 10px;" ui-sref="orderList" >返回上一步</a>
+			<span ng-show="isEdit" class="detail-trash2 text-danger" ng-click="deleteDetail('receivable-for-detail')" >隐藏</span>
+			<div style="position:absolute;right:400px;top:0px;">
+			  <span id="elementFlag" ng-bind="elementFlag">是否已收到要件：是</span>
+			  <span><a id="elementInfo" ng-bind="elementInfo" ng-click="showDetail('elementEntrance');">要件详情</a></span>
+			</div>
+		</div>
+	</div>
+	<!--标题 end-->
+	<div class="row detail-row form-inline w150" >
+		<div class="col-md-12 col-lg-12"><label>预计回款时间：</label><span ng-bind="customerPaymentTime| date:'yyyy-MM-dd' "></span></div>
+		<div ng-repeat="f in forList" >
+		    <samp ng-init="remark=f.remark"></samp>
+			<div class="col-md-6 col-lg-4"><label>实际<span ng-if="f.isFrist==1">首次</span>回款时间：</label><span ng-bind="f.payMentAmountDate| date:'yyyy-MM-dd' "></span></div>
+			<div class="col-md-6 col-lg-4"><label>回款金额：</label><span ng-bind="f.payMentAmount"></span> 万元 
+			<!--图片 放大插件-->
+			 <span class=" gallerys" ng-if="f.payMentPic!='' && f.payMentPic!=null">
+			    <a class="view-pic" onclick="laa(this)">查看图片</a>
+				<img ng-repeat="img in f.payMentPic.split(',')" src="{{img}}"   class="detail-img gallery-pic" style="display:none">
+			</span>
+			<!--图片end--> 
+			</div>
+			<div class="col-md-6 col-lg-4">&nbsp;</div>
+		</div>
+		<div class="col-md-6 col-lg-4" ng-if="huaRong!=null && huaRong.id !='0' && iswq"><label>推送信息：</label><a class="showHR" onclick="ab1()">查看</a></div>
+		<div class="col-md-6 col-lg-4" ng-if="''!=receivablePage2fundCode && receivablePage2fundCode=='114' && iswq"><label>推送信息：</label><a class="showHR" ng-click="viewYn()">查看</a></div>
+	</div>
+	<!--备注-->
+	<div class="row relative" ng-if="remark!='' && remark!=null">
+	    <span class="remark-span remark-lhw">备注：</span>
+		<textarea class="remark-p remark-lhw-p textarea-lhw" ng-bind="remark"   readonly="readonly"> </textarea>
+	</div>
+	<!--备注end-->
+
+	<!--资方信息:云南-->
+	<div class="row" ng-show="''!=receivablePage2fundCode && receivablePage2fundCode=='114'">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;资方检验结果</div>
+	</div>	
+	<div class="row detail-row form-inline w150" ng-show="''!=receivablePage2fundCode && receivablePage2fundCode=='114'">
+		<div class="col-md-12 col-lg-12">
+			<label>还款状态：</label><!-- 0 已创建 1 检验中2 检验失败3检验成功4支付中5支付异常(说明：还款方式为1000线上代扣代扣失败后对应状态)6支付成功7已完成8撤销9支付失败(说明：还款方式为5001快捷支付代扣失败后对应状态) -->
+			<span ng-bind="receivablePageVo2repay.statusName"></span>
+			<a ng-click="statuYnLoading()">刷新</a>			
+		</div>	
+		<div class="col-md-12 col-lg-12" ng-show="2==receivablePageVo2repay.status || 5==receivablePageVo2repay.status || 9==receivablePageVo2repay.status">
+			<label>还款失败原因：</label>
+			<span ng-bind="receivablePageVo2repay.failMsg"></span>
+		</div>	
+		<div class="col-md-12 col-lg-12">
+			<label>支付状态：</label> <!-- 0:支付中1:支付成功2:支付失败 -->
+			<span ng-bind="receivablePageVo2pay.statusName"></span>
+		</div>	
+		<div class="col-md-12 col-lg-12" ng-show="2==receivablePageVo2pay.status">
+			<label>支付失败原因：</label>
+			<span ng-bind="receivablePageVo2pay.failMsg"></span>
+		</div>
+		<div class="col-md-12 col-lg-12" ng-show="receivableEnabled && (2==receivablePageVo2repay.status || 5==receivablePageVo2repay.status || 8==receivablePageVo2repay.status || 9==receivablePageVo2repay.status)">
+			<label>&nbsp;</label>
+			<button type="button" class="btn btn-primary" ng-click="submitAgainYn()">再次发送回款计划</button>
+		</div>
+		<div class="col-md-12 col-lg-12" ng-show="receivableEnabled && (3==receivablePageVo2repay.status&&(2==receivablePageVo2pay.status||!receivablePageVo2pay.status))">
+			<label>&nbsp;</label>
+			<button type="button" class="btn btn-primary" ng-click="submitPayYn()">提交并发送支付计划表</button>
+		</div>
+	</div>
+</div>
+
+<!--推送start-->
+	<div class="lhw-alert-bg hktsShow1"  style="display:none">
+		<div class="lhw-alert-box" style="width:1100px;">
+			<div class="lhw-alert-tit relative" >以下信息推送给资金方110<div class="lhw-x lhw-x1" ></div></div>
+				<div class="row">
+					<div class="col-md-12" style="padding-top:10px;">
+						<ul class="nav nav-tabs"><li><a href="javascript:void(0);">回款信息</a></li></ul>
+					</div>
+				</div>
+				<div>
+				    <div class="row form-inline detail-row w147" style="padding:30px 10px; ">
+				        <div class="col-md-6 col-lg-4">
+				            <label>估计还款时间: </label> <span ng-bind="huaRong.repaymentTime|date:'yyyy-MM-dd HH:mm'"></span>
+				        </div>
+				        <div class="col-md-6 col-lg-4">
+				            <label>已经还款时间:</label> <span ng-bind="huaRong.repaymentYestime|date:'yyyy-MM-dd HH:mm'"></span>
+				        </div>
+				        <div class="col-md-6 col-lg-4">
+				            <label>期供金额:</label> <span ng-bind="huaRong.repaymentAccount"></span>&nbsp;元
+				        </div>
+				         <div class="col-md-6 col-lg-4">
+				            <label>实还金额:</label> <span ng-bind="huaRong.repaymentYesaccount"></span>&nbsp;元
+				        </div>
+				         <div class="col-md-6 col-lg-4">
+				            <label>逾期天数:</label> <span ng-bind="huaRong.lateDays"></span>&nbsp;天
+				        </div>
+				        <div class="col-md-6 col-lg-4">
+				            <label>逾期利息:</label> <span ng-bind="huaRong.lateInterest"></span>&nbsp;元
+				        </div>
+				        <div class="col-md-6 col-lg-4">
+				            <label>应还利息:</label> <span ng-bind="huaRong.interest"></span>&nbsp;元
+				        </div>
+				        <div class="col-md-6 col-lg-4">
+				            <label>应还本金:</label> <span ng-bind="huaRong.capital"></span>&nbsp;元
+				        </div>
+				        <div class="col-md-6 col-lg-4">
+				            <label>已还本金:</label> <span ng-bind="huaRong.setlCapital"></span>&nbsp;元
+				        </div>
+				        <div class="col-md-6 col-lg-4">
+				            <label>已还利息:</label> <span ng-bind="huaRong.setlInterest"></span>&nbsp;元
+				        </div>
+				        <div class="col-md-6 col-lg-4">
+				            <label>已还罚息:</label> <span ng-bind="huaRong.setlLateInterest"></span>&nbsp;元
+				        </div>
+				        <div class="col-md-6 col-lg-4">
+				            <label>贷款执行利率:</label> <span ng-bind="huaRong.psIntRate"></span>&nbsp;%
+				        </div>
+				    </div>
+				</div>
+			</div>
+		</div>
+<!--推送end-->
+<script> 
+function ab1(){$(".hktsShow1").show();}
+function laa(a){
+	$.openPhotoGallery($(a).next("img"));
+}
+$(".lhw-x1").click(function(){
+	$(".hktsShow1").hide();
+})
+</script>
+
+		<!--云南推送start-->
+	<div class="lhw-alert-bg2"  ng-show="''!=receivablePage2fundCode && receivablePage2fundCode=='114' && yunNanShow">
+	<form name="yunNanForm" id="yunNanForm" class="yunNanForm-supplement">
+		<div class="lhw-alert-box" style="width:1100px;" ng-show="!isSubmitReturn && !isSubmitPay">
+			<div class="lhw-alert-tit relative" >以下信息推送给资金方<div class="lhw-x" ng-click="yunNanShow=false;forShow=true;"></div></div>
+			<div>
+				<div class="row">
+					<div class="col-md-12" style="padding-top:10px;">
+						<ul class="nav nav-tabs">
+							<li>
+								<a href="javascript:void(0);">还款信息</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div>
+				    <div class="row form-inline detail-row w147" style="padding:30px 10px; ">
+				        <div class="col-md-6 col-lg-4">
+				            <label><span class="text-warning">*</span>预计还款时间: </label> 
+				            <span ng-bind="obj.info.repayDate | date:'yyyy-MM-dd HH:mm'"/>
+				        </div>
+				        <div class="col-md-6 col-lg-4">
+				            <label><span class="text-warning">*</span>实际还款时间:</label> 
+				            <span ng-bind="obj.info.realityPayDate | date:'yyyy-MM-dd HH:mm'"/>
+				        </div>
+				         <div class="col-md-6 col-lg-4">
+				            <label><span class="text-warning">*</span>应还本金总计:</label> 
+				            <span ng-bind="obj.info.repayPrincipal"/>元
+				         </div>
+				        				        
+				        <div class="col-md-6 col-lg-4">
+				            <label><span class="text-warning">*</span>已还本金总计:</label> 
+				            <span ng-bind="obj.info.givePayPrincipal" />元
+				        </div>	
+				        <div class="col-md-6 col-lg-4">
+				            <label><span class="text-warning">*</span>应还利息总计:</label> 
+				            <span ng-bind="obj.info.repayProfit" />元
+				        </div>
+				        <div class="col-md-6 col-lg-4">
+				            <label><span class="text-warning">*</span>已还利息总计:</label> 
+				            <span ng-bind="obj.info.givePayProfit"/>元
+				        </div>
+				        				        
+				        <div class="col-md-6 col-lg-4">
+				            <label><span class="text-warning">*</span>借款期限:</label> 
+				            <span ng-bind="obj.info.borrowingDays"/>天
+				        </div>				        
+				        <div class="col-md-6 col-lg-4">
+				            <label>逾期天数:</label> 
+				            <span ng-bind="obj.info.lateDay" />天
+				        </div>
+				        <div class="col-md-6 col-lg-4">
+				            <label>逾期罚息:</label> 
+				            <span ng-bind="obj.info.penaltyFee" />元
+				        </div>
+				        
+				        <div class="col-md-6 col-lg-4">
+				            <label>逾期违约金:</label> 
+				            <span ng-bind="obj.info.latePenalty" />元
+				        </div>	
+				        <div class="col-md-6 col-lg-4">
+				            <label>逾期服务费:</label> 
+				            <span ng-bind="obj.info.lateFee" />元
+				        </div>	
+				        <div class="col-md-6 col-lg-4">
+				            <label>逾期其它费用:</label> 
+				            <span ng-bind="obj.info.lateOtherCost" />元
+				        </div>	
+				        
+				        <div class="col-md-6 col-lg-4">
+				            <label>逾期费用总计:</label>
+				            <span ng-bind="obj.info.overDueFee"></span>元
+				        </div>	
+				        <div class="col-md-6 col-lg-8">
+				            <label>还款方式:</label> 
+				            <span ng-bind="obj.info.paymentMethodName"/>
+				        </div>		
+				    </div>
+				</div>
+			</div>
+			<div>
+				<div class="row">
+					<div class="col-md-12" style="padding-top:10px;">
+						<ul class="nav nav-tabs">
+							<li>
+								<a href="javascript:void(0);">支付信息</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div>
+				    <div class="row form-inline detail-row w147" style="padding:30px 10px; ">
+				        <div class="col-md-6 col-lg-4">
+				            <label>交易类型:</label> 
+				            <span ng-bind="obj.pay.voucherTypeName"/>
+				        </div>				        
+				         <div class="col-md-6 col-lg-4">
+				            <label>回款银行户名:</label> 
+				            <span ng-bind="obj.pay.accountName"/>
+				        </div>
+				        <div class="col-md-6 col-lg-4">
+				            <label>回款银行账号:</label> 
+				            <span ng-bind="obj.pay.accountNo"/>
+				        </div>
+				        
+				        <div class="col-md-6 col-lg-4">
+				            <label>回款流水号:</label> 
+				            <span ng-bind="obj.pay.bankTransactionNo"/>
+				        </div>
+				        <div class="col-md-6 col-lg-8">
+				            <label>还款总金额:</label> 
+				            <span ng-bind="obj.pay.amount"></span>元
+				        </div>	
+				    </div>
+				</div>
+			</div>
+		</div>
+		<!-- 编辑 -->
+		<div class="lhw-alert-box" style="width:1100px;" ng-show="isSubmitReturn || isSubmitPay">
+			<div class="lhw-alert-tit relative" >以下信息推送给资金方<div class="lhw-x" ng-click="yunNanShow=false;forShow=true;"></div></div>
+			<div ng-show="isSubmitReturn">
+				<div class="row">
+					<div class="col-md-12" style="padding-top:10px;">
+						<ul class="nav nav-tabs">
+							<li>
+								<a href="javascript:void(0);">还款信息</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div>
+				    <div class="row form-inline detail-row w147" style="padding:30px 10px; ">
+				        <div class="col-md-6 col-lg-4">
+				            <label><span class="text-warning">*</span>预计还款时间: </label> <input type="text"  readonly ng-model="obj.info.repayDate" ng-disabled="true" class="form-control form_dateu"/>
+				        </div>
+				        <div class="col-md-6 col-lg-4">
+				            <label><span class="text-warning">*</span>实际还款时间:</label> <input type="text" readonly ng-model="obj.info.realityPayDate" class="form-control form_dateu"/>
+				        </div>
+				         <div class="col-md-6 col-lg-4">
+				            <label><span class="text-warning">*</span>应还本金总计:</label> <input type="number" required min="0" name="repayPrincipal" ng-disabled="true" ng-model="obj.info.repayPrincipal" class="form-control" />元
+				        	<span style="color:red" ng-show="yunNanForm.repayPrincipal.$dirty && yunNanForm.repayPrincipal.$invalid">
+		  						<span ng-show="yunNanForm.repayPrincipal.$error.required">必填</span>
+							</span>
+				         </div>
+				        				        
+				        <div class="col-md-6 col-lg-4">
+				            <label><span class="text-warning">*</span>已还本金总计:</label> <input type="number" required min="0" name="givePayPrincipal" ng-model="obj.info.givePayPrincipal" class="form-control" />元
+				        	<span class="inputError"><error class="text-danger" ng-show="yunNanForm.givePayPrincipal.$invalid">必填</error></span>
+				        </div>	
+				        <div class="col-md-6 col-lg-4">
+				            <label><span class="text-warning">*</span>应还利息总计:</label> <input type="number" required min="0" name="repayProfit" ng-disabled="true" ng-model="obj.info.repayProfit" class="form-control" />元
+				        	<span class="inputError"><error class="text-danger" ng-show="yunNanForm.repayProfit.$invalid">必填</error></span>
+				        </div>
+				        <div class="col-md-6 col-lg-4">
+				            <label><span class="text-warning">*</span>已还利息总计:</label> <input type="number" required min="0" name="givePayProfit" ng-model="obj.info.givePayProfit" class="form-control"/>元
+				        	<span class="inputError"><error class="text-danger" ng-show="yunNanForm.givePayProfit.$invalid">必填</error></span>
+				        </div>
+				        				        
+				        <div class="col-md-6 col-lg-4">
+				            <label><span class="text-warning">*</span>借款期限:</label> <input type="number" required min="0" name="borrowingDays" ng-disabled="true" ng-model="obj.info.borrowingDays" class="form-control"/>天
+				        	<span class="inputError"><error class="text-danger" ng-show="yunNanForm.borrowingDays.$invalid">必填</error></span>
+				        </div>				        
+				        <div class="col-md-6 col-lg-4">
+				            <label>逾期天数:</label> <input type="number" min="0" ng-model="obj.info.lateDay" class="form-control" />天
+				        </div>
+				        <div class="col-md-6 col-lg-4">
+				            <label>逾期罚息:</label> <input type="number" min="0" ng-model="obj.info.penaltyFee" class="form-control" />元
+				        </div>
+				        
+				        <div class="col-md-6 col-lg-4">
+				            <label>逾期违约金:</label> <input type="number" min="0" ng-model="obj.info.latePenalty" class="form-control" />元
+				        </div>	
+				        <div class="col-md-6 col-lg-4">
+				            <label>逾期服务费:</label> <input type="number" min="0" ng-model="obj.info.lateFee" class="form-control" />元
+				        </div>	
+				        <div class="col-md-6 col-lg-4">
+				            <label>逾期其它费用:</label> <input type="number" min="0" ng-model="obj.info.lateOtherCost" class="form-control" />元
+				        </div>	
+				        
+				        <div class="col-md-6 col-lg-4">
+				            <label>逾期费用总计:</label>
+				            <span ng-bind="obj.info.overDueFee"></span>元
+				        </div>	
+				        <div class="col-md-6 col-lg-8">
+				            <label>还款方式:</label> 
+				            <select class="form-control" ng-model="dictPaymentMethod" ng-init="dictPaymentMethod='@请选择'" style="width:180px">				            		
+				            	<option value="@请选择">请选择</option>
+				            	<option value="1000@线上代扣">线上代扣</option>
+				            	<option value="2001@委托转付">委托转付</option>
+				            	<option value="2002@商户担保">商户担保</option>
+				            	<option value="2003@回购">回购</option>
+				            	<option value="2004@差额划拨">差额划拨</option>
+				            	<option value="2005@代偿">代偿</option>
+				            	<option value="3001@主动付款">主动付款</option>
+				            	<option value="3002@他人代偿">他人代偿</option>
+				            	<option value="4001@商户代扣">商户代扣</option>
+				            	<option value="5001@线上代扣-快捷支付">线上代扣-快捷支付</option>
+				            	<option value="6001@线上代扣-在线支付">线上代扣-在线支付</option>
+							</select>
+				        </div>		
+				    </div>
+				</div>
+			</div>
+			<div ng-show="isSubmitPay">
+				<div class="row">
+					<div class="col-md-12" style="padding-top:10px;">
+						<ul class="nav nav-tabs">
+							<li>
+								<a href="javascript:void(0);">支付信息</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div>
+				    <div class="row form-inline detail-row w147" style="padding:30px 10px; ">
+				        <div class="col-md-6 col-lg-4">
+				            <label>交易类型:</label> 
+				            <select  class="form-control" ng-model="dictVoucherType" ng-init="dictVoucherType='0@线下转账'" style="width:180px">	
+				            	<option value="@请选择">请选择</option>
+				            	<option value="0@线下转账">线下转账</option>
+				            	<option value="2@线上代扣">线上代扣</option>
+							</select>
+				        </div>				        
+				         <div class="col-md-6 col-lg-4">
+				            <label>回款银行户名:</label> <input type="text"  ng-model="obj.pay.accountName" class="form-control"/>
+				        </div>
+				        <div class="col-md-6 col-lg-4">
+				            <label>回款银行账号:</label> <input type="text"  ng-model="obj.pay.accountNo" class="form-control"/>
+				        </div>
+				        
+				        <div class="col-md-6 col-lg-4">
+				            <label>回款流水号:</label> <input type="text"  ng-model="obj.pay.bankTransactionNo" class="form-control"/>
+				            <br/><font style="color:#ccc;"><label>&nbsp;</label>注：请填写回款银行流水号</font>
+				        </div>
+				        <div class="col-md-6 col-lg-8">
+				            <label>还款总金额:</label> 
+				            <span ng-bind="obj.pay.amount"></span>元
+				        </div>	
+				    </div>
+				</div>
+			</div>
+			<div class="lhw-alert-but yunNanBtns" ng-show="isSubmitReturn">
+				<button type="button" class="btn btn-primary lhw-alert-ok" ng-click="forSubmit()" style="margin-right:80px;">提交并发送回款计划</button>
+			</div>
+			<div class="lhw-alert-but yunNanBtns" ng-show="isSubmitPay">
+				<button type="button" class="btn btn-primary lhw-alert-ok" ng-click="forSubmit()" style="margin-right:80px;">提交并发送支付计划表</button>
+			</div>
+		</div>
+	</form>
+	</div>
+	<!--云南推送end-->

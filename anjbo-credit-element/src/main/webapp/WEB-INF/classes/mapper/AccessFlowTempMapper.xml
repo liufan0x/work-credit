@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.AccessFlowTempMapper">
+
+
+    <insert id="insertAccessFlowTemp" parameterType="java.util.List" useGeneratedKeys ="true" keyProperty="id">
+       	INSERT INTO tbl_element_access_flow_temp (
+		orderNo,
+		currentHandlerUid,
+		content,
+		operationType,
+		templateType
+		)
+		VALUES
+			(
+			#{orderNo},
+			#{currentHandlerUid},
+			#{content},
+			#{operationType},
+			#{templateType}
+		)
+    </insert>
+    
+    
+     <select id="selectAccessFlowTemp" parameterType="java.util.Map" resultType="java.util.Map">
+    	select * from tbl_element_access_flow_temp WHERE 1=1 
+    	<if test="orderNo != null">
+			and orderNo=#{orderNo}
+		</if>
+		
+		<if test="orderNo == null">
+			and orderNo is null
+		</if>
+		
+		<if test="operationType != null">
+			and operationType=#{operationType}
+		</if>
+    	
+    	<if test="currentHandlerUid != null">
+			and currentHandlerUid=#{currentHandlerUid} 
+		</if>
+		
+		<if test="templateType != null">
+			and templateType=#{templateType}
+		</if>
+    	    order by id DESC limit 0,1;
+    	<!-- select * from tbl_element_access_flow_temp WHERE orderNo='No123457' and operationType='1' and currentHandlerUid='123' and templateType='1' order by id DESC limit 0,1; -->
+     </select>
+ 
+     <update id="updateAccessFlowTempById" parameterType="java.util.Map">
+        update tbl_element_access_flow_temp set content=#{content} where id = #{id};
+     </update>
+     
+       <!-- 根据条件删除-->
+    <delete id="deleteAccessFlowTempByMap" parameterType="java.util.Map">
+		delete	from tbl_element_access_flow_temp where 1=1
+		<if test="operationType != null">
+			and operationType=#{operationType}
+		</if>
+    	
+    	<if test="currentHandlerUid != null">
+			and currentHandlerUid=#{currentHandlerUid} 
+		</if>
+		
+		<if test="templateType != null">
+			and templateType=#{templateType}
+		</if>
+    </delete>
+    
+</mapper>

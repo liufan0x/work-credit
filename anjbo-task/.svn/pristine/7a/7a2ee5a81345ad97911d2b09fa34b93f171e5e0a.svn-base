@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.fc.order.ReceivableReportMapper">
+   <select id="findByCity" resultType="DictDto" parameterType="java.lang.String">
+       select * from `anjbo-server-common`.tbl_common_dict where type=#{0} ORDER BY sort asc
+   </select>
+   <select id="findByreceivableHas" parameterType="java.util.Map" resultType="java.util.Map">
+       SELECT IFNULL(COUNT(b.orderNo),0) as orderCount,IFNULL(SUM(b.borrowingAmount),0) as orderAmountSum
+        from `anjbo-server-order`.tbl_order_list_base b
+		LEFT JOIN `anjbo-server-finance`.tbl_finance_receivable_has h on h.orderNo=b.orderNo
+		where b.orderNo is not null and (h.type = 1 or h.type=0)
+		and b.productCode =#{productCode}
+		and b.cityCode=#{cityCode}
+   </select>
+   <select id="findByOverHas" parameterType="java.util.Map" resultType="java.util.Map">
+       SELECT IFNULL(COUNT(b.orderNo),0) as orderCount,IFNULL(SUM(b.borrowingAmount),0) as orderAmountSum,IFNULL(SUM(h.datediff),0) as overDay ,IFNULL(MIN(h.datediff),0) as minDay
+        from `anjbo-server-order`.tbl_order_list_base b
+		LEFT JOIN `anjbo-server-finance`.tbl_finance_receivable_has h on h.orderNo=b.orderNo
+		where b.orderNo is not null and h.type = 2
+		and b.productCode =#{productCode}
+		and b.cityCode=#{cityCode}
+   </select>
+   <select id="findByLending" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT IFNULL(COUNT(b.orderNo),0) as orderCount,IFNULL(SUM(b.borrowingAmount),0) as orderAmountSum from `anjbo-server-order`.tbl_order_list_base b
+		LEFT JOIN `anjbo-server-finance`.tbl_finance_lending l on l.orderNo=b.orderNo
+		where l.lendingTime is not null
+		and b.productCode =#{productCode}
+		 and b.cityCode=#{cityCode}
+   </select>
+   <select id="findByNotLending" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT  IFNULL(COUNT(orderNo),0) as orderCount,IFNULL(SUM(borrowingAmount),0) as orderAmountSum  from `anjbo-server-order`.tbl_order_list_base 
+		where  ((auditSort=1 AND processId != 'placeOrder')or (auditSort=2 and processId !='notarization'))
+		and processId !='foreclosure' and processId !='forensics' and processId !='cancellation' 
+		and processId !='transfer' and processId !='newlicense' and processId !='receivableFor' and processId !='receivableForFirst' 
+		and processId !='mortgage' and processId !='receivableForEnd' and processId !='pay' and processId !='elementReturn' and processId !='isBackExpenses' and processId !='backExpenses'
+		and processId != 'rebate' and processId != 'fddMortgageRelease' and processId != 'release' and processId != 'closeOrder' and processId !='wanjie'
+		and productCode =#{productCode}
+		and cityCode=#{cityCode}
+   </select>
+   <select id="findByNotReceivable" parameterType="java.util.Map" resultType="java.util.Map">
+       SELECT  IFNULL(COUNT(orderNo),0) as orderCount,IFNULL(SUM(borrowingAmount),0) as orderAmountSum  from `anjbo-server-order`.tbl_order_list_base 
+		where  ( processId ='foreclosure' or processId ='forensics' or processId ='cancellation' or processId ='transfer' or processId ='newlicense' 
+			    or processId ='receivableFor' or processId ='receivableForFirst' or processId ='mortgage' or processId ='receivableForEnd' 
+			    or processId ='isBackExpenses' or processId ='backExpenses')
+		<if test="forType !=null and (forType=='1' or forType==1)"><![CDATA[ and planPaymentTime > now()]]> </if>
+		<if test="forType !=null and (forType=='2'or forType==2)"><![CDATA[ and planPaymentTime < now()]]> </if>
+ 		<if test="productCode !=null and productCode !='null' and productCode !=''">and productCode =#{productCode}</if>
+		and cityCode=#{cityCode}
+   </select>
+   <select id="findByNotReceivableAll"  parameterType="java.util.Map" resultType="java.util.Map">
+       SELECT  IFNULL(COUNT(orderNo),0) as orderCount,IFNULL(SUM(borrowingAmount),0) as orderAmountSum  from `anjbo-server-order`.tbl_order_list_base 
+	   where  processId ='foreclosure' or processId ='forensics' or processId ='cancellation' or processId ='transfer' or processId ='newlicense' 
+			    or processId ='receivableFor' or processId ='receivableForFirst' or processId ='mortgage' or processId ='receivableForEnd' 
+			    or processId ='isBackExpenses' or processId ='backExpenses'
+   </select>
+   <select id="findByNotOverAll" parameterType="java.util.Map" resultType="java.util.Map">
+       SELECT  IFNULL(COUNT(orderNo),0) as orderCount,IFNULL(SUM(borrowingAmount),0) as orderAmountSum  from `anjbo-server-order`.tbl_order_list_base 
+		where  (processId ='foreclosure' or processId ='forensics' or processId ='cancellation' or processId ='transfer' or processId ='newlicense' 
+			    or processId ='receivableFor' or processId ='receivableForFirst' or processId ='mortgage' or processId ='receivableForEnd' 
+			    or processId ='isBackExpenses' or processId ='backExpenses')
+		<![CDATA[ and planPaymentTime < now()]]> 
+   </select>
+   <select id="findByReport" parameterType="java.util.Map" resultType="java.lang.Integer">
+     select count(1) from `anjbo-server-order`.`tbl_order_receivable_report`
+     where productCode =#{productCode} and cityCode=#{cityCode}
+   </select>
+   <insert id="addReport" parameterType="java.util.Map">
+       INSERT INTO `anjbo-server-order`.`tbl_order_receivable_report` 
+       (
+        `createTime`, `updateTime`, `cityCode`, `cityName`, `productCode`, `productName`, `receivableCount`,
+        `receivableAmount`, `overdueCount`, `overdueAmount`, `lendingCount`, `lendingAmount`, `notLendingCount`,
+        `notLendingAmount`, `notReceivableCount`, `notReceivableAmount`, `notOverdueCount`,
+        `notOverdueAmount`, `notReceivableSum`, `notReceivableAmountSum`, `overdueAmountRatio`, `overdueAmountRatioByCount`, 
+        `overdueAmountRatioBySum`,  `overdueNumber`, `overdueDay`, `overdueBigDay`,`overDayCount`
+        ) VALUES (
+         now(), now(), #{cityCode}, #{cityName}, #{productCode}, #{productName}, #{receivableCount},
+         #{receivableAmount}, #{overdueCount}, #{overdueAmount}, #{lendingCount}, #{lendingAmount}, #{notLendingCount},
+         #{notLendingAmount}, #{notReceivableCount}, #{notReceivableAmount}, #{notOverdueCount}, 
+         #{notOverdueAmount}, #{notReceivableSum}, #{notReceivableAmountSum}, #{overdueAmountRatio}, #{overdueAmountRatioByCount},
+         #{overdueAmountRatioBySum}, #{overdueNumber}, #{overdueDay}, #{overdueBigDay},#{overDayCount}
+        );
+   </insert>
+   <delete id="deleteReport" parameterType="java.util.Map">
+     delete from `anjbo-server-order`.`tbl_order_receivable_report` 
+     where productCode =#{productCode} and cityCode=#{cityCode}
+   </delete>
+</mapper>

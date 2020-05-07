@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.DocumentsReturnMapper">
+   
+    <sql id="Base_Column_List">
+        id, createUid, createTime, updateUid, updateTime, orderNo, returnTime,remark,handleUid,returnImgUrl,returnHandleName
+    </sql>
+    
+    <select id="detail" parameterType="java.lang.String" resultType="documentsReturnDto">
+    	select 
+    		<include refid="Base_Column_List"/>
+    	from tbl_element_documents_return WHERE orderNo=#{orderNo} ORDER BY createTime DESC LIMIT 1;
+    </select>
+    
+    <insert id="insert" parameterType="DocumentsReturnDto">
+        insert into tbl_element_documents_return 
+        (
+        	id, createUid, createTime, 
+            updateUid, orderNo,handleUid,returnHandleName, 
+            returnTime,remark,returnImgUrl
+          )
+        values (
+        	null, #{createUid}, now(), 
+            #{updateUid}, #{orderNo}, #{handleUid},#{returnHandleName},
+            #{returnTime},#{remark},#{returnImgUrl}
+            )
+    </insert>
+    
+    <update id="update" parameterType="documentsReturnDto">
+        update tbl_element_documents_return
+        <set>
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+            <if test="returnTime != null">
+                returnTime = #{returnTime},
+            </if>
+            <if test="remark!=null and remark!=''">
+            	remark = #{remark},
+            </if>
+            <if test="returnImgUrl!=null and returnImgUrl!=''">
+            	returnImgUrl = #{returnImgUrl},
+            </if>
+            <if test="returnHandleName!=null and returnHandleName!=''">
+            	returnHandleName = #{returnHandleName},
+            </if>
+            <if test="handleUid!=null and handleUid!=''">
+            	handleUid = #{handleUid}
+            </if>
+        </set>
+        where orderNo = #{orderNo} ORDER BY createTime DESC LIMIT 1;
+    </update>
+</mapper>

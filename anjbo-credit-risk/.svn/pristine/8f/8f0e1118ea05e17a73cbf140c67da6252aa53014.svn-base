@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.RiskModelConfigMapper">
+    
+	<select id="selectCreditList" parameterType="Map" resultType="RiskModelConfigDto">
+		select * from tbl_risk_model_config 
+		limit ${start},${pageSize}
+	</select>
+	
+	<select id="selectCreditCount" parameterType="Map" resultType="int">
+		select count(1) from tbl_risk_model_config 
+	</select>
+	
+	<update id="updateCredit" parameterType="Map">
+		update tbl_risk_model_config 
+		set 
+			auditFirstResult = #{auditFirstResult},
+			auditFinalResult = #{auditFinalResult},
+			uid = #{uid}
+		where id = #{id}
+	</update>
+</mapper>

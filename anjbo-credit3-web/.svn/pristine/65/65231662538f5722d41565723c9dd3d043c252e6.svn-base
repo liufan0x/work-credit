@@ -1,0 +1,163 @@
+<style>
+    .form-inline.w112 label{width:112px;}
+    .form-inline.w154 label{width:154px;}
+    .form-inline.w154 .form-control{width:150px}
+</style>
+<form name="ordinaryAppointForm">
+<div>
+    <div class="row form-inline detail-row" style="padding:0 10px;" ng-if="relationOrderNo == 0">
+        <div class="col-md-6 col-lg-6 ">
+            <label  style="width:154px;">客户姓名: </label> <span ng-bind="ordinaryObj.borrowerName"></span>
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <label  style="width:154px;">手机号:</label> <span ng-bind="ordinaryObj.phoneNumber"></span>
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <label  style="width:154px;">借款金额:</label><input type="text" string-to-number name="appointApplyAmt" ng-model="ordinaryObj.loanAmount"  class="form-control" required/> 万元
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="ordinaryAppointForm.appointApplyAmt.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <label  style="width:154px;">借款期限:</label><input type="text" string-to-number name="appointApplyTnr" ng-model="ordinaryObj.borrowingDays"  class="form-control" required/>天
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="ordinaryAppointForm.appointApplyTnr.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-6" ng-if="productCode!='03' &&  '07'!= productCode">
+        <label style="width:154px;">原贷款是否银行：</label>
+			<span ng-if="ordinaryObj.isOldLoanBank==1">是</span>
+			<span ng-if="ordinaryObj.isOldLoanBank==2">否</span>
+	    </div>
+		
+		<div class="col-md-6 col-lg-6" ng-if="ordinaryObj.isOldLoanBank==2 && productCode!='03'"><label style="width:154px;">原贷款地点：</label>
+			<span ng-bind="ordinaryObj.oldLoanBankName"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-6" ng-if="ordinaryObj.isOldLoanBank==1 && productCode!='03' || productCode=='07'"><label style="width:154px;">原贷款银行-支行：</label>
+			<span ng-bind="ordinaryObj.oldLoanBankName"></span>-<span ng-bind="ordinaryObj.oldLoanBankSubName"></span>
+		</div>
+		<!-- <div class="col-md-6 col-lg-6" ng-if="productCode=='07'"><label style="width:154px;">原贷款银行-支行：</label>
+			<span ng-bind="ordinaryObj.oldLoanBankName"></span>-<span ng-bind="ordinaryObj.oldLoanBankSubName"></span>
+		</div> -->
+     	<div class="col-md-6 col-lg-6" ng-if="productCode=='03'&&  '07'!= productCode"><label style="width:154px;">新贷款是否银行： </label>
+     	    <span ng-if="productCode=='03'">
+	            <select class="form-control" name="isLoanBank" style="width:178px;" ng-model="ordinaryObj.isLoanBank"  ng-options="x.id as x.name for x in obligeeB">
+		    		<option style="display:none" value="{{x[0].id}}">{{x[0].name}}</option>
+		    	</select>
+		    	<span class="inputError" ng-show="isAudit">
+						<error class="text-danger" ng-show="ordinaryAppointForm.isLoanBank.$error.required">必选</error>
+			    </span>
+		    </span> 
+			<span ng-if="ordinaryObj.isLoanBank == 1 && productCode!='03'">是</span>
+			<span ng-if="ordinaryObj.isLoanBank == 2 && productCode!='03'">否</span>
+		</div>
+		<div class="col-md-6 col-lg-6" ng-if="ordinaryObj.isLoanBank == 2 && productCode=='03'"><label>新贷款地点：</label>
+			<input type="text" class="form-control" name="oldLoanBankName" ng-disabled="all" ng-model="ordinaryObj.loanBankName" required >
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="borrowForm.oldLoanBankName.$error.required">必填</error>
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-6" ng-if="ordinaryObj.isLoanBank == 1 && productCode=='03'"><label style="width:158px;" >新贷款银行-支行：</label>
+			<bank-sub-bank bank-id="ordinaryObj.loanBankNameId" bank-name="ordinaryObj.loanBankName" is-disabled="{{all}}" sub-bank-id="ordinaryObj.loanSubBankNameId" sub-bank-name="ordinaryObj.loanSubBankName"></bank-sub-bank>
+		</div>
+		
+		<div class="col-md-6 col-lg-6" ng-if="ordinaryObj.isLoanBank == 2 && productCode!='03'"><label style="width:154px;">新贷款地点：</label>
+			<span ng-bind="ordinaryObj.loanBankName"></span>
+		</div>
+		<div class="col-md-6 col-lg-6" ng-if="ordinaryObj.isLoanBank == 1 && productCode!='03' || productCode=='07'"><label style="width:154px;">新贷款银行-支行：</label>
+			<span ng-bind="ordinaryObj.loanBankName"></span>-<span ng-bind="ordinaryObj.loanSubBankName"></span>
+		</div>
+	
+        <div class="col-md-12 col-lg-6" ng-if="productCode!='03'&&  '07'!= productCode"><label style="width:154px;" >是否一次性回款：</label>
+			<span ng-if="ordinaryObj.isOnePay==1">是</span>
+			<span ng-if="ordinaryObj.isOnePay==2">否</span>
+		</div>
+		<list ng-repeat="idea in ordinaryObj.orderReceivableForDto" ng-if="productCode=='01'">
+        <div class="col-md-6 col-lg-6 w154"><label style="width:154px;">计划回款时间:</label>
+            <span ng-bind="idea.payMentAmountDateStr"></span>
+        </div>
+        </list>
+    </div>
+    
+    <!-- 畅贷信息 start -->
+    <div  class="row form-inline detail-row" style="padding:0 10px;" ng-if="relationOrderNo != 0 ">
+    	<div class="col-md-6 col-lg-6 ">
+            <label  style="width:154px;">客户姓名: </label> <span ng-bind="borrow.borrowerName"></span>
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <label  style="width:154px;">手机号:</label> <span ng-bind="borrow.phoneNumber"></span>
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <label  style="width:154px;">借款金额:</label><span ng-bind="borrow.loanAmount"></span>万元
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <label  style="width:154px;">借款期限:</label><span ng-bind="borrow.borrowingDays"></span>天
+        </div>
+        <div class="col-md-6 col-lg-6">
+        <label style="width:154px;">原贷款是否银行：</label>
+			<span ng-if="borrow.isOldLoanBank==1">是</span>
+			<span ng-if="borrow.isOldLoanBank==2">否</span>
+	    </div>
+		
+		<div class="col-md-6 col-lg-6" ng-if="borrow.isOldLoanBank==2"><label style="width:154px;">原贷款地点：</label>
+			<span ng-bind="borrow.oldLoanBankName"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-6" ng-if="borrow.isOldLoanBank==1"><label style="width:154px;">原贷款银行-支行：</label>
+			<span ng-bind="borrow.oldLoanBankName"></span>-<span ng-bind="borrow.oldLoanBankSubName"></span>
+		</div>
+     	<div class="col-md-6 col-lg-6"><label style="width:154px;">新贷款是否银行： </label>
+			<span ng-if="borrow.isLoanBank == 1">是</span>
+			<span ng-if="borrow.isLoanBank == 2">否</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-6" ng-if="borrow.isLoanBank == 2"><label style="width:154px;">新贷款地点：</label>
+			<span ng-bind="borrow.loanBankName"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-6" ng-if="borrow.isLoanBank == 1"><label style="width:154px;">新贷款银行-支行：</label>
+			<span ng-bind="borrow.loanBankName"></span>-<span ng-bind="borrow.loanSubBankName"></span>
+		</div>
+        <div class="col-md-12 col-lg-6"><label style="width:154px;">是否一次性回款：</label>
+			<span ng-if="borrow.isOnePay==1">是</span>
+			<span ng-if="borrow.isOnePay==2">否</span>
+		</div>
+		<list ng-repeat="idea in borrow.orderReceivableForDto">
+			<div class="col-md-6 col-lg-6" ng-if="borrow.isOnePay!='' && $index==0"><label  style="width:154px;>计划回款时间：</label>
+				<span ng-bind="idea.payMentAmountDateStr"></span>
+			</div>
+			<div class="col-md-6 col-lg-6" ng-if="borrow.isOnePay!='' && $index==0"><label>&nbsp;</label></div>
+			<div class="col-md-6 col-lg-6" ng-if="borrow.isOnePay!='' && $index==1"><label  style="width:154px;>再次计划回款时间：</label>
+				<span ng-bind="idea.payMentAmountDateStr"></span>
+			</div>
+		</list>
+    </div>
+	<div ng-if="relationOrderNo != 0">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;关联订单信息</div>
+		<div class="row detail-row w145 form-inline">	
+			<div class="col-md-6 col-lg-6">
+			    <label style="width:154px;">业务类型：</label>
+				<span>畅贷</span>
+			</div>
+			<div class="col-md-6 col-lg-6">
+            <label  style="width:154px;">借款金额:</label><input type="text" string-to-number name="appointApplyAmt" ng-model="ordinaryObj.loanAmount"  class="form-control" required/> 万元
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="ordinaryAppointForm.appointApplyAmt.$error.required">必填</error>
+		    </span>
+	        </div>
+	        <div class="col-md-6 col-lg-6">
+	            <label  style="width:154px;">借款期限:</label><input type="text" string-to-number name="appointApplyTnr" ng-model="ordinaryObj.borrowingDays"  class="form-control" required/>天
+	            <span class="inputError" ng-show="isAudit">
+						<error class="text-danger" ng-show="ordinaryAppointForm.appointApplyTnr.$error.required">必填</error>
+			    </span>
+	        </div>
+			
+			<div class="col-md-6 col-lg-4"><label style="width:154px;">收费标准：</label>
+				<span ng-bind="cdBorrow.riskGrade"></span>
+			</div>
+		</div>
+	</div>
+<!-- 畅贷信息 end -->
+</div>
+</form>

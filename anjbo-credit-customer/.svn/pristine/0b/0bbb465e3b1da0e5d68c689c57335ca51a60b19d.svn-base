@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.anjbo.dao.CustomerAgencyFeescaleMapper">	
+	<!-- where条件引用sql-->
+	<sql id="customerAgencyFeescaleWhereSQL">
+		<where>
+	       		<if test="agencyTypeId != null and agencyTypeId > 0">
+					and `agencyTypeId` = #{agencyTypeId}
+				</if>
+	       		<if test="productionid != null and productionid > 0">
+					and `productionid` = #{productionid}
+				</if>
+	       		<if test="servicefee != null and servicefee > 0">
+					and `servicefee` = #{servicefee}
+				</if>
+	       		<if test="counterfee != null and counterfee > 0">
+					and `counterfee` = #{counterfee}
+				</if>
+	       		<if test="otherfee != null and otherfee > 0">
+					and `otherfee` = #{otherfee}
+				</if>
+	       		<if test="createTime != null">
+					and `createTime` = #{createTime}
+				</if>
+	       		<if test="updateTime != null">
+					and `updateTime` = #{updateTime}
+				</if>
+	       		<if test="createUid != null and createUid != ''">
+					and `createUid` = #{createUid}
+				</if>
+	       		<if test="updateUid != null and updateUid != ''">
+					and `updateUid` = #{updateUid}
+				</if>
+	       		<if test="remark != null and remark != ''">
+					and `remark` = #{remark}
+				</if>
+		</where>
+	</sql>
+	<!-- 获取收费标准列表-->
+	<select id="selectCustomerAgencyFeescaleList" parameterType="customerAgencyFeescaleDto" resultType="customerAgencyFeescaleDto">
+		select * from tbl_customer_agency_feescale 
+		<include refid="customerAgencyFeescaleWhereSQL" />
+		<if test="pageSize>0">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	
+	<!-- 获取收费标准总数-->
+	<select id="selectCustomerAgencyFeescaleCount" parameterType="customerAgencyFeescaleDto" resultType="int">
+		select count(*) from tbl_customer_agency_feescale 
+		<include refid="customerAgencyFeescaleWhereSQL" />
+	</select>	
+		
+	<!-- 新增收费标准-->
+	<insert id="addCustomerAgencyFeescale" parameterType="customerAgencyFeescaleDto">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		insert	into tbl_customer_agency_feescale(
+			<trim suffixOverrides=",">
+				<if test="agencyTypeId != null">`agencyTypeId`,</if>
+				<if test="productionid != null">`productionid`,</if>
+				<if test="servicefee != null">`servicefee`,</if>
+				<if test="counterfee != null">`counterfee`,</if>
+				<if test="otherfee != null">`otherfee`,</if>
+				<if test="createTime != null">`createTime`,</if>
+				<if test="updateTime != null">`updateTime`,</if>
+				<if test="createUid != null">`createUid`,</if>
+				<if test="updateUid != null">`updateUid`,</if>
+				<if test="remark != null">`remark`,</if>
+				<if test="riskGradeId>0">`riskGradeId`,</if>
+			</trim>
+		)
+		values(	
+			<trim suffixOverrides=",">
+				<if test="agencyTypeId != null">#{agencyTypeId},</if>
+				<if test="productionid != null">#{productionid},</if>
+				<if test="servicefee != null">#{servicefee},</if>
+				<if test="counterfee != null">#{counterfee},</if>
+				<if test="otherfee != null">#{otherfee},</if>
+				<if test="createTime != null">#{createTime},</if>
+				<if test="updateTime != null">#{updateTime},</if>
+				<if test="createUid != null">#{createUid},</if>
+				<if test="updateUid != null">#{updateUid},</if>
+				<if test="remark != null">#{remark},</if>
+				<if test="riskGradeId>0">#{riskGradeId},</if>
+			</trim>
+		)
+	</insert>
+
+	<insert id="batchAddCustomerAgencyFeescale" parameterType="java.util.List">
+		<foreach collection="list" item="obj" separator=";">
+			INSERT INTO tbl_customer_agency_feescale
+			(
+			agencyTypeId,productionid,
+			servicefee,counterfee,
+			otherfee,createTime,
+			createUid,remark,
+			riskGradeId)
+			VALUES
+			(
+			#{obj.agencyTypeId},#{obj.productionid},
+			#{obj.servicefee},#{obj.counterfee},
+			#{obj.otherfee},now(),
+			#{obj.createUid},#{obj.remark},
+			#{obj.riskGradeId}
+			)
+		</foreach>
+	</insert>
+	<!-- 修改收费标准-->
+	<update id="updateCustomerAgencyFeescale" parameterType="customerAgencyFeescaleDto" >
+	 update tbl_customer_agency_feescale
+	<set> 
+			<trim suffixOverrides=",">
+				<if test="agencyTypeId != null">`agencyTypeId` = #{agencyTypeId},</if>
+				<if test="productionid != null">`productionid` = #{productionid},</if>
+				<if test="servicefee != null">`servicefee` = #{servicefee},</if>
+				<if test="counterfee != null">`counterfee` = #{counterfee},</if>
+				<if test="otherfee != null">`otherfee` = #{otherfee},</if>
+				<if test="createTime != null">`createTime` = #{createTime},</if>
+				<if test="updateTime != null">`updateTime` = #{updateTime},</if>
+				<if test="createUid != null">`createUid` = #{createUid},</if>
+				<if test="updateUid != null">`updateUid` = #{updateUid},</if>
+				<if test="remark != null">`remark` = #{remark},</if>
+			</trim>
+	</set> 
+	 where id = #{id}
+	</update>
+
+	<!-- 根据ID删除收费标准-->
+    <delete id="deleteCustomerAgencyFeescaleById" parameterType="int">
+		delete	from tbl_customer_agency_feescale where id = #{0}
+    </delete>
+
+	<!-- 根据ID查询收费标准 -->
+	<select id="selectCustomerAgencyFeescaleById" parameterType="int" resultType="customerAgencyFeescaleDto">
+		select	* from tbl_customer_agency_feescale where id = #{0}
+	</select>
+
+	<select id="selectCustomerAgencyFeescaleByAgencyIdAndProductionid" parameterType="customerAgencyFeescaleDto" resultType="customerAgencyFeescaleDto">
+		SELECT * FROM tbl_customer_agency_feescale WHERE agencyTypeId=#{agencyTypeId} AND productionid=#{productionid}
+	</select>
+
+	<delete id="deleteCustomerAgencyFeescaleByAgencyIdAndProductionid" parameterType="customerAgencyFeescaleDto">
+		  DELETE FROM tbl_customer_agency_feescale WHERE agencyTypeId=#{agencyTypeId} AND productionid=#{productionid}
+	</delete>
+</mapper>

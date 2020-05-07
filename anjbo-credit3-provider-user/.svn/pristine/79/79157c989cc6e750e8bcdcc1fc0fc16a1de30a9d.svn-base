@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.AgencyFeescaleSectionMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=feescaleid and feescaleid>0"> AND `feescaleid`=#{feescaleid}</if>
+		<if test="null!=raskcontrolid and raskcontrolid>0"> AND `raskcontrolid`=#{raskcontrolid}</if>
+		<if test="null!=section and section>0"> AND `section`=#{section}</if>
+		<if test="null!=maxSection and maxSection>0"> AND `maxSection`=#{maxSection}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<if test="null!=remark and ''!=remark"> AND `remark`=#{remark}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="AgencyFeescaleSectionDto" resultType="AgencyFeescaleSectionDto">    
+	SELECT `id`, `feescaleid`, `raskcontrolid`, `section`, `maxSection`, `createTime`, `updateTime`, `createUid`, `updateUid`, `remark` 
+	FROM tbl_customer_agency_feescale_section 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="AgencyFeescaleSectionDto" resultType="AgencyFeescaleSectionDto">
+	SELECT `id`, `feescaleid`, `raskcontrolid`, `section`, `maxSection`, `createTime`, `updateTime`, `createUid`, `updateUid`, `remark`
+	FROM tbl_customer_agency_feescale_section 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="AgencyFeescaleSectionDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_customer_agency_feescale_section 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="AgencyFeescaleSectionDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_customer_agency_feescale_section(
+		`feescaleid`,
+		`raskcontrolid`,
+		`section`,
+		`maxSection`,
+		`createTime`,
+		`updateTime`,
+		`createUid`,
+		`updateUid`,
+		`remark`
+	) VALUES(
+		#{feescaleid},
+		#{raskcontrolid},
+		#{section},
+		#{maxSection},
+		now(),
+		now(),
+		#{createUid},
+		#{createUid},
+		#{remark}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="AgencyFeescaleSectionDto" >
+    DELETE FROM tbl_customer_agency_feescale_section 
+	WHERE ID=#{id}
+  </delete>
+  
+  <update id="update" parameterType="AgencyFeescaleSectionDto" >
+    UPDATE tbl_customer_agency_feescale_section
+	<set>
+		<if test="null!=feescaleid">`feescaleid`=#{feescaleid},</if>
+		<if test="null!=raskcontrolid">`raskcontrolid`=#{raskcontrolid},</if>
+		<if test="null!=section">`section`=#{section},</if>
+		<if test="null!=maxSection">`maxSection`=#{maxSection},</if>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=remark">`remark`=#{remark},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

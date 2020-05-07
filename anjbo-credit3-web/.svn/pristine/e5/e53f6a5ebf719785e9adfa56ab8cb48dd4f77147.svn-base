@@ -1,0 +1,23 @@
+<div class="container-fluid" id="auditFinal">
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;风控终审意见
+		<a ng-show="!isEdit" style="display:inline-block;float:right;padding-right: 10px;" ui-sref="orderList" >返回上一步</a>
+		<span ng-show="isEdit" class="detail-trash2 text-danger" ng-click="deleteDetail('audit-final-detail')" >隐藏</span>
+			<div style="position:absolute;right:400px;top:0px;">
+			  <span id="elementFlag" ng-bind="elementFlag">是否已收到要件：是</span>
+			  <span><a id="elementInfo" ng-bind="elementInfo" ng-click="showDetail('elementEntrance');">要件详情</a></span>
+			</div>
+	</div>
+	<div class="col-md-12 col-lg-12" ng-if="productCode=='04'">
+			<label>&nbsp;&nbsp;放款条件：<span ng-bind="obj.paymentType"></span></label> 
+	</div>
+	<div class="col-md-12 detail-row">
+		&nbsp;&nbsp;终审意见
+		（终审人：<span class="text-danger" ng-bind="obj.handleName"></span>
+		终审结果：<span class="text-danger" ng-if="obj.auditStatus==1">通过</span>
+				  <span class="text-danger" ng-if="obj.auditStatus==2">不通过(退回)</span>
+				  <span class="text-danger" ng-if="obj.auditStatus==3">上报首席风险官</span>
+				   <span class="text-danger" ng-if="obj.auditStatus==4">上报复核审批</span>）  
+		<span ng-bind="obj.auditTime|date:'yyyy-MM-dd HH:mm'"></span>
+	</div>
+	<textarea  readonly="readonly" ng-bind="obj.remark" style="background:transparent;resize:none;outline:medium;border:none;width:94%;padding:10px;line-height: 30px;" disabled="disabled "/>
+</div>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.ReceivableHasMapper">
+
+  <!-- 查询详情 --> 
+  <select id="findByReceivableHas" parameterType="ReceivableHasDto" resultType="ReceivableHasDto">
+      select * from tbl_finance_receivable_has where orderNo=#{orderNo} order by createTime desc limit 1
+  </select>
+
+  <!-- 添加数据 -->
+   <insert id="addReceivableHas" parameterType="ReceivableHasDto">
+	   INSERT INTO `tbl_finance_receivable_has` (
+	      `createTime`, `createUid`, `updateUid`, `orderNo`, `type`,`refund`,`penaltyPayable`,`datediff`,`remark`
+	   ) VALUES (
+	       now(), #{createUid}, #{updateUid},  #{orderNo}, #{type},#{refund},#{penaltyPayable},#{datediff},#{remark}
+	   )
+  </insert>
+  <!-- 完善信息 -->
+   <update id="updateReceivableHas" parameterType="ReceivableHasDto">
+      update tbl_finance_receivable_has set updateUid=#{updateUid},
+      type=#{type},refund=#{refund},penaltyPayable=#{penaltyPayable},datediff=#{datediff},remark=#{remark}
+      where orderNo = #{orderNo}
+  </update>
+ <!-- 删除信息 -->
+  <delete id="delectReceivableHas" parameterType="java.lang.String">
+	     delete  from tbl_finance_receivable_has where status=0 and orderNo=#{0} order by createTime desc limit 1
+  </delete>
+  <!-- 修改信息 撤回用 -->
+  <update id="updwithdraw" parameterType="ReceivableHasDto" >
+  	     update tbl_finance_receivable_has set status=0 where orderNo=#{orderNo} and status=1 order by updateTime desc limit 1
+  </update>
+  
+</mapper>

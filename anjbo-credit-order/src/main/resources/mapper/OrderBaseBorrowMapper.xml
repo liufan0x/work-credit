@@ -1,0 +1,496 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.OrderBaseBorrowMapper" >
+	
+	<!-- 添加订单借款信息 -->
+	<insert id="saveOrderBorrow" parameterType="OrderBaseBorrowDto">
+		INSERT INTO tbl_order_base_borrow (
+			createUid,
+			createTime,
+			orderNo,
+			<if test="agencyId != null and agencyId > 0">
+				agencyId,
+			</if>
+			cityCode,
+			cityName,
+			productCode,
+			productName,
+			cooperativeAgencyId,
+			agencyName,
+			agencyTypeName,
+			channelManagerUid,
+			acceptMemberUid,
+			notarialUid,
+			facesignUid,
+			elementUid,
+			branchCompany,
+			borrowerName,
+			phoneNumber,
+			isOldLoanBank,
+			oldLoanBankName,
+			oldLoanBankSubName,
+			oldLoanBankNameId,
+			oldLoanBankSubNameId,
+			oldLoanBankManager,
+			oldLoanBankManagerPhone,
+			isLoanBank,
+			loanBankName,
+			loanSubBankName,
+			loanBankNameId,
+			loanSubBankNameId,
+			loanBankNameManagerPhone,
+			loanBankNameManager,
+			borrowingDays,
+			loanAmount,
+			rate,
+			overdueRate,
+			chargeMoney,
+			customsPoundage,
+			riskGradeId,
+			otherPoundage,
+			isRebate,
+			rebateMoney,
+			rebateBankId,
+			rebateBankSubId,
+			rebateBank,
+			rebateSubBank,
+			rebateBankCardName,
+			rebateBankCardNum,
+			isOnePay,
+			remark,
+			paymentMethod,
+			serviceCharge,
+			customerType
+		)
+		VALUES
+		(
+			#{createUid},
+			now(),
+			#{orderNo},
+			<if test="agencyId != null and agencyId > 0">
+				#{agencyId},
+			</if>
+			#{cityCode},
+			#{cityName},
+			#{productCode},
+			#{productName},
+			#{cooperativeAgencyId},
+			#{agencyName},
+			#{agencyTypeName},
+			#{channelManagerUid},
+			#{acceptMemberUid},
+			#{notarialUid},
+			#{facesignUid},
+			#{elementUid},
+			#{branchCompany},
+			#{borrowerName},
+			#{phoneNumber},
+			#{isOldLoanBank},
+			#{oldLoanBankName},
+			#{oldLoanBankSubName},
+			#{oldLoanBankNameId},
+			#{oldLoanBankSubNameId},
+			#{oldLoanBankManager},
+			#{oldLoanBankManagerPhone},
+			#{isLoanBank},
+			#{loanBankName},
+			#{loanSubBankName},
+			#{loanBankNameId},
+			#{loanSubBankNameId},
+			#{loanBankNameManagerPhone},
+			#{loanBankNameManager},
+			#{borrowingDays},
+			#{loanAmount},
+			#{rate},
+			#{overdueRate},
+			#{chargeMoney},
+			#{customsPoundage},
+			#{riskGradeId},
+			#{otherPoundage},
+			#{isRebate},
+			#{rebateMoney},
+			#{rebateBankId},
+			#{rebateBankSubId},
+			#{rebateBank},
+			#{rebateSubBank},
+			#{rebateBankCardName},
+			#{rebateBankCardNum},
+			#{isOnePay},
+			#{remark},
+			#{paymentMethod},
+			#{serviceCharge},
+			#{customerType}
+		)
+	</insert>
+	
+	<!-- 修改订单借款信息 -->
+	<update id="updateOrderBorrow" parameterType="OrderBaseBorrowDto">
+	  	UPDATE tbl_order_base_borrow 
+	  	<set>
+	  		<if test="createUid != null and createUid != ''">
+	  			createUid = #{createUid},
+	  		</if>
+	  		<if test="updateUid != null and updateUid != ''">
+	  			updateUid = #{updateUid},
+	  		</if>
+	  		<if test="agencyId != null and agencyId > 0">
+	  			agencyId = #{agencyId},
+	  		</if>
+	  		<if test="cityCode != null and cityCode != ''">
+	  			cityCode = #{cityCode},
+	  		</if>
+	  		<if test="cityName != null and cityName != ''">
+	  			cityName = #{cityName},
+	  		</if>
+	  		<if test="productCode != null and productCode != ''">
+	  			productCode = #{productCode},
+	  		</if>
+	  		<if test="productName != null and productName != ''">
+	  			productName = #{productName},
+	  		</if>
+	  		<if test="cooperativeAgencyId != null and cooperativeAgencyId > 0">
+	  			cooperativeAgencyId = #{cooperativeAgencyId},
+	  		</if>
+	  		<if test="agencyName != null and agencyName != ''">
+	  			agencyName = #{agencyName},
+	  		</if>
+	  		<if test="agencyTypeName != null and agencyTypeName != ''">
+	  			agencyTypeName = #{agencyTypeName},
+	  		</if>
+	  		<if test="channelManagerUid != null and channelManagerUid != ''">
+	  			channelManagerUid = #{channelManagerUid},
+	  		</if>
+	  		<if test="acceptMemberUid != null and acceptMemberUid != ''">
+	  			acceptMemberUid = #{acceptMemberUid},
+	  		</if>
+	  		<if test="notarialUid != null and notarialUid != ''">
+	  			notarialUid = #{notarialUid},
+	  		</if>
+	  		<if test="facesignUid != null and facesignUid != ''">
+	  			facesignUid = #{facesignUid},
+	  		</if>
+	  		<if test="elementUid != null and elementUid != ''">
+	  			elementUid = #{elementUid},
+	  		</if>
+	  		<if test="branchCompany != null and branchCompany != ''">
+	  			branchCompany = #{branchCompany},
+	  		</if>
+	  		<if test="borrowerName != null and borrowerName != ''">
+	  			borrowerName = #{borrowerName},
+	  		</if>
+	  		<if test="phoneNumber != null and phoneNumber != ''">
+	  			phoneNumber = #{phoneNumber},
+	  		</if>
+	  		<if test="isOldLoanBank != null and isOldLoanBank > 0">
+	  			isOldLoanBank = #{isOldLoanBank},
+	  		</if>
+	  		<if test="oldLoanBankName != null and oldLoanBankName != ''">
+	  			oldLoanBankName = #{oldLoanBankName},
+	  		</if>
+	  		<if test="oldLoanBankSubName != null and oldLoanBankSubName != ''">
+	  			oldLoanBankSubName = #{oldLoanBankSubName},
+	  		</if>
+	  		<if test="oldLoanBankNameId != null and oldLoanBankNameId > 0">
+	  			oldLoanBankNameId = #{oldLoanBankNameId},
+	  		</if>
+	  		<if test="oldLoanBankSubNameId != null and oldLoanBankSubNameId > 0">
+	  			oldLoanBankSubNameId = #{oldLoanBankSubNameId},
+	  		</if>
+	  		<if test="oldLoanBankManager != null and oldLoanBankManager != ''">
+	  			oldLoanBankManager = #{oldLoanBankManager},
+	  		</if>
+	  		<if test="oldLoanBankManagerPhone != null and oldLoanBankManagerPhone != ''">
+	  			oldLoanBankManagerPhone = #{oldLoanBankManagerPhone},
+	  		</if>
+	  		<if test="isLoanBank != null and isLoanBank > 0">
+	  			isLoanBank = #{isLoanBank},
+	  		</if>
+	  		<if test="loanBankName != null and loanBankName != ''">
+	  			loanBankName = #{loanBankName},
+	  		</if>
+	  		<if test="loanSubBankName != null and loanSubBankName != ''">
+	  			loanSubBankName = #{loanSubBankName},
+	  		</if>
+	  		<if test="loanBankNameId != null and loanBankNameId > 0">
+	  			loanBankNameId = #{loanBankNameId},
+	  		</if>
+	  		<if test="loanSubBankNameId != null and loanSubBankNameId > 0">
+	  			loanSubBankNameId = #{loanSubBankNameId},
+	  		</if>
+	  		<if test="loanBankNameManagerPhone != null and loanBankNameManagerPhone != ''">
+	  			loanBankNameManagerPhone = #{loanBankNameManagerPhone},
+	  		</if>
+	  		<if test="loanBankNameManager != null and loanBankNameManager != ''">
+	  			loanBankNameManager = #{loanBankNameManager},
+	  		</if>
+	  		<if test="borrowingDays != null and borrowingDays > 0">
+	  			borrowingDays = #{borrowingDays},
+	  		</if>
+	  		<if test="loanAmount != null and loanAmount > 0">
+	  			loanAmount = #{loanAmount},
+	  		</if>
+	  		<if test="rate != null and rate > -1">
+	  			rate = #{rate},
+	  		</if>
+	  		<if test="overdueRate != null and overdueRate > -1">
+	  			overdueRate = #{overdueRate},
+	  		</if>
+	  		<if test="chargeMoney != null and chargeMoney > -1">
+	  			chargeMoney = #{chargeMoney},
+	  		</if>
+	  		<if test="customsPoundage != null and customsPoundage >-1">
+	  			customsPoundage = #{customsPoundage},
+	  		</if>
+	  		<if test="riskGradeId != null and riskGradeId > -1">
+	  			riskGradeId = #{riskGradeId},
+	  		</if>
+	  		<if test="otherPoundage != null and otherPoundage > -1">
+	  			otherPoundage = #{otherPoundage},
+	  		</if>
+	  		<if test="isRebate != null and isRebate != 0">
+	  			isRebate = #{isRebate},
+	  		</if>
+	  		<if test="rebateMoney != null and rebateMoney > 0">
+	  			rebateMoney = #{rebateMoney},
+	  		</if>
+	  		<if test="rebateBankId != null and rebateBankId != 0">
+	  			rebateBankId = #{rebateBankId},
+	  		</if>
+	  		<if test="rebateBankSubId != null and rebateBankSubId != 0">
+	  			rebateBankSubId = #{rebateBankSubId},
+	  		</if>
+	  		<if test="rebateBank != null and rebateBank != ''">
+	  			rebateBank = #{rebateBank},
+	  		</if>
+	  		<if test="rebateSubBank != null and rebateSubBank != ''">
+	  			rebateSubBank = #{rebateSubBank},
+	  		</if>
+	  		<if test="rebateBankCardName != null and rebateBankCardName != ''">
+	  			rebateBankCardName = #{rebateBankCardName},
+	  		</if>
+	  		<if test="rebateBankCardNum != null and rebateBankCardNum != ''">
+	  			rebateBankCardNum = #{rebateBankCardNum},
+	  		</if>
+	  		<if test="isOnePay != null and isOnePay != 0">
+	  			isOnePay = #{isOnePay},
+	  		</if>
+	  		<if test="remark != null and remark != ''">
+	  			remark = #{remark},
+	  		</if>
+	  		<if test="isFinish != null and isFinish != 0">
+	  			isFinish = #{isFinish},
+	  		</if>
+	  		<if test="paymentMethod != null and paymentMethod > 0">
+	  			paymentMethod = #{paymentMethod},
+	  		</if>
+	  		<if test="serviceCharge != null and serviceCharge > -1">
+	  			serviceCharge = #{serviceCharge},
+	  		</if>
+	  		<if test="customerType != null and customerType > 0">
+	  			customerType = #{customerType},
+	  		</if>
+	  		<if test="financeOutLoanTimeStr != null and financeOutLoanTimeStr != ''">
+	  			financeOutLoanTime = #{financeOutLoanTimeStr},
+	  		</if>
+	  		updateTime = now()
+	  	</set>
+	  	WHERE orderNo = #{orderNo}
+  	</update>
+  	
+  	<!-- 修改订单借款信息 -->
+	<update id="updateOrderBorrowNull" parameterType="OrderBaseBorrowDto">
+	  	UPDATE tbl_order_base_borrow 
+	  	SET
+	  			updateUid = #{updateUid},
+	  			cooperativeAgencyId = #{cooperativeAgencyId},
+	  			agencyName = #{cooperativeAgencyName},
+	  			channelManagerUid = #{channelManagerUid},
+	  			notarialUid = #{notarialUid},
+	  			facesignUid = #{facesignUid},
+	  			elementUid = #{elementUid},
+	  			branchCompany = #{branchCompany},
+	  			borrowerName = #{borrowerName},
+	  			phoneNumber = #{phoneNumber},
+	  			isOldLoanBank = #{isOldLoanBank},
+	  			oldLoanBankName = #{oldLoanBankName},
+	  			oldLoanBankNameId = #{oldLoanBankNameId},
+	  			oldLoanBankSubNameId = #{oldLoanBankSubNameId},
+	  			oldLoanBankSubName = #{oldLoanBankSubName},
+	  			oldLoanBankManager = #{oldLoanBankManager},
+	  			oldLoanBankManagerPhone = #{oldLoanBankManagerPhone},
+	  			isLoanBank = #{isLoanBank},
+	  			loanBankName = #{loanBankName},
+	  			loanBankNameId = #{loanBankNameId},
+	  			loanSubBankNameId = #{loanSubBankNameId},
+	  			loanSubBankName = #{loanSubBankName},
+	  			loanBankNameManagerPhone = #{loanBankNameManagerPhone},
+	  			loanBankNameManager = #{loanBankNameManager},
+	  			borrowingDays = #{borrowingDays},
+	  			loanAmount = #{loanAmount},
+	  			rate = #{rate},
+	  			overdueRate = #{overdueRate},
+	  			chargeMoney = #{chargeMoney},
+	  			customsPoundage = #{customsPoundage},
+	  			riskGradeId = #{riskGradeId},
+	  			otherPoundage = #{otherPoundage},
+	  			isRebate = #{isRebate},
+	  			rebateMoney = #{rebateMoney},
+	  			rebateBankId = #{rebateBankId},
+	  			rebateBankSubId = #{rebateBankSubId},
+	  			rebateBankCardName = #{rebateBankCardName},
+	  			rebateBankCardNum = #{rebateBankCardNum},
+	  			isOnePay = #{isOnePay},
+	  			remark = #{remark},
+	  			<if test="isFinish != null and isFinish > 0">
+	  			isFinish = #{isFinish},
+	  			</if>
+	  			<if test="paymentMethod != null and paymentMethod > 0">
+		  			paymentMethod = #{paymentMethod},
+		  		</if>
+		  		<if test="null!=customerType and customerType > 0">customerType = #{customerType},</if>
+	  			serviceCharge =#{serviceCharge},
+	  			foreclosureMemberUid = #{foreclosureMemberUid},
+	  			rateBefore = #{rateBefore},
+	  			feeUnder = #{feeUnder},
+	  			rateProcedure = #{rateProcedure},
+	  			paidType = #{paidType},
+	  			mortgageType = #{mortgageType},
+	  			financeOutLoanTime = #{financeOutLoanTimeStr},
+	  			forwardMortgageBalance = #{forwardMortgageBalance},
+	  			domicileProvinceId = #{domicileProvinceId},
+	  			domicileCityId = #{domicileCityId},
+	  			domicileProvince = #{domicileProvince},
+	  			domicileCity = #{domicileCity},
+	  			updateTime = now()
+	  	WHERE orderNo = #{orderNo}
+  	</update>
+  	
+	<!-- 查询订单借款信息 -->
+	<select id="selectOrderBorrowByOrderNo" parameterType="java.lang.String" resultType="OrderBaseBorrowDto">
+  		select 
+  			id,
+  			createUid,
+			createTime,
+			updateUid,
+			updateTime,
+			orderNo,
+			agencyId,
+			cityCode,
+			cityName,
+			productCode,
+			productName,
+			cooperativeAgencyId,
+			agencyName,
+			agencyTypeName,
+			channelManagerUid,
+			acceptMemberUid,
+			notarialUid,
+			facesignUid,
+			elementUid,
+			branchCompany,
+			borrowerName,
+			phoneNumber,
+			isOldLoanBank,
+			oldLoanBankName,
+			oldLoanBankSubName,
+			oldLoanBankNameId,
+			oldLoanBankSubNameId,
+			oldLoanBankManager,
+			oldLoanBankManagerPhone,
+			isLoanBank,
+			loanBankName,
+			loanSubBankName,
+			loanBankNameId,
+			loanSubBankNameId,
+			loanBankNameManagerPhone,
+			loanBankNameManager,
+			borrowingDays,
+			loanAmount,
+			rate,
+			overdueRate,
+			chargeMoney,
+			customsPoundage,
+			riskGradeId,
+			otherPoundage,
+			isRebate,
+			rebateMoney,
+			rebateBankId,
+			rebateBankSubId,
+			rebateBank,
+			rebateSubBank,
+			rebateBankCardName,
+			rebateBankCardNum,
+			isOnePay,
+			remark,
+			isFinish ,
+			paymentMethod,
+			customerType,
+			serviceCharge,
+			foreclosureMemberUid,
+			rateBefore,
+			feeUnder,
+			rateProcedure,
+			paidType,
+			mortgageType,
+			financeOutLoanTime,
+			forwardMortgageBalance,
+			domicileProvinceId,
+			domicileCityId,
+			domicileProvince,
+			domicileCity,
+			DATE_FORMAT(financeOutLoanTime,'%Y-%m-%d') as financeOutLoanTimeStr
+  		from tbl_order_base_borrow where orderNo=#{orderNo}
+    </select>
+    <!-- 查询订单列表(供统计) -->
+    <select id="selectOrderBorrowList" parameterType="OrderBaseBorrowDto" resultType="OrderBaseBorrowDto">
+    	SELECT
+    		orderNo,
+			cityName,
+			productName,
+			branchCompany,
+			borrowerName,
+			loanAmount,
+			borrowingDays,
+			rate,
+			agencyName,
+			acceptMemberUid,
+			channelManagerUid,
+			oldLoanBankName,
+			oldLoanBankSubName,
+			oldLoanBankNameId,
+			oldLoanBankSubNameId,
+			loanBankName,
+			loanSubBankName,
+			loanBankNameId,
+			loanSubBankNameId
+		FROM
+			tbl_order_base_borrow
+		WHERE
+			orderNo IN (${orderNo})
+		<if test="pageSize>0">	
+		 limit #{start},#{pageSize}
+		</if> 	
+    </select>
+    <!-- 查询订单列表(供统计) -->
+	<select id="selectOrderBorrowCount" parameterType="OrderBaseBorrowDto" resultType="int">
+		SELECT
+			count(1)
+		FROM
+			tbl_order_base_borrow
+		WHERE
+			orderNo IN (${orderNo})
+	</select>
+	
+	<update  id="updateAcceptMember" parameterType="OrderBaseBorrowDto">
+		UPDATE tbl_order_base_borrow
+		<set>
+			<if test="agencyId != null and agencyId > 0">
+				agencyId = #{agencyId},
+			</if>
+			<if test="acceptMemberUid!=null and acceptMemberUid!=''">
+				acceptMemberUid = #{acceptMemberUid},
+			</if>
+		</set>
+		 WHERE orderNo=#{orderNo}
+	</update>
+</mapper>

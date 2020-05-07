@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.CreditMapper">
+    <resultMap id="BaseResultMap" type="CreditDto">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="createUid" jdbcType="VARCHAR" property="createUid" />
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="updateUid" jdbcType="VARCHAR" property="updateUid" />
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="orderNo" jdbcType="VARCHAR" property="orderNo" />
+        <result column="creditCardYears" jdbcType="VARCHAR" property="creditCardYears" />
+        <result column="loanRecordYears" jdbcType="VARCHAR" property="loanRecordYears" />
+        <result column="violationProportion" jdbcType="VARCHAR" property="violationProportion" />
+        <result column="allHouseWorth" jdbcType="DECIMAL" property="allHouseWorth" />
+        <result column="allHouseNumber" jdbcType="INTEGER" property="allHouseNumber" />
+        <result column="creditCardOverdraft" jdbcType="DECIMAL" property="creditCardOverdraft" />
+        <result column="creditQuota" jdbcType="DECIMAL" property="creditQuota" />
+        <result column="useQuota" jdbcType="DECIMAL" property="useQuota" />
+        <result column="creditLiabilities" jdbcType="DECIMAL" property="creditLiabilities" />
+        <result column="liabilitiesProportion" jdbcType="DECIMAL" property="liabilitiesProportion" />
+        <result column="loanPercentage" jdbcType="DECIMAL" property="loanPercentage" />
+        <result column="foreclosurePercentage" jdbcType="DECIMAL" property="foreclosurePercentage" />
+        <result column="creditOverdueNumber" jdbcType="INTEGER" property="creditOverdueNumber" />
+        <result column="latelyHalfYearSelectNumber" jdbcType="INTEGER" property="latelyHalfYearSelectNumber" />
+        <result column="latelyTwoYearMoneyOverdueNumber" jdbcType="INTEGER" property="latelyTwoYearMoneyOverdueNumber" />
+        <result column="isCompanyProperty" jdbcType="VARCHAR" property="isCompanyProperty" />
+        <result column="propertyMortgage" jdbcType="VARCHAR" property="propertyMortgage" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, createUid, createTime, updateUid, updateTime, orderNo, creditCardYears, loanRecordYears, 
+        violationProportion, allHouseWorth, allHouseNumber, creditCardOverdraft, creditQuota, 
+        useQuota, creditLiabilities, liabilitiesProportion, loanPercentage, foreclosurePercentage, 
+        creditOverdueNumber, latelyHalfYearSelectNumber, latelyTwoYearMoneyOverdueNumber, 
+        isCompanyProperty, propertyMortgage,remark,isFinish
+    </sql>
+   
+   <select id="detail" resultType="CreditDto" parameterType="java.lang.String">
+   	select 
+   		<include refid="Base_Column_List"/>
+   	from tbl_risk_credit where orderNo = #{orderNo} ORDER BY createTime DESC limit 0,1
+   </select>
+    
+    <insert id="insertCredit" parameterType="CreditDto">
+    	<selectKey resultType="int" keyProperty="id">
+            select
+            last_insert_id()
+        </selectKey>
+        insert into tbl_risk_credit 
+        (
+        	createUid, createTime, 
+            updateUid, orderNo, 
+            creditCardYears, loanRecordYears, violationProportion, 
+            allHouseWorth, allHouseNumber, creditCardOverdraft, 
+            creditQuota, useQuota, creditLiabilities, 
+            liabilitiesProportion, loanPercentage, 
+            foreclosurePercentage, creditOverdueNumber, 
+            latelyHalfYearSelectNumber, latelyTwoYearMoneyOverdueNumber, 
+            isCompanyProperty, 
+            propertyMortgage,remark,isFinish
+         )
+        values 
+        (
+        	#{createUid}, now(), 
+            #{updateUid}, #{orderNo}, 
+            #{creditCardYears}, #{loanRecordYears}, #{violationProportion}, 
+            #{allHouseWorth}, #{allHouseNumber}, #{creditCardOverdraft}, 
+            #{creditQuota}, #{useQuota}, #{creditLiabilities}, 
+            #{liabilitiesProportion}, #{loanPercentage}, 
+            #{foreclosurePercentage}, #{creditOverdueNumber}, 
+            #{latelyHalfYearSelectNumber}, #{latelyTwoYearMoneyOverdueNumber}, 
+             #{isCompanyProperty}, 
+            #{propertyMortgage},#{remark},#{isFinish}
+         )
+    </insert>
+   
+    <update id="updateCredit" parameterType="CreditDto">
+        
+        update tbl_risk_credit
+        <set>
+            <if test="createUid != null and createUid!=''">
+                createUid = #{createUid},
+            </if>
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+            <if test="creditCardYears != null and creditCardYears!=''">
+                creditCardYears = #{creditCardYears},
+            </if>
+            <if test="loanRecordYears != null and loanRecordYears!=''">
+                loanRecordYears = #{loanRecordYears},
+            </if>
+            <if test="violationProportion != null and violationProportion!=''">
+                violationProportion = #{violationProportion},
+            </if>
+            <if test="allHouseWorth != null">
+                allHouseWorth = #{allHouseWorth},
+            </if>
+            <if test="allHouseNumber != null">
+                allHouseNumber = #{allHouseNumber},
+            </if>
+            <if test="creditCardOverdraft != null">
+                creditCardOverdraft = #{creditCardOverdraft},
+            </if>
+            <if test="creditQuota != null">
+                creditQuota = #{creditQuota},
+            </if>
+            <if test="useQuota != null">
+                useQuota = #{useQuota},
+            </if>
+            <if test="creditLiabilities != null">
+                creditLiabilities = #{creditLiabilities},
+            </if>
+            <if test="liabilitiesProportion != null">
+                liabilitiesProportion = #{liabilitiesProportion},
+            </if>
+            <if test="loanPercentage != null">
+                loanPercentage = #{loanPercentage},
+            </if>
+            <if test="foreclosurePercentage != null">
+                foreclosurePercentage = #{foreclosurePercentage},
+            </if>
+            <if test="creditOverdueNumber != null">
+                creditOverdueNumber = #{creditOverdueNumber},
+            </if>
+            <if test="latelyHalfYearSelectNumber != null">
+                latelyHalfYearSelectNumber = #{latelyHalfYearSelectNumber},
+            </if>
+            <if test="latelyTwoYearMoneyOverdueNumber != null">
+                latelyTwoYearMoneyOverdueNumber = #{latelyTwoYearMoneyOverdueNumber},
+            </if>
+          
+            <if test="isCompanyProperty != null and isCompanyProperty!=''">
+                isCompanyProperty = #{isCompanyProperty},
+            </if>
+            <if test="propertyMortgage != null and propertyMortgage!=''">
+                propertyMortgage = #{propertyMortgage},
+            </if>
+            <if test="remark!=null and remark!=''">
+            	remark = #{remark},
+            </if>
+            <if test="isFinish>0">
+            	isFinish = #{isFinish}
+            </if>
+        </set>
+        where orderNo = #{orderNo} ORDER BY createTime DESC LIMIT 1
+    </update>
+    
+     <update id="updateNull" parameterType="CreditDto">
+        
+        update tbl_risk_credit
+        SET
+                updateUid = #{updateUid},
+                creditCardYears = #{creditCardYears},
+                loanRecordYears = #{loanRecordYears},
+                violationProportion = #{violationProportion},
+                allHouseWorth = #{allHouseWorth},
+                allHouseNumber = #{allHouseNumber},
+                creditCardOverdraft = #{creditCardOverdraft},
+                creditQuota = #{creditQuota},
+                useQuota = #{useQuota},
+                creditLiabilities = #{creditLiabilities},
+                liabilitiesProportion = #{liabilitiesProportion},
+                loanPercentage = #{loanPercentage},
+                foreclosurePercentage = #{foreclosurePercentage},
+                creditOverdueNumber = #{creditOverdueNumber},
+                latelyHalfYearSelectNumber = #{latelyHalfYearSelectNumber},
+                latelyTwoYearMoneyOverdueNumber = #{latelyTwoYearMoneyOverdueNumber},
+                isCompanyProperty = #{isCompanyProperty},
+                propertyMortgage = #{propertyMortgage},
+            	remark = #{remark},
+            	isFinish = #{isFinish}
+        where orderNo = #{orderNo} ORDER BY createTime DESC LIMIT 1
+    </update>
+    
+    <!--  废弃
+    <select id="selectCreditLog" parameterType="java.lang.String" resultType="java.util.Map">
+    	SELECT 
+    		 l1.startVal,l2.endVal,l2.createTime,l2.createUid,l2.colName,l2.beanColumn,l2.isShow,l2.type,l2.updateUid,l2.operationType 
+		FROM tbl_risk_log l1,tbl_risk_log l2 
+		WHERE l1.orderNo=#{orderNo} AND l1.orderNo=l2.orderNo and l1.beanColumn=l2.beanColumn
+		AND l1.id = (SELECT min(l3.id) FROM tbl_risk_log l3 WHERE l3.beanColumn = l1.beanColumn)
+		AND l2.id = (SELECT max(l3.id) FROM tbl_risk_log l3 WHERE l3.beanColumn = l2.beanColumn)
+		AND l1.startVal!=l2.endVal
+    </select>
+    -->
+    
+    <insert id="insertCreditLog" parameterType="java.util.Map">
+    	<selectKey resultType="int" keyProperty="id">
+            select
+            last_insert_id()
+        </selectKey>
+        insert into tbl_risk_log 
+        (
+        	createUid, createTime, 
+            orderNo, beanColumn,
+            colName,startVal,endVal,
+            isShow,type,operationType
+         )
+        values 
+        (
+        	#{createUid},now(), 
+            #{orderNo},#{beanColumn},
+            #{colName},#{startVal},#{endVal},
+            #{isShow},#{type},#{operationType}
+         )
+    </insert>
+    
+    <insert id="insertCreditLogBatch" parameterType="java.util.List">
+    	<selectKey resultType="int" keyProperty="id">
+            select
+            last_insert_id()
+        </selectKey>
+        insert into tbl_risk_log 
+        (
+        	createUid,createTime, 
+            orderNo, beanColumn,
+            colName,startVal,endVal,
+            isShow,type,operationType
+         )
+        values 
+         <foreach collection="list" separator="," item="obj">
+         (
+       		#{obj.createUid},now(), 
+            #{obj.orderNo},#{obj.beanColumn},
+            #{obj.colName},#{obj.startVal},#{obj.endVal},
+            #{obj.isShow},#{obj.type},#{obj.operationType}
+            )
+        </foreach>
+    </insert>
+    
+    <update id="updateCreditLog" parameterType="java.util.Map">
+    	update tbl_risk_log
+    	<set>
+    		<if test="updateUid!=null and updateUid!=''">
+    			updateUid = #{updateUid},
+    		</if>
+    		<if test="colName!=null and colName!=''">
+    			colName = #{colName},
+    		</if>
+    		<if test="startVal!=null and startVal!=''">
+    			startVal = #{startVal},
+    		</if>
+    		<if test="endVal!=null and endVal!=''">
+    			endVal = #{endVal},
+    		</if>
+    		<if test="isShow!=null">
+    			isShow = #{isShow},
+    		</if>
+    		<if test="type!=null">
+    			type = #{type},
+    		</if>
+    		<if test="operationType!=null">
+    			operationType = #{operationType}
+    		</if>
+    	</set>
+    	where orderNo = #{orderNo} and beanColumn=#{beanColumn}
+    </update>
+    
+    <select id="selectCreditLogAsc" parameterType="java.lang.String" resultType="java.util.Map">
+		SELECT l1.* FROM(
+		SELECT * FROM tbl_risk_log l2 WHERE orderNo=#{0} ORDER BY l2.createTime ASC
+		) l1 GROUP BY l1.beanColumn
+    </select>
+    
+    <select id="selectCreditLogDesc" parameterType="java.lang.String" resultType="java.util.Map">
+    	SELECT l1.* FROM(
+		SELECT * FROM tbl_risk_log l2 WHERE orderNo=#{0} ORDER BY l2.createTime DESC
+		) l1 GROUP BY l1.beanColumn
+    </select>
+</mapper>

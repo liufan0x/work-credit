@@ -1,0 +1,194 @@
+<style>
+.form-inline.width165 label {width: 165px;}
+</style>
+<form method="post" name="creditForm" id="creditForm" class="form-inline detail-row width165">
+	<div class="col-md-12 detail-right-tit ">&nbsp;&nbsp; 征信信息 <button type="button" ng-click="submitCredit()" class="btn btn-info detail-right-save">保存</button></div>
+
+	<div class="col-md-6 col-lg-4"><label>信用卡年限：</label>
+		<select class="form-control" ng-model="credit.creditCardYears" name="creditCardYears" style="width:178px;" choice-dict-name="creditCardYears" required>
+			<option value="">请选择</option>
+		</select>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="creditForm.creditCardYears.$error.required">必选</error>
+		</span>
+	</div>
+
+	<div class="col-md-6 col-lg-4"><label>个人贷款记录年限：</label>
+		<select class="form-control" name="loanRecordYears" style="width:178px;" choice-dict-name="loanRecordYears" ng-model="credit.loanRecordYears" required>
+			<option value="">请选择</option>
+		</select>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="creditForm.loanRecordYears.$error.required">必选</error>
+		</span>
+	</div>
+
+	<div class="col-md-6 col-lg-4"><label style="width: 235px;">个人贷款、信用卡累计有效违约率：</label>
+		<select class="form-control" name="violationProportion" style="width:178px;" choice-dict-name="violationProportion" ng-model="credit.violationProportion" required>
+			<option value="">请选择</option>
+		</select>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="creditForm.violationProportion.$error.required">必选</error>
+		</span>
+	</div>
+
+	<div class="col-md-6 col-lg-4"><label>所有房产评估总值：</label>
+		<input type="text" ng-pattern="/^([1-9]\d{0,6}|0)([.]?|(\.\d{1,4})?)$/" class="form-control jisuanfzbl" ng-model="credit.allHouseWorth" name="allHouseWorth" required>
+		<span class="a-span">&nbsp;万元</span>
+		<span class="inputError" ng-show="creditForm.allHouseWorth.$error.pattern">
+			<error class="text-danger">错误</error>
+		</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="creditForm.allHouseWorth.$error.required">必填</error>
+		</span>
+	</div>
+
+	<div class="col-md-6 col-lg-4"><label>房产套数：</label>
+		<input type="text" class="form-control" ng-pattern="/^[0-9]{0,4}$/" ng-model="credit.allHouseNumber" name="allHouseNumber" required>
+		<span class="a-span">&nbsp;套</span>
+		<span class="inputError" ng-show="creditForm.allHouseNumber.$error.pattern">
+			<error class="text-danger">错误</error>
+		</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="creditForm.allHouseNumber.$error.required">必填</error>
+		</span>
+	</div>
+
+	<div class="col-md-6 col-lg-4"><label>信用卡半年月均透支额：</label>
+		<input type="text" class="form-control" ng-pattern="/^([1-9]\d{0,6}|0)([.]?|(\.\d{1,4})?)$/" ng-model="credit.creditCardOverdraft" name="creditCardOverdraft" required>
+		<span class="a-span">&nbsp;万元</span>
+		<span class="inputError" ng-show="creditForm.creditCardOverdraft.$error.pattern">
+			<error class="text-danger">错误</error>
+		</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="creditForm.creditCardOverdraft.$error.required">必填</error>
+		</span>
+	</div>
+
+	<div class="col-md-6 col-lg-4"><label>授信总额：</label>
+		<input type="text" class="form-control" ng-pattern="/^([1-9]\d{0,6}|0)([.]?|(\.\d{1,4})?)$/" ng-model="credit.creditQuota" name="creditQuota" required>
+		<span class="a-span">&nbsp;万元</span>
+		<span class="inputError" ng-show="creditForm.creditQuota.$error.pattern">
+			<error class="text-danger">错误</error>
+		</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="creditForm.creditQuota.$error.required">必填</error>
+		</span>
+	</div>
+
+	<div class="col-md-6 col-lg-4"><label>已用额度：</label>
+		<input type="text" class="form-control" ng-pattern="/^([1-9]\d{0,6}|0)([.]?|(\.\d{1,4})?)$/" ng-model="credit.useQuota" name="useQuota" required>
+		<span class="a-span">&nbsp;万元</span>
+		<span class="inputError" ng-show="creditForm.useQuota.$error.pattern">
+			<error class="text-danger">错误</error>
+		</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="creditForm.useQuota.$error.required">必填</error>
+		</span>
+	</div>
+
+	<div class="col-md-6 col-lg-4"><label>征信总负债：</label>
+		<input type="text" class="form-control jisuanfzbl" ng-pattern="/^([1-9]\d{0,6}|0)([.]?|(\.\d{1,4})?)$/" ng-model="credit.creditLiabilities" name="creditLiabilities" required>
+		<span class="a-span">&nbsp;万元</span>
+		<span class="inputError" ng-show="creditForm.creditLiabilities.$error.pattern">
+			<error class="text-danger">错误</error>
+		</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="creditForm.creditLiabilities.$error.required">必填</error>
+		</span>
+	</div>
+
+	<div class="col-md-6 col-lg-4">
+		<label><span class="tooltip-toggle" data-toggle="tooltip-toggle" title="负债比例=征信总负债 / 所有房产评估总值">负债比例 <span class="help"></span></span>：</label>
+		<input type="text" class="form-control" ng-pattern="/^([1-9]\d{0,6}|0)([.]?|(\.\d{1,2})?)$/" ng-model="credit.liabilitiesProportion" name="liabilitiesProportion" required>
+		<span class="a-span">&nbsp;%</span>
+		<span class="inputError" ng-show="creditForm.liabilitiesProportion.$error.pattern">
+			<error class="text-danger">错误</error>
+		</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="creditForm.liabilitiesProportion.$error.required">请查看“？”</error>
+		</span>
+	</div>
+
+	<div class="col-md-6 col-lg-4">
+		<label><span class="tooltip-toggle" data-toggle="tooltip-toggle" title="借款成数=借款金额 / 新贷款金额">借款成数 <span class="help"></span></span>：</label>
+		<input type="text" class="form-control" ng-pattern="/^([1-9]\d{0,6}|0)([.]?|(\.\d{1,2})?)$/" ng-model="credit.loanPercentage" name="loanPercentage" required>
+		<span class="a-span">&nbsp;%</span>
+		<span class="inputError" ng-show="creditForm.loanPercentage.$error.pattern">
+			<error class="text-danger">错误</error>
+		</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="creditForm.loanPercentage.$error.required">必填</error>
+		</span>
+	</div>
+
+	<div class="col-md-6 col-lg-4" ng-show="isProductCode!='03'">
+		<label><span class="tooltip-toggle" data-toggle="tooltip-toggle" title="债务置换贷款成数=借款金额 / 房产价值">债务置换贷款成数 <span class="help"></span></span>：</label>
+		<input type="text" class="form-control" ng-pattern="/^([1-9]\d{0,6}|0)([.]?|(\.\d{1,2})?)$/" ng-model="credit.foreclosurePercentage" name="foreclosurePercentage" required>
+		<span class="a-span">&nbsp;%</span>
+		<span class="inputError" ng-show="creditForm.foreclosurePercentage.$error.pattern">
+			<error class="text-danger">错误</error>
+		</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="creditForm.foreclosurePercentage.$error.required">必填</error>
+		</span>
+	</div>
+
+	<div class="col-md-6 col-lg-4"><label>近2年征信报告逾期：</label>
+		<input type="text" class="form-control" ng-pattern="/^[0-9]{0,4}$/" ng-model="credit.creditOverdueNumber" name="creditOverdueNumber" required>
+		<span class="a-span">&nbsp;次</span>
+		<span class="inputError" ng-show="creditForm.creditOverdueNumber.$error.pattern">
+			<error class="text-danger">错误</error>
+		</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="creditForm.creditOverdueNumber.$error.required">必填</error>
+		</span>
+	</div>
+
+	<div class="col-md-6 col-lg-4"><label>近半年征信查询次数：</label>
+		<input type="text" class="form-control" ng-pattern="/^[0-9]{0,4}$/" ng-model="credit.latelyHalfYearSelectNumber" name="latelyHalfYearSelectNumber" required>
+		<span class="a-span">&nbsp;次</span>
+		<span class="inputError" ng-show="creditForm.latelyHalfYearSelectNumber.$error.pattern">
+			<error class="text-danger">错误</error>
+		</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="creditForm.latelyHalfYearSelectNumber.$error.required">必填</error>
+		</span>
+	</div>
+
+	<div class="col-md-6 col-lg-4"><label>是否公司产权：</label>
+		<select class="form-control" name="isCompanyProperty" style="width:178px;" ng-model="credit.isCompanyProperty" required>
+			<option value="">请选择</option>
+			<option value="是">是</option>
+			<option value="否">否</option>
+		</select>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="creditForm.isCompanyProperty.$error.required">必选</error>
+		</span>
+	</div>
+
+	<div class="col-md-6 col-lg-4"><label>产权抵押情况：</label>
+		<select class="form-control" name="propertyMortgage" style="width:178px;" choice-dict-name="propertyMortgage" ng-model="credit.propertyMortgage" required>
+			<option value="">请选择</option>
+		</select>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="creditForm.propertyMortgage.$error.required">必选</error>
+		</span>
+	</div>
+	<div class="col-md-12 col-lg-12 relative">
+		<label>&nbsp;</label>
+		<label style="position:absolute;top:0; left:0;">备注：</label>
+		<textarea class="form-control" maxlength="3000" name='remark' ng-model="credit.remark" style="width:1000px;height:100px;"></textarea>
+	</div>
+</form>
+<script>
+	$(function() {
+		$(".tooltip-toggle").tooltip({
+			html: true
+		});
+	});
+</script>

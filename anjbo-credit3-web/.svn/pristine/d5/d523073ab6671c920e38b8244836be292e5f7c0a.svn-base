@@ -1,0 +1,38 @@
+<div class="container-fluid" id="auditFinal">
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;复核审批意见
+		<a ng-show="!isEdit" style="display:inline-block;float:right;padding-right: 10px;" ui-sref="orderList" >返回上一步</a>
+		<span ng-show="isEdit" class="detail-trash2 text-danger" ng-click="deleteDetail('audit-review-detail')" >隐藏</span>
+			<div style="position:absolute;right:400px;top:0px;">
+			  <span id="elementFlag" ng-bind="elementFlag">是否已收到要件：是</span>
+			  <span><a id="elementInfo" ng-bind="elementInfo" ng-click="showDetail('elementEntrance');">要件详情</a></span>
+			</div>
+	</div>
+	<div class="col-md-12 detail-row">
+		&nbsp;&nbsp;复核审批意见
+		（复核审批人：<span class="text-danger" ng-bind="obj.handleName"></span>
+		复核审批结果：<span class="text-danger" ng-if="obj.auditStatus==1">通过</span>
+				  <span class="text-danger" ng-if="obj.auditStatus==2">不通过(退回)</span>
+				  <span class="text-danger" ng-if="obj.auditStatus==3">上报首席风险官</span>）  
+		<span ng-bind="obj.auditTime|date:'yyyy-MM-dd HH:mm'"></span>
+	</div>
+	<div  class="row detail-row form-inline w138">
+		<div class="col-md-6  col-lg-6">
+			<label>借款金额：</label><span ng-bind="obj.loanAmont"></span>万
+		</div>
+		<div class="col-md-6 col-lg-6">
+			<label>借款期限：</label><span ng-bind="obj.borrowingDays"></span> 天
+		</div>
+		<div class="col-md-6 col-lg-6">
+			<label>建议费率：</label><span ng-bind="obj.rate"></span>%/天
+		</div>
+		<div class="col-md-6 col-lg-6">
+			<label>建议逾期费率：</label><span ng-bind="obj.overdueRate"></span>%/天
+		</div>
+		<div class="row detail-row form-inline w138" style="padding-top:10px;" ng-if="obj.remark!=null">
+		     <div class="col-md-12 col-lg-12" style="position:relative;">
+		            <label style="float:left;">审批意见：</label>
+					<p ng-bind-html="obj.remark"  style="margin-left:100px;padding-right:20px;"></p>
+			</div>
+		</div>
+	</div>
+</div>

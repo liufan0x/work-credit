@@ -1,0 +1,309 @@
+<div class="container-fluid">
+<style>
+.form-inline.w138 label{width:150px;}
+</style>
+	<form method="post" name="ordinaryAuditForm" id="ordinaryAuditForm" class="form-inline element-supplement  detail-row">
+	<div class="row detail-row form-inline w138" ng-if="productCode!='03' && relationOrderNo=='0'">
+	    <div class="col-md-12" style="color:#4a77ac"> &nbsp;&nbsp;1)业务概况：</div>
+		<div class="col-md-6  col-lg-4">
+			<label>业务类型：</label><span ng-bind="firstObj.productName"></span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>借款金额：</label>
+			<input type="text" ng-model="firstObj.loanAmount" name="loanAmount"  class="form-control" maxlength="9" ng-pattern="/^\-?([1-9]\d{0,13}|0)([.]?|(\.\d{1,2})?)$/"  required> 万元
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="ordinaryAuditForm.loanAmount.$error.required">必填</error>
+			</span>
+			<span class="inputError" ng-show="ordinaryAuditForm.loanAmount.$error.pattern">
+				<error class="text-danger">错误</error>
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>负债比例：</label>
+			<input type="text" ng-model="firstObj.debtRatio" name="debtRatio"  class="form-control" maxlength="11"  ng-pattern="/^\-?([1-9]\d{0,13}|0)([.]?|(\.\d{1,2})?)$/"  required> %
+			 <span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="ordinaryAuditForm.debtRatio.$error.required">必填</error>
+			</span>
+			<span class="inputError" ng-show="ordinaryAuditForm.debtRatio.$error.pattern">
+				<error class="text-danger">错误</error>
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>借款成数：</label>
+			<input type="text" ng-model="firstObj.loanPoportion" name="loanPoportion" maxlength="11" class="form-control"  ng-pattern="/^\-?([1-9]\d{0,13}|0)([.]?|(\.\d{1,2})?)$/"  required> %
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="ordinaryAuditForm.loanPoportion.$error.required">必填</error>
+			</span> 
+			<span class="inputError" ng-show="ordinaryAuditForm.loanPoportion.$error.pattern">
+				<error class="text-danger">错误</error>
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>债务置换贷款成数：</label>
+			<input type="text" ng-model="firstObj.productLoanPoportion" name="productLoanPoportion" maxlength="11" class="form-control"  ng-pattern="/^([1-9]\d{0,13}|0)([.]?|(\.\d{1,2})?)$/"  required> %
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="ordinaryAuditForm.productLoanPoportion.$error.required">必填</error>
+			</span> 
+			<span class="inputError" ng-show="ordinaryAuditForm.productLoanPoportion.$error.pattern">
+				<error class="text-danger">错误</error>
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>房产产权人 ：</label>
+			<input type="text" ng-model="firstObj.propertyOwner" name="propertyOwner" class="form-control" required> 
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="ordinaryAuditForm.propertyOwner.$error.required">必填</error>
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>物业名称：</label>
+			<input type="text" ng-model="firstObj.propertyName" name="propertyName" class="form-control" required>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="ordinaryAuditForm.propertyName.$error.required">必填</error>
+			</span> 
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>建筑面积：</label>
+			<input type="text" ng-model="firstObj.area" name="area"  maxlength="9" class="form-control"  ng-pattern="/^([1-9]\d{0,13}|0)([.]?|(\.\d{1,2})?)$/"  required> ㎡ 
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="ordinaryAuditForm.area.$error.required">必填</error>
+			</span>
+			<span class="inputError" ng-show="ordinaryAuditForm.area.$error.pattern">
+				<error class="text-danger">错误</error>
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>评估总值：</label>
+			<input type="text" ng-model="firstObj.assessment" name="assessment"  maxlength="12" class="form-control"  ng-pattern="/^([1-9]\d{0,13}|0)([.]?|(\.\d{1,2})?)$/"  required> 元
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="ordinaryAuditForm.assessment.$error.required">必填</error>
+			</span>
+			<span class="inputError" ng-show="ordinaryAuditForm.assessment.$error.pattern">
+				<error class="text-danger">错误</error>
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>抵押情况：</label>
+			<select class="form-control" ng-model="firstObj.mortgageSituation"  name="mortgageSituation" style="width:178px;" required>
+				<option value="抵押符合借款合同无查封">抵押符合借款合同无查封</option>
+				<option value="抵押不符合借款">抵押不符合借款</option>
+			</select>
+			<span class="inputError" ng-show="isAudit" >
+				<error class="text-danger" ng-show="ordinaryAuditForm.mortgageSituation.$error.required">抵押情况必选</error>
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>原贷款地点：</label>
+			<input type="text" ng-model="firstObj.addressOld" name="addressOld" class="form-control"  required> 
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="ordinaryAuditForm.addressOld.$error.required">必填</error>
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>原贷款金额：</label>
+			<input type="text" ng-model="firstObj.amountOld" name="amountOld" maxlength="9" class="form-control"  ng-pattern="/^([1-9]\d{0,13}|0)([.]?|(\.\d{1,2})?)$/"  required> 万元
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="ordinaryAuditForm.amountOld.$error.required">必填</error>
+			</span>
+			<span class="inputError" ng-show="ordinaryAuditForm.amountOld.$error.pattern">
+				<error class="text-danger">错误</error>
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>新贷款地点：</label>
+			<input type="text" ng-model="firstObj.addressNew" name="addressNew" class="form-control" required> 
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="ordinaryAuditForm.addressNew.$error.required">必填</error>
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>新贷款金额：</label>
+			<input type="text" ng-model="firstObj.amountNew" name="amountNew" maxlength="9" class="form-control"  ng-pattern="/^([1-9]\d{0,13}|0)([.]?|(\.\d{1,2})?)$/" required> 万元
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="ordinaryAuditForm.amountNew.$error.required">必填</error>
+			</span>
+			<span class="inputError" ng-show="ordinaryAuditForm.amountNew.$error.pattern">
+				<error class="text-danger">错误</error>
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>近6个月查询次数：</label>
+			<input type="text" ng-model="firstObj.monthNum" name="monthNum"  maxlength="9" class="form-control"  ng-pattern="/^\d+$/" required> 次
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="ordinaryAuditForm.monthNum.$error.required">必填</error>
+			</span>
+			<span class="inputError" ng-show="ordinaryAuditForm.monthNum.$error.pattern">
+				<error class="text-danger">错误</error>
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>近两年逾期次数：</label>
+			<input type="text" ng-model="firstObj.yearNum" name="yearNum" maxlength="9" class="form-control"  ng-pattern="/^\d+$/" required> 次
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="ordinaryAuditForm.yearNum.$error.required">必填</error>
+			</span>
+			<span class="inputError" ng-show="ordinaryAuditForm.yearNum.$error.pattern">
+				<error class="text-danger">错误</error>
+			</span>
+		</div>
+		<div class="row detail-row form-inline w138" style="padding-top:30px;">
+		     <div class="col-md-12 col-lg-12">
+		        <label>概况：</label>
+				<div class="form-group">
+						<textarea class="form-control" name="remark" rows="2" ng-model="firstObj.remark"   placeholder="请在此处输入其他信息描述" style="width:900px;"/>
+				</div>
+			</div>
+	  </div>
+	</div>
+	<div class="row detail-row form-inline w138" ng-if="productCode!='03' && relationOrderNo=='0'">
+	    <div class="col-md-12" style="color:#4a77ac;"> &nbsp;&nbsp;2)初审意见：</div>
+		<div class="col-md-12 ">
+			<label>1.业务标准：</label>
+			<select class="form-control" ng-model="firstObj.business" name="business" style="width:178px;" required ng-options="x.id as x.name for x in obligeeA">
+	    		<option style="display:none" value="{{x[0].id}}">{{x[0].name}}</option>
+	        </select>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="ordinaryAuditForm.business.$error.required">业务标准必填</error>
+			</span>
+		</div>
+		<div class="col-md-12">
+			<label>2.出款金额：</label>
+			<input type="text" ng-model="firstObj.sunMoney" name="sunMoney" class="form-control" maxlength="9" ng-pattern="/^([1-9]\d{0,13}|0)([.]?|(\.\d{1,2})?)$/" required> 万元
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="ordinaryAuditForm.sunMoney.$error.required">必填</error>
+			</span>
+			<span class="inputError" ng-show="ordinaryAuditForm.sunMoney.$error.pattern">
+				<error class="text-danger">错误</error>
+			</span>
+		</div>
+		<div class="col-md-12" > <label>3.出款银行信息：</label></div>
+		<div class="col-md-6 col-lg-4">
+			<label>开户名：</label>
+			<input type="text" ng-model="firstObj.loanName" name="loanName" class="form-control" required> 
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="ordinaryAuditForm.loanName.$error.required">必填</error>
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>账号：</label>
+			<input type="text" ng-model="firstObj.loanAccount" name="loanAccount" class="form-control" required> 
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="ordinaryAuditForm.loanAccount.$error.required">必填</error>
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-12">
+			<label>银行-支行：</label>
+			<bank-sub-bank bank-id="firstObj.loanBankId" is-disabled="{{all}}" sub-bank-id="firstObj.loanBankSubId" ></bank-sub-bank>
+		</div>
+		<div class="col-md-12" > <label>4.回款银行信息：</label></div>
+		<div class="col-md-6 col-lg-4">
+			<label>开户名：</label>
+			<input type="text" ng-model="firstObj.paymentName" name="paymentNam" id="returnMoney"  class="form-control" required> 
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="ordinaryAuditForm.paymentNam.$error.required">必填</error>
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>账号：</label>
+			<input type="text" ng-model="firstObj.paymentAccount" name="paymentAccount"  class="form-control" required> 
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="ordinaryAuditForm.paymentAccount.$error.required">必填</error>
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-12">
+			<label>银行-支行：</label>
+			<bank-sub-bank bank-id="firstObj.paymentBankId"  sub-bank-id="firstObj.paymentBankSubId" ></bank-sub-bank>
+		</div>
+<!-- 		<div class="col-md-6 col-lg-4"> -->
+<!-- 			<label>5.建议费率：</label> -->
+<!-- 			<input type="text" ng-model="firstObj.rate" name="rate"  class="form-control" ng-pattern="/^([1-9]\d{0,13}|0)([.]?|(\.\d{1,4})?)$/"  required>  %/天 -->
+<!-- 			<span class="inputError" ng-show="isAudit"> -->
+<!-- 				<error class="text-danger" ng-show="ordinaryAuditForm.rate.$error.required">必填</error> -->
+<!-- 			</span> -->
+<!-- 			<span class="inputError" ng-show="ordinaryAuditForm.rate.$error.pattern"> -->
+<!-- 				<error class="text-danger">错误</error> -->
+<!-- 			</span> -->
+<!-- 		</div> -->
+<!-- 		<div class="col-md-6 col-lg-4"> -->
+<!-- 			<label>建议逾期费率：</label> -->
+<!-- 			<input type="text" ng-model="firstObj.overdueRate" name="overdueRate" class="form-control"  ng-pattern="/^([1-9]\d{0,13}|0)([.]?|(\.\d{1,4})?)$/"  required>  %/天 -->
+<!-- 			<span class="inputError" ng-show="isAudit"> -->
+<!-- 				<error class="text-danger" ng-show="ordinaryAuditForm.overdueRate.$error.required">必填</error> -->
+<!-- 			</span> -->
+<!-- 			<span class="inputError" ng-show="ordinaryAuditForm.overdueRate.$error.pattern"> -->
+<!-- 				<error class="text-danger">错误</error> -->
+<!-- 			</span> -->
+<!-- 		</div> -->
+<!-- 		<div class="col-md-12" > &nbsp;&nbsp;<span style="padding-left:45px;">&nbsp;</span>6.严格控制相关账号账户要件，并更改密码</div> -->
+<!-- 		<div class="col-md-12" > &nbsp;&nbsp;<span style="padding-left:45px;">&nbsp;</span>7.严控流程节点并及时反馈相关节点信息操作</div> -->
+		<div class="row detail-row form-inline w138" style="padding-top:30px;">
+		     <div class="col-md-12 col-lg-12">
+		            <label> 其 他 ：</label>
+					<div class="form-group">
+							<textarea class="form-control" rows="2" ng-model="firstObj.other" required name="other" placeholder="请在此处输入概况描述" style="width:900px;"/>
+							<span class="inputError" ng-show="isAudit">
+								<error class="text-danger" ng-show="ordinaryAuditForm.other.$error.required">必填</error>
+							</span>	
+					</div>
+			</div>
+	  </div>
+	  <div class="row detail-row form-inline w138" style="padding-top:30px;">
+		     <div class="col-md-12 col-lg-12">
+		            <label>风控终审意见 ：</label>
+					<div class="form-group">
+							<textarea class="form-control" rows="2" ng-model="kgApproval.judgment" required name="judgment" placeholder="请在此处输入风控终审意见" style="width:900px;"/>
+							<span class="inputError" ng-show="isAudit">
+								<error class="text-danger" ng-show="ordinaryAuditForm.judgment.$error.required">必填</error>
+							</span>	
+					</div>
+			</div>
+	  </div>
+	  <div class="row detail-row form-inline w138" style="padding-top:30px;">
+		     <div class="col-md-12 col-lg-12">
+		            <label>首席官审批意见 ：</label>
+					<div class="form-group">
+							<textarea class="form-control" rows="2" ng-model="kgApproval.chiefRiskOpinion" required name="chiefRiskOpinion" placeholder="请在此处输入首席风险官审批意见" style="width:900px;"/>
+<!-- 							<span class="inputError" ng-show="isAudit"> -->
+<!-- 								<error class="text-danger" ng-show="ordinaryAuditForm.chiefRiskOpinion.$error.required">必填</error> -->
+<!-- 							</span>	 -->
+					</div>
+			</div>
+	  </div>
+	</div>
+	<div class="row detail-row form-inline w138" ng-if="productCode=='03' || relationOrderNo!='0'">
+	   <div class="row detail-row form-inline w138" style="padding-top:30px;">
+	     <div class="col-md-12 col-lg-12">
+	     		 <label>风控初审意见 ：</label>
+				<div class="form-group">
+						<textarea class="form-control" rows="5" ng-model="firstObj.remark"  name="remark" placeholder="请在此处输入审批意见" style="width:900px;"/>
+						<span class="inputError" ng-show="isAudit">
+								<error class="text-danger" ng-show="ordinaryAuditForm.remark.$error.required">必填</error>
+							</span>	
+				</div>
+		</div>
+	  </div>
+	  <div class="row detail-row form-inline w138" style="padding-top:30px;">
+		     <div class="col-md-12 col-lg-12">
+		            <label>风控终审意见 ：</label>
+					<div class="form-group">
+							<textarea class="form-control" rows="2" ng-model="kgApproval.judgment" required name="judgment" placeholder="请在此处输入风控终审意见" style="width:900px;"/>
+							<span class="inputError" ng-show="isAudit">
+								<error class="text-danger" ng-show="ordinaryAuditForm.judgment.$error.required">必填</error>
+							</span>	
+					</div>
+			</div>
+	 </div>
+	<div class="row detail-row form-inline w138" style="padding-top:30px;">
+		     <div class="col-md-12 col-lg-12">
+		            <label>首席官审批意见 ：</label>
+					<div class="form-group">
+							<textarea class="form-control" rows="2" ng-model="kgApproval.chiefRiskOpinion" required name="chiefRiskOpinion" placeholder="请在此处输入首席风险官审批意见" style="width:900px;"/>
+<!-- 							<span class="inputError" ng-show="isAudit"> -->
+<!-- 								<error class="text-danger" ng-show="ordinaryAuditForm.chiefRiskOpinion.$error.required">必填</error> -->
+<!-- 							</span>	 -->
+					</div>
+			</div>
+	  </div>
+	</div>
+  </form>
+</div>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.RoleAuthorityMapper">
+	<sql id="sqlwhereSearch">
+		<where>
+			<if test="null!=id and id>0"> AND `id`=#{id}</if>
+			<if test="null!=roleId and roleId>0"> AND `roleId`=#{roleId}</if>
+			<if test="null!=authorityId and ''!=authorityId"> AND `authorityId`=#{authorityId}</if>
+			<!-- <if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if> 
+				<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if> -->
+		</where>
+	</sql>
+
+
+	<!-- 获取实体 -->
+	<select id="find" parameterType="RoleAuthorityDto"
+		resultType="RoleAuthorityDto">
+		SELECT id, roleId, authorityId, createTime
+		FROM tbl_role_authority
+		<include refid="sqlwhereSearch" />
+	</select>
+
+	<!-- 查询 -->
+	<select id="search" parameterType="RoleAuthorityDto"
+		resultType="RoleAuthorityDto">
+		SELECT id, roleId, authorityId, createTime
+		FROM tbl_role_authority
+		<include refid="sqlwhereSearch" />
+
+		<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+	</select>
+
+	<!-- 查询 -->
+	<select id="count" parameterType="RoleAuthorityDto"
+		resultType="int">
+		SELECT count(1)
+		FROM tbl_role_authority
+		<include refid="sqlwhereSearch" />
+	</select>
+
+
+	<!-- 增删改 -->
+	<insert id="insert" parameterType="RoleAuthorityDto"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tbl_role_authority(
+		<if test="null!=roleId">`roleId`,</if>
+		<if test="null!=authorityId">`authorityId`,</if>
+		<if test="null!=createTime">`createTime`</if>
+		) VALUES(
+		<if test="null!=roleId">#{roleId},</if>
+		<if test="null!=authorityId">#{authorityId},</if>
+		<if test="null!=createTime">#{createTime}</if>
+		)
+	</insert>
+
+
+	<delete id="delete" parameterType="RoleAuthorityDto">
+		DELETE FROM tbl_role_authority
+		<include refid="sqlwhereSearch" />
+	</delete>
+
+	<update id="update" parameterType="RoleAuthorityDto">
+		UPDATE tbl_role_authority
+		<set>
+			<if test="null!=roleId">`roleId`=#{roleId},</if>
+			<if test="null!=authorityId">`authorityId`=#{authorityId},</if>
+			<if test="null!=createTime">`createTime`=#{createTime}</if>
+		</set>
+		WHERE roleId=#{roleId}
+	</update>
+
+	<!-- 批量增删改 -->
+	<insert id="batchInsert" parameterType="RoleAuthorityDto"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tbl_role_authority(
+		roleId,
+		authorityId,
+		createTime
+		) VALUES
+		<foreach collection="list" index="index" item="item"
+			separator=",">
+			(
+			#{item.roleId},
+			#{item.authorityId},
+			#{item.createTime}
+			)
+		</foreach>
+	</insert>
+
+
+	<delete id="batchDelete" parameterType="RoleAuthorityDto">
+		<foreach collection="list" index="index" item="item"
+			separator=";">
+			DELETE FROM tbl_role_authority
+			WHERE ID=#{item.id}
+		</foreach>
+	</delete>
+
+	<update id="batchUpdate" parameterType="RoleAuthorityDto">
+		<foreach collection="list" index="index" item="item"
+			separator=";">
+			UPDATE tbl_role_authority
+			<set>
+				<if test="null!=item.roleId">`roleId`=#{item.roleId},</if>
+				<if test="null!=item.authorityId">`authorityId`=#{item.authorityId},</if>
+				<if test="null!=item.createTime">`createTime`=#{item.createTime}</if>
+			</set>
+			WHERE ID=#{item.id}
+		</foreach>
+	</update>
+
+	<insert id="insertByAgency">
+		INSERT INTO
+		tbl_role_authority(roleId,authorityId,createTime)
+		SELECT ur.id AS roleId,ra.authorityId,NOW() FROM tbl_user_role ur
+		LEFT JOIN
+		tbl_role_authority ra ON ra.roleId=ur.fromRole
+		WHERE ur.agencyId=#{0}
+		AND ur.id NOT IN(SELECT roleId FROM tbl_role_authority
+		ra,tbl_user_role ur WHERE ur.id=ra.roleId AND agencyId=#{0})
+	</insert>
+
+</mapper>

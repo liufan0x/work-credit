@@ -1,0 +1,73 @@
+<div class="container-fluid">
+  <place-order-detail></place-order-detail>
+  <div id="viewRow"></div>
+  <form name="myForm">
+	<div class="row">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;面签</div>
+	</div>
+	<div class="row detail-row form-inline" >
+        <div class="col-md-12 col-lg-12">
+			 面签日期： 
+			<input ng-model="obj.faceSignTime" size="16" type="text" readonly  class="form-control form_date">
+			<!-- <a href="#"><span data-fancybox="iframe" data-src="/plugins/uploadify/upload_image.html?returnFun=returnDateFacesign" data-type="iframe" >点此上传面签照片（必传）</span></a>
+			<input type="hidden" id="img" >
+			  <span class="gallerys processuUpdImg" style="display:none">
+			       <a href="#" class="processuView-pic">查看图片</a>
+			       <img ng-repeat="img in obj.imgs" ng-src="{{img}}"  class='gallery-pic' style='display:none;'>
+			  </span>
+			   -->
+			<span ng-if="isProductCode!='04'"><a  ng-click="changeView(6)">上传面签影像资料 ></a>   </span>
+			<span ng-if="isProductCode=='04'"><a  ng-click="changeView(pageConfigDto.pageTabConfigDtos[5]);">上传面签影像资料 ></a>   </span>
+        </div>
+    </div>
+	<div class="row">
+		<div class="form-group">
+			<textarea ng-model="obj.remark" class="form-control" rows="5" placeholder="如有特殊说明，请在此处备注（非必填）"/>
+		</div>
+		<div class="col-md-12">
+			<button type="button" class="btn btn-primary" ng-click="submit()">提交</button>
+			<button type="button" class="btn btn-warning" ng-show="!orderIsBack" ng-click="backToSubmit()">退回</button>
+		</div>
+	</div>
+	</form>
+</div>
+<script>
+$(".processuView-pic").click(function(){
+    $.openPhotoGallery($(this).next("img"),"delZijinPic");
+})
+function delZijinPic(a){ 
+  $(".processuUpdImg").find("img").each(function(){ 
+      if($(this).attr("src")==a){
+       $(this).remove();
+    }
+   })
+   var returnPic="";
+   $(".processuUpdImg").find("img").each(function(){
+        returnPic+=$(this).attr("src")+",";
+   })
+   $("#img").val(returnPic.substring(0,returnPic.length-1)); 
+   var img=$("#img").val();
+   if(img==''){
+	   $(".processuUpdImg").hide() 
+   }
+}
+function returnDateFacesign(url,smallUrl,name){
+	var img=$("#img").val();
+	if(url!=''){
+		 url=url.substring(0,url.length-1);
+		 var urls= new Array();
+		 var urls=url.split(",");	
+		 var h="";
+		 for (var i=0;i<urls.length ;i++ )  { 
+			 h+="<img src='"+urls[i]+"' class='gallery-pic' style='display:none;'>";
+		 }   
+		 $(".processuUpdImg").append(h);
+		 if(img!=''){
+			 url=img+","+url;
+		 }
+		 $("#img").val(url); 
+		 $(".processuUpdImg").show();
+	}
+}
+	
+</script>

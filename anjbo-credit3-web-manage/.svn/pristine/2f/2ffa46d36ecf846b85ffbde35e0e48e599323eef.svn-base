@@ -1,0 +1,38 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="breadcrumb">
+                <li>
+                    <a ui-sref="fundList">资方列表</a>
+                    <span class="divider"></span>
+                </li>
+                <li class="active">
+                   业务模型({{fundName}})
+                </li>
+                <li class="go-back"> <a ui-sref="fundList" >返回上一步</a></li>
+            </ul>
+        </div>
+    </div><!--row-->
+    <div class="row">
+        <div class="col-md-12 form-inline">
+            <!--table-->
+            <table bs-table-control="fundBusinessModel" disabled   id="table"></table>
+            <!--table end-->
+        </div>
+        <button type="button" ng-click="disableModel(2)" id="disableModel" class="btn btn-warning lhw-alert-ok" style="margin-right:20px;">全部禁用</button>
+        <button type="button" ng-click="disableModel(1)" id="disableModel" class="btn btn-primary lhw-alert-ok" style="margin-right:50px;">全部启用</button>
+    </div><!--row-->
+</div><!--container-fluid-->
+
+
+<div ng-show="false" id="editBusinessModel">
+	<div class="row panelW500">
+		<div class="col-md-12">
+			<form class="form-inline" name="orderForm" id="orderForm">
+				<div class="form-group">
+					<span id="business" ></span>
+				</div>	
+			</form>
+		</div>
+	</div>
+</div>

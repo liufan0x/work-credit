@@ -1,0 +1,150 @@
+<form name="huarongKgIndivForm">
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;快鸽提单信息--借款人信息</div>
+    <div class="row form-inline detail-row" style="padding:0 10px;">
+        <div class="col-md-6 col-lg-4">
+            <label>借款人姓名: </label>
+            <span ng-bind="kgIndiv.custName"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>证件类型:</label>
+            <span ng-bind="kgIndiv.docType"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>证件号码:</label>
+            <span ng-bind="kgIndiv.docNo"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>手机号:</label>
+            <span ng-bind="kgIndiv.mobile"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>婚姻状况:</label>
+            <span ng-bind="kgIndiv.marStatus"></span>
+        </div>
+        <div class="col-md-6 col-lg-4"
+             ng-if="kgIndiv.marStatus=='已婚无子女'
+             ||kgIndiv.marStatus=='已婚有子女'
+             ||kgIndiv.marStatus=='复婚'">
+            <label>配偶姓名:</label>
+            <span ng-bind="kgIndiv.sCustName"></span>
+        </div>
+        <div class="col-md-6 col-lg-4"
+             ng-if="kgIndiv.marStatus=='已婚无子女'
+             ||kgIndiv.marStatus=='已婚有子女'
+             ||kgIndiv.marStatus=='复婚'">
+            <label>配偶证件类型:</label>
+            <span ng-bind="kgIndiv.sDocType"></span>
+        </div>
+        <div class="col-md-6 col-lg-4"
+             ng-if="kgIndiv.marStatus=='已婚无子女'
+             ||kgIndiv.marStatus=='已婚有子女'
+             ||kgIndiv.marStatus=='复婚'">
+            <label>配偶证件号码:</label>
+            <span ng-bind="kgIndiv.sDocNo"></span>
+        </div>
+        <div class="col-md-6 col-lg-4"
+             ng-if="kgIndiv.marStatus=='已婚无子女'
+             ||kgIndiv.marStatus=='已婚有子女'
+             ||kgIndiv.marStatus=='复婚'">
+            <label>配偶手机号:</label>
+            <span ng-bind="kgIndiv.sMobile"></span>
+        </div>
+        <div class="col-md-6 col-lg-4"
+             ng-if="kgIndiv.marStatus=='已婚无子女'
+             ||kgIndiv.marStatus=='已婚有子女'
+             ||kgIndiv.marStatus=='复婚'">
+            <label>配偶婚姻状况:</label>
+            <span ng-bind="kgIndiv.sMarStatus"></span>
+    </div>
+</div>
+
+
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;快鸽提单信息--征信信息</div>
+    <div class="row form-inline detail-row w154" style="padding:0 10px;">
+        <div class="col-md-6 col-lg-4">
+            <label>信用卡年限: </label>
+            <span ng-bind="kgIndiv.cardLife"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>所有房产评估总值: </label>
+            <span ng-bind="kgIndiv.totalPremises"></span>万元
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>授信总额: </label>
+            <span ng-bind="kgIndiv.totalCredit"></span> 万元
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>负债比例: </label>
+            <span ng-bind="kgIndiv.debtRatio"></span>%
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>近两年征信报告逾期: </label>
+            <span ng-bind="kgIndiv.overdueCredit"></span>次
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>原贷款是否银行:</label>
+            <span ng-bind="kgIndiv.yIsBank"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>个人贷款记录年限: </label>
+            <span ng-bind="kgIndiv.loanYear"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>房产套数: </label>
+            <span ng-bind="kgIndiv.houseNum"></span>套
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>已用额度: </label>
+            <span ng-bind="kgIndiv.quotaUsed"></span> 万元
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>借款成数: </label>
+            <span ng-bind="kgIndiv.loanAmount"></span>%
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>近半年征信查询次数: </label>
+            <span ng-bind="kgIndiv.creditFindNum"></span>次
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>新贷款是否银行:</label>
+            <span ng-bind="kgIndiv.xIsBank"></span>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <label>信用卡半年月均透支额: </label>
+            <span ng-bind="kgIndiv.overdraft"></span>万元
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>征信总负债: </label>
+            <span ng-bind="kgIndiv.totalCreditLia"></span> 万元
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>债务置换贷款成数: </label>
+            <span ng-bind="kgIndiv.foreclosureRate"></span>%
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>是否公司产权:</label>
+            <span ng-bind="kgIndiv.companyRight"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>产权抵押情况:</label>
+            <span ng-bind="kgIndiv.rightMortgage"></span>
+        </div>
+        <div class="col-md-12 col-lg-12">
+            <label style="width:309px;">个人贷款，信用卡累计有效违约率: </label>
+            <span ng-bind="kgIndiv.defaultRate"></span>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;</div>
+    <div class="clear" style="width:100%; height:1px; clear:both;"></div>
+    <div class="row form-inline relative  detail-row" style="padding:0 10px;">
+        <span class="remark-span remark-lhw">备注：</span>
+        <textarea style="border:1px solid #ddd;width:82%;" readonly="readonly" class="remark-p remark-lhw-p textarea-lhw ng-binding ng-isolate-scope"  ng-model="kgIndiv.remark" name="kgApprovalTrial"> </textarea>
+    </div>
+</div>
+</form>

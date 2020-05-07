@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="GBK"?>
+<conditions>
+	<condition queryType="10103">
+		<item>
+			<name>bankId</name>
+			<value>${bankId}</value>
+		</item>
+		<item>
+			<name>judgeFor</name>
+			<value>${judgeFor}</value>
+		</item>
+		<item>
+			<name>rightType</name>
+			<value>${rightType}</value>
+		</item>
+		<item>
+			<name>property</name>
+			<value>${property}</value>
+		</item>
+		<item>
+			<name>buildSize</name>
+			<value>${buildSize}</value>
+		</item>		
+		<item>
+			<name>totalPrice</name>
+			<value>${totalPrice}</value>
+		</item>
+		<item>
+			<name>regPrice</name>
+			<value>${regPrice}</value>
+		</item>
+		<item>
+			<name>BuyDate</name>
+			<value>${buyDate}</value>
+		</item>
+	</condition>
+</conditions>

@@ -1,0 +1,149 @@
+<style>
+.form-inline.w125 label{width:125px;}
+</style>
+<div class="row form-inline w125 detail-row-min">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp; 出款方式</div>
+		<div class="col-md-6 col-lg-4"><label>出款方式：</label>
+			<span ng-bind="foreclosureType.foreclosureType"></span>
+		</div>
+		<div class="col-md-6 col-lg-4"><label>账户类型：</label>
+			<span ng-bind="foreclosureType.accountType"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>开户银行-支行：</label>
+			<span ng-bind="foreclosureType.bankName"></span>-<span ng-bind="foreclosureType.bankSubName"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label ng-if="foreclosureType.accountType!='公司'">银行卡户名：</label>
+			<label ng-if="foreclosureType.accountType=='公司'">公司名称：</label>
+			<span ng-bind="foreclosureType.bankCardMaster"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label ng-if="foreclosureType.accountType!='公司'">银行卡账号：</label>
+			<label ng-if="foreclosureType.accountType=='公司'">公司账号：</label>
+			<span ng-bind="foreclosureType.bankNo"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="foreclosureType.accountType!='公司'"><label>身份证号码：</label>
+			<span ng-bind="foreclosureType.idCard"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>银行卡密码：</label>
+			<span ng-if="foreclosureType.isUpdateBankCardPWD != '1'">未修改</span>
+			<span ng-if="foreclosureType.isUpdateBankCardPWD == '1'">已修改</span>
+		</div>
+		<div class="col-md-6 col-lg-4" ng-if="foreclosureType.foreclosureType!='柜台还款'"><label>手机银行：</label>
+			<span ng-if="foreclosureType.isMobleBank != '1'">未关闭</span>
+			<span ng-if="foreclosureType.isMobleBank == '1'">已关闭</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="foreclosureType.foreclosureType!='柜台还款'"><label>网银：</label>
+			<span ng-if="foreclosureType.isNetBank != '1'">未关闭</span>
+			<span ng-if="foreclosureType.isNetBank == '1'">已关闭</span>
+		</div>
+		<!-- 公章 -->
+		<div class="col-md-6 col-lg-4" ng-if="foreclosureType.accountType=='公司'"><label>公章：</label>
+			<span ng-if="foreclosureType.isReceiveCompanyStamp != '1'">未回收</span>
+			<span ng-if="foreclosureType.isReceiveCompanyStamp == '1'">已回收</span>
+		</div>
+		<!-- 财务章 -->
+		<div class="col-md-6 col-lg-4" ng-if="foreclosureType.accountType=='公司'"><label>财务章：</label>
+			<span ng-if="foreclosureType.isReceiveFinanceStamp != '1'">未回收</span>
+			<span ng-if="foreclosureType.isReceiveFinanceStamp == '1'">已回收</span>
+		</div>
+
+		<!-- 私章 -->
+		<div class="col-md-6 col-lg-4" ng-if="foreclosureType.accountType=='公司'"><label>私章：</label>
+			<span ng-if="foreclosureType.isReceivePrivateStamp != '1'">未回收</span>
+			<span ng-if="foreclosureType.isReceivePrivateStamp == '1'">已回收</span>
+		</div>
+		
+		<!-- 营业执照 -->
+		<div class="col-md-6 col-lg-4" ng-if="foreclosureType.accountType=='公司'"><label>营业执照：</label>
+			<span ng-if="foreclosureType.isReceiveBusinessLicence != '1'">未回收</span>
+			<span ng-if="foreclosureType.isReceiveBusinessLicence == '1'">已回收</span>
+		</div>
+		
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp; 回款方式</div>
+		<div class="col-md-6 col-lg-4"><label>回款方式：</label>
+			<span ng-bind="paymentType.paymentMode"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>账户类型：</label>
+			<span ng-bind="paymentType.paymentaccountType"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>开户银行-支行：</label>
+			<span ng-bind="paymentType.paymentBankName + '-' + paymentType.paymentBankSubName "></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label ng-if="paymentType.paymentaccountType!='公司'">银行卡户名：</label>
+			<label ng-if="paymentType.paymentaccountType=='公司'">公司名称：</label>
+			<span ng-bind="paymentType.paymentBankCardName"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label ng-if="paymentType.paymentaccountType!='公司'">银行卡账号：</label>
+			<label ng-if="paymentType.paymentaccountType=='公司'">公司账号：</label>
+			<span ng-bind="paymentType.paymentBankNumber"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="paymentType.paymentaccountType!='公司'"><label>身份证号码：</label>
+			<span ng-bind="paymentType.paymentIdCardNo"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>银行卡密码：</label>
+			<span ng-if="paymentType.paymentBankCardPwdState != '1'">未核实</span>
+			<span ng-if="paymentType.paymentBankCardPwdState == '1'">已核实</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>手机银行：</label>
+			<span ng-if="paymentType.paymentmobileBankState != '1'">未关闭</span>
+			<span ng-if="paymentType.paymentmobileBankState == '1'">已关闭</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="paymentType.paymentMode!='网银转账'"><label>网银：</label>
+			<span ng-if="paymentType.isNetBankLoginPwd != '1'">未核实</span>
+			<span ng-if="paymentType.isNetBankLoginPwd == '1'">已核实</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="paymentType.paymentMode=='网银转账'"><label>网银登录用户名：</label>
+			<span ng-bind="paymentType.netBankLoginName"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="paymentType.paymentMode=='网银转账'"><label>网银登录密码：</label>
+			<span ng-if="paymentType.isNetBankLoginPwd != '1'">未核实</span>
+			<span ng-if="paymentType.isNetBankLoginPwd == '1'">已核实</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="paymentType.paymentMode=='网银转账'"><label>网银支付密码：</label>
+			<span ng-if="paymentType.verfuyNetBankPwd != '1'">未成功支付</span>
+			<span ng-if="paymentType.verfuyNetBankPwd == '1'">已成功支付</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="paymentType.paymentMode=='网银转账'"><label>限额（元）：</label>
+			<span ng-bind="paymentType.quota"></span>
+		</div>
+		<!--个人start-->	
+		<div class="col-md-6 col-lg-4" ng-if="paymentType.paymentaccountType=='公司'"><label>公章：</label>
+			<span ng-if="paymentType.paymentOfficialSealState != '1'">未回收</span>
+			<span ng-if="paymentType.paymentOfficialSealState == '1'">已回收</span>
+		</div>
+		<div class="col-md-6 col-lg-4" ng-if="paymentType.paymentaccountType=='公司'"><label>财务章：</label>
+			<span ng-if="paymentType.paymentFinanceSealState != '1'">未回收</span>
+			<span ng-if="paymentType.paymentFinanceSealState == '1'">已回收</span>
+		</div>
+		<div class="col-md-6 col-lg-4" ng-if="paymentType.paymentaccountType=='公司'"><label>私章：</label>
+			<span ng-if="paymentType.paymentPrivateSealState != '1'">未回收</span>
+			<span ng-if="paymentType.paymentPrivateSealState == '1'">已回收</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="paymentType.paymentaccountType=='公司'"><label>营业执照：</label>
+			<span ng-if="paymentType.paymentBusinessLicenseState != '1'">未回收</span>
+			<span ng-if="paymentType.paymentBusinessLicenseState == '1'">已回收</span>
+		</div>
+		<!--个人end-->	
+		
+	</div>
+	<!-- <div class="col-md-12 col-lg-12"><label class="remark-span remark-lhw" style="width:115px;">备注说明：</label>
+			<textarea class="remark-p remark-lhw-p textarea-lhw" ng-bind="foreclosureType.remark" readonly="readonly" style="margin-left:120px"></textarea>
+    </div> -->

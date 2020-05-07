@@ -1,0 +1,542 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.EnquiryMapper">
+    
+    <resultMap id="BaseResultMap" type="enquiryDto">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="createUid" jdbcType="VARCHAR" property="createUid" />
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="updateUid" jdbcType="VARCHAR" property="updateUid" />
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="orderNo" jdbcType="VARCHAR" property="orderNo" />
+        <result column="enquiryId" jdbcType="VARCHAR" property="enquiryId" />
+        <result column="area" jdbcType="VARCHAR" property="area" />
+        <result column="buildingId" jdbcType="VARCHAR" property="buildingId" />
+        <result column="buildingName" jdbcType="VARCHAR" property="buildingName" />
+        <result column="propertyId" jdbcType="VARCHAR" property="propertyId" />
+        <result column="propertyName" jdbcType="VARCHAR" property="propertyName" />
+        <result column="registerPrice" jdbcType="DECIMAL" property="registerPrice" />
+        <result column="roomId" jdbcType="VARCHAR" property="roomId" />
+        <result column="roomName" jdbcType="VARCHAR" property="roomName" />
+        <result column="obligee" jdbcType="VARCHAR" property="obligee" />
+        <result column="range" jdbcType="VARCHAR" property="range" />
+        <result column="consumerloans" jdbcType="INTEGER" property="consumerloans" />
+        <result column="transactionprice" jdbcType="DECIMAL" property="transactionprice" />
+        <result column="totalPrice" jdbcType="DECIMAL" property="totalPrice" />
+        <result column="netPrice" jdbcType="DECIMAL" property="netPrice" />
+        <result column="maxLoanPrice" jdbcType="DECIMAL" property="maxLoanPrice" />
+    </resultMap>
+    
+    <insert id="insertSelective" parameterType="java.util.Map">
+        insert into tbl_risk_enquiry
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="createUid != null">
+                createUid,
+            </if>
+            <if test="createTime != null">
+                createTime,
+            </if>
+            <if test="updateUid != null">
+                updateUid,
+            </if>
+            <if test="orderNo != null">
+                orderNo,
+            </if>
+            <if test="enquiryId != null">
+                enquiryId,
+            </if>
+            <if test="area != null">
+                area,
+            </if>
+            <if test="buildingId != null">
+                buildingId,
+            </if>
+            <if test="buildingName != null">
+                buildingName,
+            </if>
+            <if test="propertyId != null">
+                propertyId,
+            </if>
+            <if test="propertyName != null">
+                propertyName,
+            </if>
+            <if test="registerPrice != null">
+                registerPrice,
+            </if>
+            <if test="roomId != null">
+                roomId,
+            </if>
+            <if test="roomName != null">
+                roomName,
+            </if>
+            <if test="obligee != null">
+                obligee,
+            </if>
+            <if test="range != null">
+                `range`,
+            </if>
+            <if test="consumerloans != null">
+                consumerloans,
+            </if>
+            <if test="transactionprice != null">
+                transactionprice,
+            </if>
+            <if test="totalPrice != null">
+                totalPrice,
+            </if>
+            <if test="netPrice != null">
+                netPrice,
+            </if>
+            <if test="maxLoanPrice != null">
+                maxLoanPrice
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="createUid != null">
+                #{createUid},
+            </if>
+            <if test="createTime != null">
+                now(),
+            </if>
+            <if test="updateUid != null">
+                #{updateUid},
+            </if>
+            <if test="orderNo != null">
+                #{orderNo},
+            </if>
+            <if test="enquiryId != null">
+                #{enquiryId},
+            </if>
+            <if test="area != null">
+                #{area},
+            </if>
+            <if test="buildingId != null">
+                #{buildingId},
+            </if>
+            <if test="buildingName != null">
+                #{buildingName},
+            </if>
+            <if test="propertyId != null">
+                #{propertyId},
+            </if>
+            <if test="propertyName != null">
+                #{propertyName},
+            </if>
+            <if test="registerPrice != null">
+                #{registerPrice},
+            </if>
+            <if test="roomId != null">
+                #{roomId},
+            </if>
+            <if test="roomName != null">
+                #{roomName},
+            </if>
+            <if test="obligee != null">
+                #{obligee},
+            </if>
+            <if test="range != null">
+                #{range},
+            </if>
+            <if test="consumerloans != null">
+                #{consumerloans},
+            </if>
+            <if test="transactionprice != null">
+                #{transactionprice},
+            </if>
+            <if test="totalPrice != null">
+                #{totalPrice},
+            </if>
+            <if test="netPrice != null">
+                #{netPrice},
+            </if>
+            <if test="maxLoanPrice != null">
+                #{maxLoanPrice}
+            </if>
+            
+        </trim>
+    </insert>
+    
+    <insert id="insert" parameterType="enquiryDto">
+    	<selectKey resultType="int" keyProperty="id">
+            select
+            last_insert_id()
+        </selectKey>
+    	INSERT INTO tbl_risk_enquiry
+    	(
+    		id,createUid,createTime,updateUid,orderNo,
+    		enquiryId,area,buildingId,buildingName,
+    		propertyId,propertyName,registerPrice,
+    		roomId,roomName,obligee,totalPrice,
+    		netPrice,maxLoanPrice,`range`,transactionprice,
+    		consumerloans
+    	)
+    	VALUE
+    	(
+    		null,#{createUid},now(),#{updateUid},#{orderNo},
+    		#{enquiryId},#{area},#{buildingId},#{buildingName},
+    		#{propertyId},#{propertyName},#{registerPrice},
+    		#{roomId},#{roomName},#{obligee},#{totalPrice},
+    		#{netPrice},#{maxLoanPrice},#{range},#{transactionprice},
+    		#{consumerloans}
+    	)
+    </insert>
+    
+    <insert id="insertByMap" parameterType="java.util.Map">
+    	<selectKey resultType="int" keyProperty="id">
+            select
+            last_insert_id()
+        </selectKey>
+    	INSERT INTO tbl_risk_enquiry
+    	(
+    		createUid,createTime,updateUid,orderNo,
+    		enquiryId,area,buildingId,buildingName,
+    		propertyId,propertyName,registerPrice,
+    		roomId,roomName,obligee,totalPrice,
+    		netPrice,maxLoanPrice,`range`,transactionprice,
+    		consumerloans
+    	)
+    	VALUES
+    	(
+    		#{createUid},now(),#{updateUid},#{orderNo},
+    		#{enquiryid},#{area},#{buildingId},#{buildingName},
+    		#{propertyId},#{propertyName},#{registerPrice},
+    		#{roomId},#{roomName},#{obligee},#{totalPrice},
+    		#{netPrice},#{maxLoanPrice},#{range},#{transactionprice},
+    		#{consumerloans}
+    	)
+    </insert>
+    
+    <select id="listEnquiry" resultType="enquiryDto" parameterType="java.lang.String">
+    	SELECT 
+    		* 
+    	FROM tbl_risk_enquiry WHERE orderNo = #{orderNo} ORDER BY createTime 	
+    </select>
+    
+    <select id="detail" parameterType="java.util.Map" resultType="enquiryDto">
+    	SELECT
+    		*
+    	FROM tbl_risk_enquiry WHERE orderNo = #{orderNo} and enquiryId = #{enquiryId} ORDER BY createTime LIMIT 1
+    </select>
+    
+     <select id="detailById" parameterType="java.lang.Integer" resultType="enquiryDto">
+    	SELECT
+    		*
+    	FROM tbl_risk_enquiry WHERE id=#{id}
+    </select>
+    
+    <update id="update" parameterType="enquiryDto">
+    	UPDATE tbl_risk_enquiry
+    	<set>
+    		<if test="updateUid!=null and updateUid!=''">
+    			updateUid = #{updateUid},
+    		</if>
+    		<if test="enquiryId!=null and enquiryId!=''">
+    			enquiryId = #{enquiryId},
+    		</if>
+    		<if test="area!=null and area!=''">
+    			area = #{area},
+    		</if>
+    		<if test="buildingId!=null and buildingId!=''">
+    			buildingId = #{buildingId},
+    		</if>
+    		<if test="buildingName!=null and buildingName!=''">
+    			buildingName = #{buildingName},
+    		</if>
+    		<if test="propertyId!=null and propertyId!=''">
+    			propertyId = #{propertyId},
+    		</if>
+    		<if test="propertyName!=null and propertyName!=''">
+    			propertyName = #{propertyName},
+    		</if>
+    		<if test="registerPrice!=null">
+    			registerPrice = #{registerPrice},
+    		</if>
+    		<if test="roomId!=null and roomId!=''">
+    			roomId = #{roomId},
+    		</if>
+    		<if test="roomName and roomName!=''">
+    			roomName = #{roomName},
+    		</if>
+    		<if test="obligee!=null and obligee!=''">
+    			obligee = #{obligee},
+    		</if>
+    		<if test="totalPrice!=null">
+    			totalPrice = #{totalPrice},
+    		</if>
+    		<if test="netPrice!=null">
+    			netPrice = #{netPrice},
+    		</if>
+    		<if test="maxLoanPrice!=null">
+    			maxLoanPrice = #{maxLoanPrice},
+    		</if>
+    		<if test="range!=null and range!=null">
+    			`range` = #{range},
+    		</if>
+    		<if test="transactionprice!=null">
+    			transactionprice = #{transactionprice},
+    		</if>
+    		<if test="consumerloans!=null">
+    			consumerloans = #{consumerloans}
+    		</if>
+    		
+    	</set>
+    	WHERE orderNo = #{orderNo} and enquiryId = #{enquiryId}
+    </update>
+     <update id="updateByOldEnquiryId" parameterType="java.util.Map">
+    	UPDATE tbl_risk_enquiry
+    	<set>
+    		<if test="updateUid!=null and updateUid!=''">
+    			updateUid = #{updateUid},
+    		</if>
+    		<if test="enquiryid!=null and enquiryid!=''">
+    			enquiryId = #{enquiryid},
+    		</if>
+    		<if test="area!=null and area!=''">
+    			area = #{area},
+    		</if>
+    		<if test="buildingId!=null and buildingId!=''">
+    			buildingId = #{buildingId},
+    		</if>
+    		<if test="buildingName!=null and buildingName!=''">
+    			buildingName = #{buildingName},
+    		</if>
+    		<if test="propertyId!=null and propertyId!=''">
+    			propertyId = #{propertyId},
+    		</if>
+    		<if test="propertyName!=null and propertyName!=''">
+    			propertyName = #{propertyName},
+    		</if>
+    		<if test="registerPrice!=null">
+    			registerPrice = #{registerPrice},
+    		</if>
+    		<if test="roomId!=null and roomId!=''">
+    			roomId = #{roomId},
+    		</if>
+    		<if test="roomName and roomName!=''">
+    			roomName = #{roomName},
+    		</if>
+    		<if test="obligee!=null and obligee!=''">
+    			obligee = #{obligee},
+    		</if>
+    		<if test="totalPrice!=null">
+    			totalPrice = #{totalPrice},
+    		</if>
+    		<if test="netPrice!=null">
+    			netPrice = #{netPrice},
+    		</if>
+    		<if test="maxLoanPrice!=null">
+    			maxLoanPrice = #{maxLoanPrice},
+    		</if>
+    		<if test="range!=null and range!=null">
+    			`range` = #{range},
+    		</if>
+    		<if test="transactionprice!=null">
+    			transactionprice = #{transactionprice},
+    		</if>
+    		<if test="consumerloans!=null">
+    			consumerloans = #{consumerloans}
+    		</if>
+    		
+    	</set>
+    	WHERE orderNo = #{orderNo} and enquiryId = #{oldEnquiryId}
+    </update>
+    
+    <update id="updateByOrderNo" parameterType="enquiryDto">
+    	UPDATE tbl_risk_enquiry
+    	<set>
+    		<if test="updateUid!=null and updateUid!=''">
+    			updateUid = #{updateUid},
+    		</if>
+    		<if test="enquiryId!=null and enquiryId!=''">
+    			enquiryId = #{enquiryId},
+    		</if>
+    		<if test="area!=null and area!=''">
+    			area = #{area},
+    		</if>
+    		<if test="buildingId!=null and buildingId!=''">
+    			buildingId = #{buildingId},
+    		</if>
+    		<if test="buildingName!=null and buildingName!=''">
+    			buildingName = #{buildingName},
+    		</if>
+    		<if test="propertyId!=null and propertyId!=''">
+    			propertyId = #{propertyId},
+    		</if>
+    		<if test="propertyName!=null and propertyName!=''">
+    			propertyName = #{propertyName},
+    		</if>
+    		<if test="registerPrice!=null">
+    			registerPrice = #{registerPrice},
+    		</if>
+    		<if test="roomId!=null and roomId!=''">
+    			roomId = #{roomId},
+    		</if>
+    		<if test="roomName and roomName!=''">
+    			roomName = #{roomName},
+    		</if>
+    		<if test="obligee!=null and obligee!=''">
+    			obligee = #{obligee},
+    		</if>
+    		<if test="totalPrice!=null">
+    			totalPrice = #{totalPrice},
+    		</if>
+    		<if test="netPrice!=null">
+    			netPrice = #{netPrice},
+    		</if>
+    		<if test="maxLoanPrice!=null">
+    			maxLoanPrice = #{maxLoanPrice},
+    		</if>
+    		<if test="range!=null and range!=null">
+    			`range` = #{range},
+    		</if>
+    		<if test="transactionprice!=null">
+    			transactionprice = #{transactionprice},
+    		</if>
+    		<if test="consumerloans!=null">
+    			consumerloans = #{consumerloans}
+    		</if>
+    		
+    	</set>
+    	WHERE orderNo = #{orderNo}
+    </update>
+    
+    <select id="detailByOrderNo" parameterType="java.lang.String" resultType="enquiryDto">
+    	SELECT
+    		*
+    	FROM tbl_risk_enquiry WHERE orderNo = #{orderNo} ORDER BY createTime
+    </select>
+    
+    <update id="updateById" parameterType="java.util.Map">
+    	UPDATE tbl_risk_enquiry
+    	<set>
+    		<if test="updateUid!=null and updateUid!=''">
+    			updateUid = #{updateUid},
+    		</if>
+    		<if test="enquiryId!=null and enquiryId!=''">
+    			enquiryId = #{enquiryId},
+    		</if>
+    		<if test="area!=null and area!=''">
+    			area = #{area},
+    		</if>
+    		<if test="buildingId!=null and buildingId!=''">
+    			buildingId = #{buildingId},
+    		</if>
+    		<if test="buildingName!=null and buildingName!=''">
+    			buildingName = #{buildingName},
+    		</if>
+    		<if test="propertyId!=null and propertyId!=''">
+    			propertyId = #{propertyId},
+    		</if>
+    		<if test="propertyName!=null and propertyName!=''">
+    			propertyName = #{propertyName},
+    		</if>
+    		<if test="registerPrice!=null">
+    			registerPrice = #{registerPrice},
+    		</if>
+    		<if test="roomId!=null and roomId!=''">
+    			roomId = #{roomId},
+    		</if>
+    		<if test="roomName and roomName!=''">
+    			roomName = #{roomName},
+    		</if>
+    		<if test="obligee!=null and obligee!=''">
+    			obligee = #{obligee},
+    		</if>
+    		<if test="totalPrice!=null">
+    			totalPrice = #{totalPrice},
+    		</if>
+    		<if test="netPrice!=null">
+    			netPrice = #{netPrice},
+    		</if>
+    		<if test="maxLoanPrice!=null">
+    			maxLoanPrice = #{maxLoanPrice},
+    		</if>
+    		<if test="range!=null and range!=null">
+    			`range` = #{range},
+    		</if>
+    		<if test="transactionprice!=null">
+    			transactionprice = #{transactionprice},
+    		</if>
+    		<if test="consumerloans!=null">
+    			consumerloans = #{consumerloans}
+    		</if>
+    		
+    	</set>
+    	WHERE id = #{id}
+    </update>
+    
+    <update id="updateByMap" parameterType="java.util.Map">
+    	UPDATE tbl_risk_enquiry
+    	<set>
+    		<if test="updateUid!=null and updateUid!=''">
+    			updateUid = #{updateUid},
+    		</if>
+    		<if test="enquiryId!=null and enquiryId!=''">
+    			enquiryId = #{enquiryId},
+    		</if>
+    		<if test="area!=null and area!=''">
+    			area = #{area},
+    		</if>
+    		<if test="buildingId!=null and buildingId!=''">
+    			buildingId = #{buildingId},
+    		</if>
+    		<if test="buildingName!=null and buildingName!=''">
+    			buildingName = #{buildingName},
+    		</if>
+    		<if test="propertyId!=null and propertyId!=''">
+    			propertyId = #{propertyId},
+    		</if>
+    		<if test="propertyName!=null and propertyName!=''">
+    			propertyName = #{propertyName},
+    		</if>
+    		<if test="registerPrice!=null">
+    			registerPrice = #{registerPrice},
+    		</if>
+    		<if test="roomId!=null and roomId!=''">
+    			roomId = #{roomId},
+    		</if>
+    		<if test="roomName and roomName!=''">
+    			roomName = #{roomName},
+    		</if>
+    		<if test="obligee!=null and obligee!=''">
+    			obligee = #{obligee},
+    		</if>
+    		<if test="totalPrice!=null">
+    			totalPrice = #{totalPrice},
+    		</if>
+    		<if test="netPrice!=null">
+    			netPrice = #{netPrice},
+    		</if>
+    		<if test="maxLoanPrice!=null">
+    			maxLoanPrice = #{maxLoanPrice},
+    		</if>
+    		<if test="range!=null and range!=null">
+    			`range` = #{range},
+    		</if>
+    		<if test="transactionprice!=null">
+    			transactionprice = #{transactionprice},
+    		</if>
+    		<if test="consumerloans!=null">
+    			consumerloans = #{consumerloans}
+    		</if>
+    		
+    	</set>
+    	WHERE  orderNo = #{orderNo} and enquiryId = #{enquiryId}
+    </update>
+    
+    <delete id="delete" parameterType="enquiryDto">
+  		DELETE FROM tbl_risk_enquiry WHERE enquiryId=#{enquiryId} and orderNO = #{orderNo}
+  	</delete>
+  	
+  	 <select id="detailByOrderNoLimitOne" parameterType="java.lang.String" resultType="enquiryDto">
+    	SELECT
+    		*
+    	FROM tbl_risk_enquiry WHERE orderNo = #{orderNo} ORDER BY createTime LIMIT 1;
+    </select>
+</mapper>

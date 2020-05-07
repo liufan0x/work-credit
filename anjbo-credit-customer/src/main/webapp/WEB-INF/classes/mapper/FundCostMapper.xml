@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.FundCostMapper">
+    <resultMap id="BaseResultMap" type="FundCostDto">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="fundId" jdbcType="INTEGER" property="fundId" />
+        <result column="productId" jdbcType="INTEGER" property="productId" />
+        <result column="dayRate" jdbcType="DOUBLE" property="dayRate" />
+        <result column="overdueRate" jdbcType="DOUBLE" property="overdueRate" />
+        <result column="overdueRateHas" jdbcType="TINYINT" property="overdueRateHas" />
+        <result column="riskProvision" jdbcType="DOUBLE" property="riskProvision" />
+        <result column="riskProvisionHas" jdbcType="TINYINT" property="riskProvisionHas" />
+        <result column="discountHas" jdbcType="TINYINT" property="discountHas" />
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="createUid" jdbcType="INTEGER" property="createUid" />
+        <result column="updateUid" jdbcType="INTEGER" property="updateUid" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+    </resultMap>
+    
+    <sql id="Base_Column_List">
+        id, fundId, productId, dayRate, overdueRate, overdueRateHas, riskProvision, riskProvisionHas, 
+        discountHas, createTime, updateTime, createUid, updateUid, remark
+    </sql>
+    
+    <select id="detail" parameterType="java.lang.Integer" resultType="FundCostDto">
+        select 
+        <include refid="Base_Column_List" />
+        from tbl_customer_fund_cost
+        where id = #{id}
+    </select>
+    
+    <select id="selectByFundId" parameterType="java.lang.Integer" resultType="FundCostDto">
+    	SELECT 
+    		<include refid="Base_Column_List"/>
+    	FROM tbl_customer_fund_cost WHERE fundId = #{findId} ORDER BY createTime DESC LIMIT 1;
+    </select>
+    
+     <select id="list" resultType="FundCostDto">
+    	SELECT 
+    		<include refid="Base_Column_List"/>
+    	FROM tbl_customer_fund_cost
+    </select>
+    
+    <insert id="insert" parameterType="FundCostDto">
+        insert into tbl_customer_fund_cost 
+        (
+        	id,
+        	fundId,
+        	productId, 
+            dayRate,
+            overdueRate,
+            overdueRateHas, 
+            riskProvision,
+            riskProvisionHas,
+            discountHas, 
+            createTime,
+            createUid, 
+            updateUid,
+            remark
+        )
+        values 
+        (
+        	#{id},
+        	#{fundId},
+        	#{productId}, 
+            #{dayRate},
+            #{overdueRate},
+            #{overdueRateHas}, 
+            #{riskProvision},
+            #{riskProvisionHas},
+            #{discountHas}, 
+            #{createTime},
+            #{createUid}, 
+            #{updateUid},
+            #{remark}
+          )
+    </insert>
+    
+    <update id="update" parameterType="FundCostDto">
+        update tbl_customer_fund_cost
+        <set>
+            <if test="fundId != null">
+                fundId = #{fundId},
+            </if>
+            <if test="productId != null">
+                productId = #{productId},
+            </if>
+            <if test="dayRate != null">
+                dayRate = #{dayRate},
+            </if>
+            <if test="overdueRate != null">
+                overdueRate = #{overdueRate},
+            </if>
+            <if test="overdueRateHas != null">
+                overdueRateHas = #{overdueRateHas},
+            </if>
+            <if test="riskProvision != null">
+                riskProvision = #{riskProvision},
+            </if>
+            <if test="riskProvisionHas != null">
+                riskProvisionHas = #{riskProvisionHas},
+            </if>
+            <if test="discountHas != null">
+                discountHas = #{discountHas},
+            </if>
+            <if test="createTime != null">
+                createTime = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                updateTime = #{updateTime},
+            </if>
+            <if test="createUid != null">
+                createUid = #{createUid},
+            </if>
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+            <if test="remark != null and remark!=''">
+                remark = #{remark},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

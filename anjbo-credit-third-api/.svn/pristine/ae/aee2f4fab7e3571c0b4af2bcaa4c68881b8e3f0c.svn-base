@@ -1,0 +1,54 @@
+<#setting number_format="#0.00">
+<?xml version="1.0" encoding="UTF-8"?>
+<ROOT>
+	<HEADER>
+		<TRANNO>${tranNo!}</TRANNO>
+		<COMNO>${comNo!}</COMNO>
+		<BNKNO>${bankNo!}</BNKNO>
+		<CHANNELNO>${channelNo!}</CHANNELNO>
+		<ISN>${isn!}</ISN>
+	</HEADER>
+	<BODY>
+		<LOANAPP>
+			<Cst_Nm>${custName!}</Cst_Nm>
+			<Crdt_TpCd>${certificateType!}</Crdt_TpCd>
+			<Crdt_No>${certificateNo!}</Crdt_No>
+			<PD_Cd>${productCode!}</PD_Cd>
+			<Loan_Amt>${(loanAmount!'0')?number*10000}</Loan_Amt>
+			<Loan_Trm>${loanLimit!}</Loan_Trm>
+			<Idv_loan_Use_Cd>${loanUsed!}</Idv_loan_Use_Cd>
+			<Cst_RltvAR_ID></Cst_RltvAR_ID>
+			<FstPy_Amt>${(firstPayment!'0')?number*10000}</FstPy_Amt>
+			<Hs_Val>${totalAmount!}</Hs_Val>
+			<Parn_RspbPsn_ID>${agentName!}</Parn_RspbPsn_ID>
+			<Parn_RspbPsn_Phone>${agentMobile!}</Parn_RspbPsn_Phone>
+			<RspbPsn_Phone>${custManagerMobile!}</RspbPsn_Phone>
+			<RpMd_Cd>${repaymentWay!}</RpMd_Cd>
+			<Mrtg_No>${assessAppNo!}</Mrtg_No>
+			<#if payeeName?exists>
+			<RcvPymtPs_Grp>
+				<RcvPymtPs_AccNo>${payeeCardNo!}</RcvPymtPs_AccNo>
+				<RcvPymtPs_AccNm>${payeeName!}</RcvPymtPs_AccNm>
+				<RPPDBnk_Nm_Inf>${payeeBankName!}${payeeSubBankName!}</RPPDBnk_Nm_Inf>
+				<OurBnk_Ind>${payeeIsOurBank!}</OurBnk_Ind>
+			</RcvPymtPs_Grp>
+			</#if>
+			<#if assCustName?exists && assCustName!=''>
+				<Rel_Grp>
+					<RelParty_TpCd>${assType!}</RelParty_TpCd>
+					<Cst_Nm>${assCustName!}</Cst_Nm>
+					<Crdt_TpCd>${assCertificateType!}</Crdt_TpCd>
+					<Crdt_No>${assCertificateNo!}</Crdt_No>
+				</Rel_Grp>
+			</#if>
+			<Hbs_Grp>
+				<Fam_Exst_Hs_Num>${houseCount!}</Fam_Exst_Hs_Num>
+				<HsStl_Cd>${houseType!}</HsStl_Cd>
+				<Adr_ID></Adr_ID>
+			</Hbs_Grp>
+			<Gnt_Grp>
+				<Mrtg_Ind>1</Mrtg_Ind>
+			</Gnt_Grp>
+		</LOANAPP>
+	</BODY>
+</ROOT>

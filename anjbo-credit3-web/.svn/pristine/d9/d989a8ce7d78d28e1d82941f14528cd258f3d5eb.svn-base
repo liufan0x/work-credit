@@ -1,0 +1,148 @@
+<!--表格-->
+<div ng-show="undefined!=busInfo.changRelationLoan && null!=busInfo.changRelationLoan && busInfo.changRelationLoan.length>0">
+<div class="col-md-12 detail-right-tit ">&nbsp;&nbsp;<span ng-bind="cityName"></span>-债务置换影像资料</div>
+	<div class="row" class="form-inline detail-row">
+		<div class="col-md-12 ">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>序号</th>
+						<th>分类</th>
+						<th>资料名称</th>
+						<th>文档数</th>
+						<th>操作</th>
+						<th>说明</th>
+					</tr>
+				</thead>
+				<tbody ng-repeat="pType in busInfo.changRelationLoan">
+				<tr  ng-repeat="sType in pType.sonTypes">
+					<td ng-bind="$parent.$index+1*$index"></td>
+					<td ng-if="$index==0" rowspan="{{pType.sonTypes.length}}" class="white-bg" style=" font-weight:bold; vertical-align: middle;text-align:center;">
+					<span ng-bind="pType.name"></span></br></td>
+					<td>
+						<span ng-if="sType.isMust==1" class="text-danger">*</span>
+						<span>{{sType.name}}</span>
+					</td>
+					<td ng-bind="sType.docCount"></td>
+					<td>
+						<span class="caozuo" ng-if="cOperate">
+							<a data-fancybox="iframe" ng-click="setType(sType.id, pType.relationOrderNo)" data-src="/plugins/uploadify/upload_image.html" data-type="iframe" href="javascript:;">上传</a>
+						</span>&nbsp;&nbsp;&nbsp;
+						<span class="caozuo" ng-if="cOperate && sType.listMap.length>0"><a ng-click="imgShow('move', sType.id, pType.relationOrderNo)">移动</a></span>&nbsp;&nbsp;&nbsp;
+						<span class="caozuo red-word" ng-if="cOperate && sType.listMap.length>0"><a ng-click="imgShow('del', sType.id, pType.relationOrderNo)">删除</a></span>&nbsp;&nbsp;&nbsp;
+						<span class="caozuo chakan-img gallerys">
+							<list ng-repeat="imgMap in sType.listMap">
+								<span class="gallery-pic-img" title="{{imgMap.url}}" ng-show="$index==0"></span>
+							</list>
+						</span>
+						<input type="hidden" name="typeId" value="{{sType.id}}">
+					</td>
+					<td ng-bind="sType.remark"></td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+</div>
+<!--表格row end-->
+<!--表格-->
+<div class="col-md-12 detail-right-tit place-businfo-edit">&nbsp;&nbsp;畅贷影像资料</div>
+	<div class="row" class="form-inline detail-row">
+		<div class="col-md-12">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>序号</th>
+						<th>分类</th> 
+						<th>资料名称</th>
+						<th>文档数</th>
+						<th>操作</th>
+						<th>说明</th>
+					</tr>
+				</thead>
+				<tbody ng-repeat="pType in busInfo.creditLoan">
+				<tr  ng-repeat="sType in pType.sonTypes">
+					<td ng-bind="$parent.$index+1*$index"></td>
+					<td ng-if="$index==0" rowspan="{{pType.sonTypes.length}}" class="white-bg" style="font-weight:bold;  vertical-align: middle;text-align:center;">
+					<span ng-bind="pType.name"></span></br></td>
+					<td>
+						<span ng-if="sType.isMust==1" class="text-danger">*</span>
+						<span>{{sType.name}}</span>
+					</td>
+					<td ng-bind="sType.docCount"></td>
+					<td align="center">
+						<span class="caozuo" ng-if="isImg">  
+							<a data-fancybox="iframe" ng-click="setType(sType.id)" data-src="/plugins/uploadify/upload_image.html" data-type="iframe" href="javascript:;">上传</a>
+						</span>
+						<span class="caozuo" ng-if="isImg && sType.listMap.length>0">&nbsp;&nbsp;&nbsp;<a ng-click="imgShow('move',sType.id)">移动</a></span>
+						<span class="caozuo red-word" ng-if="isImg && sType.listMap.length>0">&nbsp;&nbsp;&nbsp;<a ng-click="imgShow('del',sType.id)">删除</a></span>
+						<span class="caozuo chakan-img gallerys">
+							<list ng-repeat="imgMap in sType.listMap">
+								<span ng-if="$index==0">&nbsp;&nbsp;&nbsp;</span><span class="gallery-pic-img" title="{{imgMap.url}}" ng-show="$index==0"></span>
+							</list>
+						</span>
+						<input type="hidden" name="typeId" value="{{sType.id}}">
+					</td>
+					<td ng-bind="sType.remark"></td>
+				</tr>
+			</tbody>
+			</table>
+		</div>
+	</div>
+<!--表格row end-->
+
+<!--弹框end-->
+<!--弹框start-->
+<div class="lhw-alert-bg" ng-show="isDelMoveShow">
+	<div class="lhw-alert-box" style="width:480px;">
+		<div class="lhw-alert-tit">请选择要<span ng-show="showType=='del'">删除</span><span ng-show="showType=='move'" >移动</span>的资料</div>
+		<div>
+			<div class="row form-inline detail-row" style="padding:0 10px;">
+				<div class="tan-pic">
+					<div class="tan-pic-box" ng-repeat="img in imgList">
+						<label ng-show="img.url!='' && img.url !=null">
+							<img src="{{img.url}}" ng-if="!(progressId=='placeOrder'||(img.isOrder!=1&&progressId!='placeOrder')) && showType=='del'" width="100%" height="120px;" title="提单资料不能删除">
+							<img src="{{img.url}}" ng-if="!(!(progressId=='placeOrder'||(img.isOrder!=1&&progressId!='placeOrder')) && showType=='del')" width="100%" height="120px;">
+							<div class="squaredFour" ng-if=" progressId == 'placeOrder'||(img.isOrder!=1&&progressId!='placeOrder')">
+								<input type="checkbox" name="ids" value="{{img.id}}" />
+								<span></span>
+							</div>
+						</label>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+		</div>
+		<div class="lhw-alert-con" style="font-size:14px;" ng-show="showType=='move'">
+			<div class="row form-inline detail-row" style="padding:0 10px;">
+				<div class="col-md-12 col-lg-10">
+					<label>移动至：</label>
+					<select class="form-control" ng-model="toTypeId">
+						<option value="">请选择</option>
+						<option ng-repeat="type in typeList" value="{{type.id}}">{{type.name}}</option>
+					</select>
+				</div>
+			</div>
+		</div>
+		<div class="lhw-alert-but">
+			<button type="button" class="btn btn-primary lhw-alert-ok" ng-click="imgcz();" style="margin-right:80px;">确定</button>
+			<button type="button" class="btn btn-danger lhw-alert-cancel" ng-click="isDelMoveShow=false">取消</button>
+		</div>
+	</div>
+</div>
+
+<!--弹框end-->
+<script type="text/javascript">
+	function returnData(url,b,c){
+		var scope=angular.element('.place-businfo-edit').scope();
+		if(url!=''){
+			 url=url.substring(0,url.length-1);
+//			 var urls= new Array();
+//			 var urls=url.split(",");
+			 var h="";
+			 scope.uploadifyImg(url);
+		}
+		
+	}
+</script>

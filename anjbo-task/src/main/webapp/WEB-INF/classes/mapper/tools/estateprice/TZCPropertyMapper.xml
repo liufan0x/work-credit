@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.tools.estateprice.TZCPropertyMapper">
+
+    <select id="selectPropertyMaxAndAVGPrice" resultType="com.anjbo.bean.estateprice.TZCPropertyDto">
+        select a.propertyName,a.buildingName,a.cityName as city,max(b.unitPrice) as maxPrice,AVG(b.unitPrice) as avgPrice
+        from tbl_tools_enquiry_base as a,tbl_tools_enquiry_report as b
+        where b.enquiryId=a.id and b.unitPrice>0 GROUP BY a.propertyName,a.buildingName,a.cityName
+    </select>
+    <select id="selectPropertyMaxAndAVGPriceByArea" resultType="com.anjbo.bean.estateprice.TZCPropertyDto">
+        select a.propertyName,a.buildingName,a.cityName as city,max(b.unitPrice) as maxPrice,AVG(b.unitPrice) as avgPrice
+        from tbl_tools_enquiry_base as a,tbl_tools_enquiry_report as b
+        where b.enquiryId=a.id and a.area>#{0} and a.area &lt;=#{1} and b.unitPrice>0 GROUP BY a.propertyName,a.buildingName,a.cityName
+    </select>
+</mapper>

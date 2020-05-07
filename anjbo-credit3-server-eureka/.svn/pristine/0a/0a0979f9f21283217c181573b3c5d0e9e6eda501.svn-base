@@ -1,0 +1,21 @@
+eureka:
+  instance:
+    hostname: eureka002
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
+  client:
+    serviceUrl:
+      defaultZone: http://eureka001:60100/eureka/
+server:
+  port: 60100
+
+spring:
+  application:
+    name: SERVER-002
+  
+logging:  
+  path: /data/logs/anjbo-credit3
+  file: anjbo-credit3-server.log
+  level: 
+    root: INFO
+    com.anjbo: INFO

@@ -1,0 +1,255 @@
+<style>
+.form-inline.w label{width:135px;}
+ 
+</style>
+<div class="row form-inline w detail-row-min" >
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;1.房产信息</div>
+		<div ng-repeat="idea in house.orderBaseHousePropertyDto">
+			<div class="col-md-12 danbao-tit">&nbsp;&nbsp;房产信息（<span class="num-box" ng-bind="$index+1"></span>）</div>
+			<div class="col-md-6 col-lg-4"><label>所在地区：</label>
+				<span ng-bind="house.cityName"></span>-<span ng-bind="idea.houseRegion"></span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>房产名称： </label> 
+				<span ng-bind="idea.houseName"></span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>产权证类型：</label>
+				<span ng-bind="idea.housePropertyType"></span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>产权证号：</label>
+				<span ng-bind="idea.housePropertyNumber"></span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>登记价：</label>
+				<span ng-bind="idea.houseRecordPrice"></span>元
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>建筑面积：</label>
+				<span ng-bind="idea.houseArchitectureSize"></span>㎡
+			</div>
+		</div>
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;2.产权人信息</div>
+		<div ng-repeat="idea in house.orderBaseHousePropertyPeopleDto">
+			<div class="col-md-12 danbao-tit">&nbsp;&nbsp;产权人信息（<span class="num-box" ng-bind="$index+1"></span>）</div>
+		<div class="col-md-6 col-lg-4"><label>姓名：</label>
+			<span ng-bind="idea.propertyName"></span>
+		</div>
+		
+		<!-- <div class="col-md-6 col-lg-4"><label>手机号码：  
+			<span ng-bind="idea.propertyPhoneNumber"></span>
+		</div> -->
+		
+		<div class="col-md-6 col-lg-4"><label>婚姻状况：</label>
+			<span ng-bind="idea.propertyMarriageState"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>证件类型：</label>
+			<span ng-bind="idea.propertyCardType"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>证件号码：</label>
+			<span ng-bind="idea.propertyCardNumber"></span>
+		</div>
+		</div>
+		
+		<div ng-if="productCode=='01' || productCode=='02'" >
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;3.房贷信息</div>
+		<div class="col-md-6 col-lg-4"><label>原房贷金额：</label>
+			<span ng-bind="house.oldHouseLoanAmount"></span>万元
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>原房贷余额：</label>
+			<span ng-bind="house.oldHouseLoanBalance"></span>万元
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>原贷款是否银行：</label>
+			<span ng-if="house.isOldLoanBank==1">是</span>
+			<span ng-if="house.isOldLoanBank==2">否</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="house.isOldLoanBank==2"><label>原贷款地点：</label>
+			<span ng-bind="house.oldLoanBankName"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="house.isOldLoanBank==1"><label>原贷款银行-支行：</label>
+			<span ng-bind="house.oldLoanBankName"></span>-<span ng-bind="house.oldLoanBankSubName"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="house.isOldLoanBank==1"><label>原贷款银行经理：</label>
+			<span ng-bind="house.oldLoanBankManager"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="house.isOldLoanBank==1"><label>银行经理电话： </label>
+			<span ng-bind="house.oldLoanBankManagerPhone"></span>
+		</div>
+		</div>
+		
+	<div ng-if="productCode=='01' && relationOrderNo != 0">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;4.买房人信息</div>
+		<div ng-repeat="idea in house.orderBaseHousePurchaserDto">
+			<div class="col-md-12 danbao-tit">&nbsp;&nbsp;买房人信息（<span class="num-box" ng-bind="$index+1"></span>）</div>
+			<div class="col-md-6 col-lg-4"><label>姓名：</label>
+				<span ng-bind="idea.buyName"></span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>手机号码：  </label>
+				<span ng-bind="idea.buyPhoneNumber"></span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>证件类型：</label>
+				<span ng-bind="idea.buyCardType"></span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>证件号码：</label>
+				<span ng-bind="idea.buyCardNumber"></span>
+			</div>
+		</div>
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;5.交易信息</div>
+		<div class="col-md-6 col-lg-4"><label>成交价格：</label>
+			<span ng-bind="house.houseDealPrice"></span>万元
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>成交定金：</label>
+			<span ng-bind="house.houseDealDeposit"></span>万元
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>资金监管金额：</label>
+			<span ng-bind="house.houseSuperviseAmount"></span>万元
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>贷款金额：</label>
+			<span ng-bind="house.houseLoanAmount"></span>万元
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>新贷款是否银行：</label>
+			<span ng-if="house.isLoanBank==1">是</span>
+			<span ng-if="house.isLoanBank==2">否</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="house.isLoanBank==2"><label>新贷款地点：</label>
+			<span ng-bind="house.loanBankName"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="house.isLoanBank==1"><label>新贷款银行-支行：</label>
+			<span ng-bind="house.loanBankName"></span>-<span ng-bind="house.loanSubBankName"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="house.isLoanBank==1"><label>新贷款银行经理：</label>
+			<span ng-bind="house.loanBankNameManager"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="house.isLoanBank==1"><label>银行经理电话： </label>
+			<span ng-bind="house.loanBankNameManagerPhone"></span>
+		</div>
+	</div>
+	<div ng-if="productCode!='01' && relationOrderNo != 0">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;4.新贷款信息</div>
+		
+		<div class="col-md-6 col-lg-4"><label>新贷款金额：</label>
+			<span ng-bind="house.houseLoanAmount"></span>万元
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>新贷款是否银行：</label>
+			<span ng-if="house.isLoanBank==1">是</span>
+			<span ng-if="house.isLoanBank==2">否</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="house.isLoanBank==2"><label>新贷款地点：</label>
+			<span ng-bind="house.loanBankName"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="house.isLoanBank==1"><label>新贷款银行-支行：</label>
+			<span ng-bind="house.loanBankName"></span>-<span ng-bind="house.loanSubBankName"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="house.isLoanBank==1"><label>新贷款银行经理：</label>
+			<span ng-bind="house.loanBankNameManager"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="house.isLoanBank==1"><label>银行经理电话： </label>
+			<span ng-bind="house.loanBankNameManagerPhone"></span>
+		</div>
+	</div>
+	
+	
+	<div ng-if="relationOrderNo == 0">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;3.业务类型</div>
+		<div class="col-md-6 col-lg-4"><label>业务类型：</label>
+			<span ng-if="house.bussinessType==1">交易类</span>
+			<span ng-if="house.bussinessType==2">非交易类</span>
+		</div>
+	</div>
+	
+	<div ng-if="house.bussinessType==2 && relationOrderNo == 0">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;4.新贷款信息(非交易类)</div>
+		
+		<div class="col-md-6 col-lg-4"><label>贷款金额：</label>
+			<span ng-bind="house.houseLoanAmount"></span>万元
+		</div>
+	</div>
+	
+	<div ng-if="house.bussinessType==1 && relationOrderNo == 0">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;4.买房人信息(交易类)</div>
+		<div ng-repeat="idea in house.orderBaseHousePurchaserDto">
+			<div class="col-md-6 col-lg-4"><label>姓名：</label>
+				<span ng-bind="idea.buyName"></span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>手机号码：  </label>
+				<span ng-bind="idea.buyPhoneNumber"></span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>证件类型：</label>
+				<span ng-bind="idea.buyCardType"></span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>证件号码：</label>
+				<span ng-bind="idea.buyCardNumber"></span>
+			</div>
+		</div>
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;5.交易信息(交易类)</div>
+		<div class="col-md-6 col-lg-4"><label>成交价格：</label>
+			<span ng-bind="house.houseDealPrice"></span>万元
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>成交定金：</label>
+			<span ng-bind="house.houseDealDeposit"></span>万元
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>资金监管金额：</label>
+			<span ng-bind="house.houseSuperviseAmount"></span>万元
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>贷款金额：</label>
+			<span ng-bind="house.houseLoanAmount"></span>万元
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>新贷款是否银行：</label>
+			<span ng-if="house.isLoanBank==1">是</span>
+			<span ng-if="house.isLoanBank==2">否</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="house.isLoanBank==2"><label>新贷款地点：</label>
+			<span ng-bind="house.loanBankName"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="house.isLoanBank==1"><label>新贷款银行-支行：</label>
+			<span ng-bind="house.loanBankName"></span>-<span ng-bind="house.loanSubBankName"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="house.isLoanBank==1"><label>新贷款银行经理：</label>
+			<span ng-bind="house.loanBankNameManager"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="house.isLoanBank==1"><label>银行经理电话： </label>
+			<span ng-bind="house.loanBankNameManagerPhone"></span>
+		</div>
+	</div>
+	
+	<div class="col-md-12 col-lg-12">
+			<label class="remark-span remark-lhw">备注：</label>
+			<textarea ng-bind="house.remark" class="remark-p remark-lhw-p textarea-lhw" readonly="readonly" ></textarea>
+		</div>
+</div>

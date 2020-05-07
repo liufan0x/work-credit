@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.PageBusinfoMapper">
+
+	<select id="selectPageBusinfo"
+		parameterType="PageBusinfoDto" resultType="PageBusinfoDto">
+		select * from tbl_page_businfo where orderNo = #{orderNo}
+		<if test="typeId != null and typeId>0">
+			and typeId = #{typeId}
+		</if>
+	</select>
+
+	<insert id="batchInsert" parameterType="java.util.List">
+		<foreach collection="list" item="obj" separator=";">
+			INSERT INTO
+			tbl_page_businfo 
+			(
+			createUid,
+			createTime,
+			orderNo,
+			typeId,
+			`index`,
+			isOrder,
+			url,
+			isPs
+			)
+			VALUES
+			(
+			#{obj.createUid},
+			now(),
+			#{obj.orderNo},
+			#{obj.typeId},
+			#{obj.index},
+			#{obj.isOrder},
+			#{obj.url},
+			#{obj.isPs}
+			)
+		</foreach>
+	</insert>
+
+	<delete id="batchdelete" parameterType="PageBusinfoDto">
+		delete from tbl_page_businfo
+		where id in (${ids}) 
+		<if test="typeId != null and typeId>0">
+			and typeId = #{typeId}
+		</if>
+		<if test=" isOrder != null and isOrder != ''">
+			and isOrder = #{isOrder}
+		</if>
+	</delete>
+
+
+	<update id="batchUpdate" parameterType="PageBusinfoDto">
+		UPDATE tbl_page_businfo
+		<set>
+			<if test="updateUid != null and updateUid != ''">
+				updateUid = #{createUid},
+			</if>
+			<if test="typeId != null and typeId > 0">
+				typeId = #{typeId},
+			</if>
+			updateTime = now()
+		</set>
+		WHERE id in (${ids})
+	</update>
+
+</mapper>

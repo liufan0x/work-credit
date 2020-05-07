@@ -1,0 +1,16 @@
+<div class="container-fluid">
+	<place-order-detail></place-order-detail>
+	<div id="viewRow">
+		
+	</div>
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;资料审核意见</div>
+	<div class="row">
+		<div class="form-group">
+			<textarea class="form-control" ng-model="dataAuidt.remark" rows="5" placeholder="请在此处输入审核意见（非必填）"/>
+		</div>
+		<div class="col-md-12">
+			<button type="button" class="btn btn-primary" ng-click="showSubmit()">提交</button>
+			<button type="button" ng-show="!orderIsBack" class="btn btn-warning" ng-click="showBack()">退回</button>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,152 @@
+<div class="container-fluid">
+    <div class="row">
+      <button ng-click="test()" ng-show=0>
+        测试
+      </button>
+    
+      <div class="col-md-12">
+        <ul class="breadcrumb">
+          <li>
+            报表管理
+          </li>
+          <li>
+            统计报表
+          </li>
+          <li>
+            实时报表
+          </li>
+        </ul>
+      </div>
+    </div><!--row-->
+    <div style="margin-left:30px; ">
+        <div class="form-group" >
+             <button type="button" ng-init="reportType='0'" class="btn" ng-click="reportType='0'" ng-class="{true: 'btn-primary', false: 'btn-default'}[reportType=='0']">出回款实时报表</button>
+             <button ng-show="showRisk" type="button" class="btn" ng-click="reportType='1'" ng-class="{true: 'btn-primary', false: 'btn-default'}[reportType=='1']">风控审批实时报表</button>
+         </div>
+    </div>
+    <!-- 业绩概览 -->
+    <div ng-show="reportType == 0">
+      <div class="row">
+      <div class="col-md-12"> 
+        <form class="form-inline search" style="margin-bottom:20px;margin-left:30px; ">
+    
+          <br></br>
+          <div class="form-group" >
+              <label>城市</label>
+              <select  class="form-control selectcity01"  ng-model="page0.cityCode" >
+                  <!-- <option selected hidden value="">全国</option> -->
+                  <option  ng-repeat="city in orderCitys" ng-value='city.code'>{{city.name}}</option>
+            </select>
+          </div>
+         
+          <br></br>
+          <div class="form-group" >
+              <label>产品:</label>
+                 <button type="button" class="btn" ng-repeat="item in productList" ng-click="page0.productCode=item.productCode" ng-class="{true: 'btn-primary', false: 'btn-default'}[page0.productCode==item.productCode]">{{item.productName}}</button>
+             </div>
+             <br></br>
+              <div class="form-group" >
+                  <label>类型:</label>
+                     <button type="button" ng-init="page0.data='in'" class="btn" ng-click="page0.data='in'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page0.data=='in']">回款</button>
+                     <button type="button" class="btn" ng-click="page0.data='out'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page0.data=='out']">出款</button>
+                 </div>
+              <div class="form-group">
+    </form>
+      </div>
+    </div>
+    
+    <div class="row" id="customer" ng-show="page0.data == 'in'">
+        <div style="margin-left:30px"><span style="width: 4px;
+          display: inline-block;
+          height: 11px;
+          margin-right: 5px;
+          background-color: #333;"></span>预计回款统计
+        </div>
+      <div class="col-md-12 cityTable">
+             <table  bs-table-control="inpaymentList" id="inpaymentList" data-show-export="true" style="min-width:1000px;"></table>
+      </div>
+    </div>
+    </div>
+    <div class="row" id="customer" ng-show="page0.data == 'out'">
+        <div style="margin-left:30px"><span style="width: 4px;
+          display: inline-block;
+          height: 11px;
+          margin-right: 5px;
+          background-color: #333;"></span>预计出款统计
+        </div>
+        <div class="col-md-12 cityTable">
+               <table  bs-table-control="outpaymentList" id="outpaymentList" data-show-export="true" style="min-width:1000px;"></table>
+        </div>
+      </div>
+      </div>
+    
+    </div><!--container-fluid-->
+    <!-- 个人创收 -->
+    <div ng-show="reportType == 1" ng-if="showRisk">
+        <div class="row">
+        <div class="col-md-12" > 
+            <form class="form-inline search" style="margin-bottom:20px;margin-left:30px; ">
+    
+                <br></br>
+                <div class="form-group" >
+                    <label>城市</label>
+                    <select  class="form-control selectcity02"  ng-model="page1.cityCode" >
+                        <!-- <option selected hidden value="">全国</option> -->
+                        <option  ng-repeat="city in orderCitys" ng-value='city.code'>{{city.name}}</option>
+                  </select>
+                </div>
+               
+                <br></br>
+                <div class="form-group" >
+                    <label>产品:</label>
+                       <button type="button"  class="btn" ng-repeat="item in productList" ng-click="page1.productCode=item.productCode" ng-class="{true: 'btn-primary', false: 'btn-default'}[page1.productCode==item.productCode]">{{item.productName}}</button>
+                   </div>
+                   
+          </form>
+        </div>
+      </div>
+      <div style="margin-left:30px"><span style="width: 4px;
+        display: inline-block;
+        height: 11px;
+        margin-right: 5px;
+        background-color: #333;"></span>预计风控审批统计
+      </div>
+      <div class="row">
+        <div class="col-xs-3	col-sm-3	col-md-3	col-lg-3">
+            <a style="display:block;width:150px;height:150px;background-color: #337ab7;margin: 0 auto;border-radius: 5px;color:#fff;padding-top: 50px;text-align:center">
+                <p>今日待提单</p>
+                <p style="font-family: '微软雅黑 Bold', '微软雅黑';
+                font-weight: 700;font-size:18px">
+                  {{riskList.placeOrder}}
+                </p>
+              </a>
+        </div>
+        <div class="col-xs-3	col-sm-3	col-md-3	col-lg-3">
+            <a style="display:block;width:150px;height:150px;background-color: #337ab7;margin: 0 auto;border-radius: 5px;color:#fff;padding-top: 50px;text-align:center">
+                <p>今日待初审</p>
+                <p style="font-family: '微软雅黑 Bold', '微软雅黑';
+                font-weight: 700;font-size:18px">
+                {{riskList.auditFirst}}
+                </p>
+              </a>
+        </div>
+        <div class="col-xs-3	col-sm-3	col-md-3	col-lg-3">
+            <a style="display:block;width:150px;height:150px;background-color: #337ab7;margin: 0 auto;border-radius: 5px;color:#fff;padding-top: 50px;text-align:center">
+                <p>今日待终审</p>
+                <p style="font-family: '微软雅黑 Bold', '微软雅黑';
+                font-weight: 700;font-size:18px">
+                {{riskList.auditFinal}}
+                </p>
+              </a>
+        </div>
+        <div class="col-xs-3	col-sm-3	col-md-3	col-lg-3">
+            <a style="display:block;width:150px;height:150px;background-color: #337ab7;margin: 0 auto;border-radius: 5px;color:#fff;padding-top: 50px;text-align:center">
+                <p>今日待首席官审批</p>
+                <p style="font-family: '微软雅黑 Bold', '微软雅黑';
+                font-weight: 700;font-size:18px">
+                {{riskList.auditOfficer}}
+                </p>
+              </a>
+        </div>
+        </div>
+    <!-- 订单概览 -->

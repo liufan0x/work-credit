@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.PageDataMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=tblName and ''!=tblName"> AND `tblName`=#{tblName}</if>
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="PageDataDto" resultType="PageDataDto">    
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `tblName`, `orderNo`, `data`, `showText` 
+	FROM tbl_page_data 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="PageDataDto" resultType="PageDataDto">
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `tblName`, `orderNo`, `data`, `showText`
+	FROM tbl_page_data 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="PageDataDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_page_data 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="PageDataDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_page_data(
+		`createUid`,
+		`createTime`,
+		`updateUid`,
+		`updateTime`,
+		`tblName`,
+		`orderNo`,
+		`data`,
+		`showText`
+	) VALUES(
+		#{updateUid},
+		now(),
+		#{updateUid},
+		now(),
+		#{tblName},
+		#{orderNo},
+		#{data},
+		#{showText}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="PageDataDto" >
+    DELETE FROM tbl_page_data 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="PageDataDto" >
+    UPDATE tbl_page_data
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=tblName">`tblName`=#{tblName},</if>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=data">`data`=#{data},</if>
+		<if test="null!=showText">`showText`=#{showText},</if>
+	</set>
+	WHERE orderNo=#{orderNo} and `tblName`=#{tblName}
+  </update>
+    
+</mapper>

@@ -1,0 +1,251 @@
+<style>
+.form-inline.w150 label{width:150px;}
+.w150{ padding-top:10px;}
+</style>
+<div class="row form-inline w150 detail-row-min">
+	<div class="col-md-6 col-lg-4"><label>客户姓名：</label>
+			<span ng-bind="customer.customerName"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>年龄：</label>
+			<span ng-bind="customer.customerAge"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>性别：</label>
+			<span ng-bind="customer.customerSex"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>证件类型：</label>
+			<span ng-bind="customer.customerCardType"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>证件号码：</label>
+			<span ng-bind="customer.customerCardNumber"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>户籍：</label>
+			<span ng-bind="customer.customerHouseholdRegister"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>教育程度：</label>
+			<span ng-bind="customer.customerCulture"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>现单位工作时间：</label>
+			<span ng-bind="customer.customerWorkTime"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>民族：</label>
+			<span ng-bind="customer.customerNationsType"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-12"><label>职位：</label>
+			<span ng-bind="customer.customerPosition"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-12"><label>职业/单位：</label>
+			<span ng-bind="customer.customerCompany"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>婚姻状况：</label>
+			<span ng-bind="customer.customerMarriageState"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>健康状况：</label>
+			<span ng-bind="customer.customerBodiesState"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="customer.customerMarriageState=='已婚有子女' || customer.customerMarriageState=='已婚无子女'"><label>配偶姓名：</label>
+			<span ng-bind="customer.customerWifeName"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="customer.customerMarriageState=='已婚有子女' || customer.customerMarriageState=='已婚无子女'"><label>配偶证件类型：</label>
+			<span ng-bind="customer.customerWifeCardType"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="customer.customerMarriageState=='已婚有子女' || customer.customerMarriageState=='已婚无子女'"><label>配偶证件号码：</label>
+			<span ng-bind="customer.customerWifeCardNumber"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="customer.customerMarriageState=='已婚有子女' || customer.customerMarriageState=='已婚无子女'"><label>配偶手机号：</label>
+			<span ng-bind="customer.customerWifePhone"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="customer.customerMarriageState=='已婚有子女' || customer.customerMarriageState=='已婚无子女'"><label>配偶婚姻状况：</label>
+			<span ng-bind="customer.customerWifeMarriageState"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-12" ng-if="customer.customerMarriageState=='已婚有子女' || customer.customerMarriageState=='已婚无子女'"><label>配偶职位：</label>
+			<span ng-bind="customer.customerWifePosition"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-12" ng-if="customer.customerMarriageState=='已婚有子女' || customer.customerMarriageState=='已婚无子女'"><label>配偶职业/单位：</label>
+			<span ng-bind="customer.customerWifeCompany"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>拥有房屋情况：</label>
+			<span ng-bind="customer.customerHouseInfo"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>拥有汽车情况：</label>
+			<span ng-bind="customer.customerCatInfo"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>个人年收入：</label>
+			<span ng-bind="customer.customerAnnualIncome"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>家庭人均年收入：</label>
+			<span ng-bind="customer.customerFamilyAverageAnnualIncome"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>收入还贷比：</label>
+			<span ng-bind="customer.customerIncomeRepaymentProportion"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>负债比率：</label>
+			<span ng-bind="customer.customerLiabilitiesRatio"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>保险：</label>
+			<span ng-bind="customer.customerInsurance"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>产权比例：</label>
+			<span ng-bind="customer.customerPropertyRightProportion"></span>%
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>风险偏好：</label>
+			<span ng-bind="customer.customerPreference"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>人生阶段：</label>
+			<span ng-bind="customer.customerStage"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>半年月均信用卡透支：</label>
+			<span ng-bind="customer.customerCreditCardOverdraft"></span>
+		</div>
+		
+		
+		<!-- <div class="col-md-12 col-lg-12"><label class="remark-span remark-lhw">备注：</label>
+			<textarea ng-bind="customer.remark" class="remark-p remark-lhw-p textarea-lhw" readonly="readonly"></textarea>
+		</div> -->
+		
+		
+		<div ng-if="customer.customerGuaranteeDto&&customer.customerGuaranteeDto.length>0">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;担保人信息</div>
+		<div ng-repeat="idea in customer.customerGuaranteeDto">
+			<div class="col-md-12 danbao-tit">&nbsp;&nbsp;担保人信息（<span class="num-box" ng-bind="$index+1"></span>）</div>
+			<div class="col-md-6 col-lg-4"><label>姓名：</label>
+				<span ng-bind="idea.guaranteeName"></span>
+			</div>
+			<div class="col-md-6 col-lg-4"><label>手机号码：</label>
+				<span ng-bind="idea.guaranteePhone"></span>
+			</div>
+			<div class="col-md-6 col-lg-4"><label>证件类型：</label>
+				<span ng-bind="idea.guaranteeCardType"></span>
+			</div>
+			<div class="col-md-6 col-lg-4"><label>证件号码：</label>
+				<span ng-bind="idea.guaranteeCardNumber"></span>
+			</div>
+			<div class="col-md-6 col-lg-4"><label>担保方式：</label>
+				<span ng-bind="idea.guaranteeType"></span>
+			</div>
+			<div class="col-md-6 col-lg-4"><label>产权证类型：</label>
+				<span ng-bind="idea.guaranteePropertyType"></span>
+			</div>
+			<div class="col-md-6 col-lg-4"><label>建筑面积：</label>
+				<span ng-bind="idea.guaranteeAPropertyrchitectureSize"></span>㎡
+			</div>
+			<div class="col-md-6 col-lg-4"><label>与借款人关系：</label>
+				<span ng-bind="idea.guaranteeRelationship"></span>
+			</div>
+			<div class="col-md-6 col-lg-4"><label>是否产权人：</label>
+				<span ng-bind="idea.guaranteeIsPropertyProple"></span>
+			</div>
+		</div>
+		</div>
+		<div ng-if="customer.customerBorrowerDto && customer.customerBorrowerDto.length>0">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;共同借款人信息</div>
+		<div ng-repeat="idea in customer.customerBorrowerDto">
+			<div class="col-md-12 danbao-tit">&nbsp;&nbsp;共同借款人信息（<span class="num-box" ng-bind="$index+1"></span>）</div>
+			<div class="col-md-6 col-lg-4"><label>姓名：</label>
+				<span ng-bind="idea.borrowerName"></span>
+			</div>
+			<div class="col-md-6 col-lg-4"><label>手机号码：</label>
+				<span ng-bind="idea.borrowerPhone"></span>
+			</div>
+			<div class="col-md-6 col-lg-4"><label>证件类型：</label>
+				<span ng-bind="idea.borrowerCardType"></span>
+			</div>
+			<div class="col-md-6 col-lg-4"><label>证件号码：</label>
+				<span ng-bind="idea.borrowerCardNumber"></span>
+			</div>
+			<div class="col-md-6 col-lg-4"><label>婚姻状况：</label>
+				<span ng-bind="idea.borrowerMarriageState"></span>
+			</div>
+			<div class="col-md-6 col-lg-4" ng-if="idea.customerMarriageState=='已婚有子女' && idea.customerMarriageState=='已婚无子女'"><label>配偶姓名：</label>
+				<span ng-bind="idea.borrowerWifeName"></span>
+			</div>
+			<div class="col-md-6 col-lg-4" ng-if="idea.customerMarriageState=='已婚有子女' && idea.customerMarriageState=='已婚无子女'"><label>配偶证件类型：</label>
+				<span ng-bind="idea.borrowerWifeCardType"></span>
+			</div>
+			<div class="col-md-6 col-lg-4" ng-if="idea.customerMarriageState=='已婚有子女' && idea.customerMarriageState=='已婚无子女'"><label>配偶证件号码：</label>
+				<span ng-bind="idea.borrowerWifeCardNumber"></span>
+			</div>
+			<div class="col-md-6 col-lg-4"><label>与借款人关系：</label>
+				<span ng-bind="idea.borrowerRelationship"></span>
+			</div>
+			<div class="col-md-6 col-lg-4"><label>是否产权人：</label>
+				<span ng-bind="idea.borrowerIsPropertyProle"></span>
+			</div>
+		</div>
+		</div>
+		
+		<div ng-show="borrow.customerType == '2'">
+			<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;企业信息</div>
+			<div class="col-md-6 col-lg-4"><label>企业名称：</label>
+				<span ng-bind="customer.companyName"></span>
+			</div>
+			<div class="col-md-6 col-lg-4"><label>营业执照号：</label>
+				<span ng-bind="customer.licenseNumber"></span>
+			</div>
+			<div class="col-md-6 col-lg-4"><label>法定代表人：</label>
+				<span ng-bind="customer.representative"></span>
+			</div>
+			<div class="col-md-6 col-lg-4"><label>注册资本：</label>
+				<span ng-bind="customer.registeredCapital"></span><span ng-if="null!=customer.registeredCapital">万</span>
+			</div>
+			<div class="col-md-6 col-lg-4"><label>成立时间：</label>
+				<span ng-bind="customer.establishTime"></span>
+			</div>
+			<div class="col-md-6 col-lg-4"><label>员工数量：</label>
+				<span ng-bind="customer.employeesNumber"></span><span ng-if="null!=customer.employeesNumber">人</span>
+			</div>
+			<div class="col-md-6 col-lg-4"><label>行业类别：</label>
+				<span ng-bind="customer.category"></span>
+			</div>
+			<div class="col-md-6 col-lg-4"><label>实际经营地址：</label>
+				<span ng-bind="customer.operatingAddress"></span>
+			</div>
+			
+			<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;股东信息</div>
+			<div ng-repeat="idea in customer.customerShareholderDto">
+				<div class="col-md-12 danbao-tit">&nbsp;&nbsp;股东信息（<span class="num-box" ng-bind="$index+1"></span>）</div>
+				<div class="col-md-6 col-lg-4"><label>股东姓名：</label>
+					<span ng-bind="idea.shareholderName"></span>
+				</div>
+				<div class="col-md-6 col-lg-4"><label>出资方式：</label>
+					<span ng-bind="idea.contributionMethod"></span>
+				</div>
+				<div class="col-md-6 col-lg-4"><label>出资额：</label>
+					<span ng-bind="idea.contributionAmount"></span>万
+				</div>
+				<div class="col-md-6 col-lg-4"><label>出资比例：</label>
+					<span ng-bind="idea.contributionProportion"></span>%
+				</div>
+			</div>
+		</div>
+		
+</div>

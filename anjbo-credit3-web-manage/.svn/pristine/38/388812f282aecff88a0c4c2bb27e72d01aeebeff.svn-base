@@ -1,0 +1,90 @@
+<div  class="form-inline detail-row common-file-refresh" ng-if="!agencyDto.agencyWaitSign">
+    <div class="col-md-8" style="position: relative;">
+        <label style="position: absolute;top:0;left:0;">
+            <span class="text-danger" ng-if="m.isNeed==2">*</span>
+            <span>附件：</span>
+        </label>
+
+        <table class="table table-bordered" style="margin-left:174px;float:left;width:600px">
+            <thead>
+                <tr>
+                    <th>资料名称</th>
+                    <th>文档数</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td ng-bind="m.title"></td>
+                <td ng-bind="files.length"></td>
+                <td>
+                    <span  ng-if="uploadOrDownloadOperate" ng-click="fileUploadShow(true)" class="btn btn-info detail-right-save ng-binding ng-scope">上传</span>
+                    <span  ng-if="files.length>0" ng-click="deleteOrDownloadFileShow(true,'download','资料名称')" class="btn btn-info detail-right-save ng-binding ng-scope">下载</span>
+                    <span  ng-if="files.length>0&&uploadOrDownloadOperate" ng-click="deleteOrDownloadFileShow(true,'delete','请选择要删除的文件')" class="btn btn-info detail-right-save ng-binding ng-scope">删除</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <!-- 展示错误信息 -->
+        <span class="inputError" ng-if="!m.isHide&&m.type==23">
+            <error class="text-danger" ng-bind="m.errorInfo"></error>
+        </span>
+    </div>
+</div>
+<table class="table table-bordered  common-file-refresh" style="margin-left:0px;float:left;width:600px" ng-if="agencyDto.agencyWaitSign&&''!=agencyDto.agencyWaitSign">
+    <thead>
+    <tr>
+        <th>资料名称</th>
+        <th>文档数</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td ng-bind="m.title"></td>
+        <td ng-bind="files.length"></td>
+        <td>
+            <span  ng-if="uploadOrDownloadOperate" ng-click="fileUploadShow(true)" class="btn btn-info detail-right-save ng-binding ng-scope">上传</span>
+            <span  ng-if="files.length>0" ng-click="deleteOrDownloadFileShow(true,'download','资料名称')" class="btn btn-info detail-right-save ng-binding ng-scope">下载</span>
+            <span  ng-if="files.length>0&&uploadOrDownloadOperate" ng-click="deleteOrDownloadFileShow(true,'delete','请选择要删除的文件')" class="btn btn-info detail-right-save ng-binding ng-scope">删除</span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+<div class="lhw-alert-bg" id="deleteOrDownloadFileShow" style="display: none;">
+    <div class="lhw-alert-box" >
+        <div class="lhw-alert-tit" ng-bind="deleteOrDownloadFileTile"></div>
+        <div style="padding:10px;height:300px;overflow-y:auto;">
+            <div class="row form-inline detail-row" style="padding:0 10px;">
+                <div class="tan-pic">
+                    <table class="table" >
+                        <tbody>
+                        <tr ng-repeat="f in files">
+
+                            <td class="caozuo chakan-img gallerys" style="text-align: left">
+                                <input type="checkbox" name="fileIds" value="{{f.id}}" ng-if="downloadOrDelete=='delete'" />
+                                <span ng-if="downloadOrDelete!='download'"><a href="{{f.url}}" ng-bind="f.name" target="_blank"></a></span>&nbsp;&nbsp;
+                                <!--
+                                <span ng-if="downloadOrDelete=='download'"><a href="{{f.url}}" ng-click="downloadfile(f)" ng-bind="f.name"></a></span>&nbsp;&nbsp;
+                                -->
+                                <span ng-if="downloadOrDelete=='download'"><a href="{{f.url}}" target="_blank" ng-bind="f.name"></a></span>&nbsp;&nbsp;
+                                <span ng-if="downloadOrDelete=='download'"><a href="{{f.url}}" download target="_blank">下载</a></span>&nbsp;&nbsp;
+                                <span ng-show="f.type.indexOf('image')>=0" class="gallery-pic-img" title="{{f.url}}"></span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+        <div class="lhw-alert-but" style="height:63px;">
+            <button type="button" ng-if="downloadOrDelete=='delete'" class="btn btn-primary" ng-click="deleteFile()" style="margin-right:80px;">确定</button>
+            <button type="button" ng-if="downloadOrDelete=='delete'" class="btn btn-danger lhw-alert-cancel" ng-click="deleteOrDownloadFileShow(false)">取消</button>
+            <button type="button" ng-if="downloadOrDelete=='download'" class="btn btn-primary lhw-alert-cancel" ng-click="deleteOrDownloadFileShow(false)">关闭</button>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>结清原贷款</title>
+<!--标准mui.css-->
+<link rel="stylesheet" href="./css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="./css/order.css" />
+<link href="./css/mui.picker.min.css" rel="stylesheet" />
+</head>
+<body>
+<div class="form-box">
+<div class="detail-box">
+     <iframe src="detail.html" frameborder="0" id="detail-if" style="width:100%;height:307px;"></iframe>
+</div>
+<p class="toggle-p">点击展开已完成节点</p>
+</div>
+<div class="form-box">
+     <div class="inp-div">
+           <span class="inp-span mi">结清原贷款日期</span><span class="inp-r icon-d"> &nbsp;</span>
+           <input type="text" value="" readonly class="inp-box date" data-options='{"type":"date"}'  id="foreclosureTime" placeholder="请选择">
+     </div>
+     <div class="inp-div">
+           <span class="inp-span mi">借款金额</span><span class="inp-r"> 万元 </span>
+           <input type="number" value="" class="inp-box"  id="loanAmount" placeholder="请输入">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">是否在银行结清</span><span class="inp-r icon-d"> &nbsp;</span>
+           <input type="text" value="是"  readonly class="inp-box sel"  id="isBankEnd">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">结清原贷款银行</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#" id="selbank"><input type="text" value="" readonly class="inp-box" id="foreclosureBankName" placeholder="请选择"></a>
+		   <input type="hidden"  id="foreclosureBankNameId">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">结清原贷款支行</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#" id="selsubbank"><input type="text" value="" readonly class="inp-box" id="foreclosureBankSubName" placeholder="请选择"></a>
+		   <input type="hidden"  id="foreclosureBankSubNameId">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">银行卡户名</span><span class="inp-r">&nbsp;</span>
+           <input type="text" value=""  class="inp-box" name="bank3" placeholder="请输入">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">银行卡账号</span><span class="inp-r">&nbsp;</span>
+           <input type="text" value=""  class="inp-box" name="bank4" placeholder="请输入">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">添加扣款凭证照片</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" readonly class="inp-box" name="pic" ></a>
+     </div>
+	 <div class="inp-div no-border" >
+           <span class="inp-span mi">添加结清证明照片</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" readonly class="inp-box" name="pic2" ></a>
+     </div>
+     <div class="clear"></div>
+</div>
+
+
+<div class="form-box">
+     <div class="inp-div">
+           <span class="inp-span mi">取证员</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="list.html"><input type="text" value="" readonly class="inp-box" name="quz" placeholder="请选择"></a>
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">预计取证时间</span><span class="inp-r icon-d"> &nbsp;</span>
+           <input type="text" value="" readonly class="inp-box date" data-options='{"type":"date"}'  name="time" placeholder="请选择">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">取证银行</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" readonly class="inp-box" id="licenseRevBankName" placeholder="请选择"></a>
+		    <input type="hidden"  id="licenseRevBank">
+     </div>
+	 <div class="inp-div no-border">
+           <span class="inp-span mi">取证支行</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" readonly class="inp-box" id="licenseRevBankSubName" placeholder="请选择"></a><input type="hidden"  id="licenseRevBankSub">
+     </div>
+	 <div class="clear"></div>
+</div>
+
+
+<div class="form-box">
+    <div class="clear"> </div>
+	<div class="inp-div no-border">
+           <span class="inp-span">备注</span>
+     </div>
+     <textarea id="remark" rows="5" placeholder="如有特殊说明，请在此备注（非必填）。" class="textarea-box"></textarea>
+	 <div class="clear"></div>
+ 
+     <div class="sub-but">确认</div>
+     <br>
+</div>
+
+<!--银行/支行-->
+<div class="mui-iframe-wrapper iframe-box selbank-if">
+<iframe id="ifranmes" src="selectBank_list.html"></iframe>
+</div>
+
+ 
+
+<script src="./js/mui.min.js"></script>
+<script src="./js/mui.picker.min.js"></script>
+<script src="./js/jquery.min.js"></script>
+<script src="./js/process.js"></script>
+<script>
+var bankId="";
+//银行返回数据//支行返回数据
+function returnData(id,name,sub){
+  if(id){ 
+	   $(".selbank-if").css({"opacity":"0","z-index":"-11"});
+	   if(sub=="no"){
+	     $("#foreclosureBankNameId").val(id);
+	     $("#foreclosureBankName").val(name);
+		 $("#foreclosureBankSubNameId").val("");
+	     $("#foreclosureBankSubName").val("");
+	     bankId=id;
+	   }else{
+	     $("#foreclosureBankSubNameId").val(id);
+	     $("#foreclosureBankSubName").val(name);
+	   }
+	   
+  }
+}
+
+ 
+ $(function(){
+	//详情点击效果
+	$(".toggle-p").on("click",function(){
+		  if($(this).html()=="点击收起已完成节点"){ 
+			  $(this).html("点击展开已完成节点"); 
+		   }
+		  else{  $(this).html("点击收起已完成节点"); }
+		  $(this).prev(".detail-box").toggle();
+	}) 
+
+	 $("#selbank").on("click",function(){
+		 bankId==""
+		 $("#ifranmes").attr("src","selectBank_list.html");
+	     $(".selbank-if").css({"opacity":"1","z-index":"111"});
+	 })
+	 $("#selsubbank").on("click",function(){
+		    if(bankId==""){
+			   mui.alert("请选择银行");
+			}else{
+				 $("#ifranmes").attr("src","selectBank_list.html?bankId="+bankId);
+			     $(".selbank-if").css({"opacity":"1","z-index":"111"});
+			}
+	 })
+	 var orderNo = GetQueryString("orderNo");
+	 $.ajax({ 
+		 url:'',
+		 data:JSON.stringify({"orderNo":orderNo}), 
+         type: 'post' ,
+         dataType: 'json',  
+         contentType:'application/json;charset=utf-8',
+		 success: function(data){
+			var obj= data.data;
+		    var pcode = obj.code;
+		    var img = obj.transferImg;
+		    if(img!=null && img!=''){
+		    	 $("#nImg").val("已上传");
+		    }
+		    $("#transferTime").val(obj.transferTimeStr);
+		    $("#tlandBureauName").val(obj.tlandBureauName);
+		    $("#transferStartTime").val(obj.transferStartTimeStr);
+		    $("#transferEndTime").val(obj.transferEndTimeStr);
+		    $("#receiptNumber").val(obj.receiptNumber);
+		    $("#transferImg").val(obj.transferImg);
+		    $("#nlandBureauUid").val(obj.nlandBureauUid);
+		    $("#nlandBureauUserName").val(obj.nlandBureauUserName);
+		    $("#nlandBureauName").val(obj.nlandBureauName);
+		    $("#nlandBureau").val(obj.nlandBureau);
+		    $("#newlicenseTime").val(obj.newlicenseTimeStr);
+		    $("#remark").val(obj.remark);
+		    $("#ifranmes").attr("src","landBureau_list.html?orderNo="+orderNo+"&pcode="+pcode);
+         }
+	   });
+ })
+
+$(".sub-but").click(function(){  
+	var orderNo = GetQueryString("orderNo");
+	var remark =$("#remark").val();
+	var transferStartTime =$("#transferStartTime").val();
+	var transferEndTime =$("#transferEndTime").val();
+	var receiptNumber= $("#receiptNumber").val();
+	var transferImg = $("#transferImg").val();
+	var nlandBureauUid = $("#nlandBureauUid").val();
+	var nlandBureauUserName = $("#nlandBureauUserName").val();
+	var nlandBureauName = $("#nlandBureauName").val();
+	var nlandBureau=  $("#nlandBureau").val();
+	var newlicenseTime=  $("#newlicenseTime").val();
+	
+	if(transferStartTime ==null ||  transferStartTime =='' ){
+		alert("过户开始时间不能为空");
+		return false;
+	}
+	if(transferEndTime ==null ||  transferEndTime =='' ){
+		alert("过户结束时间不能为空");
+		return false;
+	}
+	if(receiptNumber ==null ||  receiptNumber =='' ){
+		alert("过户回执编号不能为空");
+		return false;
+	}
+// 	if(transferImg ==null ||  transferImg =='' ){
+// 		alert("过户照片不能为空");
+// 		return false;
+// 	}
+	if(newlicenseTime ==null ||  newlicenseTime =='' ){
+		alert("预计领新证日期不能为空");
+		return false;
+	}
+	if(nlandBureauName ==null ||  nlandBureauName =='' ){
+		alert("国土局不能为空");
+		return false;
+	}
+	if(nlandBureauUserName ==null ||  nlandBureauUserName =='' ){
+		alert("国土局驻点不能为空");
+		return false;
+	}
+    var content={"orderNo":orderNo,"transferStartTime":transferStartTime,"transferEndTime":transferEndTime,
+    		 	"receiptNumber":receiptNumber,"transferImg":transferImg,"nlandBureauUid":nlandBureauUid,
+    		 	"nlandBureauUserName":nlandBureauUserName,"nlandBureauName":nlandBureauName,"nlandBureau":nlandBureau,
+    		 	"newlicenseTime":newlicenseTime,"remark":remark};
+	 $.ajax({ 
+		url:'/credit/process/transfer/v/add',
+		data:JSON.stringify(content), 
+        type: 'post' ,
+        dataType: 'json',  
+        contentType:'application/json;charset=utf-8',
+		 success: function(data){
+			alert(data.msg);
+        }
+	   });
+ })
+ 
+ 
+
+
+mui.init();
+mui.ready(function() {
+
+  $(".sel").click(function(){
+	  var userPicker = new mui.PopPicker();
+	  userPicker.setData([{
+		value: '0',
+		text: '是'
+	  }, {
+		value: '1',
+		text: '否'
+	  }]);
+	  var _this=$(this);
+	  userPicker.show(function(items) {
+			_this.val((items[0].text));
+			alert(items[0].value)
+			//返回 false 可以阻止选择框的关闭
+			//return false;
+		});
+  });
+   
+  $(".date").on("click",function(){
+	  var _this=$(this);
+	  var optionsJson = _this.attr('data-options') || '{}';
+	  var options = JSON.parse(optionsJson);
+	  var  picker = new mui.DtPicker(options);
+	  picker.show(function(rs) {
+		  _this.val(rs.text);
+		   picker.dispose();
+		});
+     });
+  
+});
+
+</script>
+</body>
+</html>

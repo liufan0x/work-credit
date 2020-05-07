@@ -1,0 +1,162 @@
+<style>
+	.jigou-span{width: 255px;}
+	.form-inline label.frmLabelRadio{width:55px; text-align:left;}
+</style>
+<div class="container-fluid"> 
+	<div class="row">
+		<div class="col-md-12">
+			 <ul class="breadcrumb">
+				 <li><a ui-sref="fundList">资金方列表 </a></li>
+				 <li><span ng-if="isAdd">添加</span><span ng-if="!isAdd">编辑</span>资金方</li>			
+				 <li class="go-back"> <a ui-sref="fundList" >返回上一步</a></li>
+			 </ul>
+		</div>
+	</div>
+
+	<div class="row">
+		<form name="fundForm" role="form" class="form-inline">
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="jigou-span"><span class="text-warning">*</span>资金方名称：</div>
+					<input type="text" class="form-control" ng-model="fundDto.fundName" name="fundName" required />（如“深圳市快鸽互联网金融有限公司”)
+					<span style="color:red" ng-show="fundForm.fundName.$dirty && fundForm.fundName.$invalid">
+  						<span ng-show="fundForm.fundName.$error.required ">资金方名称必填</span>
+					</span>
+				</div> 
+			</div>
+
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="jigou-span"><span class="text-warning">*</span>描述：</div>
+					<input type="text" class="form-control" ng-model="fundDto.fundDesc" name="fundDesc" required/>（如“快鸽按揭”)
+					<span style="color:red" ng-show="fundForm.fundDesc.$dirty && fundForm.fundDesc.$invalid">
+  						<span ng-show="fundForm.fundDesc.$error.required ">描述必填</span>
+					</span>
+				</div> 
+			</div>
+
+
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="jigou-span"><span class="text-warning">*</span>代号：</div>	
+					<span ng-if="isAdd">						
+						<input type="text" class="form-control" ng-model="fundDto.fundCode" name="fundCode" required />（如“001”)
+						<span style="color:red" ng-show="fundForm.fundCode.$dirty && fundForm.fundCode.$invalid">
+	  						<span ng-show="fundForm.fundCode.$error.required ">必填</span>
+						</span>
+					</span><span ng-if="!isAdd">						
+						<input type="text" class="form-control" ng-model="fundDto.fundCode" name="fundCode" readonly="readonly" style="background-color:#dcdcdc;"/>
+					</span>
+				</div> 
+			</div>
+
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="jigou-span"><span class="text-warning">*</span>联系人：</div>
+					<input type="text" class="form-control" ng-model="fundDto.contactMan" name="contactMan" required />
+					<span style="color:red" ng-show="fundForm.contactMan.$dirty && fundForm.contactMan.$invalid">
+  						<span ng-show="fundForm.contactMan.$error.required ">必填</span>
+					</span>
+				</div> 
+			</div>
+
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="jigou-span"><span class="text-warning">*</span>联系人手机号：</div>
+					<input type="text" class="form-control" ng-model="fundDto.contactTel" name="contactTel" required ng-pattern="/^1[1-9]{1}[0-9]{9}$/"/>
+					<span class="inputError" ng-show="fundForm.contactTel.$error.pattern">
+						<error class="text-danger">请输入11位的手机号.</error>
+					</span>
+					<span class="inputError" ng-show="fundForm.contactTel.$dirty && fundForm.contactTel.$invalid">
+  						<error class="text-danger">必填</error>
+					</span>
+				</div> 
+			</div>
+			<div class="col-md-12">
+				<div class="jigou-span">&nbsp;</div>
+				<span class="detail-row2" style="margin-top:-7px; display:inline-block; color:#ccc;">注：资方联系人将会收到登录信贷业务系统的账号和密码短信.请提醒相关人员查收!</span>
+			</div>
+		</form>
+		<form name="fundRoleForm" role="form" class="form-inline">
+			<div class="col-md-12">
+				<div class="jigou-span"><span class="text-warning">*</span>风控审批查看权限：</div>
+				<span class="detail-row2">
+					<label style="width:165px;">债务置换贷款(交易类):</label>
+					<label class="frmLabelRadio"><input type="radio" name="optionsRadios1500" ng-model="authRisk" value="1500">有</label>
+					<label class="frmLabelRadio"><input type="radio" name="optionsRadios1500" ng-model="authRisk" value="0">没有</label>					
+				</span>
+			</div>
+			<div class="col-md-12">
+				<div class="jigou-span">&nbsp;</div>
+				<span class="detail-row2">
+					<label style="width:165px;">债务置换贷款(非交易类):</label>
+					<label class="frmLabelRadio"><input type="radio" name="optionsRadios1502" ng-model="authRisk1502" value="1502">有</label>
+					<label class="frmLabelRadio"><input type="radio" name="optionsRadios1502" ng-model="authRisk1502" value="-2">没有</label>					
+				</span>
+			</div>
+			<div class="col-md-12">
+				<div class="jigou-span">&nbsp;</div>
+				<span class="detail-row2">
+					<label style="width:165px;">畅贷:</label>
+					<label class="frmLabelRadio"><input type="radio" name="optionsRadios1501" ng-model="authRisk1501" value="1501">有</label>
+					<label class="frmLabelRadio"><input type="radio" name="optionsRadios1501" ng-model="authRisk1501" value="-1">没有</label>					
+				</span>
+			</div>
+			<div class="col-md-12" style="margin-top: 6px;">
+				<div class="jigou-span"><span class="text-warning">*</span>影像资料模板配置：</div>
+				<span class="detail-row2">
+					<button type="button" ng-click="loadingBusinfoType('01')" class="btn" ng-class="{true:'btn-primary', false:'btn-default'}[productCode=='01']">债务置换贷款（交易类）</button>
+					<button type="button" ng-click="loadingBusinfoType('02')" class="btn" ng-class="{true:'btn-primary', false:'btn-default'}[productCode=='02']">债务置换贷款（非交易类）</button>
+					<button type="button" ng-click="loadingBusinfoType('03')" class="btn" ng-class="{true:'btn-primary', false:'btn-default'}[productCode=='03']">畅贷</button>
+					<button type="button" ng-click="loadingBusinfoType('07')" class="btn" ng-class="{true:'btn-primary', false:'btn-default'}[productCode=='07']">通道类业务</button>
+				</span>
+			</div>
+			<div class="col-md-12">
+				<div class="jigou-span">&nbsp;</div>
+				<span class="detail-row2">
+					<table class="table table-bordered" style="margin-top:6px; width:648px;">
+						<thead>
+							<tr>
+								<th>序号</th>
+								<th>分类</th> 
+								<th>资料名称</th>
+								<th>
+									是否有权限查看<label style="width:54px; font-weight:normal;"><input type="checkbox" ng-model="chgCheckAllModel" ng-true-value="true" ng-click="chgCheckAll()"/>全选</label>
+								</th>
+							</tr>
+						</thead>
+						<tbody ng-repeat="pType in listBusinfoType">
+						<!-- <tr ng-repeat="cType in pType.sonTypes">
+							<td >{{$index+1}}</td>
+							<td ng-if="$index==0" rowspan="{{pType.sonTypes.length}}" class="white-bg" style="font-weight:bold;  vertical-align: middle;text-align:center;">{{pType.name}}</td>
+							<td>{{cType.name}}</td>
+							<td>
+								<label><input type="checkbox" id="auths{{cType.id}}" ng-model="cType.authId" ng-true-value="{{cType.id}}" ng-false-value=""/>有</label>
+							</td>							
+						</tr> -->
+						<tr ng-repeat="cType in pType.childs">
+							<td >{{$index+1}}</td>
+							<td ng-if="$index==0" rowspan="{{pType.childs.length}}" class="white-bg" style="font-weight:bold;  vertical-align: middle;text-align:center;">{{pType.name}}</td>
+							<td>{{cType.name}}</td>
+							<td>
+								<label><input type="checkbox" id="auths{{cType.id}}" ng-model="cType.authId" ng-true-value="{{cType.id}}" ng-false-value=""/>有</label>
+							</td>							
+						</tr>
+						</tbody>
+					</table>
+				</span>
+			</div>
+		</form>
+	</div>
+
+	<div class="clear" style="height:15px;"></div>
+	<div class="row" style="margin-bottom: 55px;">
+		<div class="col-md-12">
+			<div class="jigou-span">&nbsp;</div>
+			<button type="button" class="btn btn-success" ng-if="isAdd" ng-click="addOrEdit(true)">保存并继续添加</button>
+			<button type="button" class="btn btn-primary" ng-click="addOrEdit(false)">保存</button>
+			<button type="button" class="btn btn-default" ng-click="cancel()">取消</button> 
+		</div>
+	</div>
+
+</div>

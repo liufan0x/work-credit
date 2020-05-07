@@ -1,0 +1,16 @@
+<form class="form-inline"  >
+	<div class="form-group">
+		<select class="form-control"  ng-model="processIndex">
+			<option value="" >请选择退回的流程</option>
+			<option value="{{$index}}" ng-repeat="process in processList" >{{process.currentProcessName}}</option>
+		</select>
+		-
+		<select class="form-control" disabled="false" >
+			<option>{{processName}}</option>
+		</select>
+	</div>
+	 
+	 <textarea ng-model="backReason" class="form-control" rows="5" cols="45" placeholder="如有特殊说明，请在此处备注（必填）"/>
+		 
+	 
+</form>

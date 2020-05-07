@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8"/>
+	<title>API在线文档</title>
+	<link rel="icon" type="image/png" th:href="${listZuulRoute.get(0).path}+'webjars/springfox-swagger-ui/images/favicon-16x16.png'" sizes="16x16"/>
+	<link media='screen' rel='stylesheet' type='text/css' th:href="${listZuulRoute.get(0).path}+'webjars/springfox-swagger-ui/css/typography.css'"/>
+  	<link media='screen' rel='stylesheet' type='text/css' th:href="${listZuulRoute.get(0).path}+'webjars/springfox-swagger-ui/css/reset.css'"/>
+  	<link media='screen' rel='stylesheet' type='text/css' th:href="${listZuulRoute.get(0).path}+'webjars/springfox-swagger-ui/css/screen.css'"/>
+	<style type="text/css">
+.info{padding-top: 9px;}
+.info p{line-height:23px; }	
+.container li{line-height:23px; }	
+	</style>
+</head>
+<body class="swagger-section">
+<div id='header'>
+	<div class="swagger-ui-wrap">
+    	<a id="logo" href="javascript:void(0);"><img class="logo__img" alt="swagger" height="30" width="30" th:src="${listZuulRoute.get(0).path}+'webjars/springfox-swagger-ui/images/logo_small.png'" /><span class="logo__title">Restful APIs Doc</span></a>
+	</div>
+</div>
+<div id="swagger-ui-container" class="swagger-ui-wrap">
+	<div class="info">
+  		<p>API在线文档，API调试工具</p>
+  	</div>
+  	<div class="container">
+  		<ul>
+		  	<li th:each="zRoute: ${listZuulRoute}">
+			    <a th:text="${zRoute.name}" th:href="${zRoute.path}+'swagger-ui.html'" target="_blank"></a>
+			</li>
+		</ul>
+  	</div>  	
+</div>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>借款信息</title>
+<!--标准mui.css-->
+<link rel="stylesheet" href="./css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="./css/order.css" />
+<link href="./css/mui.picker.min.css" rel="stylesheet" />
+</head>
+<body>
+
+<div class="nav-box">
+     <a href="loan_mes.html"><div class="nav-box-in">债务置换贷款</div></a>
+	 <div class="nav-box-in on">关联订单</div>
+</div>
+<div class="form-box">
+	 <div class="inp-div no-border">
+           <span class="inp-span mi">业务类型</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="畅贷" readonly class="inp-box" name="productCode" value="" ng-model="obj.productCode" required></a>
+     </div>
+	 <div class="clear"></div>
+</div>
+ 
+<div class="form-box">
+     <div class="inp-div">
+           <span class="inp-span mi">借款金额</span><span class="inp-r ">万元</span>
+           <input type="number" value="" id="loanAmount"  class="inp-box" name="bank" placeholder="请输入">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">借款期限</span><span class="inp-r ">天</span>
+           <input type="tel" value="" id="borrowingDays" class="inp-box" name="bank" placeholder="请输入">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">风控等级</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" id="riskGradeName"  readonly class="inp-box" name="bank" placeholder="请选择"></a>
+           <input type="hidden"  id="riskGradeId">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">费率</span><span class="inp-r ">%/天</span>
+           <input type="number" value="" id="rate"  class="inp-box" name="bank" placeholder="请输入">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">逾期费率</span><span class="inp-r ">天</span>
+           <input type="number" value="" id="overdueRate"  class="inp-box" name="bank" placeholder="请输入">
+     </div>
+	  <div class="inp-div">
+           <span class="inp-span mi">其他金额</span><span class="inp-r ">元</span>
+           <input type="number" value="" id="otherPoundage"  class="inp-box" name="bank" placeholder="请输入">
+     </div>
+	 <div class="inp-div no-border">
+           <span class="inp-span mi">收费金额</span><span class="inp-r ">元</span>
+           <input type="number" value="" id="chargeMoney"  class="inp-box" name="bank" placeholder="请输入">
+     </div>
+	 <div class="clear"></div>
+</div>
+ 
+<div class="form-box">
+    <div class="clear"> </div>
+	<div class="inp-div no-border">
+           <span class="inp-span">备注</span>
+     </div>
+     <textarea id="remark" rows="5" placeholder="如有特殊说明，请在此备注（非必填）。" class="textarea-box"></textarea>
+	 <div class="clear"></div><br>
+</div>
+<br><br>
+
+ <div class="save-but"></div>
+
+<script src="./js/mui.min.js"></script>
+<script src="./js/mui.picker.min.js"></script>
+<script src="./js/jquery.min.js"></script>
+<script src="./js/process.js"></script>
+<script>
+var orderNo = GetQueryString("orderNo");
+$(function(){
+	//初始化订单数据
+	$.ajax({ 
+		 url:'/credit/order/borrow/v/query',
+		 data:JSON.stringify({"orderNo":orderNo}), 
+	    type: 'post' ,
+	    dataType: 'json',  
+		 async:false,
+	    contentType:'application/json;charset=utf-8',
+		 success: function(data){
+			var order= data.data;
+			console.log(order);
+			var obj = new Array();
+			obj = order.orderBaseBorrowRelationDto;
+			for(var i=0;i<obj.length;i++){
+				$("#loanAmount").val(obj[i].loanAmount);
+				$("#borrowingDays").val(obj[i].borrowingDays);
+				$("#riskGradeId").val(obj[i].riskGradeId);
+				$("#rate").val(obj[i].rate);
+				$("#overdueRate").val(obj[i].overdueRate);
+				$("#otherPoundage").val(obj[i].otherPoundage);
+				$("#chargeMoney").val(obj[i].chargeMoney);
+			    $("#remark").val(obj[i].remark);
+			}
+			//债务置换贷款信息初始化
+			var productId = order.cityCode+order.productCode;
+			 //初始化风控等级集合
+			  $.ajax({ 
+				 url:'/credit/customer/risk/v/findRiskGradeList',
+				 data:JSON.stringify({"cooperativeAgencyId":3,"productId":productId}), 
+			    type: 'post' ,
+			    dataType: 'json',  
+				 async:false,
+			    contentType:'application/json;charset=utf-8',
+				 success: function(data){
+					 console.log(data.data);
+					var riskGradeList = data.data;
+			    }
+			  })
+	    }
+	  })
+	 
+})
+
+</script>
+</body>
+</html>

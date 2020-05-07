@@ -1,0 +1,75 @@
+<div class="container-fluid">
+
+	<place-order-detail></place-order-detail>
+
+	<div id="viewRow">
+		
+	</div>
+
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;付利息信息</div>
+	<div class="row detail-row form-inline" >
+
+		<div class="col-md-6 col-lg-4">
+			<label>应付利息：</label>
+			<span ng-bind="pay.payInterestMoney" onkeyup="value=value.replace(/[^\d.]/g,'')" maxlength="9"></span> 元
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>付利息时间：</label>
+			<input  size="16" type="text" ng-model="pay.payTime" readonly  class="form-control form_dateu">
+			<a href="#"><span data-fancybox="iframe" data-src="/plugins/uploadify/upload_image.html?returnFun=returnDatafinance" data-type="iframe" >点此上传截屏照片（可不传）</span></a>
+			<input type="hidden" id="img" >
+			  <span class="gallerys processuUpdImg" style="display:none">
+			       <a href="#" class="processuView-pic">查看图片</a>
+			       <img ng-repeat="img in obj.imgs" ng-src="{{img}}"  class='gallery-pic' style='display:none;'>
+			  </span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="form-group">
+			<textarea class="form-control" ng-model="pay.remark" rows="5" placeholder="如有特殊说明，请在此处备注（非必填）"/>
+		</div>
+		<div class="col-md-12">
+			<button type="button" class="btn btn-primary" ng-click="submit()">提交</button>
+		</div>
+	</div>
+</div>
+<script>
+$(".processuView-pic").click(function(){
+    $.openPhotoGallery($(this).next("img"),"delZijinPic");
+})
+function delZijinPic(a){ 
+  $(".processuUpdImg").find("img").each(function(){ 
+      if($(this).attr("src")==a){
+       $(this).remove();
+    }
+   })
+   var returnPic="";
+   $(".processuUpdImg").find("img").each(function(){
+        returnPic+=returnPic+$(this).attr("src")+",";
+   })
+   $("#img").val(returnPic.substring(0,returnPic.length-1)); 
+   var img=$("#img").val();
+   if(img==''){
+	   $(".processuUpdImg").hide() 
+   }
+}
+function returnDatafinance(url,smallUrl,name){
+	var img=$("#img").val();
+	if(url!=''){
+		 url=url.substring(0,url.length-1);
+		 var urls= new Array();
+		 var urls=url.split(",");	
+		 var h="";
+		 for (var i=0;i<urls.length ;i++ )  { 
+			 h+="<img src='"+urls[i]+"' class='gallery-pic' style='display:none;'>";
+		 }   
+		 $(".processuUpdImg").append(h);
+		 if(img!=''){
+			 url=img+","+url;
+		 }
+		 $("#img").val(url); 
+		 $(".processuUpdImg").show();
+	}
+}
+	
+</script>

@@ -1,0 +1,19 @@
+<div class="container-fluid">
+	
+	<place-order-detail></place-order-detail>
+
+	<div id="viewRow">
+		
+	</div>
+
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;分配订单意见</div>
+	<div class="row">
+		<div class="form-group">
+			<textarea class="form-control" ng-model="magager.remark" rows="5" placeholder="请在此处输入审批意见（非必填）"/>
+		</div>
+		<div class="col-md-12">
+			<button type="button" class="btn btn-primary" ng-click="showSubmit()">提交</button>
+			<button type="button" class="btn btn-warning" ng-click="showBack()" ng-if="magager.status==2">退回</button>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.BankMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND id=#{id}</if>
+		<if test="null!=name and ''!=name"> AND name LIKE CONCAT('%', #{name}, '%') </if>
+		<if test="null!=sort and sort>0"> AND sort=#{sort}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="BankDto" resultType="BankDto">    
+	SELECT id, name, sort 
+	FROM tbl_common_bank 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="BankDto" resultType="BankDto">
+	SELECT id, name, sort
+	FROM tbl_common_bank 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="BankDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_common_bank 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="BankDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_common_bank(
+		<if test="null!=name">name,</if>
+		<if test="null!=sort">sort</if>
+	) VALUES(
+		<if test="null!=name">#{name},</if>
+		<if test="null!=sort">#{sort}</if>
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="BankDto" >
+    DELETE FROM tbl_common_bank 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="BankDto" >
+    UPDATE tbl_common_bank
+	<set>
+		<if test="null!=name">name=#{name},</if>
+		<if test="null!=sort">sort=#{sort}</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+
+    <!-- 批量增删改 -->
+  <insert id="batchInsert" parameterType="BankDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_common_bank(
+		name,
+		sort
+	) VALUES
+	<foreach collection="list" index="index" item="item" separator="," >
+	(
+		#{item.name},
+		#{item.sort}
+	)
+	</foreach>
+  </insert>
+
+
+  <delete id="batchDelete" parameterType="BankDto" >
+    <foreach collection="list" index="index" item="item" separator=";" >
+    DELETE FROM tbl_common_bank 
+	WHERE ID=#{item.id}
+	</foreach>
+  </delete>
+  
+  <update id="batchUpdate" parameterType="BankDto" >
+    <foreach collection="list" index="index" item="item" separator=";" >
+    UPDATE tbl_common_bank
+	<set>
+		<if test="null!=item.name">name=#{item.name},</if>
+		<if test="null!=item.sort">sort=#{item.sort}</if>
+	</set>
+	WHERE ID=#{item.id}
+	</foreach>
+  </update>
+
+    
+</mapper>

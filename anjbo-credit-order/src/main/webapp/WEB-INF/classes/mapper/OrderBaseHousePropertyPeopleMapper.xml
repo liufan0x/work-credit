@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.OrderBaseHousePropertyPeopleMapper" >
+	<!-- 添加订单产权人信息 -->
+	<insert id="saveOrderPropertyPeople" parameterType="OrderBaseHousePropertyPeopleDto">
+		INSERT INTO tbl_order_base_house_propertypeople (
+			createUid,
+			createTime,
+			orderNo,
+			propertyName,
+			propertyPhoneNumber,
+			propertyMarriageState,
+			propertyCardNumber,
+			propertyCardType,
+			propertyPosition,
+			<if test="isFinish != null and isFinish > 0">
+			isFinish,
+			</if>
+			sort
+		)
+		VALUES
+		(
+			#{createUid},
+			now(),
+			#{orderNo},
+			#{propertyName},
+			#{propertyPhoneNumber},
+			#{propertyMarriageState},
+			#{propertyCardNumber},
+			#{propertyCardType},
+			#{propertyPosition},
+			<if test="isFinish != null and isFinish > 0">
+			#{isFinish},
+			</if>
+			#{sort}
+		)
+	</insert>
+	
+	<!-- 修改订单产权人信息 -->
+	<update id="updateOrderPropertyPeople" parameterType="OrderBaseHousePropertyPeopleDto">
+	  	UPDATE tbl_order_base_house_propertypeople 
+	  	<set>
+	  		<if test="createUid != null and createUid != ''">
+	  			createUid = #{createUid},
+	  		</if>
+	  		<if test="updateUid != null and updateUid != ''">
+	  			updateUid = #{updateUid},
+	  		</if>
+	  		<if test="propertyName != null and propertyName != ''">
+	  			propertyName = #{propertyName},
+	  		</if>
+	  		<if test="propertyPhoneNumber != null and propertyPhoneNumber != ''">
+	  			propertyPhoneNumber = #{propertyPhoneNumber},
+	  		</if>
+	  		<if test="propertyMarriageState != null and propertyMarriageState != ''">
+	  			propertyMarriageState = #{propertyMarriageState},
+	  		</if>
+	  		<if test="propertyCardNumber != null and propertyCardNumber != ''">
+	  			propertyCardNumber = #{propertyCardNumber},
+	  		</if>
+	  		<if test="propertyCardType != null and propertyCardType != ''">
+	  			propertyCardType = #{propertyCardType},
+	  		</if>
+	  		<if test="propertyPosition != null and propertyPosition != ''">
+	  			propertyPosition = #{propertyPosition},
+	  		</if>
+	  		<if test="sort != null and sort > 0">
+	  			sort = #{sort},
+	  		</if>
+	  		<if test="isFinish != null and isFinish != 0">
+	  			isFinish = #{isFinish},
+	  		</if>
+	  		updateTime = now()
+	  	</set>
+	  	WHERE id = #{id}
+  	</update>
+  	
+  	<!-- 修改订单产权人信息 -->
+	<update id="updateOrderPropertyPeopleNull" parameterType="OrderBaseHousePropertyPeopleDto">
+	  	UPDATE tbl_order_base_house_propertypeople 
+	  	SET
+	  			updateUid = #{updateUid},
+	  			propertyName = #{propertyName},
+	  			propertyPhoneNumber = #{propertyPhoneNumber},
+	  			propertyMarriageState = #{propertyMarriageState},
+	  			propertyCardNumber = #{propertyCardNumber},
+	  			propertyCardType = #{propertyCardType},
+	  			propertyPosition = #{propertyPosition},
+	  			<if test="isFinish != null and isFinish > 0">
+	  			isFinish = #{isFinish},
+	  			</if>
+	  			updateTime = now()
+	  	WHERE id = #{id}
+  	</update>
+  	
+	<!-- 查询订单产权人信息 -->
+	<select id="selectOrderPropertyPeopleByOrderNo" parameterType="java.lang.String" resultType="OrderBaseHousePropertyPeopleDto">
+  		select 
+  			id,
+  			createUid,
+			createTime,
+			updateUid,
+			updateTime,
+			orderNo,
+			propertyName,
+			propertyPhoneNumber,
+			propertyMarriageState,
+			propertyCardNumber,
+			propertyCardType,
+			propertyPosition,
+			sort,
+			isFinish
+  		from tbl_order_base_house_propertypeople where orderNo=#{orderNo}
+  		ORDER BY id
+    </select>
+    
+    <!-- 查询订单产权人信息 -->
+	<select id="selectOrderPropertyPeopleById" parameterType="int" resultType="OrderBaseHousePropertyPeopleDto">
+  		select 
+  			id,
+  			createUid,
+			createTime,
+			updateUid,
+			updateTime,
+			orderNo,
+			propertyName,
+			propertyPhoneNumber,
+			propertyMarriageState,
+			propertyCardNumber,
+			propertyCardType,
+			propertyPosition,
+			sort,
+			isFinish
+  		from tbl_order_base_house_propertypeople where id=#{id}
+    </select>
+    
+    <!-- 删除产权人信息 -->
+    <delete id="deleteProHouseById" parameterType="int">
+    	delete from tbl_order_base_house_propertypeople
+    	where id =#{0}
+    </delete>
+    
+    <!-- 删除产权人信息 -->
+    <delete id="deleteProHouseByOrderNo" parameterType="string">
+    	delete from tbl_order_base_house_propertypeople
+    	where orderNo =#{0}
+    </delete>
+</mapper>

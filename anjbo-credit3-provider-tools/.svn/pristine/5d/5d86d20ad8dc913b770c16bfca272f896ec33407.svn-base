@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.contract.FieldMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=groupId and groupId>0"> AND `groupId`=#{groupId}</if>
+		<if test="null!=name and ''!=name"> AND `name`=#{name}</if>
+		<if test="null!=type and type>0"> AND `type`=#{type}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="FieldDto" resultType="FieldDto">    
+	SELECT `id`, `groupId`, `name`, `type` 
+	FROM tbl_common_field 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="FieldDto" resultType="FieldDto">
+	SELECT `id`, `groupId`, `name`, `type`
+	FROM tbl_common_field 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="FieldDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_common_field 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="FieldDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_common_field(
+		`groupId`,
+		`name`,
+		`type`
+	) VALUES(
+		#{groupId},
+		#{name},
+		#{type}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="FieldDto" >
+    DELETE FROM tbl_common_field 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="FieldDto" >
+    UPDATE tbl_common_field
+	<set>
+		<if test="null!=groupId">`groupId`=#{groupId},</if>
+		<if test="null!=name">`name`=#{name},</if>
+		<if test="null!=type">`type`=#{type},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

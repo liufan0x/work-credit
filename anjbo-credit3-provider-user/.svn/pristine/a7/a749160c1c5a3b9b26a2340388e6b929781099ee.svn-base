@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.UserMapper">
+	<sql id="sqlwhereSearch">
+		<where>
+			<if test="null!=id and ''!=id"> AND `id`=#{id}</if>
+			<if test="null!=uid and ''!=uid"> AND `uid`=#{uid}</if>
+			<if test="null!=account and ''!=account"> AND `account`=#{account}</if>
+			<if test="null!=name and ''!=name"> AND `name` LIKE CONCAT('%', #{name}, '%') </if>
+			<if test="null!=password and ''!=password"> AND `password`=#{password}</if>
+			<if test="null!=telphone and ''!=telphone"> AND `telphone`=#{telphone}</if>
+			<if test="null!=mobile and ''!=mobile"> AND `mobile`=#{mobile}</if>
+			<if test="null!=email and ''!=email"> AND `email`=#{email}</if>
+			<if test="null!=position and ''!=position"> AND `position`=#{position}</if>
+			<if test="null!=identity and ''!=identity"> AND `identity`=#{identity}</if>
+			<if test="null!=cityCode and ''!=cityCode"> AND `cityCode`=#{cityCode}</if>
+			<if test="null!=roleId and roleId>0"> AND `roleId`=#{roleId}</if>
+			<if test="null!=token and token>0"> AND `token`=#{token}</if>
+
+			<if test="deptId != null and deptId > 0">
+				and deptIdArray LIKE CONCAT('%', #{deptId}, '%')
+			</if>
+			<if test="deptIds!=null and deptIds!=''">
+				and (
+				<foreach collection="deptIdsArray" index="index" item="item"
+					open="" close="" separator="or"> deptIdArray LIKE
+					CONCAT('%',#{item},'%') </foreach>
+				)
+			</if>
+
+			<if test="null!=deptIdArray and ''!=deptIdArray"> AND `deptIdArray`=#{deptIdArray}</if>
+			<if test="null!=jobNumber and ''!=jobNumber"> AND `jobNumber`=#{jobNumber}</if>
+			<if test="null!=agencyId and agencyId>0"> AND `agencyId`=#{agencyId}</if>
+			<if test="null!=isEnable and ''!=isEnable"> AND `isEnable`=#{isEnable}</if>
+			<if test="null!=approveRemark and ''!=approveRemark"> AND `approveRemark`=#{approveRemark}</if>
+			<if test="null!=idCard and ''!=idCard"> AND `idCard`=#{idCard}</if>
+			<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+			<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+			<!-- <if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if> 
+				<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if> -->
+			<!-- <if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if> 
+				<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if> -->
+			<if test="null!=remark and ''!=remark"> AND `remark`=#{remark}</if>
+			<if test="null!=appIsShow and appIsShow>0"> AND `appIsShow`=#{appIsShow}</if>
+			<if test="null!=dingtalkUid and ''!=dingtalkUid"> AND `dingtalkUid`=#{dingtalkUid}</if>
+			<if test="null!=dingtalkDepId and ''!=dingtalkDepId"> AND `dingtalkDepId`=#{dingtalkDepId}</if>
+			<if test="null!=sourceFrom and ''!=sourceFrom"> AND `sourceFrom`=#{sourceFrom}</if>
+			<if test="null!=isAdmin and isAdmin>0"> AND `isAdmin`=#{isAdmin}</if>
+			<!-- <if test="@Ognl@isNotEmpty(indateStartBegin)"> AND indateStart >= 
+				#{indateStartBegin}</if> <if test="@Ognl@isNotEmpty(indateStartEnd)"> AND 
+				indateStart &lt;= #{indateStartEnd}</if> -->
+			<!-- <if test="@Ognl@isNotEmpty(indateEndBegin)"> AND indateEnd >= #{indateEndBegin}</if> 
+				<if test="@Ognl@isNotEmpty(indateEndEnd)"> AND indateEnd &lt;= #{indateEndEnd}</if> -->
+		</where>
+	</sql>
+
+	<!-- 查询所有用户 -->
+	<select id="selectAllUserDto" resultType="UserDto">
+		SELECT
+		a.*, b.`name` AS
+		roleName,
+		c.`name` AS deptName
+		FROM
+		tbl_user_base a
+		LEFT JOIN
+		tbl_user_role b ON (a.roleId = b.id)
+		LEFT JOIN tbl_user_dept c ON
+		(a.deptId = c.id)
+	</select>
+
+	<!-- 获取实体 -->
+	<select id="find" parameterType="UserDto" resultType="UserDto">
+		SELECT id, uid, account, name, password, telphone, mobile, email,
+		position, identity, cityCode, roleId, deptId, deptIdArray, jobNumber,
+		agencyId, isEnable, approveRemark, idCard, createUid, updateUid,
+		createTime, updateTime, remark, appIsShow, dingtalkUid, dingtalkDepId,
+		sourceFrom, isAdmin, indateStart, indateEnd,token
+		FROM tbl_user_base
+		<include refid="sqlwhereSearch" />
+	</select>
+
+	<!-- 查询 -->
+	<select id="search" parameterType="UserDto" resultType="UserDto">
+		SELECT id, uid, account, name, password, telphone, mobile, email,
+		position, identity, cityCode, roleId, deptId, deptIdArray, jobNumber,
+		agencyId, isEnable, approveRemark, idCard, createUid, updateUid,
+		createTime, updateTime, remark, appIsShow, dingtalkUid, dingtalkDepId,
+		sourceFrom, isAdmin, indateStart, indateEnd,token
+		FROM tbl_user_base
+		<include refid="sqlwhereSearch" />
+
+		<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+	</select>
+
+	<!-- 查询 -->
+	<select id="searchByUid" parameterType="UserDto"
+		resultType="UserDto">
+		SELECT id, uid, account, name, password, telphone, mobile,
+		email,
+		position, identity, cityCode, roleId, deptId, deptIdArray,
+		jobNumber,
+		agencyId, isEnable, approveRemark, idCard, createUid,
+		updateUid,
+		createTime, updateTime, remark, appIsShow, dingtalkUid,
+		dingtalkDepId,
+		sourceFrom, isAdmin, indateStart, indateEnd,token
+		FROM
+		tbl_user_base where uid in (${uid});
+	</select>
+
+	<!-- 查询 -->
+	<select id="count" parameterType="UserDto" resultType="int">
+		SELECT count(1)
+		FROM tbl_user_base
+		<include refid="sqlwhereSearch" />
+	</select>
+
+
+	<!-- 增删改 -->
+	<insert id="insert" parameterType="UserDto"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tbl_user_base(
+		<if test="null!=uid">`uid`,</if>
+		<if test="null!=account">`account`,</if>
+		<if test="null!=name">`name`,</if>
+		<if test="null!=password">`password`,</if>
+		<if test="null!=telphone">`telphone`,</if>
+		<if test="null!=mobile">`mobile`,</if>
+		<if test="null!=email">`email`,</if>
+		<if test="null!=position">`position`,</if>
+		<if test="null!=identity">`identity`,</if>
+		<if test="null!=cityCode">`cityCode`,</if>
+		<if test="null!=roleId">`roleId`,</if>
+		<if test="null!=deptId">`deptId`,</if>
+		<if test="null!=deptIdArray">`deptIdArray`,</if>
+		<if test="null!=jobNumber">`jobNumber`,</if>
+		<if test="null!=agencyId">`agencyId`,</if>
+		<if test="null!=isEnable">`isEnable`,</if>
+		<if test="null!=approveRemark">`approveRemark`,</if>
+		<if test="null!=idCard">`idCard`,</if>
+		<if test="null!=createUid">`createUid`,</if>
+		<if test="null!=updateUid">`updateUid`,</if>
+		<if test="null!=createTime">`createTime`,</if>
+		<if test="null!=updateTime">`updateTime`,</if>
+		<if test="null!=remark">`remark`,</if>
+		<if test="null!=appIsShow">`appIsShow`,</if>
+		<if test="null!=dingtalkUid">`dingtalkUid`,</if>
+		<if test="null!=dingtalkDepId">`dingtalkDepId`,</if>
+		<if test="null!=sourceFrom">`sourceFrom`,</if>
+		<if test="null!=isAdmin">`isAdmin`,</if>
+		<if test="null!=indateStart">`indateStart`,</if>
+		<if test="null!=indateEnd">`indateEnd`</if>
+		) VALUES(
+		<if test="null!=uid">#{uid},</if>
+		<if test="null!=account">#{account},</if>
+		<if test="null!=name">#{name},</if>
+		<if test="null!=password">#{password},</if>
+		<if test="null!=telphone">#{telphone},</if>
+		<if test="null!=mobile">#{mobile},</if>
+		<if test="null!=email">#{email},</if>
+		<if test="null!=position">#{position},</if>
+		<if test="null!=identity">#{identity},</if>
+		<if test="null!=cityCode">#{cityCode},</if>
+		<if test="null!=roleId">#{roleId},</if>
+		<if test="null!=deptId">#{deptId},</if>
+		<if test="null!=deptIdArray">#{deptIdArray},</if>
+		<if test="null!=jobNumber">#{jobNumber},</if>
+		<if test="null!=agencyId">#{agencyId},</if>
+		<if test="null!=isEnable">#{isEnable},</if>
+		<if test="null!=approveRemark">#{approveRemark},</if>
+		<if test="null!=idCard">#{idCard},</if>
+		<if test="null!=createUid">#{createUid},</if>
+		<if test="null!=updateUid">#{updateUid},</if>
+		<if test="null!=createTime">#{createTime},</if>
+		<if test="null!=updateTime">#{updateTime},</if>
+		<if test="null!=remark">#{remark},</if>
+		<if test="null!=appIsShow">#{appIsShow},</if>
+		<if test="null!=dingtalkUid">#{dingtalkUid},</if>
+		<if test="null!=dingtalkDepId">#{dingtalkDepId},</if>
+		<if test="null!=sourceFrom">#{sourceFrom},</if>
+		<if test="null!=isAdmin">#{isAdmin},</if>
+		<if test="null!=indateStart">#{indateStart},</if>
+		<if test="null!=indateEnd">#{indateEnd}</if>
+		)
+	</insert>
+
+
+	<delete id="delete" parameterType="UserDto">
+		DELETE FROM tbl_user_base
+		<include refid="sqlwhereSearch" />
+	</delete>
+
+	<update id="update" parameterType="UserDto">
+		UPDATE tbl_user_base
+		<set>
+			<if test="null!=uid">`uid`=#{uid},</if>
+			<if test="null!=account">`account`=#{account},</if>
+			<if test="null!=name">`name`=#{name},</if>
+			<if test="null!=password">`password`=#{password},</if>
+			<if test="null!=telphone">`telphone`=#{telphone},</if>
+			<if test="null!=mobile">`mobile`=#{mobile},</if>
+			<if test="null!=email">`email`=#{email},</if>
+			<if test="null!=position">`position`=#{position},</if>
+			<if test="null!=identity">`identity`=#{identity},</if>
+			<if test="null!=cityCode">`cityCode`=#{cityCode},</if>
+			<if test="null!=roleId">`roleId`=#{roleId},</if>
+			<if test="null!=deptId">`deptId`=#{deptId},</if>
+			<if test="null!=deptIdArray">`deptIdArray`=#{deptIdArray},</if>
+			<if test="null!=jobNumber">`jobNumber`=#{jobNumber},</if>
+			<if test="null!=agencyId">`agencyId`=#{agencyId},</if>
+			<if test="null!=isEnable">`isEnable`=#{isEnable},</if>
+			<if test="null!=approveRemark">`approveRemark`=#{approveRemark},</if>
+			<if test="null!=idCard">`idCard`=#{idCard},</if>
+			<if test="null!=createUid">`createUid`=#{createUid},</if>
+			<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+			<if test="null!=createTime">`createTime`=#{createTime},</if>
+			<if test="null!=updateTime">`updateTime`=#{updateTime},</if>
+			<if test="null!=remark">`remark`=#{remark},</if>
+			<if test="null!=appIsShow">`appIsShow`=#{appIsShow},</if>
+			<if test="null!=dingtalkUid">`dingtalkUid`=#{dingtalkUid},</if>
+			<if test="null!=dingtalkDepId">`dingtalkDepId`=#{dingtalkDepId},</if>
+			<if test="null!=sourceFrom">`sourceFrom`=#{sourceFrom},</if>
+			<if test="null!=isAdmin">`isAdmin`=#{isAdmin},</if>
+			<if test="null!=indateStart">`indateStart`=#{indateStart},</if>
+			<if test="null!=token">`token`=#{token},</if>
+			<if test="null!=indateEnd">`indateEnd`=#{indateEnd}</if>
+		</set>
+		WHERE uid=#{uid}
+	</update>
+
+	<!-- 批量增删改 -->
+	<insert id="batchInsert" parameterType="UserDto"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tbl_user_base(
+		uid,
+		account,
+		name,
+		password,
+		telphone,
+		mobile,
+		email,
+		position,
+		identity,
+		cityCode,
+		roleId,
+		deptId,
+		deptIdArray,
+		jobNumber,
+		agencyId,
+		isEnable,
+		approveRemark,
+		idCard,
+		createUid,
+		updateUid,
+		createTime,
+		updateTime,
+		remark,
+		appIsShow,
+		dingtalkUid,
+		dingtalkDepId,
+		sourceFrom,
+		isAdmin,
+		indateStart,
+		indateEnd
+		) VALUES
+		<foreach collection="list" index="index" item="item"
+			separator=",">
+			(
+			#{item.uid},
+			#{item.account},
+			#{item.name},
+			#{item.password},
+			#{item.telphone},
+			#{item.mobile},
+			#{item.email},
+			#{item.position},
+			#{item.identity},
+			#{item.cityCode},
+			#{item.roleId},
+			#{item.deptId},
+			#{item.deptIdArray},
+			#{item.jobNumber},
+			#{item.agencyId},
+			#{item.isEnable},
+			#{item.approveRemark},
+			#{item.idCard},
+			#{item.createUid},
+			#{item.updateUid},
+			#{item.createTime},
+			#{item.updateTime},
+			#{item.remark},
+			#{item.appIsShow},
+			#{item.dingtalkUid},
+			#{item.dingtalkDepId},
+			#{item.sourceFrom},
+			#{item.isAdmin},
+			#{item.indateStart},
+			#{item.indateEnd}
+			)
+		</foreach>
+	</insert>
+
+
+	<delete id="batchDelete" parameterType="UserDto">
+		<foreach collection="list" index="index" item="item"
+			separator=";">
+			DELETE FROM tbl_user_base
+			WHERE ID=#{item.id}
+		</foreach>
+	</delete>
+
+	<update id="batchUpdate" parameterType="UserDto">
+		<foreach collection="list" index="index" item="item"
+			separator=";">
+			UPDATE tbl_user_base
+			<set>
+				<if test="null!=item.uid">`uid`=#{item.uid},</if>
+				<if test="null!=item.account">`account`=#{item.account},</if>
+				<if test="null!=item.name">`name`=#{item.name},</if>
+				<if test="null!=item.password">`password`=#{item.password},</if>
+				<if test="null!=item.telphone">`telphone`=#{item.telphone},</if>
+				<if test="null!=item.mobile">`mobile`=#{item.mobile},</if>
+				<if test="null!=item.email">`email`=#{item.email},</if>
+				<if test="null!=item.position">`position`=#{item.position},</if>
+				<if test="null!=item.identity">`identity`=#{item.identity},</if>
+				<if test="null!=item.cityCode">`cityCode`=#{item.cityCode},</if>
+				<if test="null!=item.roleId">`roleId`=#{item.roleId},</if>
+				<if test="null!=item.deptId">`deptId`=#{item.deptId},</if>
+				<if test="null!=item.deptIdArray">`deptIdArray`=#{item.deptIdArray},</if>
+				<if test="null!=item.jobNumber">`jobNumber`=#{item.jobNumber},</if>
+				<if test="null!=item.agencyId">`agencyId`=#{item.agencyId},</if>
+				<if test="null!=item.isEnable">`isEnable`=#{item.isEnable},</if>
+				<if test="null!=item.approveRemark">`approveRemark`=#{item.approveRemark},</if>
+				<if test="null!=item.idCard">`idCard`=#{item.idCard},</if>
+				<if test="null!=item.createUid">`createUid`=#{item.createUid},</if>
+				<if test="null!=item.updateUid">`updateUid`=#{item.updateUid},</if>
+				<if test="null!=item.createTime">`createTime`=#{item.createTime},</if>
+				<if test="null!=item.updateTime">`updateTime`=#{item.updateTime},</if>
+				<if test="null!=item.remark">`remark`=#{item.remark},</if>
+				<if test="null!=item.appIsShow">`appIsShow`=#{item.appIsShow},</if>
+				<if test="null!=item.dingtalkUid">`dingtalkUid`=#{item.dingtalkUid},</if>
+				<if test="null!=item.dingtalkDepId">`dingtalkDepId`=#{item.dingtalkDepId},</if>
+				<if test="null!=item.sourceFrom">`sourceFrom`=#{item.sourceFrom},</if>
+				<if test="null!=item.isAdmin">`isAdmin`=#{item.isAdmin},</if>
+				<if test="null!=item.indateStart">`indateStart`=#{item.indateStart},</if>
+				<if test="null!=item.indateEnd">`indateEnd`=#{item.indateEnd}</if>
+			</set>
+			WHERE ID=#{item.id}
+		</foreach>
+	</update>
+
+
+	<!-- 根据部门分组统计用户数量 -->
+	<select id="selectUserCountGroupByDeptId"
+		parameterType="UserDto" resultType="java.util.Map">
+		select identity, deptIdArray as deptId, count(1) as count from
+		tbl_user_base
+		where account != 'admin'
+		<if test="agencyId != null and agencyId != ''">
+			and agencyId = #{agencyId}
+		</if>
+		group by identity,deptIdArray
+	</select>
+
+	<select id="selectUidByDeptList" parameterType="list"
+		resultType="java.lang.String">
+		select uid from tbl_user_base where 1=1 and(
+		<foreach collection="list" index="index" item="item" open=""
+			separator=" or " close="">deptIdArray like CONCAT('%', #{item}, '%')
+		</foreach>
+		)
+	</select>
+	
+	<!-- 解绑 -->
+	<update id="updateUnbind" parameterType="UserDto">
+		update
+		tbl_user_base SET
+		agencyId=0,deptId=0,deptIdArray=0,roleId=-1,isEnable=3,isAdmin=0,approveRemark=''
+		where agencyId>1 
+		<if test="null!=agencyId">AND agencyId=#{agencyId}</if>
+		<if test="null!=uid">AND uid=#{uid}</if>
+		
+	</update>
+	
+	<!-- 设置token -->
+	<update id="updateToken" parameterType="UserDto">
+		update tbl_user_base SET token = #{token} where uid=#{uid}
+		
+	</update>
+
+</mapper>

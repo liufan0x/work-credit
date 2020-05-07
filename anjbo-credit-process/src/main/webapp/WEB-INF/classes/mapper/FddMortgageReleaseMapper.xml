@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.FddMortgageReleaseMapper">
+	
+	<select id="findByFddMortgageRelease" parameterType="java.lang.String" resultType="FddMortgageReleaseDto">
+	   select * from tbl_process_app_fdd_mortgage_release  where orderNo=#{0} order by createTime desc  limit 1;
+	</select>
+	
+	<insert id="addFddMortgageRelease" parameterType="FddMortgageReleaseDto" >
+	   INSERT INTO `anjbo-server-process`.`tbl_process_app_fdd_mortgage_release` (
+	     `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `region`, `housePropertyType`, `houseName`, `housePropertyNumber`, `collateralOutTime`,`remark`
+	   ) VALUES (
+	      #{createUid}, now(), #{updateUid}, now(), #{orderNo}, #{region}, #{housePropertyType}, #{houseName}, #{housePropertyNumber}, #{collateralOutTime}, #{remark});
+	</insert>
+	<update id="updFddMortgageRelease" parameterType="FddMortgageReleaseDto">
+	   update tbl_process_app_fdd_mortgage_release
+		<set>
+		    <if test="updateUid!= null and updateUid !='' " >
+        		updateUid = #{updateUid},
+      		</if>
+      		<if test="region != null and region !='' " >
+        		region = #{region},
+      		</if>
+			<if test="housePropertyType != null and housePropertyType !='' " >
+        		housePropertyType = #{housePropertyType},
+      		</if>
+      		<if test="houseName != null and houseName !='' " >
+        		houseName = #{houseName},
+      		</if>
+      		<if test="housePropertyNumber != null and housePropertyNumber !='' " >
+        		housePropertyNumber = #{housePropertyNumber},
+      		</if>
+      		<if test="collateralOutTime != null  " >
+        		collateralOutTime = #{collateralOutTime},
+      		</if>
+      		<if test="remark!= null and remark !='' " >
+	        	remark = #{remark},
+	      	</if>
+	      </set>
+		where orderNo =#{orderNo}
+	</update>
+</mapper>

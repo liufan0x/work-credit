@@ -1,0 +1,4 @@
+jdbc_driverClassName=com.mysql.jdbc.Driver
+jdbc_url=jdbc:mysql://192.168.1.8:3306/ams?useUnicode=true&amp;characterEncoding=utf-8&allowMultiQueries=true
+jdbc_username=deploy_user
+jdbc_password=deploy_pass

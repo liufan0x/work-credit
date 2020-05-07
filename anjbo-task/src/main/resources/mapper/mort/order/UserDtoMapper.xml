@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.mort.order.UserDtoMapper">
+	
+	<select id="listUserUid" resultType="java.util.Map" parameterType="java.util.Map">
+		select uid,phone from tbl_user where phone in (${phones}) limit #{start},#{pageSize}
+	</select>
+	<select id="listUserUidCont" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from tbl_user where phone in (${phones})
+	</select>
+</mapper>

@@ -1,0 +1,222 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.anjbo.dao.tools.EnquiryMapper">
+
+	<!-- 新增询价 -->
+	<insert id="insertEnquiry" parameterType="EnquiryDto">
+		<selectKey resultType="int" keyProperty="id">
+			select
+			last_insert_id()
+	</selectKey>
+		INSERT INTO `tbl_tools_enquiry_base`
+		(
+		`uid`,  `cityName`,
+		`type`, `propertyId`, `propertyName`,`district`,
+		`buildingId`, `buildingName`,
+		`roomId`, `roomName`, `currentFloor`,
+		`area`, `registerPrice`,
+		`dealPrice`, `obligee`, `consumerloans`,
+		`range`, `serialid`,
+		`isGetNetPriceTax`, `enable`, `source`, `device`,
+		`version`,
+		`createtime`,`registerDate`
+		)
+		VALUES
+		(
+		#{uid},  #{cityName}, #{type},
+		#{propertyId},
+		#{propertyName}, #{district}, #{buildingId}, #{buildingName},
+		#{roomId},
+		#{roomName}, #{currentFloor}, #{area}, #{registerPrice},
+		#{dealPrice},
+		#{obligee}, #{consumerloans}, #{range},
+		#{serialid},
+		#{isGetNetPriceTax}, #{enable}, #{source}, #{device}, #{version},now(),#{registerDate}
+		)
+	</insert>
+
+	<!-- 查询相同物业，相同楼栋，相同房号同一天查询次数 -->
+	<select id="selectCountByCondition" resultType="java.lang.Integer"
+		parameterType="EnquiryDto">
+		select count(1) from tbl_tools_enquiry_base
+		where uid =
+		#{uid}
+		and cityName=#{cityName} and propertyId=#{propertyId}
+		and
+		buildingId=#{buildingId} and roomId=#{roomId} and
+		date_format(createtime,'%Y-%m-%d')=date_format(now(),'%Y-%m-%d')
+	</select>
+
+	<!-- 修改世联总价 -->
+	<update id="updateSlTotalPrice" parameterType="java.util.Map">
+		update tbl_enquiry
+		set
+		sltotalprice = #{sltotalprice}
+		where id=#{id}
+  </update>
+
+	<!-- 更新询价状态 -->
+	<update id="updateEnquiryStatus" parameterType="java.util.Map">
+		update
+		tbl_enquiry set
+		status=#{status},
+		replayuser = #{replayuser},
+		replaytime
+		= #{replaytime},
+		replayprice = #{replayprice}
+		where id=#{id}
+  </update>
+
+	<!-- 查询评估记录Id -->
+	<select id="reportExit" parameterType="EnquiryReportDto"
+		resultType="java.lang.Integer">
+		select id from tbl_tools_enquiry_report where
+		enquiryId=#{enquiryId} and
+		company=#{company}
+	</select>
+
+	<!-- 新增评估记录 -->
+	<insert id="insertReport" parameterType="EnquiryReportDto">
+		<selectKey resultType="int" keyProperty="id">
+			select
+			last_insert_id()
+		</selectKey>
+
+		INSERT INTO `tbl_tools_enquiry_report`
+		(
+		`enquiryId`, `propertyName`,
+		`buildingName`, `roomName`, `area`,
+		`unitPrice`,
+		`totalPrice`, `tax`,
+		`netPrice`, `sffive`, `sften`,
+		`company`,
+		`createTime`
+		)
+		VALUES
+		(
+		#{enquiryId}, #{propertyName}, #{buildingName},
+		#{roomName},
+		#{area},
+		#{unitPrice}, #{totalPrice}, #{tax}, #{netPrice},
+		#{sffive},
+		#{sften},
+		#{company}, now()
+		)
+	</insert>
+
+	<!-- 查询税费记录Id -->
+	<select id="taxExit" parameterType="java.util.Map" resultType="java.lang.Integer">
+		select id from tbl_tax where reportId=#{reportId} and
+		bankId =
+		#{bankId}
+	</select>
+
+	<!-- 新增税费记录 -->
+	<insert id="insertTax" parameterType="java.util.Map">
+		insert into tbl_tax(
+		tax,salesTax,urbanTax,eduAttached,stamp,landTax,income,tranFees,bankId,reportId
+		)values(
+		#{tax},
+		#{salesTax},
+		#{urbanTax},
+		#{eduAttached},
+		#{stamp},
+		#{landTax},
+		#{income},
+		#{tranFees},
+		#{bankId},
+		#{reportId})
+	</insert>
+
+	<!-- 删除询价结果记录 -->
+	<delete id="deleteReportByEnquiryId" parameterType="java.lang.Integer">
+		delete from
+		tbl_report
+		where enquiryid = #{0}
+	  </delete>
+
+	<!-- 删除询价记录 -->
+	<delete id="deleteEnquiryByEnquiryId" parameterType="java.lang.Integer">
+		delete from
+		tbl_enquiry
+		where id = #{id,jdbcType=INTEGER}
+    </delete>
+
+	<!-- 查询同致诚未询价成功得serialid -->
+	<select id="selectSerialidList" resultType="java.lang.String">
+		select t2.serialid
+		from tbl_tools_enquiry_report t1
+		left join tbl_tools_enquiry_base t2 on
+		t1.enquiryid=t2.id
+		where t1.`status`=0 and t1.company=2
+	</select>
+
+	<!-- 查询询价列表 -->
+	<select id="getList" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		select b.totalPrice tzcTotalPrice , c.totalPrice gjTotalPrice , f.totalPrice sltotalprice ,
+		d.totalPrice ypgTotalPrice ,g.totalPrice lkpgTotalPrice , a.* from tbl_tools_enquiry_base a
+		LEFT JOIN tbl_tools_enquiry_report b on a.id = b.enquiryId and b.company = '同致诚'
+		LEFT JOIN tbl_tools_enquiry_report c on a.id = c.enquiryId and c.company = '国策'
+		LEFT JOIN tbl_tools_enquiry_report d on a.id = d.enquiryId and d.company = '云评估'
+		LEFT JOIN tbl_tools_enquiry_report f on a.id = f.enquiryId and f.company = '世联'
+		LEFT JOIN tbl_tools_enquiry_report g on a.id = g.enquiryId and g.company = '鲁克评估' 
+		where uid = #{uid} ORDER BY
+		a.createtime DESC LIMIT ${start},${pagesize}
+	</select>
+
+	<!-- 查询询价详情 -->
+	<select id="selectEnquiry" parameterType="java.lang.Integer" resultType="EnquiryDto" >
+		select * from tbl_tools_enquiry_base where id = #{0} 
+	</select>
+	
+	<!-- 查询询价结果记录 -->
+	<select id="selectEnquiryReportList" parameterType="java.lang.Integer"
+		resultType="java.util.Map">
+		select * from tbl_tools_enquiry_report where enquiryId = #{0}
+  	</select>
+	
+	<!-- 查询询价id通过serialid -->
+	<select id="selectEnquiryBySerialid" parameterType="java.lang.String" resultType="java.lang.Integer">
+		select id from tbl_tools_enquiry_base where serialid = #{0}
+	</select>
+	
+	<update id="updateEnquiryReport" parameterType="EnquiryReportDto" >
+		update tbl_tools_enquiry_report set 
+		propertyName = #{propertyName},
+		buildingName  = #{buildingName},
+		roomName = #{roomName},
+		area = #{area},
+		unitPrice = #{unitPrice},
+		totalPrice = #{totalPrice},
+		tax = #{tax},
+		netPrice = #{netPrice},
+		sffive = #{sffive},
+		sften = #{sften}
+		where company = #{company} and enquiryId = #{enquiryId}
+	</update>
+	
+	<delete id="deleteEnquiryById" parameterType="java.lang.Integer">
+	    delete from tbl_tools_enquiry_base where id=#{0}
+	</delete>
+	
+	<delete id="deleteToolsReportByEnquiryId" parameterType="java.lang.Integer">
+	    delete from tbl_tools_enquiry_report where enquiryid=#{0}
+	</delete>
+	
+	<select id="enqueryReportCountByProperty" resultType="int">
+		select count(*) from tbl_tools_enquiry_report WHERE propertyName = #{propertyName}
+	</select>
+	
+	<select id="enqueryReportListByProperty" resultType="map">
+		select CONCAT(propertyName,buildingName,roomName) as property,area,unitPrice,totalPrice,DATE_FORMAT(updateTime,'%Y.%m.%d %H:%i') updateTime
+		 from tbl_tools_enquiry_report WHERE propertyName = #{propertyName}
+		<if test="orderColumn != null and orderColumn != ''">
+			ORDER BY ${orderColumn} ${order}
+		</if>
+		<if test="pageSize != null and pageSize > 0">
+			LIMIT #{start},#{pageSize}
+		</if>
+	</select>
+	
+</mapper>

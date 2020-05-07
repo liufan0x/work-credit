@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.order.BaseReceivableForMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(payMentAmountDateBegin)"> AND payMentAmountDate >= #{payMentAmountDateBegin}</if>
+		<if test="@Ognl@isNotEmpty(payMentAmountDateEnd)"> AND payMentAmountDate &lt;= #{payMentAmountDateEnd}</if>
+		-->
+		<if test="null!=payMentAmount and payMentAmount>0"> AND `payMentAmount`=#{payMentAmount}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="BaseReceivableForDto" resultType="BaseReceivableForDto">    
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `payMentAmountDate`, `payMentAmount` 
+	FROM tbl_order_base_receivable_for 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="BaseReceivableForDto" resultType="BaseReceivableForDto">
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `payMentAmountDate`, `payMentAmount`
+	FROM tbl_order_base_receivable_for 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="BaseReceivableForDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_order_base_receivable_for 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="BaseReceivableForDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_order_base_receivable_for(
+		`createUid`,
+		`createTime`,
+		`updateUid`,
+		`updateTime`,
+		`orderNo`,
+		`payMentAmountDate`,
+		`payMentAmount`
+	) VALUES(
+		#{createUid},
+		now(),
+		#{createUid},
+		now(),
+		#{orderNo},
+		#{payMentAmountDate},
+		#{payMentAmount}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="BaseReceivableForDto" >
+    DELETE FROM tbl_order_base_receivable_for 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="BaseReceivableForDto" >
+    UPDATE tbl_order_base_receivable_for
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=payMentAmountDate">`payMentAmountDate`=#{payMentAmountDate},</if>
+		<if test="null!=payMentAmount">`payMentAmount`=#{payMentAmount},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    <!-- 查询订单计划回款信息 -->
+	<select id="selectOrderReceivableForByOrderNo" parameterType="java.lang.String" resultType="BaseReceivableForDto">
+  		select 
+  			id,
+  			createUid,
+			createTime,
+			updateUid,
+			updateTime,
+			orderNo,
+			payMentAmountDate,
+			DATE_FORMAT(payMentAmountDate,'%Y-%m-%d') as payMentAmountDateStr,
+			payMentAmount
+  		from tbl_order_base_receivable_for where orderNo=#{orderNo} order by id asc
+    </select>
+</mapper>

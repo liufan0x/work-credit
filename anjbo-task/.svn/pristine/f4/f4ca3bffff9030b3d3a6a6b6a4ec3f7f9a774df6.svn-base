@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.app.estatedeal.DongGuanDealDataMapper">
+
+
+    <insert id="insertDongGuanOneHandDataBatch" parameterType="java.util.List">
+        INSERT INTO `anjbo-app`.`tbl_app_task_dealdata_dongguan_data`
+        (`houseNum`, `totalNum`, `type`, `date`)
+        VALUES
+        <foreach collection="list" item="dto" index="index" separator=",">
+            (
+            #{dto.houseNum},
+            #{dto.totalNum},
+            #{dto.type},
+            #{dto.date,jdbcType=DATE}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteDongGuanOneHandDataByDate" parameterType="java.util.Date">
+        delete from `tbl_app_task_dealdata_dongguan_data` where `type`='1' and `date`=#{date,jdbcType=DATE}
+    </delete>
+
+
+    <insert id="insertDongGuanSecondHandDataBatch" parameterType="java.util.List">
+        INSERT INTO `anjbo-app`.`tbl_app_task_dealdata_dongguan_data`
+        (`houseNum`, `totalNum`, `type`, `date`)
+        VALUES
+        <foreach collection="list" item="dto" index="index" separator=",">
+            (
+            #{dto.houseNum},
+            #{dto.totalNum},
+            #{dto.type},
+            #{dto.date,jdbcType=DATE}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteDongGuanSecondHandDataByDate" parameterType="java.util.Date">
+       delete from `tbl_app_task_dealdata_dongguan_data` where `type`='2' and `date`=#{date,jdbcType=DATE}
+    </delete>
+
+
+    <insert id="insertDongGuanSecondHandDetailBatch" parameterType="java.util.List">
+        INSERT INTO `anjbo-app`.`tbl_app_task_dealdata_dongguan_data_detail`
+        (`name`, `totalNum`, `money`, `type`, `date`)
+        VALUES
+        <foreach collection="list" item="dto" index="index" separator=",">
+            (
+            #{dto.name}, #{dto.totalNum},#{dto.money},#{dto.type},
+            #{dto.date,jdbcType=DATE}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteDongGuanSecondHandDetailByDate" parameterType="java.util.Date">
+        delete from `tbl_app_task_dealdata_dongguan_data_detail` where `type`='2' and  `date`=#{date,jdbcType=DATE}
+    </delete>
+
+    <insert id="insertDongGuanOneHandDetailBatch" parameterType="java.util.List">
+        INSERT INTO `anjbo-app`.`tbl_app_task_dealdata_dongguan_data_detail`
+        (`name`, `totalNum`, `money`, `type`, `date`)
+        VALUES
+        <foreach collection="list" item="dto" index="index" separator=",">
+            (
+            #{dto.name}, #{dto.totalNum},#{dto.money},#{dto.type},
+            #{dto.date,jdbcType=DATE}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteDongGuanOneHandDetailByDate" parameterType="java.util.Date">
+        delete from `tbl_app_task_dealdata_dongguan_data_detail` where `type`='1' and  `date`=#{date,jdbcType=DATE}
+    </delete>
+    
+
+     <delete id="deleteDongGuanSecondHandTrendByDate" parameterType="java.util.Date">
+        delete from `tbl_app_task_dealdata_trend` where `date`=#{date,jdbcType=DATE} and cityName=#{cityName}
+    </delete>
+    
+     <insert id="insertDongGuanSecondHandTrend" parameterType="java.util.List">
+        INSERT INTO `tbl_app_task_dealdata_trend`
+        (`cityName`, `totalNum`, `avgPrice`,`date`,`houseType`,`lastMonthRate`,`lastYearRate`,`dataType`)
+        VALUES
+        <foreach collection="list" item="dto" index="index" separator=",">            
+            (
+            #{dto.cityName}, #{dto.totalNum},#{dto.avgPrice},#{dto.date,jdbcType=DATE},#{dto.houseType},#{dto.lastMonthRate},#{dto.lastYearRate},#{dto.dataType}
+            )
+        </foreach>
+    </insert>
+
+</mapper>

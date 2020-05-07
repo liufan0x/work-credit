@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>征信</title>
+<!--标准mui.css-->
+<link rel="stylesheet" href="./css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="./css/order.css" />
+<link href="./css/mui.picker.min.css" rel="stylesheet" />
+</head>
+<body>
+ 
+<div class="form-box">
+     <div class="inp-div">
+           <span class="inp-span mi">信用卡年限</span><span class="inp-r icon-d"> &nbsp;</span>
+           <input type="text" value="是"  readonly class="inp-box sel" name="name" >
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">个人贷款记录年限</span><span class="inp-r icon-d"> &nbsp;</span>
+           <input type="text" value="是"  readonly class="inp-box sel" name="name" >
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">信用卡累计有效违约</span><span class="inp-r icon-d"> &nbsp;</span>
+           <input type="text" value="是"  readonly class="inp-box sel" name="name" >
+     </div>
+	  <div class="inp-div">
+           <span class="inp-span mi">所有房产评估总值</span><span class="inp-r">万元</span>
+           <input type="num" value=""  class="inp-box" name="bank3" placeholder="请输入">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">房产套数</span><span class="inp-r">套</span>
+           <input type="num" value=""  class="inp-box" name="bank3" placeholder="请输入">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">信用卡半年月均透支额</span><span class="inp-r">万元</span>
+           <input type="num" value=""  class="inp-box" name="bank3" placeholder="请输入">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">授信总额</span><span class="inp-r">万元</span>
+           <input type="num" value=""  class="inp-box" name="bank3" placeholder="请输入">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">已用额度</span><span class="inp-r">万元</span>
+           <input type="num" value=""  class="inp-box" name="bank3" placeholder="请输入">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">征信总负债</span><span class="inp-r">万元</span>
+           <input type="num" value=""  class="inp-box" name="bank3" placeholder="请输入">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">负债比例</span><span class="inp-r">%</span>
+           <input type="num" value=""  class="inp-box" name="bank3" placeholder="请输入">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">借款成数</span><span class="inp-r">%</span>
+           <input type="num" value=""  class="inp-box" name="bank3" placeholder="请输入">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">赎楼成数</span><span class="inp-r">%</span>
+           <input type="num" value=""  class="inp-box" name="bank3" placeholder="请输入">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">近2年征信报告逾期</span><span class="inp-r">次</span>
+           <input type="num" value=""  class="inp-box" name="bank3" placeholder="请输入">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">近半年征信查询数</span><span class="inp-r">次</span>
+           <input type="num" value=""  class="inp-box" name="bank3" placeholder="请输入">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">是否公司产权</span><span class="inp-r icon-d"> &nbsp;</span>
+           <input type="text" value="是"  readonly class="inp-box sel" name="name" >
+     </div>
+	 <div class="inp-div no-border">
+           <span class="inp-span mi">产权抵押情况</span><span class="inp-r icon-d"> &nbsp;</span>
+           <input type="text" value="是"  readonly class="inp-box sel" name="name" >
+     </div>
+
+ 
+     <div class="clear"> </div>
+</div>
+
+
+  <br> <br> <br>
+
+ 
+
+<div class="save-but"></div>
+ 
+
+<script src="./js/mui.min.js"></script>
+<script src="./js/mui.picker.min.js"></script>
+<script src="./js/jquery.min.js"></script>
+<script>
+  (function($, doc, $$) {
+				$.init();
+				$.ready(function() {
+
+				  $$(".sel").click(function(){
+					  var userPicker = new $.PopPicker();
+					  userPicker.setData([{
+						value: 'yes',
+						text: '是'
+					  }, {
+						value: 'no',
+						text: '否'
+					  }]);
+					  var _this=$$(this);
+				      userPicker.show(function(items) {
+							_this.val((items[0].text));
+							//返回 false 可以阻止选择框的关闭
+							//return false;
+						});
+				 
+				  });
+                   
+				 
+
+
+					 
+					 
+				});
+			})(mui, document,jQuery);
+</script>
+</body>
+</html>

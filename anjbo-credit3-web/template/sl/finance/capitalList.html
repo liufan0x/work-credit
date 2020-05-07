@@ -1,0 +1,81 @@
+<div class="container-fluid">
+<div class="row">
+  <div class="col-md-12" style="position:relative;">
+    <ul class="breadcrumb">
+      <li>
+        <a>代扣管理</a>
+        <span class="divider"></span>
+      </li>
+      <li class="active">
+        全部订单
+      </li>
+    </ul> 
+      <div class="form-group" style="position:absolute;right:1px; top:14px;   ">
+        <label style="color:red;">余额：{{balanceAmt}}元 &nbsp;&nbsp;</label>
+        <button type="submit" class="btn btn-info"  ng-click="withdrawals()" style="margin-bottom:10px; margin-right:10px;">提现</button>
+      </div>  
+  </div>
+</div><!--row-->
+<div class="row">
+  <div class="col-md-12"> 
+    <form class="form-inline search" style="margin-bottom:20px;margin-left:30px; ">
+
+      <div class="form-group">
+        <label>姓名：</label>
+        <input type="text" class="form-control" ng-model="page.name">
+      </div>
+      <div class="form-group">
+        <label>身份证号：</label>
+        <input type="text" class="form-control" ng-model="page.idCard">
+      </div>
+      <div class="form-group">
+        <label>手机号：</label>
+        <input type="text" class="form-control" ng-model="page.phone">
+      </div>      
+      <div class="form-group">
+        <label>代扣状态：</label>
+          <select class="form-control" ng-model="page.withholdState">
+            <option value="">所有</option>
+            <option value="3">已成功</option>
+            <option value="4">失败</option>
+            <option value="1">未代扣</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-default" ng-click="query()" style="margin-bottom:10px; margin-right:10px;">查询</button>
+      
+</form>
+	</div>
+</div><!--row-->
+
+<div class="row">
+	<div class="col-md-12">
+ 
+	     <!--table-->
+         <table bs-table-control="capitalList"    id="table"></table>
+	     <!--table end-->
+			 
+		</div>
+</div><!--row-->
+</div><!--container-fluid-->
+ 
+<div ng-show="false" id="outCapital"  style="display: none;">
+	<div class="row">
+	  <div class="col-md-14">
+	  <form class="form-inline" >
+	      <p style="line-height:40px; text-align:left;"> <label style="width:126px;">余额：</label>&nbsp;{{balanceAmt}}元</p>
+	 	  <div class="">
+	        
+	        <span></span>
+	      </div>
+	      <div class="">
+	        <label style="width:67px;">提现：</label>
+	        <input type="money" class="form-control" ng-model="obj.transAmt" onkeyup="value=value.replace(/[^\d.]/g,'')">&nbsp;元
+	      </div>
+	      <div class="">
+	        <textarea  class="form-control" ng-model="obj.remarks" style="width:280px; margin:10px auto; height:130px;"  placeholder="如有特殊说明，请在此处备注（非必填）"></textarea>
+	      </div>
+	       <p ng-if="msg.errorInfo!=''" class="text-danger"  ng-bind="msg.errorInfo"></p>
+		</div>
+		</form>
+	</div>
+</div>

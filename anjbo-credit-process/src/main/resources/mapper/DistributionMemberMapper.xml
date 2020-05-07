@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.DistributionMemberMapper">
+	
+	<select id="selectDistributionMember" parameterType="DistributionMemberDto" resultType="DistributionMemberDto">
+	   select *,DATE_FORMAT(distributionTime,'%Y-%m-%d') as distributionTimeStr from tbl_process_distribution_member where orderNo=#{orderNo}
+	</select>
+	
+	<insert id="addDistributionMember" parameterType="DistributionMemberDto" >
+	    INSERT INTO `tbl_process_distribution_member` (
+	    `createUid`, `createTime`, `updateUid`, `orderNo`,`foreclosureMemberUid`,  `remark` ,distributionTime
+	    ) VALUES (
+	     #{createUid}, now(), #{updateUid}, #{orderNo},  #{foreclosureMemberUid},  #{remark} ,now()
+	    )
+	</insert>
+	<update id="updateDistributionMember" parameterType="DistributionMemberDto">
+	    update tbl_process_distribution_member set updateUid=#{updateUid},foreclosureMemberUid=#{foreclosureMemberUid},remark=#{remark},distributionTime=now()
+	    where orderNo=#{orderNo}
+	</update>
+</mapper>

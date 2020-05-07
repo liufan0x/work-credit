@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.ChannelManagerMapper">
+
+	 <!-- 根据受理员Uid查询关联渠道经理集合-->
+  <select id="listRoleByRolrNameAndAgencyIds" resultType="AgencyDto" parameterType="string">
+	    SELECT
+			chanlMan
+		FROM
+			tbl_customer_agency a
+		WHERE
+			a. STATUS = 1
+		AND a.signStatus = 2			
+		AND a.id IN (
+			SELECT
+				aa.agencyId
+			FROM
+				tbl_customer_agency_accept aa
+			WHERE
+				acceptUid = #{0}
+		)
+		GROUP BY
+			a.chanlMan
+  </select>
+  
+   <!-- 查询机构渠道经理 -->
+  <select id="findChanlMan" parameterType="int" resultType="AgencyDto">
+	select chanlMan from tbl_customer_agency where id=#{0}
+  </select>
+  <!-- 查询渠道经理机构 -->
+   <select id="findAgencyByChanlAndAccept" parameterType="AgencyDto" resultType="map">
+	SELECT
+		a.name,
+		a.simName,
+		a.type,
+		a.id,
+		a.simName AS text,
+		a.chargeStandard,
+		a.isBond,
+		a.proportionResponsibility,
+		a.bond,
+		a.creditLimit,
+		a.id as agencyId
+	FROM
+		tbl_customer_agency a
+	WHERE
+		a. STATUS = 1
+	AND a.signStatus = 2	
+	AND a.chanlMan = #{chanlMan}
+	AND a.id IN (
+		SELECT
+			aa.agencyId
+		FROM
+			tbl_customer_agency_accept aa
+		WHERE
+			acceptUid = #{acceptUid}
+	)
+  </select>
+  
+   <select id="findAgencyByChanlMan" resultType="map" parameterType="string">
+	SELECT
+		a.name,
+		a.simName,
+		a.type,
+		a.id,
+		a.simName AS text,
+		a.chargeStandard,
+		a.isBond,
+		a.proportionResponsibility,
+		a.bond,
+		a.creditLimit,
+		a.agencyCode
+	FROM
+		tbl_customer_agency a
+	WHERE a. STATUS=1 AND a.signStatus=2 AND (a.id=1 OR a.chanlMan=#{0})
+	ORDER BY a.id DESC	
+  </select>
+  
+</mapper>

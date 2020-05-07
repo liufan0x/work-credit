@@ -1,0 +1,27 @@
+<div class="container-fluid">
+	<!--标题-->
+	<div class="row">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;抵押品入库信息
+			<a ng-show="!isEdit" style="display:inline-block;float:right;padding-right: 10px;" ui-sref="orderList" >返回上一步</a>
+			<span ng-show="isEdit" class="detail-trash2 text-danger" ng-click="deleteDetail('fdd-mortgage-storage-detail')" >隐藏</span>
+			<div style="position:absolute;right:400px;top:0px;">
+			  <span id="elementFlag" ng-bind="elementFlag">是否已收到要件：是</span>
+			  <span><a id="elementInfo" ng-bind="elementInfo" ng-click="showDetail('elementEntrance');">要件详情</a></span>
+			</div>
+		</div>
+	</div>
+	<!--标题 end-->
+	<div class="row detail-row detail-lhw" >
+		<div class="col-md-6 col-lg-4"><label>产权证类型：</label><span ng-bind="obj.housePropertyType"></span></div>
+		<div class="col-md-6 col-lg-4"><label>产权证号：</label><span ng-bind="obj.housePropertyNumber"></div>
+		<div class="col-md-6 col-lg-4"><label>所在地区：</label><span ng-bind="obj.region"></span></div>
+		<div class="col-md-6 col-lg-4"><label>房产名称：</label><span ng-bind="obj.houseName"></span></div>
+		<div class="col-md-6 col-lg-4"><label>入库时间：</label><span ng-bind="obj.collateralTime| date:'yyyy-MM-dd' "></div>
+	</div>
+	<!--备注-->
+	<div class="row relative" ng-if="obj.remark!='' && obj.remark!=null">
+		<span class="remark-span remark-lhw">备注：</span>
+		<textarea class="remark-p remark-lhw-p textarea-lhw" readonly="readonly" ng-bind="obj.remark" > </textarea>
+	</div>
+	<!--备注end-->
+</div>

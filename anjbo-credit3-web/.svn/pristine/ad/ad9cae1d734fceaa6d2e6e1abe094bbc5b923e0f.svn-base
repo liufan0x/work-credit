@@ -1,0 +1,298 @@
+<style>
+.form-inline.w125 label{width:125px;}
+</style>
+<form class="form-inline w125 detail-row place-Inquiry-edit">
+	<div class="col-md-12 detail-right-tit">
+		&nbsp;&nbsp; 询价<span ng-if="cityCode!=4403">（请将询价结果上传）</span><span ng-if="cityCode==4403">（仅限深圳地区）
+		<button type="button" class="btn btn-info detail-right-save fr" ng-click="addEnquiry()">+ 询价信息</button>  </span>
+	</div>
+	<div ng-if="cityCode!=4403" class="col-md-6 col-lg-4">
+		询价截屏：
+		<span id="updEnquiryImg">
+			<span class="text-info" data-fancybox="iframe" data-src="/plugins/uploadify/upload_image.html?returnFun=returnDataEnquir"  data-type="iframe" >点此上传询价结果</span>
+		</span>
+		&nbsp;&nbsp;&nbsp;
+		<span class="chakan-img gallerys enquiryUpdImg" style="display: none;">
+			<a href="javascript:void(0);" class="enquiryView-pic">查看询价截屏</a>
+			<img  ng-repeat="img in enquiryImgList" src="{{img.imgUrl}}" class="gallery-pic" style="display: none;"/>
+		</span>
+			<input type="hidden" ng-model="enquiry.enquiryImgs" id="enquiryImg">
+			<div id="imgEnquiry" class="gallerys"> </div>
+	</div>
+	<xunjia ng-repeat="enquiry in enquiryList" ng-if="cityCode==4403">
+		<div class="col-md-12 danbao-tit">&nbsp;&nbsp;询价（<span class="num-box" ng-bind="$index+1"></span>）
+			<button type="button" style="margin-bottom: 5px;" ng-click="queryEnquiry(enquiry)" class="btn btn-info detail-right-save">
+				<span ng-show="enquiry.id">再次查询</span>
+				<span ng-show="!enquiry.id">查询</span>
+			</button>
+			<span class="detail-trash text-danger" ng-if="$index>0" ng-click="delEnquiry($index)">删除</span>
+		</div>
+
+		<xunjiasearch ng-show="!enquiry.id">
+			<div class="col-md-6 col-lg-4">
+				<label>房产名称：</label>
+				<anjbo-auto html-id="t{{$index}}" enquiry="enquiry" query-building="queryBuilding(enquiry)" ></anjbo-auto>
+			</div>
+
+			<div class="col-md-6 col-lg-4">
+				<label>楼栋：</label>
+				<select class="form-control" style="width: 180px;" select2 ng-options="building.name for building in enquiry.buildingList track by building.name" ng-model="enquiry.building" ng-change="queryRoom(enquiry)">
+					<option value="">请选择</option>
+				</select>
+			</div>
+
+			<div class="col-md-6 col-lg-4">
+				<label>房号：</label>
+				<select class="form-control" style="width: 180px;" select2 ng-options="room.name for room in enquiry.roomList track by room.name" ng-model="enquiry.room" ng-change="setArea(enquiry)">
+					<option value="">请选择</option>
+				</select>
+			</div>
+
+			<div class="col-md-6 col-lg-4">
+				<label>建筑面积：</label>
+				<input type="text" class="form-control" ng-model="enquiry.area" >
+				<span class="inp-r">㎡</span>
+			</div>
+
+			<div class="col-md-6 col-lg-4">
+				<label>登记价格：</label>
+				<input type="text" class="form-control" ng-model="enquiry.registerPrice">
+				<span class="inp-r">元</span>
+			</div>
+
+			<div class="col-md-6 col-lg-4" ng-if="borrow.productCode != '02'">
+				<label>&nbsp;</label>
+			</div>
+
+			<div class="col-md-6 col-lg-4" ng-if="borrow.productCode == '02'">
+				<label>是否消费贷：</label>
+				<select class="form-control" ng-model="enquiry.consumerloans" style="width:178px;">
+					<option value="0">无消费贷</option>
+					<option value="1">有消费贷</option>
+				</select>
+			</div>
+
+			<div class="col-md-6 col-lg-4" ng-if="borrow.productCode == '02' && enquiry.consumerloans == '1'">
+				<label>成交价格：</label>
+				<input type="text" class="form-control" ng-model="enquiry.transactionprice">元
+			</div>
+
+			<div class="col-md-6 col-lg-4" ng-if="borrow.productCode == '02'">
+				<label>权利人：</label>
+				<select class="form-control" ng-model="enquiry.obligee" style="width:178px;">
+					<option value="单位">单位</option>
+					<option value="个人">个人</option>
+				</select>
+			</div>
+
+			<div class="col-md-6 col-lg-4" ng-if="borrow.productCode == '02'">
+				<label>购房期限：</label>
+				<select class="form-control" ng-model="enquiry.range" style="width:178px;"> 
+					<option value="0">未满两年</option>
+					<option value="1">满两年</option>
+				</select>
+			</div>
+		</xunjiasearch>
+		
+		<xunjiajieguo ng-show="enquiry.id">
+			
+			<div class="col-md-12 col-lg-4" >
+				<label>房产名称：</label>
+				<span ng-bind="enquiry.propertyName"></span>
+			</div>
+
+			<div class="col-md-12 col-lg-4" >
+				<label>楼栋：</label>
+				<span ng-bind="enquiry.buildingName"></span>
+			</div>
+
+			<div class="col-md-12 col-lg-4" >
+				<label>房号：</label>
+				<span ng-bind="enquiry.roomName"></span>
+			</div>
+			<div class="col-md-12 col-lg-4" >
+				<label>建筑面积：</label>
+				<span ng-bind="enquiry.area"></span>㎡
+			</div>
+
+			<div class="col-md-12 col-lg-4" >
+				<label>登记价格：</label>
+				<span ng-bind="enquiry.registerPrice"></span>元
+			</div>
+
+			<div class="col-md-12 col-lg-4" ng-if="borrow.productCode == '02'">
+				<label>是否消费贷：</label>
+				<span ng-if="enquiry.consumerloans=='0'">无消费贷</span>
+				<span ng-if="enquiry.consumerloans=='1'">有消费贷</span>
+			</div>
+
+			<div class="col-md-12 col-lg-4" ng-if="borrow.productCode == '02' && enquiry.consumerloans == 1">
+				<label>成交价格：</label>
+				<span ng-bind="enquiry.transactionprice"></span>
+			</div>
+
+			<div class="col-md-12 col-lg-4" ng-if="borrow.productCode == '02'">
+				<label>权利人：</label>
+				<span ng-bind="enquiry.obligee"></span>
+			</div>
+
+			<div class="col-md-12 col-lg-4" ng-if="borrow.productCode == '02'">
+				<label>购房期限：</label>
+				<span ng-if="enquiry.range=='0'">未满两年</span>
+				<span ng-if="enquiry.range=='1'">满两年</span>
+			</div>
+
+			<div class="col-md-12 col-lg-12" >
+				<label>查询时间：</label>
+				<span ng-bind="enquiry.createTime | date:'yyyy-MM-dd HH:mm'" ></span>
+				<span> (此结果来自深圳市房地产信息系统)</span>
+			</div>
+
+			<div class="col-md-12 col-lg-4" >
+				<label>评估总值：</label>
+				<span ng-bind="enquiry.totalPrice"></span>元
+			</div>
+
+			<div class="col-md-12 col-lg-4" >
+				<label>评估净值：</label>
+				<span ng-bind="enquiry.netPrice" ></span>元
+			</div>
+
+			<div class="col-md-12 col-lg-4" >
+				<label>首套房最高可贷：</label>
+				<span ng-bind="enquiry.maxLoanPrice"></span>万元
+			</div>
+
+		</xunjiajieguo>
+	</xunjia>
+
+
+	<div class="col-md-12 detail-right-tit">
+		&nbsp;&nbsp; 查档<span ng-if="cityCode!=4403">（请将查档结果上传）</span><span ng-if="cityCode==4403">（仅限深圳地区）  
+		<button type="button" class="btn btn-info detail-right-save fr" ng-click="addArchive()">+ 查档信息</button></span>
+	</div>
+
+	<div ng-if="cityCode!=4403" class="col-md-6 col-lg-4">
+		查档截屏：
+		<span id="updArchiveImg">
+			<span class="text-info" data-fancybox="iframe" data-src="/plugins/uploadify/upload_image.html?returnFun=returnDataArchive"  data-type="iframe" >点此上传查档结果</span>
+		</span>
+		&nbsp;&nbsp;&nbsp;
+		<span class="chakan-img gallerys archiveUpdImg" style="display: none;">
+			<a href="javascript:void(0);" class="archiveView-pic">查看查档截屏</a>
+			<img  ng-repeat="img in archiveImgList" src="{{img.imgUrl}}" class="gallery-pic" style="display: none;"/>
+		</span>
+			<input type="hidden" ng-model="archive.archiveImgs" id="archiveImg">
+			<div id="imgArchive" class="gallerys"> </div>
+	</div>
+	<chadang ng-repeat="archive in archiveList" ng-if="cityCode==4403">
+
+		<div class="col-md-12 danbao-tit">&nbsp;&nbsp;查档（<span class="num-box" ng-bind="$index+1"></span>）
+			<button type="button" style="margin-bottom: 5px;" ng-click="queryArchive(archive)" class="btn btn-info detail-right-save">
+				<span ng-show="!archive.id">查询</span>
+				<span ng-show="archive.id">再次查询</span>
+			</button>
+			<span class="detail-trash text-danger" ng-if="$index>0" ng-click="delArchive($index)">删除</span>
+		</div>
+
+		<chadangsearch ng-show="!archive.id">
+
+			<div class="col-md-6 col-lg-4">
+				<label>产权证类型：</label>
+				<select class="form-control" ng-model="archive.estateType">
+					<option value="0">房地产权证书</option>
+					<option value="2015">不动产权证书（粤2015）</option>
+					<option value="2016">不动产权证书（粤2016）</option>
+					<option value="2017">不动产权证书（粤2017）</option>
+					<option value="2018">不动产权证书（粤2018）</option>
+				</select>
+			</div>
+
+			<div class="col-md-6 col-lg-4">
+				<label>房产证号：</label>
+				<input type="text" class="form-control" ng-model="archive.estateNo" >
+			</div>
+
+			<div class="col-md-6 col-lg-4">
+				<label>姓名/身份证号：</label>
+				<input type="text" class="form-control" ng-model="archive.identityNo" required>
+			</div>
+		</chadangsearch>
+
+		<chadangjieguo ng-show="archive.id">
+
+			<div class="col-md-12 col-lg-12" >
+				<label>查询时间：</label>
+				<span ng-bind="archive.createTime | date:'yyyy-MM-dd HH:mm'"></span>
+				<span> (此结果来自深圳市房地产信息系统)</span>
+			</div>
+
+			<div class="col-md-12 col-lg-12">
+				<span ng-bind="archive.message"></span>
+			</div>
+
+		</chadangjieguo>
+
+	</chadang>
+
+
+	<div class="col-md-12 detail-right-tit">
+		&nbsp;&nbsp; 诉讼 &nbsp;&nbsp;
+		<button type="button" style="margin-bottom: 5px;" ng-click="showQueryCountry()" class="btn btn-info detail-right-save">查询全国</button>
+		<button ng-if="cityCode==4403" type="button" style="margin-bottom: 5px;" ng-click="showQuerySz()" class="btn btn-info detail-right-save">查询深圳</button>
+	</div>
+	
+	<div ng-if="cityCode!=4403" class="col-md-6 col-lg-4">
+		当地诉讼截屏：
+		<span id="updLawsuitImg">
+			<span class="text-info" data-fancybox="iframe" data-src="/plugins/uploadify/upload_image.html?returnFun=returnDataLawsuit"  data-type="iframe" >点此上传诉讼结果</span>
+		</span>
+		&nbsp;&nbsp;&nbsp;
+		 <span class="chakan-img gallerys lawsuitUpdImg" style="display: none;">
+			<a href="javascript:void(0);" class="lawsuitView-pic" ng-click="aa($event)">查看诉讼截屏</a>
+			<img  ng-repeat="img in lawsuitImgList" src="{{img.imgUrl}}" class="gallery-pic" style="display: none;"/>
+		</span>
+			<input type="hidden" ng-model="lawsuitImgs" id="lawsuitImg">
+			<div id="imgLawsuit" class="gallerys"> </div>
+	</div>
+
+	<div class="col-md-6 col-lg-5">
+		<label style="width: 190px;">被执行人姓名/ 组织名称：</label>
+		<input type="text" class="form-control" ng-model="pname" required>
+		<span class="a-span">&nbsp;</span>
+	</div>
+
+	<div class="col-md-6 col-lg-3">
+		<label style="width: 190px;">身份证号码/ 组织机构代码：</label>
+		<input type="text" class="form-control" ng-model="cardNum" required>
+	</div>
+
+	<div class="col-md-12" ng-if="countryShow">
+		<table bs-table-control="countryList" ></table>
+	</div>
+
+	<div class="col-md-12" ng-if="szShow">
+		<table bs-table-control="szList" ></table>
+	</div>
+
+</form>
+
+<script type="text/javascript">
+//诉讼
+function loadFunction(){
+	$(".archiveView-pic").click(function(){
+		$.openPhotoGallery($(this).next("img"),"deleteArchiveUrl")
+	});
+	$(".lawsuitView-pic").click(function(){
+		$.openPhotoGallery($(this).next("img"),"deleteLawsuitUrl");
+	});
+	$(".enquiryView-pic").click(function(){
+		$.openPhotoGallery($(this).next("img"),"deleteEnquiryUrl");
+	});
+}
+
+clearTimeout(tmp);
+	var tmp = setTimeout(loadFunction,500);
+
+
+</script>

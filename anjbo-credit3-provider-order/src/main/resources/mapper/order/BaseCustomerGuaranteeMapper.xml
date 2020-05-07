@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.order.BaseCustomerGuaranteeMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<if test="null!=guaranteeName and ''!=guaranteeName"> AND `guaranteeName`=#{guaranteeName}</if>
+		<if test="null!=guaranteePhone and ''!=guaranteePhone"> AND `guaranteePhone`=#{guaranteePhone}</if>
+		<if test="null!=guaranteeRelationship and ''!=guaranteeRelationship"> AND `guaranteeRelationship`=#{guaranteeRelationship}</if>
+		<if test="null!=guaranteeCardType and ''!=guaranteeCardType"> AND `guaranteeCardType`=#{guaranteeCardType}</if>
+		<if test="null!=guaranteeCardNumber and ''!=guaranteeCardNumber"> AND `guaranteeCardNumber`=#{guaranteeCardNumber}</if>
+		<if test="null!=guaranteeType and ''!=guaranteeType"> AND `guaranteeType`=#{guaranteeType}</if>
+		<if test="null!=guaranteePropertyType and ''!=guaranteePropertyType"> AND `guaranteePropertyType`=#{guaranteePropertyType}</if>
+		<!-- <if test="null!=guaranteeAPropertyrchitectureSize and guaranteeAPropertyrchitectureSize>0"> AND `guaranteeAPropertyrchitectureSize`=#{guaranteeAPropertyrchitectureSize}</if> -->
+		<if test="null!=guaranteeIsPropertyProple and ''!=guaranteeIsPropertyProple"> AND `guaranteeIsPropertyProple`=#{guaranteeIsPropertyProple}</if>
+		<if test="null!=isFinish and isFinish>0"> AND `isFinish`=#{isFinish}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="BaseCustomerGuaranteeDto" resultType="BaseCustomerGuaranteeDto">    
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `guaranteeName`, `guaranteePhone`, `guaranteeRelationship`, `guaranteeCardType`, `guaranteeCardNumber`, `guaranteeType`, `guaranteePropertyType`, `guaranteeAPropertyrchitectureSize`, `guaranteeIsPropertyProple`, `isFinish` 
+	FROM tbl_order_base_customer_guarantee 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="BaseCustomerGuaranteeDto" resultType="BaseCustomerGuaranteeDto">
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `guaranteeName`, `guaranteePhone`, `guaranteeRelationship`, `guaranteeCardType`, `guaranteeCardNumber`, `guaranteeType`, `guaranteePropertyType`, `guaranteeAPropertyrchitectureSize`, `guaranteeIsPropertyProple`, `isFinish`
+	FROM tbl_order_base_customer_guarantee 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="BaseCustomerGuaranteeDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_order_base_customer_guarantee 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="BaseCustomerGuaranteeDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_order_base_customer_guarantee(
+		`createUid`,
+		`createTime`,
+		`updateUid`,
+		`updateTime`,
+		`orderNo`,
+		`guaranteeName`,
+		`guaranteePhone`,
+		`guaranteeRelationship`,
+		`guaranteeCardType`,
+		`guaranteeCardNumber`,
+		`guaranteeType`,
+		`guaranteePropertyType`,
+		`guaranteeAPropertyrchitectureSize`,
+		`guaranteeIsPropertyProple`,
+		`isFinish`
+	) VALUES(
+		#{createUid},
+		now(),
+		#{createUid},
+		now(),
+		#{orderNo},
+		#{guaranteeName},
+		#{guaranteePhone},
+		#{guaranteeRelationship},
+		#{guaranteeCardType},
+		#{guaranteeCardNumber},
+		#{guaranteeType},
+		#{guaranteePropertyType},
+		#{guaranteeAPropertyrchitectureSize},
+		#{guaranteeIsPropertyProple},
+		#{isFinish}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="BaseCustomerGuaranteeDto" >
+    DELETE FROM tbl_order_base_customer_guarantee 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="BaseCustomerGuaranteeDto" >
+    UPDATE tbl_order_base_customer_guarantee
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=guaranteeName">`guaranteeName`=#{guaranteeName},</if>
+		<if test="null!=guaranteePhone">`guaranteePhone`=#{guaranteePhone},</if>
+		<if test="null!=guaranteeRelationship">`guaranteeRelationship`=#{guaranteeRelationship},</if>
+		<if test="null!=guaranteeCardType">`guaranteeCardType`=#{guaranteeCardType},</if>
+		<if test="null!=guaranteeCardNumber">`guaranteeCardNumber`=#{guaranteeCardNumber},</if>
+		<if test="null!=guaranteeType">`guaranteeType`=#{guaranteeType},</if>
+		<if test="null!=guaranteePropertyType">`guaranteePropertyType`=#{guaranteePropertyType},</if>
+		<if test="null!=guaranteeAPropertyrchitectureSize">`guaranteeAPropertyrchitectureSize`=#{guaranteeAPropertyrchitectureSize},</if>
+		<if test="null!=guaranteeIsPropertyProple">`guaranteeIsPropertyProple`=#{guaranteeIsPropertyProple},</if>
+		<if test="null!=isFinish">`isFinish`=#{isFinish},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

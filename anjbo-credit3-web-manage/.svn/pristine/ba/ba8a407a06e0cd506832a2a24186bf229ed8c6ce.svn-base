@@ -1,0 +1,227 @@
+<!--
+	作者：lic@anjbo.com
+	时间：2017-08-31
+	描述：左边流水
+-->
+<style>
+	.form-inline.w165 label {
+		width: 170px;
+	}
+	
+	.detail-row {
+		line-height: 55px;
+	}
+</style>
+<div class="detail-left">
+	<p class="detail-left-tit">订单状态</p>
+	<div class="detail-left-nav">
+		<div class="detail-left-nav-box" ng-repeat="orderFlow in orderFlowList">
+			<div class="detail-left-line" ng-show="orderFlowList.length != $index+1"></div>
+			<a ng-if="orderFlow.backReason==null || orderFlow.backReason==''" ng-click="addDetail(orderFlow.currentProcessId)" class="relative">
+				<div class="detail-left-circle"></div>
+				<span ng-if="orderFlow.color!='red'&&orderFlow.currentProcessName!='已放款'" ng-bind="orderFlow.currentProcessName"></span>
+				<span ng-if="orderFlow.color!='red'&&orderFlow.currentProcessName=='已放款'">放款</span>
+				<span class="text-danger" ng-if="orderFlow.color=='red'" ng-bind="orderFlow.currentProcessName"></span>
+				<span ng-if="orderFlow.currentProcessId!='wanjie'&&orderFlow.color!='red'">已完成 </span>
+			</a>
+			<span ng-if="orderFlow.backReason!=null  && orderFlow.backReason!='' && orderFlow.color!='red'" href="javascript:void(0)" class="relative text-warning"><div class="detail-left-circle"></div>订单已从【<span ng-bind="orderFlow.currentProcessName"></span>】退回给【<span ng-bind="orderFlow.nextProcessName"></span>】</span>
+			<span ng-if="orderFlow.backReason!=null  && orderFlow.backReason!='' && orderFlow.color=='red'" href="javascript:void(0)" class="relative text-warning text-danger"><div class="detail-left-circle text-danger"></div>订单已从【<span class="text-danger" ng-bind="orderFlow.currentProcessName"></span>】退回给【<span class="text-danger" ng-bind="orderFlow.nextProcessName"></span>】</span>
+			<p class="text-danger" ng-if="orderFlow.backReason!=null  && orderFlow.backReason!='' && orderFlow.color=='red'" ng-bind="'退回原因：'+orderFlow.backReason"></p>
+			<p ng-if="orderFlow.backReason!=null  && orderFlow.backReason!='' && orderFlow.color!='red'" ng-bind="'退回原因：'+orderFlow.backReason"></p>
+			<p class="text-muted" ng-if="orderFlow.currentProcessId!='wanjie' && orderFlow.color!='red'">操作人：<span ng-bind="orderFlow.handleName"></span></p>
+			<p class="text-muted text-danger" ng-if="orderFlow.currentProcessId!='wanjie' && orderFlow.color=='red'">操作人：<span ng-bind="orderFlow.handleName"></span></p>
+			<p class="text-muted" ng-if="orderFlow.color!='red'" ng-bind="orderFlow.handleTime | date:'yyyy-MM-dd HH:mm:ss'"></p>
+			<p class="text-muted text-danger" ng-if="orderFlow.color=='red'" ng-bind="orderFlow.handleTime | date:'yyyy-MM-dd HH:mm:ss'"></p>
+		</div>
+	</div>
+	<div class="showBtn" style="position: fixed;height: 50px;width: 10px;z-index: 1000;background: #333a47;left:290px;top: 450px;border-top-right-radius: 8px;border-bottom-right-radius: 8px;color: white;line-height: 50px; cursor:pointer">
+		<</div>
+	</div>
+
+	<script>
+		$(function() {
+			$('div.showBtn').on('click', function() {
+				if($('div.detail-left').width() == 290) {
+					$('div.detail-left').animate({
+						width: '0px'
+					});
+					$('div.showBtn').animate({
+						left: '0px'
+					});
+					$('div.detail-right').animate({
+						left: '10px'
+					}, function() {
+						$('div.showBtn').html('>');
+					});
+				} else {
+					$('div.detail-left').animate({
+						width: '290px'
+					});
+					$('div.showBtn').animate({
+						left: '290px'
+					});
+					$('div.detail-right').animate({
+						left: '300px'
+					}, function() {
+						$('div.showBtn').html('<');
+					});
+				}
+			});
+		});
+	</script>
+
+	<style>
+		.form-inline.w165 label {
+			width: 183px;
+			line-height: 30px;
+		}
+	</style>
+	<div class="detail-right">
+
+		<div class="container-fluid page-config">
+			<!--
+	    	作者：lic@anjbo.com
+	    	时间：2017-08-18
+	    	描述：面包屑
+	    -->
+			<div class="row">
+				<div class="col-md-12">
+					<ul class="breadcrumb">
+						<li>
+							<a ng-click="goBack()" ng-bind="pageConfigDto.backButName"> </a>
+						</li>
+						<li><span ng-bind="pageConfigDto.title"></span></li>
+						<li ng-if="pageConfigDto.pageTabConfigDtos>0">
+							<span ng-repeat="pageTabConfig in pageConfigDto.pageTabConfigDtos track by $index" ng-show="showView==pageTabConfig.title" ng-bind="pageTabConfig.title"></span>
+						</li>
+						<a style="display:inline-block;float:right;padding-right: 10px;" ng-click="goBack()">返回上一步</a>
+					</ul>
+					<span class="detail-trash3" ng-bind-html="pageTabConfigDto.remarks"></span>
+				</div>
+			</div>
+
+			<!--
+	    	作者：lic@anjbo.com
+	    	时间：2017-08-25
+	    	描述：详情
+	    -->
+			<div ng-repeat="detail in detailList">
+				<common-detail process-id="{{detail}}" delete-detail="deleteDetail(detail)"></common-detail>
+			</div>
+
+			<!--
+	    	作者：lic@anjbo.com
+	    	时间：2017-08-18
+	    	描述：标签
+	    -->
+			<div class="row" ng-if="pageConfigDto.type == 1">
+				<div class="col-md-12">
+					<ul class="nav nav-tabs">
+						<li ng-repeat="pageTabConfig in pageConfigDto.pageTabConfigDtos track by $index" ng-class="{'active':showView==pageTabConfig.title}">
+							<a ng-click="changeView(pageTabConfig)" ng-bind="pageTabConfig.title"></a>
+						</li>
+						<li class="pull-right">
+							<button ng-if="pageTabConfigDto.saveButName && pageTabConfigDto.saveButName!=null && pageTabConfigDto.saveButName!='提交' && pageTabConfigDto.title != '询价/查档/诉讼' && pageTabConfigDto.title != '影像资料'" type="button" ng-click="save()" class="btn btn-info detail-right-save" ng-bind="pageTabConfigDto.saveButName"></button>
+							<button type="button" class="btn btn-primary" ng-click="submit()" ng-bind="pageConfigDto.submitButName"></button>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<!--
+	    	作者：lic@anjbo.com
+	    	时间：2017-08-18
+	    	描述：表单页
+	    -->
+			<form method="post" class="form-inline w165 detail-row">
+				<span ng-show="pageTabConfigDto.isShow" ng-bind-html="pageTabConfigDto.showText"></span>
+
+				<enquiry-edit ng-if="pageTabConfigDto.title == '询价/查档/诉讼'"></enquiry-edit>
+
+				<businfo-edit ng-if="pageTabConfigDto.title == '影像资料' || pageTabConfigDto.title == '机构影像资料'"></businfo-edit>
+
+				<div ng-repeat="pageTabRegionConfig in pageTabConfigDto.pageTabRegionConfigDtos" ng-show="!pageTabConfigDto.isShow && !((pageTabRegionConfig.title == '企业信息（非必填）' || pageTabRegionConfig.title == '股东信息（非必填）') && !isEnterprise )">
+					<div class="col-md-12 detail-right-tit ">
+						&nbsp;&nbsp;<span ng-bind="pageTabRegionConfig.title"></span>
+						<!-- &nbsp;&nbsp;<button ng-if="$index==0 && pageTabConfigDto.saveButName" type="button" ng-click="save()" class="btn btn-info detail-right-save" ng-bind="pageTabConfigDto.saveButName"></button> -->
+						<button ng-if="pageTabRegionConfig.type == 2" type="button" class="btn btn-info detail-right-save fr" ng-click="addList(pageTabRegionConfig.valueList,pageTabRegionConfig.regionClass)" ng-bind="'+ '+pageTabRegionConfig.title"></button>
+					</div>
+					<div ng-repeat="formList in pageTabRegionConfig.valueList">
+						<div class="col-md-12 danbao-tit" ng-if="pageTabRegionConfig.type==2">
+							&nbsp;&nbsp; {{pageTabRegionConfig.title}}（<span class="num-box" ng-bind="$index+1"></span>）
+							<span class="detail-trash text-danger" ng-if="$index > 0 || pageTabRegionConfig.firstIsDelete==2" ng-click="deleteList(pageTabRegionConfig.valueList,$index,pageTabRegionConfig.deleteUrl)">删除</span>
+						</div>
+
+						<div ng-include="'/plugins/page-directive/form-edit.html'"></div>
+
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<!--
+	作者：lic@anjbo.com
+	时间：2017-08-17
+	描述：类型为5删除图片
+-->
+	<div class="lhw-alert-bg" ng-show="isShowDelImg">
+		<div class="lhw-alert-box" style="width:480px;">
+			<div class="lhw-alert-tit">请选择要删除的资料</div>
+			<div>
+				<div class="row form-inline detail-row" style="padding:0 10px;">
+					<div class="tan-pic">
+						<div class="tan-pic-box" ng-repeat="img in tempObject.dataList">
+							<label ng-show="img">
+							<img src="{{img}}" width="100%" height="120px;" >
+							<div class="squaredFour">
+								<input type="checkbox" name="imgIds" value="{{img}}" />
+								<span></span>
+							</div>
+						</label>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>
+			</div>
+			<div class="lhw-alert-but">
+				<button type="button" class="btn btn-primary lhw-alert-ok" ng-click="delImg();" style="margin-right:80px;">确定</button>
+				<button type="button" class="btn btn-danger lhw-alert-cancel" ng-click="isShowDelImg=false">取消</button>
+			</div>
+		</div>
+	</div>
+
+	<!--
+	作者：lic@anjbo.com
+	时间：2017-08-19
+	描述：图片上传返回路径
+-->
+	<script type="text/javascript">
+		function imgConfig(url, simg, name, imgarr) {
+			if(url.length > 0) {
+				url = url.substring(0, url.length - 1);
+			}
+			if(simg.length > 0) {
+				simg = simg.substring(0, simg.length - 1);
+			}
+			if(name.length > 0) {
+				name = name.substring(0, name.length - 1);
+			}
+			var scope = angular.element('.page-config').scope();
+			scope.upload(url, simg, name, imgarr);
+		}
+
+		function uploadifyImg(url, simg, name, imgarr) {
+			if(url.length > 0) {
+				url = url.substring(0, url.length - 1);
+			}
+			if(simg.length > 0) {
+				simg = simg.substring(0, simg.length - 1);
+			}
+			if(name.length > 0) {
+				name = name.substring(0, name.length - 1);
+			}
+			scope = angular.element('businfo-edit').scope();
+			scope.uploadifyImg(url, simg, name, imgarr);
+		}
+	</script>

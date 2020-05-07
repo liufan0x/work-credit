@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.finance.StatementMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(lastUpdateTimeBegin)"> AND lastUpdateTime >= #{lastUpdateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(lastUpdateTimeEnd)"> AND lastUpdateTime &lt;= #{lastUpdateTimeEnd}</if>
+		-->
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<if test="null!=remark and ''!=remark"> AND `remark`=#{remark}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="StatementDto" resultType="StatementDto">    
+	SELECT *
+	FROM tbl_finance_statement 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="StatementDto" resultType="StatementDto">
+	SELECT `id`, `createTime`, `createUid`, `updateUid`, `lastUpdateTime`, `orderNo`, `remark`
+	FROM tbl_finance_statement 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="StatementDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_finance_statement 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="StatementDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_finance_statement(
+		`createTime`,
+		`createUid`,
+		`updateUid`,
+		`lastUpdateTime`,
+		`orderNo`,
+		`remark`
+	) VALUES(
+		now(),
+		#{createUid},
+		#{createUid},
+		#{lastUpdateTime},
+		#{orderNo},
+		#{remark}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="StatementDto" >
+    DELETE FROM tbl_finance_statement 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="StatementDto" >
+    UPDATE tbl_finance_statement
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=lastUpdateTime">`lastUpdateTime`=#{lastUpdateTime},</if>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=remark">`remark`=#{remark},</if>
+		<if test="null!=sgtLendingBatNo">`sgtLendingBatNo`=#{sgtLendingBatNo},</if>
+	</set>
+	WHERE orderNo=#{orderNo}
+  </update>
+    
+</mapper>

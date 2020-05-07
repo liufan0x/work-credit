@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.DeptMapper">
+
+	<select id="findDeptByDeptId" parameterType="int" resultType="DeptDto">
+		select id,pid,name,agencyId from tbl_user_dept where id = #{0} 
+	</select>
+	
+	<select id="selectDeptList" resultType="DeptDto" parameterType="DeptDto">
+		select * from tbl_user_dept  where 1 = 1 
+		<if test="agencyId != null and agencyId>0">
+			and agencyId = #{agencyId}
+		</if>
+	</select>
+	<select id="selectDeptCount" resultType="int" parameterType="DeptDto">
+		select count(1) from tbl_user_dept  where 1 = 1 
+		<if test="agencyId != null and agencyId>0">
+			and agencyId = #{agencyId}
+		</if>
+	</select>
+		
+	<select id="search" resultType="DeptDto" parameterType="DeptDto">
+		select id,name from tbl_user_dept where agencyId = #{agencyId}
+		<if test="null!=pid and pid>0"> and pid=#{pid}</if>
+	</select>
+	<select id="searchIdsByAgency" resultType="int" parameterType="int">
+		select id from tbl_user_dept where agencyId=#{agencyId}
+	</select>
+	
+	<!-- 增删改 -->	
+	<insert id="insert" parameterType="DeptDto">
+		insert into tbl_user_dept(agencyId, pid, name, createTime) values 
+		(#{agencyId}, #{pid}, #{name}, NOW())
+	</insert>
+	<update id="update" parameterType="DeptDto">      
+        update tbl_user_dept set name=#{name},updateTime=NOW() where pid>0 and agencyId=#{agencyId} and id=#{id}
+    </update>
+    <delete id="delete">
+    	delete from tbl_user_dept where pid>0 and agencyId=#{agencyId} and id=#{id}
+    </delete>
+	<insert id="batchInsert" parameterType="java.util.List">
+		insert into tbl_user_dept(agencyId, pid, id, name, remark, createTime) values 
+		<foreach collection="list" index="index" item="item" separator="," >(#{item.agencyId}, #{item.pid}, #{item.id}, #{item.name}, #{item.remark}, NOW())</foreach>
+	</insert>
+	<update id="batchUpdate" parameterType="java.util.List">      
+        <foreach collection="list" index="index" item="item" open="" close="" separator=";">
+            update tbl_user_dept set pid=#{item.pid},name=#{item.name},remark=#{item.remark},updateTime=NOW() where agencyId=#{item.agencyId} and id=#{item.id}
+        </foreach> 
+    </update>
+
+</mapper>

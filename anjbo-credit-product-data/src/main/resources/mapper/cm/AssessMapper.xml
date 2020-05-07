@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.cm.AssessMapper" >
+  
+  <insert id="addAssess" parameterType="map" >
+    insert into tbl_cm_assess_base (
+	      uid, 
+	      orderNo, 
+	      appNo,
+	      bankId, 
+	      subBankId, 
+	      custName, 
+	      certificateType, 
+	      certificateNo, 
+	      estateType, 
+	      yearNo, 
+	      estateNo, 
+	      custManagerName, 
+	      custManagerMobile, 
+	      agentName, 
+	      agentMobile, 
+	      remark, 
+	      status, 
+	      ownerCertificateType, 
+	      ownerCertificateNo,
+	      ownerName,
+	      source,
+	      actPrice
+      ) values (
+      	  #{uid}, 
+	      #{orderNo}, 
+	      #{appNo},
+	      #{bankId}, 
+	      #{subBankId}, 
+	      #{ownerName}, 
+	      #{ownerCertificateType}, 
+	      #{ownerCertificateNo}, 
+	      #{estateType}, 
+	      #{yearNo}, 
+	      #{estateNo}, 
+	      #{custManagerName}, 
+	      #{custManagerMobile}, 
+	      #{agentName}, 
+	      #{agentMobile}, 
+	      #{remark}, 
+	      #{status}, 
+	      #{ownerCertificateType}, 
+	      #{ownerCertificateNo}, 
+	      #{ownerName},
+	      #{source},
+	      #{actPrice}
+      )
+  </insert>
+  <select id="selectAssessList" parameterType="AssessDto" resultType="AssessResultDto">
+  	select t1.*,t3.id as applyLoanId
+	  	from tbl_cm_assess_base t1
+	  	left join tbl_cm_order_loan_base t3 on t1.orderNo=t3.orderNo
+  	where 1=1
+	<if test="uid!=null and uid!=''">
+		and t1.uid in (${uid})
+	</if>
+  	<if test="custName!=null and custName!=''">
+  		and t1.custName like '%${custName}%'
+  	</if>
+  	<if test="propertyName!=null and propertyName!=''">
+  		and CONCAT(t1.propertyName,t1.buildingName,t1.roomName) like '%${propertyName}%'
+  	</if>
+  	<if test="estateNo!=null and estateNo!=''">
+  		and t1.estateNo like '%${estateNo}%'
+  	</if>
+  	<if test="status!=-1">
+  		and t1.status = #{status}
+  	</if>
+  	<if test="startTime!=null and startTime!=''">
+  		<![CDATA[and DATE_FORMAT(t1.createTime,'%Y-%m-%d')>=#{startTime}]]>
+  	</if>
+  	<if test="endTime!=null and endTime!=''">
+  		<![CDATA[and DATE_FORMAT(t1.createTime,'%Y-%m-%d')<=#{endTime}]]>
+  	</if>
+  	order by t1.createTime desc
+	limit ${start},${pageSize}
+  </select>
+  <select id="selectAssessCount" parameterType="AssessDto" resultType="int">
+  	select count(1) from tbl_cm_assess_base t1
+  	where 1=1
+ 	<if test="uid!=null and uid!=''">
+		and t1.uid in (${uid})
+	</if>
+  	<if test="custName!=null and custName!=''">
+  		and t1.custName like '%${custName}%'
+  	</if>
+  	<if test="propertyName!=null and propertyName!=''">
+  		and CONCAT(t1.propertyName,t1.buildingName,t1.roomName) like '%${propertyName}%'
+  	</if>
+  	<if test="estateNo!=null and estateNo!=''">
+  		and t1.estateNo like '%${estateNo}%'
+  	</if>
+  	<if test="status!=-1">
+  		and t1.status = #{status}
+  	</if>
+  	<if test="startTime!=null and startTime!=''">
+  		<![CDATA[and DATE_FORMAT(t1.createTime,'%Y-%m-%d')>=#{startTime}]]>
+  	</if>
+  	<if test="endTime!=null and endTime!=''">
+  		<![CDATA[and DATE_FORMAT(t1.createTime,'%Y-%m-%d')<=#{endTime}]]>
+  	</if>
+  </select>
+  <select id="selectOrderNoByAssessAppNo" parameterType="java.lang.String" resultType="AssessDto">
+  	select * from tbl_cm_assess_base where appNo=#{0} order by createTime desc  limit 1
+  </select>
+  
+  <select id="selectOrderNoByAssessOrderNo" parameterType="java.lang.String" resultType="AssessDto">
+  	select * from tbl_cm_assess_base where orderNo=#{0} order by createTime desc  limit 1
+  </select>
+  
+  <update id="updateAssessStatus" parameterType="AssessDto">
+  	update tbl_cm_assess_base set status=#{status}
+  	<if test="uid!=null and uid!=''">
+  		 ,uid=#{uid}
+  	 	 ,agentName = #{agentName}
+  	 	 ,agentMobile = #{agentMobile}
+  	</if>
+  	 where orderNo=#{orderNo}
+  </update>
+  <select id="selectAssessByOrderNo" parameterType="java.lang.String" resultType="AssessResultDto">
+  	select t1.*,t3.id as applyLoanId
+	  	from tbl_cm_assess_base t1
+	  	left join tbl_cm_order_loan_base t3 on t1.orderNo=t3.orderNo where t1.orderNo=#{0}
+  </select>
+  <select id="queryAssessExtendByOrderNo" parameterType="String" resultType="AssessExtendDto">
+  	select * from tbl_cm_assess_base_extend where orderNo=#{sdf}
+  </select>
+  <update id="updateAssessAppNo" parameterType="AssessDto">
+  	update tbl_cm_assess_base set appNo=#{appNo} where orderNo=#{orderNo}  <if test="status==4">and status = 4 </if> 
+  </update>
+   <update id="updateAssess" parameterType="AssessExtendDto">
+  	update tbl_cm_assess_base set 
+  		  uid = #{uid}, 
+	      appNo= #{appNo},
+	      bankId= #{bankId}, 
+	      subBankId= #{subBankId}, 
+	      custName= #{custName}, 
+	      certificateType= #{certificateType}, 
+	      certificateNo= #{certificateNo}, 
+	      propertyName= #{propertyName}, 
+	      buildingName= #{buildingName}, 
+	      roomName= #{roomName}, 
+	      estateType= #{estateType}, 
+	      yearNo= #{yearNo}, 
+	      estateNo= #{estateNo}, 
+	      custManagerName= #{custManagerName}, 
+	      custManagerMobile= #{custManagerMobile}, 
+	      agentName= #{agentName}, 
+	      agentMobile= #{agentMobile}, 
+	      remark= #{remark}, 
+	      status= #{status}, 
+	      ownerCertificateType= #{ownerCertificateType}, 
+	      ownerCertificateNo= #{ownerCertificateNo},
+	      ownerName= #{ownerName},
+	      actPrice= #{actPrice}
+  	 where orderNo=#{orderNo}
+  </update>
+   <update id="updateAssessExtend" parameterType="AssessExtendDto">
+  	update tbl_cm_assess_base_extend set 
+  		loanAmountUpdate=#{loanAmountUpdate},
+  		userName=#{userName},
+  		userMobile=#{userMobile}
+  	 where orderNo=#{orderNo}
+  </update>
+  <insert id="addResult" parameterType="LoanAuditResultDto">
+      INSERT INTO `tbl_cm_result` (`orderNo`, `appNo`, `feedSign`, `feedType`, `result`, `createTime`
+       ) VALUES ( #{orderNo}, #{appNo}, #{feedSign}, #{feedType}, #{result}, now());
+  </insert>
+  
+</mapper>

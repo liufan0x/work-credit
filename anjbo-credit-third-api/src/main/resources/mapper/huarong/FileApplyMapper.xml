@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.huarong.FileApplyMapper">
+
+	<select id="getFileApply" parameterType="String" resultType="map">
+		 select * from tbl_third_hr_file_apply where applSeq =(select applSeq 
+			from tbl_third_hr_lc_appoint where orderNo=#{orderNo} order by id DESC limit 
+			0,1) 
+		<!-- select * from tbl_third_hr_file_apply where applSeq =(select applSeq
+		from tbl_third_hr_lc_appoint where orderNo=#{orderNo} order by id DESC
+		limit 0,1) and addtime=(select MAX(addtime) from
+		tbl_third_hr_file_apply where orderNo=#{orderNo}) -->
+	</select>
+	
+	<select id="searchFilePaths" parameterType="List" resultType="string">
+		SELECT filePath FROM tbl_third_hr_file_apply WHERE orderNo IN(<foreach collection="list" item="item" index="index" separator=",">#{item}</foreach>)
+	</select>
+		
+	<!-- 快鸽提单信息,业务信息 -->
+	<insert id="saveFileApply" parameterType="List">
+		INSERT INTO tbl_third_hr_file_apply (
+		respStatus,
+		applSeq,
+		orderNo,
+		docFileType,
+		addTime,
+		filePath,
+		`index`
+		)
+		VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.respStatus},
+			#{item.applSeq},
+			#{item.orderNo},
+			#{item.docFileType},
+			#{item.addtime},
+			#{item.filePath},
+			#{item.index}
+			)
+		</foreach>
+
+
+	</insert>
+
+</mapper>

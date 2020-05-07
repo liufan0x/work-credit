@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+	<head>
+ 		<meta charset="UTF-8" />
+		<meta name="Keywords" content="" />
+		<meta name="Description" content="" />
+		<link rel="shortcut icon" href="images/icon.png" />
+		<meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="css/select2.css" rel="stylesheet">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/bootstrap-datetimepicker.css" rel="stylesheet">
+		<link href="css/bootstrap-table.css" rel="stylesheet">
+		<link href="css/jquery.fancybox.css" rel="stylesheet">
+		<link href="css/select2-bootstrap.css" rel="stylesheet">
+		<link href="css/base.css" rel="stylesheet">
+		<link href="css/font-awesome.min.css" rel="stylesheet">
+
+		<title>快鸽按揭管理系统</title>	
+	</head>
+<body ng-controller="index">
+
+<!-- 头部 -->
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<div id="top">
+				<div id="topBar">
+					<div class="userPanel">
+						<ul>
+							<li>
+								<a  class="qingli" ng-if="hasDeployList" href="/credit/common/base/clearData" target="_blank">刷新银行支行字典</a>&nbsp;
+								<a  class="qingli" ng-if="hasDeployList"  href="/credit/common/base/clearBank" target="_blank">刷新银行</a>&nbsp;
+								<a  class="qingli" ng-if="hasDeployList"  href="/credit/common/base/clearSubBank" target="_blank">刷新支行</a>&nbsp;
+								<a  class="qingli" ng-if="hasDeployList"  href="/credit/common/base/clearDict" target="_blank">刷新字典</a>&nbsp;
+								<a  class="qingli" ng-if="hasDeployList"  href="/credit/config/page/app/base/v/initSelectConfig" target="_blank">刷新App配置</a>&nbsp;
+								<a  class="qingli" ng-if="hasDeployList"  href="/credit/product/base/v/initData" target="_blank">刷新产品</a>&nbsp;
+								<a  class="qingli" ng-if="hasDeployList"  href="/credit/user/userUtil/v/initUserList" target="_blank">刷新用户</a>
+							欢迎您：
+							<span ng-bind="userDto.name"></span>
+							【<span ng-bind="userDto.agencyName"></span>】&nbsp;&nbsp;&nbsp;&nbsp;
+							<a rel="nofollow" ng-click="showUpdatePwd()">修改密码</a>&nbsp;&nbsp;&nbsp;&nbsp;
+							<a class="text-danger" rel="nofollow" ng-click="showLogout()">退出</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--row-->		 
+	<div class="row" >
+		<div class="col-md-12">
+			 <nav class="navbar navbar-default navbar-inverse" role="navigation">
+				  <div class="navbar-header">
+					   <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+							 <span class="sr-only">Toggle navigation</span>
+							 <span class="icon-bar"></span>
+							 <span class="icon-bar"></span>
+							 <span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="#"><img alt="Bootstrap Image Preview" src="./images/logo.png"  width="50"/></a>
+						<span class="index-tit" >快鸽管理系统</span>
+					</div>
+					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" >
+						 <ul class="nav navbar-nav" style="display: none;">
+							 <li class="dropdown" ng-if="hasUserList || hasRoleList">
+							     <a class="dropdown-toggle" data-toggle="dropdown">用户管理<strong class="caret"></strong></a>
+								 <ul class="dropdown-menu">
+									 <li><a ui-sref="userList" ng-if="hasUserList">用户列表</a></li>
+									 <li><a ui-sref="roleList" ng-if="hasRoleList">角色列表</a></li>
+								</ul>
+							</li>
+							 <li class="dropdown" ng-if="hasAgencyList || hasAgencyTypeList || hasFundList ">
+							     <a href="#" class="dropdown-toggle" data-toggle="dropdown">机构管理<strong class="caret"></strong></a>
+								 <ul class="dropdown-menu">
+									 <li><a ui-sref="agencyList" ng-if="hasAgencyList" >已签约机构</a></li>
+									 <!--
+									 <li><a ui-sref="agencyTypeList" ng-if="hasAgencyTypeList">机构类型列表</a></li>
+									 <li><a ui-sref="agencyPageList({'productCode':'100','productName':'机构'})" ng-if="hasAgencyList">待签约机构</a></li>
+									 -->
+									 <li><a ui-sref="waitSignAgency({'productCode':'100','productName':'机构'})" ng-if="hasAgencyList">待签约机构</a></li>
+								</ul>
+							</li>
+							 <li class="dropdown" ng-if="hasProductList" >
+							     <a href="#" class="dropdown-toggle" data-toggle="dropdown">产品管理<strong class="caret"></strong></a>
+								 <ul class="dropdown-menu">
+									 <li><a ui-sref="productList" ng-if="hasProductList">产品列表</a></li>
+								</ul>
+							</li>
+							 <li class="dropdown" ng-if="hasFundList">
+								 <a href="#" class="dropdown-toggle" data-toggle="dropdown">资方管理<strong class="caret"></strong></a>
+								 <ul class="dropdown-menu">
+									 <li><a ui-sref="fundList" ng-if="hasFundList">资金方列表</a></li>
+								 </ul>
+							 </li>
+							 <li class="dropdown" ng-if="hasDeployList">
+								 <a href="#" class="dropdown-toggle" data-toggle="dropdown">开发管理<strong class="caret"></strong></a>
+								 <ul class="dropdown-menu">
+									 <li><a ui-sref="bankList">银行列表</a></li>
+									 <li><a ui-sref="bankSubList">支行列表</a></li>
+									 <li><a ui-sref="dictList">字典列表</a></li>
+									 <li><a ui-sref="orderListBase">订单列表</a></li>
+								 </ul>
+							 </li>
+							 <li class="dropdown" ng-if="hasContractList">
+								 <a href="#" class="dropdown-toggle" data-toggle="dropdown">工具管理<strong class="caret"></strong></a>
+								 <ul class="dropdown-menu">
+									 <li><a ng-if="hasContractList" ui-sref="contractGroupList" >合同管理</a></li>
+								 </ul>
+							 </li>
+						</ul>	 
+					</div>
+				</nav>
+	        </div>
+	</div>
+	<!--row-->
+</div>
+<!-- 头部end -->
+		 
+<!--main-->
+<div class="" ui-view="" >
+     <span style="display:block;align-content:center; text-align:center;width:auto; height: auto; font-size: 18px;padding-top:20px">欢迎使用快鸽管理系统</span>
+</div>
+<!--main end-->
+
+<div ng-show="false" id="editId" style="display: none;">
+	<div class="row">
+		<div class="col-md-14">
+		<form class="form-inline" >
+			<div class="form-group">
+				<label >原密码：</label>
+				<input type="password" class="form-control" ng-model="pwdDto.oldPwd">
+			</div>
+			<div class="form-group">
+				<label >新密码：</label>
+				<input type="password" class="form-control" ng-model="pwdDto.newPwd1">
+			</div>
+			<div class="form-group">
+				<label >确认新密码：</label>
+				<input type="password" class="form-control" ng-model="pwdDto.newPwd2">
+			</div>
+			<p ng-if="pwdDto.errorInfo!=''" class="text-danger" ng-bind="pwdDto.errorInfo"></p>
+		</form>
+		</div>
+	</div>
+</div>
+
+<div ng-show="false" id="capitalId" style="display: none;">
+	<div class="row">
+	  <div class="col-md-14">
+	  <form class="form-inline" >
+	      <div class="">
+	        <label >金额：</label>
+	        <input type="money" class="form-control" ng-model="obj.withholdMoney" onkeyup="value=value.replace(/[^\d.]/g,'')">元
+	      </div>
+	      <div class="">
+	        <textarea  class="form-control" ng-model="obj.remarks" style="width:276px; margin:10px auto; height:130px;"></textarea>
+	      </div>
+	       <label ng-bind="msg.errorInfo"></label>
+		</div>
+		</form>
+	</div>
+</div>
+
+<div ng-show="false" id="noticeId">
+	<div class="row">
+	  <div class="col-md-12">
+	      <div class="form-group">
+	      	<span ng-bind="notice"></span>
+	      </div>
+		</div>
+	</div>
+</div>
+
+</body>
+	<script type="text/javascript" src="script/common/jquery.min.js"></script>
+	<script type="text/javascript" src="script/common/angular.min.js"></script>
+	<script type="text/javascript" src="script/common/bootstrap.min.js"></script>
+	<script type="text/javascript" src="script/common/bootstrap-datetimepicker.min.js" charset="UTF-8"></script><!--日期-->
+    <script type="text/javascript" src="script/common/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="script/common/bootstrap-table.min.js" charset="UTF-8"></script><!--表格-->
+    <script type="text/javascript" src="script/common/bootstrap-table-zh-CN.min.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="script/common/bootstrap-table-angular.min.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="script/common/bootstrap-table-export.min.js" charset="UTF-8"></script> 
+	<script type="text/javascript" src="script/common/tableExport.js" charset="UTF-8"></script> 
+    <script type="text/javascript" src="plugins/jquery-photo-gallery/jquery.photo.gallery.js"></script><!--图片放大-->
+    <script type="text/javascript" src="script/common/bootstrap-suggest.js"></script><!--下拉搜索-->
+	<script type="text/javascript" src="script/common/select2.full.min.js"></script><!--下拉-->
+	<script type="text/javascript" src="script/common/jquery.fancybox.min.js"></script><!--弹出图片上传-->
+	<script type="text/javascript" src="script/sea.js"></script>
+	<script type="text/javascript" src="script/common/angular-file-upload.min.js"></script>
+	<script type="text/javascript" src="script/common/console-sham.js"></script>
+	<script type="text/javascript" >
+		seajs.use("index");
+	</script>
+</html>

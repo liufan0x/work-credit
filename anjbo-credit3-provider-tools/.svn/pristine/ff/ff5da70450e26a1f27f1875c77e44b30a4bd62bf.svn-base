@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.contract.ContractGroupMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=name and ''!=name"> AND `name`=#{name}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="ContractGroupDto" resultType="ContractGroupDto">    
+	SELECT `id`, `name` 
+	FROM tbl_common_contract_group 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="ContractGroupDto" resultType="ContractGroupDto">
+	SELECT `id`, `name`
+	FROM tbl_common_contract_group 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="ContractGroupDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_common_contract_group 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="ContractGroupDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_common_contract_group(
+		`name`
+	) VALUES(
+		#{name}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="ContractGroupDto" >
+    DELETE FROM tbl_common_contract_group 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="ContractGroupDto" >
+    UPDATE tbl_common_contract_group
+	<set>
+		<if test="null!=name">`name`=#{name},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

@@ -1,0 +1,189 @@
+<div class="container-fluid">
+  <div class="row">
+    <button ng-click="test()" ng-show=0>
+      测试
+    </button>
+  
+    <div class="col-md-12">
+      <ul class="breadcrumb">
+        <li>
+          报表管理
+        </li>
+        <li>
+          统计报表
+        </li>
+        <li>
+          风控报表
+        </li>
+      </ul>
+    </div>
+  </div><!--row-->
+  <div style="margin-left:30px; ">
+      <div class="form-group" >
+           <button type="button" class="btn" ng-click="reportType='0'" ng-class="{true: 'btn-primary', false: 'btn-default'}[reportType=='0']">订单风控数据统计</button>
+           <button type="button" class="btn" ng-click="reportType='1'" ng-class="{true: 'btn-primary', false: 'btn-default'}[reportType=='1']">初审人员效率统计</button>
+           <button type="button" class="btn" ng-click="reportType='2'" ng-class="{true: 'btn-primary', false: 'btn-default'}[reportType=='2']">终审人员效率统计</button>
+       </div>
+  </div>
+  <!-- 业绩概览 -->
+  <div ng-show="reportType == 0">
+    <div class="row">
+    <div class="col-md-12"> 
+      <form class="form-inline search" style="margin-bottom:20px;margin-left:30px; ">
+  
+        <br></br>
+        <div class="form-group" >
+          <label>城市</label>
+            <select  class="form-control selectcity001"  ng-model="page0.cityCode" id="page0_cityId">
+              <!-- <option selected hidden value="">全国</option> -->
+              <option  ng-repeat="city in orderCitys" ng-value='city.code'>{{city.name}}</option>
+        </select>
+      </div>
+        <br></br>
+        <div class="form-group" >
+         <label id="timeShow">时间：</label>
+            <button type="button" class="btn" ng-click="page0.createTime='1'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page0.createTime=='1']">昨日</button>
+            <button type="button" class="btn" ng-click="page0.createTime='2'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page0.createTime=='2']">上周</button>
+            <button type="button" class="btn" ng-click="page0.createTime='3'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page0.createTime=='3']">上月</button>
+            <button type="button" class="btn" ng-click="page0.createTime='4'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page0.createTime=='4']">本月</button>
+        </div>
+        <div class="form-group">
+          <label>自定义<span id="zdyShow"></span>时间：</label>
+          <input  size="16" type="text" readonly  class="form-control form_date_one" ng-model="page0.startTime" >
+          <span class="clear-date" ng-click="clearDate($event,'start')">X</span>
+              &nbsp;&nbsp;至
+          <input  size="16" type="text" readonly  class="form-control form_date_one" ng-model="page0.endTime" >
+           <span class="clear-date" ng-click="clearDate($event,'end')">X</span>
+        </div>
+        <button type="submit" class="btn btn-default" ng-click="query()" style="margin-bottom:10px; margin-right:10px;">查询</button>
+        <br></br>
+        <div class="form-group" >
+          <label>产品:</label>
+             <button type="button" class="btn" ng-repeat="item in productList" ng-click="page0.productCode=item.productCode" ng-class="{true: 'btn-primary', false: 'btn-default'}[page0.productCode==item.productCode]">{{item.productName}}</button>
+         </div>
+           <br></br>
+            <div class="form-group">
+  </form>
+    </div>
+  </div>
+  
+  <div class="row" id="riskAudit">
+      <div style="margin-left:30px"><span style="width: 4px;
+        display: inline-block;
+        height: 11px;
+        margin-right: 5px;
+        background-color: #333;"></span>订单风控数据统计</div>
+    <div class="col-md-12 cityTable">
+           <table  bs-table-control="riskAuditTable" id="riskAuditTable" data-show-export="true" style="min-width:1000px;"></table>
+    </div>
+  </div>
+      <div class="row" id="riskAuditTotal">
+          <div style="margin-left:30px"><span style="width: 4px;
+        display: inline-block;
+        height: 11px;
+        margin-right: 5px;
+        background-color: #333;"></span>风控退回率统计</div>
+          <lable>请选择</lable>
+          <button type="button" class="btn" ng-click="queryRiskAuditRate(1)" ng-class="onblueClick==1?'btn-primary':'btn-default'" >初审</button>
+          <button type="button" class="btn" ng-click="queryRiskAuditRate(2)" ng-class="onblueClick==2?'btn-primary':'btn-default'">终审</button>
+          <button type="button" class="btn" ng-click="queryRiskAuditRate(3)" ng-class="onblueClick==3?'btn-primary':'btn-default'">首席风控审批</button>
+          <div class="col-md-12 cityTable">
+              <table  bs-table-control="riskAuditTotalTable" id="riskAuditTotalTable" data-show-export="true" style="min-width:1000px;"></table>
+          </div>
+      </div>
+  </div>
+  
+  </div><!--container-fluid-->
+  <!-- 个人创收 -->
+  <div ng-show="reportType == 1">
+      <div class="row">
+      <div class="col-md-12"> 
+        <form class="form-inline search" style="margin-bottom:20px;margin-left:30px; ">
+    
+          <br></br>
+          <div class="form-group" >
+            <label>城市</label>
+            <select  class="form-control selectcity002"  ng-model="page1.cityCode" id="page1_cityId">
+                <!-- <option selected hidden value="">全国</option> -->
+                <option  ng-repeat="city in orderCitys" ng-value='city.code'>{{city.name}}</option>
+          </select>
+        </div>
+          <br></br>
+          <div class="form-group" >
+            <label id="timeShow">放款时间：</label>
+               <button type="button" class="btn" ng-click="page1.createTime='1'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page1.createTime=='1']">昨日</button>
+               <button type="button" class="btn" ng-click="page1.createTime='2'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page1.createTime=='2']">上周</button>
+               <button type="button" class="btn" ng-click="page1.createTime='3'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page1.createTime=='3']">上月</button>
+               <button type="button" class="btn" ng-click="page1.createTime='4'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page1.createTime=='4']">本月</button>
+           </div>
+
+          <br></br>
+          <div class="form-group" >
+            <label>产品:</label>
+               <button type="button"  class="btn" ng-repeat="item in productList" ng-click="page1.productCode=item.productCode" ng-class="{true: 'btn-primary', false: 'btn-default'}[page1.productCode==item.productCode]">{{item.productName}}</button>
+           </div>
+             <br></br>
+              
+    </form>
+      </div>
+    </div>
+  
+    <!--row-->
+    <div class="row" id="auditFirst">
+        <div style="margin-left:30px"><span style="width: 4px;
+          display: inline-block;
+          height: 11px;
+          margin-right: 5px;
+          background-color: #333;"></span>
+          排名详情</div>
+      <div class="col-md-12">
+             <table  bs-table-control="auditFirstTable" id="auditFirstTable" data-show-export="true" style="min-width:1000px;"></table>
+      </div>
+    </div>
+    </div>
+  <!-- 订单概览 -->
+  <div ng-show="reportType == 2">
+      <div class="row">
+      <div class="col-md-12"> 
+        <form class="form-inline search" style="margin-bottom:20px;margin-left:30px; ">
+          <br></br>
+          <div class="form-group" >
+            <label>城市</label>
+            <select  class="form-control selectcity003"  ng-model="page2.cityCode" id="page2_cityId">
+                <!-- <option selected hidden value="">全国</option> -->
+                <option  ng-repeat="city in orderCitys" ng-value='city.code'>{{city.name}}</option>
+          </select>
+        </div>
+          <br></br>
+          <div class="form-group" >
+            <label id="timeShow">放款时间：</label>
+               <button type="button" class="btn" ng-click="page2.createTime='1'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page2.createTime=='1']">昨日</button>
+               <button type="button" class="btn" ng-click="page2.createTime='2'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page2.createTime=='2']">上周</button>
+               <button type="button" class="btn" ng-click="page2.createTime='3'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page2.createTime=='3']">上月</button>
+               <button type="button" class="btn" ng-click="page2.createTime='4'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page2.createTime=='4']">本月</button>
+           </div>
+
+          <br></br>
+          <div class="form-group" >
+            <label>产品:</label>
+               <button type="button"  class="btn" ng-repeat="item in productList" ng-click="page2.productCode=item.productCode" ng-class="{true: 'btn-primary', false: 'btn-default'}[page2.productCode==item.productCode]">{{item.productName}}</button>
+           </div>
+             <br></br>
+              
+    </form>
+      </div>
+    </div>
+  
+    <!--row-->
+    <div class="row" id="auditFinalt">
+        <div style="margin-left:30px"><span style="width: 4px;
+          display: inline-block;
+          height: 11px;
+          margin-right: 5px;
+          background-color: #333;"></span>
+          排名详情</div>
+      <div class="col-md-12">
+             <table  bs-table-control="auditFinaltTable" id="auditFinaltTable" data-show-export="true" style="min-width:1000px;"></table>
+      </div>
+    </div>
+    </div>

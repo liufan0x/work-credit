@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.anjbo.dao.CustomerAgencyMapper">	
+	<!-- where条件引用sql-->
+	<sql id="customerAgencyWhereSQL">
+		<where>
+				AND signStatus!=1
+
+	       		<if test="id != null and id >0 ">
+					and `id` = #{id}
+				</if>
+	       		<if test="name != null and name != ''">
+					and `name` like CONCAT('%', #{name},'%')
+				</if>
+	       		<if test="simName != null and simName != ''">
+					and `simName` like CONCAT('%', #{simName},'%')
+				</if>
+	       		<if test="type != null and type > 0">
+					and `type` = #{type}
+				</if>
+	       		<if test="chanlMan != null and chanlMan != ''">
+					and `chanlMan` = #{chanlMan}
+				</if>
+	       		<if test="contactMan != null and contactMan != ''">
+					and `contactMan` = #{contactMan}
+				</if>
+	       		<if test="contactTel != null and contactTel != ''">
+					and `contactTel` like CONCAT('%', #{contactTel},'%')
+				</if>
+	       		<if test="manageAccount != null and manageAccount != ''">
+					and `manageAccount` = #{manageAccount}
+				</if>
+	       		<if test="managePass != null and managePass != ''">
+					and `managePass` = #{managePass}
+				</if>
+	       		<if test="statusExtension != null and statusExtension > -1">
+					and `status` = #{statusExtension}
+				</if>
+	       		<if test="createTime != null">
+					and `createTime` = #{createTime}
+				</if>
+	       		<if test="updateTime != null">
+					and `updateTime` = #{updateTime}
+				</if>
+	       		<if test="createUid != null and createUid != ''">
+					and `createUid` = #{createUid}
+				</if>
+	       		<if test="updateUid != null and updateUid != ''">
+					and `updateUid` = #{updateUid}
+				</if>
+	       		<if test="remark != null and remark != ''">
+					and `remark` = #{remark}
+				</if>
+	       		<if test="chargeStandard != null and chargeStandard > 0">
+					and `chargeStandard` = #{chargeStandard}
+				</if>
+	       		<if test="isBond != null and isBond != ''">
+					and `isBond` = #{isBond}
+				</if>
+	       		<if test="proportionResponsibility != null and proportionResponsibility > 0">
+					and `proportionResponsibility` = #{proportionResponsibility}
+				</if>
+	       		<if test="bond != null and bond > 0">
+					and `bond` = #{bond}
+				</if>
+	       		<if test="creditLimit != null and creditLimit > 0">
+					and `creditLimit` = #{creditLimit}
+				</if>
+				<if test="openCity!=null and openCity!=''">
+					AND  openCity like CONCAT('%', #{openCity},'%')
+				</if>
+				<if test="startSignDate!=null">
+					<![CDATA[ and signDate >= #{startSignDate} ]]>
+				</if>
+				<if test="endSignDate!=null">
+					<![CDATA[  and DATE_FORMAT(signDate,'%Y-%m-%d') <= DATE_FORMAT(#{endSignDate}, '%Y-%m-%d')]]>
+				</if>
+				<if test="agencyType!=null and agencyType!=''">
+					AND agencyType = #{agencyType}
+				</if>
+				<if test="cooperativeModeId>0">
+					AND cooperativeModeId = #{cooperativeModeId}
+				</if>
+				<if test="signStatus!=null and signStatus!=''">
+					AND  signStatus = #{signStatus}
+				</if>
+				<if test="uids!=null and uids!=''">
+					AND (createUid in (${uids})
+						OR acceptManagerUid in (${uids})
+						OR expandManagerUid in (${uids})
+						OR chanlMan in (${uids})
+						OR expandChiefUid in (${uids})
+						<if test="ids!=null and ids!=''">
+							OR id in (${ids})
+						</if>
+					)
+				</if>
+
+		</where>
+	</sql>
+	<!-- 获取机构列表-->
+	<select id="selectCustomerAgencyList" parameterType="customerAgencyDto" resultType="customerAgencyDto">
+		select * from tbl_customer_agency
+		<include refid="customerAgencyWhereSQL" />
+		order by createTime desc 
+		<if test="pageSize>0">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	
+	<!-- 获取机构总数-->
+	<select id="selectCustomerAgencyCount" parameterType="customerAgencyDto" resultType="int">
+		select count(*) from tbl_customer_agency 
+		<include refid="customerAgencyWhereSQL" />
+	</select>	
+		
+	<!-- 新增机构-->
+	<insert id="addCustomerAgency" parameterType="customerAgencyDto" useGeneratedKeys="true" keyProperty="id">
+		<selectKey resultType="int" keyProperty="id">
+			select
+			last_insert_id()
+		</selectKey>
+		insert	into tbl_customer_agency(
+			<trim suffixOverrides=",">
+				<if test="name != null">`name`,</if>
+				<if test="simName != null">`simName`,</if>
+				<if test="type != null">`type`,</if>
+				<if test="chanlMan != null">`chanlMan`,</if>
+				<if test="contactMan != null">`contactMan`,</if>
+				<if test="contactTel != null">`contactTel`,</if>
+				<if test="manageAccount != null">`manageAccount`,</if>
+				<if test="managePass != null">`managePass`,</if>
+				<if test="status != null">`status`,</if>
+				<if test="createTime != null">`createTime`,</if>
+				<if test="updateTime != null">`updateTime`,</if>
+				<if test="createUid != null">`createUid`,</if>
+				<if test="updateUid != null">`updateUid`,</if>
+				<if test="remark != null">`remark`,</if>
+				<if test="chargeStandard != null">`chargeStandard`,</if>
+				<if test="isBond != null">`isBond`,</if>
+				<if test="proportionResponsibility != null">`proportionResponsibility`,</if>
+				<if test="bond != null">`bond`,</if>
+				<if test="creditLimit != null">`creditLimit`,</if>
+				<if test="agencyCode>0">`agencyCode`,</if>
+				<if test="agencyType!=null and agencyType!=''">`agencyType`,</if>
+				<if test="signStatus>0">`signStatus`,</if>
+				<if test="cooperativeModeId>0">`cooperativeModeId`,</if>
+				<if test="signDate!=null">`signDate`,</if>
+				<if test="expandManagerUid!=null and expandManagerUid!=''">`expandManagerUid`,</if>
+				<if test="applyDate!=null">`applyDate`,</if>
+				<if test="surplusQuota!=null">`surplusQuota`,</if>
+				<if test="surplusQuotaRemind!=null">`surplusQuotaRemind`,</if>
+				<if test="openCity!=null and openCity!=''">`openCity`,</if>
+				<if test="riskBearMultiple!=null">`riskBearMultiple`,</if>
+				<if test="minBond!=null">`minBond`,</if>
+				<if test="expandChiefUid!=null and expandChiefUid!=''">`expandChiefUid`,</if>
+			</trim>
+		)
+		values(	
+			<trim suffixOverrides=",">
+				<if test="name != null">#{name},</if>
+				<if test="simName != null">#{simName},</if>
+				<if test="type != null">#{type},</if>
+				<if test="chanlMan != null">#{chanlMan},</if>
+				<if test="contactMan != null">#{contactMan},</if>
+				<if test="contactTel != null">#{contactTel},</if>
+				<if test="manageAccount != null">#{manageAccount},</if>
+				<if test="managePass != null">#{managePass},</if>
+				<if test="status != null">#{status},</if>
+				<if test="createTime != null">#{createTime},</if>
+				<if test="updateTime != null">#{updateTime},</if>
+				<if test="createUid != null">#{createUid},</if>
+				<if test="updateUid != null">#{updateUid},</if>
+				<if test="remark != null">#{remark},</if>
+				<if test="chargeStandard != null">#{chargeStandard},</if>
+				<if test="isBond != null">#{isBond},</if>
+				<if test="proportionResponsibility != null">#{proportionResponsibility},</if>
+				<if test="bond != null">#{bond},</if>
+				<if test="creditLimit != null">#{creditLimit},</if>
+                <if test="agencyCode>0">`agencyCode`,</if>
+                <if test="agencyType!=null and agencyType!=''">`agencyType`,</if>
+                <if test="signStatus>0">`signStatus`,</if>
+                <if test="cooperativeModeId>0">`cooperativeModeId`,</if>
+                <if test="signDate!=null">`signDate`,</if>
+                <if test="expandManagerUid!=null and expandManagerUid!=''">`expandManagerUid`,</if>
+                <if test="applyDate!=null">`applyDate`,</if>
+                <if test="surplusQuota!=null">`surplusQuota`,</if>
+                <if test="surplusQuotaRemind!=null">`surplusQuotaRemind`,</if>
+                <if test="openCity!=null and openCity!=''">`openCity`,</if>
+                <if test="riskBearMultiple!=null">`riskBearMultiple`,</if>
+                <if test="minBond!=null">`minBond`,</if>
+                <if test="expandChiefUid!=null and expandChiefUid!=''">`expandChiefUid`,</if>
+			</trim>
+		)
+	</insert>
+	
+	<!-- 修改机构-->
+	<update id="updateCustomerAgency" parameterType="customerAgencyDto" >
+	 update tbl_customer_agency
+	<set> 
+			<trim suffixOverrides=",">
+				<if test="name != null">`name` = #{name},</if>
+				<if test="simName != null">`simName` = #{simName},</if>
+				<if test="type != null and type != '' ">`type` = #{type},</if>
+				<if test="chanlMan != null">`chanlMan` = #{chanlMan},</if>
+				<if test="contactMan != null">`contactMan` = #{contactMan},</if>
+				<if test="contactTel != null">`contactTel` = #{contactTel},</if>
+				<if test="manageAccount != null">`manageAccount` = #{manageAccount},</if>
+				<if test="managePass != null">`managePass` = #{managePass},</if>
+				<if test="status != null">`status` = #{status},</if>
+				<if test="createTime != null">`createTime` = #{createTime},</if>
+				<if test="updateTime != null">`updateTime` = #{updateTime},</if>
+				<if test="createUid != null">`createUid` = #{createUid},</if>
+				<if test="updateUid != null">`updateUid` = #{updateUid},</if>
+				<if test="remark != null">`remark` = #{remark},</if>
+				<if test="chargeStandard != null and chargeStandard >= 0">`chargeStandard` = #{chargeStandard},</if>
+				<if test="agencyCode>0 ">`agencyCode` = #{agencyCode},</if>
+				<if test="isBond != null and isBond != ''">`isBond` = #{isBond},</if>
+				<if test="proportionResponsibility != null">`proportionResponsibility` = #{proportionResponsibility},</if>
+				<if test="bond != null">`bond` = #{bond},</if>
+				<if test="creditLimit != null and creditLimit != ''">`creditLimit` = #{creditLimit},</if>
+				<if test="cooperativeModeId>0">`cooperativeModeId` = #{cooperativeModeId},</if>
+				<if test="signDate!=null">`signDate` = #{signDate},</if>
+				<if test="expandManagerUid!=null and expandManagerUid!=''">`expandManagerUid` = #{expandManagerUid},</if>
+				<if test="applyDate!=null">`applyDate` = #{applyDate},</if>
+				<if test="surplusQuota!=null">`surplusQuota` = #{surplusQuota},</if>
+				<if test="surplusQuotaRemind!=null">`surplusQuotaRemind` = #{surplusQuotaRemind},</if>
+				<if test="openCity!=null and openCity!=''">`openCity` = #{openCity},</if>
+				<if test="riskBearMultiple!=null">`riskBearMultiple` = #{riskBearMultiple},</if>
+				<if test="agencyType!=null and agencyType!=''">`agencyType` = #{agencyType},</if>
+				<if test="accountUid!=null and accountUid!=''">`accountUid` = #{accountUid},</if>
+				<if test="minBond!=null">`minBond` = #{minBond},</if>
+				<if test="expandChiefUid!=null and expandChiefUid!=''">`expandChiefUid` = #{expandChiefUid},</if>
+			</trim>
+	</set> 
+	 where id = #{id}
+	</update>
+
+	<!-- 根据ID删除机构-->
+    <delete id="deleteCustomerAgencyById" parameterType="int">
+		delete	from tbl_customer_agency where id = #{0}
+    </delete>
+
+	<!-- 根据ID查询机构 -->
+	<select id="selectCustomerAgencyById" parameterType="int" resultType="customerAgencyDto">
+		select	* from tbl_customer_agency where id = #{0}
+	</select>
+	
+</mapper>

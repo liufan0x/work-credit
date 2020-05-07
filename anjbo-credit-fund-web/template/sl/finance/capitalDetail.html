@@ -1,0 +1,36 @@
+<style>
+.form-inline.w{line-height:37px;}
+</style>
+<div class="container-flung-bind">
+	<div class="row">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;<a ui-sref="capitalList">代扣列表 > </a> &nbsp;&nbsp;&nbsp;代扣详情</div>
+	</div>
+	<div class="row detail-row form-inline w" >
+		<div class="col-md-6 col-lg-4"><label>流水号：</label><span ng-bind="obj.flowNo"></span></div>
+		<div class="col-md-6 col-lg-4"><label>姓名：</label><span ng-bind="obj.name"></span></div>
+		<div class="col-md-6 col-lg-4"><label>身份证号：</label><span ng-bind="obj.idCard"></span></div>
+		<div class="col-md-6 col-lg-4"><label>手机号：</label><span ng-bind="obj.phone"></span></div>
+		<div class="col-md-6 col-lg-4"><label>开户银行：</label><span ng-bind="obj.bankName"></span></div>
+		<div class="col-md-6 col-lg-4"><label>银行卡号：</label><span ng-bind="obj.bankCard"></span></div>
+		<div ng-repeat="o in obj" >
+		    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;  代扣记录{{o.index+1}}</div>
+			<div class="col-md-6 col-lg-4"><label>代扣金额：</label><span ng-bind="o.withholdMoney"></span></div>
+			<div class="col-md-6 col-lg-4"><label>代扣时间：</label><span ng-bind="o.withholdDate"></span></div>
+			<div class="col-md-6 col-lg-4"><label>代扣状态：</label>
+			    <span ng-if="o.withholdState==0">初始化</span>
+				<span ng-if="o.withholdState==1">未代扣</span>
+				<span ng-if="o.withholdState==2">代扣中</span>
+				<span ng-if="o.withholdState==3">成功</span>
+				<span ng-if="o.withholdState==4">失败</span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>客  户  号：</label><span ng-bind="o.customerNo"></span></div>
+			<div class="col-md-6 col-lg-4"><label>APP支付密码：</label><span ng-bind="o.appPayPwd"></span></div>
+			<div class="col-md-6 col-lg-4"><label>绑定状态：</label>
+			   <span ng-if="o.bindState==0">初始化</span>
+			   <span ng-if="o.bindState==1">已绑定</span>
+			   <span ng-if="o.bindState==2">已解绑</span>	
+			</div>
+		</div>
+	</div>
+</div>

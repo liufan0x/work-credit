@@ -1,0 +1,232 @@
+<style>
+.form-inline.w145 label{width:145px;}
+.w145{ padding-top:10px;}
+</style>
+
+<div class="row form-inline w145 detail-row-min">
+		<div class="col-md-6 col-lg-4"><label>渠道经理-合作机构：</label>
+			<span ng-bind="borrow.channelManagerName"></span>-<span ng-bind="borrow.cooperativeAgencyName"></span>
+		</div>
+		<div class="col-md-6 col-lg-4"><label>受理员：</label>
+			<span ng-bind="borrow.agencyName"></span>-<span ng-bind="borrow.acceptMemberName"></span>
+		</div>
+		
+		<div ng-if="borrow.agencyId <= 1" class="col-md-6 col-lg-4"><label>分公司（营业部）：</label>
+			<span ng-bind="borrow.branchCompany"></span>
+		</div>
+		<div ng-if="borrow.agencyId>1 && '03'!=borrow.productCode" class="col-md-6 col-lg-4"><label>还款专员：</label>
+			<span ng-bind="borrow.foreclosureMemberName"></span>
+		</div>
+		<div class="col-md-6 col-lg-4" ng-show="borrow.agencyId>1 && '03'==borrow.productCode">&nbsp;</div>
+		
+		<div class="col-md-6 col-lg-4"><label>要件管理员：</label>
+			<span ng-bind="borrow.elementName"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>公证经办人：</label>
+			<span ng-bind="borrow.notarialName"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>面签员：</label>
+			<span ng-bind="borrow.facesignName"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>客户姓名：</label>
+			<span ng-bind="borrow.borrowerName"></span>
+		</div>		
+		<div class="col-md-6 col-lg-4"><label>手机号码：</label>
+			<span ng-bind="borrow.phoneNumber"></span>
+		</div>		
+		<div class="col-md-6 col-lg-4"><label>客户类型：</label>
+			<span ng-if="borrow.customerType == '1'">个人</span>
+			<span ng-if="borrow.customerType == '2'">小微企业</span>
+		</div>
+		
+		<div ng-if="relationOrderNo != 0" ng-class="{2 :'col-md-6 col-lg-4', 1 :'col-md-12 col-lg-12'}[borrow.isOldLoanBank]"><label>原贷款是否银行：</label>
+			<span ng-if="borrow.isOldLoanBank==1">是</span>
+			<span ng-if="borrow.isOldLoanBank==2">否</span>
+	    </div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="borrow.isOldLoanBank==2 && relationOrderNo != 0"><label>原贷款地点：</label>
+			<span ng-bind="borrow.oldLoanBankName"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="borrow.isOldLoanBank==1 && relationOrderNo != 0 "><label>原贷款银行-支行：</label>
+			<span ng-bind="borrow.oldLoanBankName"></span>-<span ng-bind="borrow.oldLoanBankSubName"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="borrow.isOldLoanBank==1 && relationOrderNo != 0"><label>原贷款银行经理：</label>
+			<span ng-bind="borrow.oldLoanBankManager"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="borrow.isOldLoanBank==1 && relationOrderNo != 0"><label>银行经理电话： </label>
+			<span ng-bind="borrow.oldLoanBankManagerPhone"></span>
+		</div>
+		<div ng-if="borrow.isOldLoanBank==2 && relationOrderNo != 0" class="col-md-6 col-lg-4"> <label>&nbsp;</label></div>
+		<div ng-class="{2 :'col-md-6 col-lg-4', 1 :'col-md-12 col-lg-12'}[borrow.isOldLoanBank]"><label>新贷款是否银行： </label>
+			<span ng-if="borrow.isLoanBank == 1">是</span>
+			<span ng-if="borrow.isLoanBank == 2">否</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="borrow.isLoanBank == 2"><label>新贷款地点：</label>
+			<span ng-bind="borrow.loanBankName"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="borrow.isLoanBank == 1"><label>新贷款银行-支行：</label>
+			<span ng-bind="borrow.loanBankName"></span>-<span ng-bind="borrow.loanSubBankName"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="borrow.isLoanBank == 1"><label>新贷款银行经理：</label>
+			<span ng-bind="borrow.loanBankNameManager"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="borrow.isLoanBank == 1"><label>银行经理电话： </label>
+			<span ng-bind="borrow.loanBankNameManagerPhone"></span>
+		</div>
+		<div ng-if="borrow.isLoanBank == 2" class="col-md-6 col-lg-4"><label>&nbsp;</label></div>
+		<div class="col-md-6 col-lg-4"><label>借款期限：</label>
+			<span ng-bind="borrow.borrowingDays"></span>天
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>借款金额：</label>
+			<span ng-bind="borrow.loanAmount"></span>万
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>收费类型：</label>
+			<span ng-bind="borrow.riskGrade"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>费率：</label>
+			<span ng-bind="borrow.rate"></span> 
+			<span ng-if="borrow.modeid==1">%</span>
+			<span ng-if="borrow.modeid!=1">%/天</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>逾期费率：</label>
+			<span ng-bind="borrow.overdueRate"></span>
+			<span ng-if="borrow.modeid==1">%</span>
+			<span ng-if="borrow.modeid!=1">%/天</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>其他金额：</label>
+			<span ng-bind="borrow.otherPoundage"></span>元
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="relationOrderNo != 0"><label>关外手续费：</label>
+			<span ng-bind="borrow.customsPoundage"></span>元
+		</div>	
+		<div class="col-md-6 col-lg-4"><label>服务费：</label>
+			<span ng-bind="borrow.serviceCharge"></span>元
+		</div>
+		<div class="col-md-6 col-lg-4"><label>收费金额：</label>
+			<span ng-bind="borrow.chargeMoney"></span>元 (其中包含:固定服务费<span ng-if="relationOrderNo != 0">+关外手续费</span>+其他费用)
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="relationOrderNo != 0" ><label>费用支付方式：</label> <!--1费用前置2费用后置-->
+			<span ng-if="borrow.paymentMethod == 1">费用前置</span>
+			<span ng-if="borrow.paymentMethod == 2">费用后置</span>
+		</div>			
+		<div class="col-md-6 col-lg-4"><label>是否有返佣：</label>
+			<span ng-if="borrow.isRebate == 1">是</span>
+			<span ng-if="borrow.isRebate == 2">否</span>
+		</div>		
+		<div class="col-md-6 col-lg-4" ng-if="borrow.isRebate == 1"><label>返佣金额：</label>
+			<span ng-bind="borrow.rebateMoney"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="borrow.isRebate == 1"><label>返佣银行-支行：</label>
+			<span ng-bind="borrow.rebateBank"></span>-<span ng-bind="borrow.rebateSubBank"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="borrow.isRebate == 1"><label>返佣银行户名：</label>
+			<span ng-bind="borrow.rebateBankCardName"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="borrow.isRebate == 1"><label>返佣银行卡号：</label>
+			<span ng-bind="borrow.rebateBankCardNum"></span>
+		</div>
+		<div class="col-md-6 col-lg-4"><label>预计出款时间：</label>
+			<span ng-bind="borrow.financeOutLoanTimeStr"></span>
+		</div>
+		<div ng-if="borrow.productCode=='01'">
+		<div class="col-md-12 col-lg-12"><label>是否一次性回款：</label>
+			<span ng-if="borrow.isOnePay==1">是</span>
+			<span ng-if="borrow.isOnePay==2">否</span>
+		</div>
+		<list ng-repeat="idea in borrow.orderReceivableForDto">
+			<div class="col-md-6 col-lg-4" ng-if="borrow.isOnePay!='' && $index==0"><label>计划回款时间：</label>
+				<span ng-bind="idea.payMentAmountDateStr"></span>
+			</div>
+			<div class="col-md-6 col-lg-4" ng-if="borrow.isOnePay!='' && $index==0"><label>回款金额：</label>
+				<span ng-bind="idea.payMentAmount"></span>万元
+			</div>
+			
+			<div class="col-md-6 col-lg-4" ng-if="borrow.isOnePay!='' && $index==0"><label>&nbsp;</label></div>
+			
+			<div class="col-md-6 col-lg-4" ng-if="borrow.isOnePay!='' && $index==1"><label>再次计划回款时间：</label>
+				<span ng-bind="idea.payMentAmountDateStr"></span>
+			</div>
+			<div class="col-md-6 col-lg-4" ng-if="borrow.isOnePay!='' && $index==1"><label>再次回款金额：</label>
+				<span ng-bind="idea.payMentAmount"></span>万元
+			</div>
+		</list>
+		</div>
+		<div class="col-md-12 col-lg-12">
+			<label class="remark-span remark-lhw">备注：</label>
+			<textarea ng-bind="borrow.remark" class="remark-p remark-lhw-p textarea-lhw" readonly="readonly" ></textarea>
+		</div>
+	</div>
+	
+	<!-- 畅贷 -->
+
+<!-- 畅贷信息 start -->
+<div ng-if="relationOrderNo != 0">
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;关联订单信息</div>
+	<div class="row detail-row w145 form-inline">	
+			<div class="col-md-6 col-lg-4"><label>业务类型：</label>
+				<span>畅贷</span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>借款期限：</label>
+				<span ng-bind="cdBorrow.borrowingDays"></span>天
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>借款金额：</label>
+				<span ng-bind="cdBorrow.loanAmount"></span>万
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>收费标准：</label>
+				<span ng-bind="cdBorrow.riskGrade"></span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>费率：</label>
+				<span ng-bind="cdBorrow.rate"></span>
+				<span ng-if="cdBorrow.modeid==1">%</span>
+				<span ng-if="cdBorrow.modeid!=1">%/天</span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>逾期费率：</label>
+			 	<span ng-bind="cdBorrow.overdueRate"></span>
+			 	<span ng-if="cdBorrow.modeid==1">%</span>
+				<span ng-if="cdBorrow.modeid!=1">%/天</span>
+			</div>
+			
+			<div class="col-md-6 col-lg-4"><label>服务费:</label>
+				<span ng-bind="cdBorrow.serviceCharge"></span>元
+			</div>
+			<div class="col-md-6 col-lg-4"><label>其他金额:</label>
+				<span ng-bind="cdBorrow.otherPoundage"></span>元
+			</div>
+			<div class="col-md-6 col-lg-4"><label>收费金额：</label>
+				<span ng-bind="cdBorrow.chargeMoney"></span>元(其中包含:固定服务费+其他费用)
+			</div>
+			<div class="col-md-6 col-lg-4"><label>预计出款时间：</label>
+				<span ng-bind="cdBorrow.financeOutLoanTimeStr"></span>
+			</div>
+			<div class="col-md-12 col-lg-12">
+				<label class="remark-span remark-lhw">备注：</label>
+				<textarea ng-bind="cdBorrow.remark" class="remark-p remark-lhw-p textarea-lhw" readonly="readonly" ></textarea>
+			</div>
+	</div>
+</div>
+<!-- 畅贷信息 end -->

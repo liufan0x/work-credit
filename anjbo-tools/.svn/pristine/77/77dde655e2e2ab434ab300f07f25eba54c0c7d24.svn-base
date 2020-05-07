@@ -1,0 +1,4 @@
+jdbc_driverClassName=com.mysql.jdbc.Driver
+jdbc_url=jdbc:mysql://182.254.149.92:3307/anjbo-tools?useUnicode=true&amp;characterEncoding=utf-8&allowMultiQueries=true
+jdbc_username=deploy_user
+jdbc_password=deploy_pass

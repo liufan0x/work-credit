@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.ordinary.AuditFundDockingOrdinaryMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<if test="null!=fundId and fundId>0"> AND `fundId`=#{fundId}</if>
+		<if test="null!=borrowerName and ''!=borrowerName"> AND `borrowerName`=#{borrowerName}</if>
+		<if test="null!=phoneNumber and ''!=phoneNumber"> AND `phoneNumber`=#{phoneNumber}</if>
+		<if test="null!=isOldLoanBank and isOldLoanBank>0"> AND `isOldLoanBank`=#{isOldLoanBank}</if>
+		<if test="null!=oldLoanBankName and ''!=oldLoanBankName"> AND `oldLoanBankName`=#{oldLoanBankName}</if>
+		<if test="null!=oldLoanBankSubName and ''!=oldLoanBankSubName"> AND `oldLoanBankSubName`=#{oldLoanBankSubName}</if>
+		<if test="null!=oldLoanBankNameId and oldLoanBankNameId>0"> AND `oldLoanBankNameId`=#{oldLoanBankNameId}</if>
+		<if test="null!=oldLoanBankSubNameId and oldLoanBankSubNameId>0"> AND `oldLoanBankSubNameId`=#{oldLoanBankSubNameId}</if>
+		<if test="null!=isLoanBank and isLoanBank>0"> AND `isLoanBank`=#{isLoanBank}</if>
+		<if test="null!=loanBankName and ''!=loanBankName"> AND `loanBankName`=#{loanBankName}</if>
+		<if test="null!=loanSubBankName and ''!=loanSubBankName"> AND `loanSubBankName`=#{loanSubBankName}</if>
+		<if test="null!=loanBankNameId and loanBankNameId>0"> AND `loanBankNameId`=#{loanBankNameId}</if>
+		<if test="null!=loanSubBankNameId and loanSubBankNameId>0"> AND `loanSubBankNameId`=#{loanSubBankNameId}</if>
+		<if test="null!=borrowingDays and borrowingDays>0"> AND `borrowingDays`=#{borrowingDays}</if>
+		<if test="null!=loanAmount and loanAmount>0"> AND `loanAmount`=#{loanAmount}</if>
+		<if test="null!=isOnePay and isOnePay>0"> AND `isOnePay`=#{isOnePay}</if>
+		<if test="null!=receivableForTime and ''!=receivableForTime"> AND `receivableForTime`=#{receivableForTime}</if>
+		<if test="null!=remark and ''!=remark"> AND `remark`=#{remark}</if>
+	</where>
+  </sql>
+                                                                          
+  <select id="findByOrdinary" parameterType="java.util.Map" resultType="AuditFundDockingOrdinaryDto">
+   		   select *
+   		    from tbl_risk_audit_funddocking_ordinary 
+   		    where orderNo=#{orderNo} and fundId = #{fundId} limit 1 
+   		</select>  
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="java.util.Map" resultType="AuditFundDockingOrdinaryDto">    
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `fundId`, `borrowerName`, `phoneNumber`, `isOldLoanBank`, `oldLoanBankName`, `oldLoanBankSubName`, `oldLoanBankNameId`, `oldLoanBankSubNameId`, `isLoanBank`, `loanBankName`, `loanSubBankName`, `loanBankNameId`, `loanSubBankNameId`, `borrowingDays`, `loanAmount`, `isOnePay`, `receivableForTime`, `remark` 
+	FROM tbl_risk_audit_funddocking_ordinary 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="AuditFundDockingOrdinaryDto" resultType="AuditFundDockingOrdinaryDto">
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `fundId`, `borrowerName`, `phoneNumber`, `isOldLoanBank`, `oldLoanBankName`, `oldLoanBankSubName`, `oldLoanBankNameId`, `oldLoanBankSubNameId`, `isLoanBank`, `loanBankName`, `loanSubBankName`, `loanBankNameId`, `loanSubBankNameId`, `borrowingDays`, `loanAmount`, `isOnePay`, `receivableForTime`, `remark`
+	FROM tbl_risk_audit_funddocking_ordinary 
+	<include refid="sqlwhereSearch"/>
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="AuditFundDockingOrdinaryDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_risk_audit_funddocking_ordinary 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_risk_audit_funddocking_ordinary(
+		`createUid`,
+		`createTime`,
+		`updateUid`,
+		`updateTime`,
+		`orderNo`,
+		`fundId`,
+		`borrowerName`,
+		`phoneNumber`,
+		`isOldLoanBank`,
+		`oldLoanBankName`,
+		`oldLoanBankSubName`,
+		`oldLoanBankNameId`,
+		`oldLoanBankSubNameId`,
+		`isLoanBank`,
+		`loanBankName`,
+		`loanSubBankName`,
+		`loanBankNameId`,
+		`loanSubBankNameId`,
+		`borrowingDays`,
+		`loanAmount`,
+		`isOnePay`,
+		`receivableForTime`,
+		`remark`
+	) VALUES(
+		#{createUid},
+		now(),
+		#{createUid},
+		now(),
+		#{orderNo},
+		#{fundId},
+		#{borrowerName},
+		#{phoneNumber},
+		#{isOldLoanBank},
+		#{oldLoanBankName},
+		#{oldLoanBankSubName},
+		#{oldLoanBankNameId},
+		#{oldLoanBankSubNameId},
+		#{isLoanBank},
+		#{loanBankName},
+		#{loanSubBankName},
+		#{loanBankNameId},
+		#{loanSubBankNameId},
+		#{borrowingDays},
+		#{loanAmount},
+		#{isOnePay},
+		#{receivableForTime},
+		#{remark}
+	)	
+  </insert>
+
+
+  <delete id="deleteAll" parameterType="java.lang.String" >
+    DELETE FROM tbl_risk_audit_funddocking_ordinary 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <delete id="delete" parameterType="java.util.Map" >
+    DELETE FROM tbl_risk_audit_funddocking_ordinary where orderNo=#{orderNo} and fundId = #{fundId}
+  </delete>
+  
+  <update id="update" parameterType="java.util.Map" >
+    UPDATE tbl_risk_audit_funddocking_ordinary
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=fundId">`fundId`=#{fundId},</if>
+		<if test="null!=borrowerName">`borrowerName`=#{borrowerName},</if>
+		<if test="null!=phoneNumber">`phoneNumber`=#{phoneNumber},</if>
+		<if test="null!=isOldLoanBank">`isOldLoanBank`=#{isOldLoanBank},</if>
+		<if test="null!=oldLoanBankName">`oldLoanBankName`=#{oldLoanBankName},</if>
+		<if test="null!=oldLoanBankSubName">`oldLoanBankSubName`=#{oldLoanBankSubName},</if>
+		<if test="null!=oldLoanBankNameId">`oldLoanBankNameId`=#{oldLoanBankNameId},</if>
+		<if test="null!=oldLoanBankSubNameId">`oldLoanBankSubNameId`=#{oldLoanBankSubNameId},</if>
+		<if test="null!=isLoanBank">`isLoanBank`=#{isLoanBank},</if>
+		<if test="null!=loanBankName">`loanBankName`=#{loanBankName},</if>
+		<if test="null!=loanSubBankName">`loanSubBankName`=#{loanSubBankName},</if>
+		<if test="null!=loanBankNameId">`loanBankNameId`=#{loanBankNameId},</if>
+		<if test="null!=loanSubBankNameId">`loanSubBankNameId`=#{loanSubBankNameId},</if>
+		<if test="null!=borrowingDays">`borrowingDays`=#{borrowingDays},</if>
+		<if test="null!=loanAmount">`loanAmount`=#{loanAmount},</if>
+		<if test="null!=isOnePay">`isOnePay`=#{isOnePay},</if>
+		<if test="null!=receivableForTime">`receivableForTime`=#{receivableForTime},</if>
+		<if test="null!=remark">`remark`=#{remark},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

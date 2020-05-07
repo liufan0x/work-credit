@@ -1,0 +1,199 @@
+<div class="container-fluid">
+	<place-order-detail></place-order-detail>
+	<div id="viewRow"></div>
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;放款信息</div>
+	
+	<div class="row detail-row form-inline">
+		<div class="col-md-6 col-lg-4">
+			<label>放款金额：</label>
+			<span ng-bind="obj.loanAmount" onkeyup="value=value.replace(/[^\d.]/g,'')"></span> 万
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label style="width:180px;">放款账号开户银行-支行：</label>
+			<span ng-bind="obj.lendingBank"></span> - <span ng-bind="obj.openingBank"></span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>银行卡户名：</label>
+			<span ng-bind="obj.bankName"></span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>银行卡账号：</label>
+			<span><span ng-bind="obj.bankAccount"></span></span>
+		</div>
+		<div class="col-md-6 col-lg-6">
+			<label>放款时间：</label>
+			<input size="16" type="text" readonly ng-model="obj.lendingTime" class="form-control form_dateu">
+			<a href="#"><span data-fancybox="iframe" data-src="/plugins/uploadify/upload_image.html?returnFun=returnDatafinance" data-type="iframe">点此上传截屏照片（可不传）</span></a>
+			<input type="hidden" id="img">
+			<span class="gallerys processuUpdImg" style="display:none">
+			       <a href="#" class="processuView-pic">查看图片</a>
+			       <img ng-repeat="img in obj.imgs" ng-src="{{img}}"  class='gallery-pic' style='display:none;'>
+			  </span>
+		</div>
+		<!-- <div class="col-md-6 col-lg-6" ng-if="isHuaRongShow && isProductCode!='03'">
+			<label>资方勾兑结果：</label>
+			<div class="form-group" style="color:red;">
+				<span ng-if="fund.grantStatus == 111">待处理</span>
+				<span ng-if="fund.grantStatus == 997">勾兑成功</span>
+				<span ng-if="fund.grantStatus == 998">勾兑否决</span>
+			</div> -->
+		<!-- </div> -->
+		<!-- <div class="col-md-6 col-lg-4" ng-if="isHuaRongShow  && isProductCode!='03'">
+			<label>资方勾兑时间：</label>
+			<span ng-bind="fund.lendingTime|date:'yyyy-MM-dd HH:mm'"></span>
+		</div> -->
+		
+		<!-- <div class="col-md-6 col-lg-6" ng-if="isYunNanShow||true">
+			<label>资方放款状态：</label>
+			<div class="form-group" style="color:red;">
+				<span ng-if="yunnanStatusDto.processStatus == 0">放款中</span>
+				<span ng-if="yunnanStatusDto.processStatus == 1">成功</span>
+				<span ng-if="yunnanStatusDto.processStatus == 2">失败</span>
+				<span ng-if="yunnanStatusDto.processStatus == 3">业务不执行</span>
+				<span ng-if="yunnanStatusDto.processStatus == 4">异常</span>
+				<span ng-if="yunnanStatusDto.processStatus == 9">放款指令发送失败</span>
+				<span ng-if="yunnanStatusDto.processStatus != 1">({{yunnanStatusDto.result}})</span>
+			</div>
+			<a ng-click="yunnanStatus()">刷新</a>
+		</div> -->
+	</div>
+
+	<div class="row">
+		<div class="form-group">
+			<textarea class="form-control" rows="5" ng-model="obj.remark" placeholder="如有特殊说明，请在此处备注（非必填）" />
+		</div>
+		<div class="col-md-12">
+			<button type="button"   class="btn btn-primary" ng-click="submit()">提交并生成合同编号</button>
+			<button type="button" class="btn btn-warning"  ng-click="showBack()">退回</button>
+		</div>
+	</div>
+	<!--推送应还款计划start-->
+	<div class="lhw-alert-bg" ng-show="rongAnhkShow">
+		<div class="lhw-alert-box" style="width:1100px;">
+			<div class="lhw-alert-tit relative">以下信息推送给资金方110
+				<div class="lhw-x" ng-click="rongAnhkShow=false;forShow=true;"></div>
+			</div>
+			<div>
+				<div class="row">
+					<div class="col-md-12" style="padding-top:10px;">
+						<ul class="nav nav-tabs">
+							<li ng-class="{'active':title=='forShow'}">
+								<a href="javascript:void(0);" ng-click="title='forShow'">应还款计划</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div>
+					<div class="row form-inline detail-row w147" style="padding:30px 10px; ">
+						<div class="col-md-6 col-lg-6">
+							<label>应还款时间: </label> <input type="text" readonly ng-model="audit.repaymentTime" class="form-control form_dateu" />
+						</div>
+						<div class="col-md-6 col-lg-6">
+							<label style="width:168px;">期供金额（本金+利息）:</label> <input type="text" ng-model="audit.repaymentAccount" class="form-control" />元
+						</div>
+						<div class="col-md-6 col-lg-6">
+							<label>应还利息:</label> <input type="text" ng-model="audit.interest" class="form-control" />元
+						</div>
+						<div class="col-md-6 col-lg-6">
+							<label>应还本金:</label> <input type="text" ng-model="audit.capital" class="form-control" />元
+						</div>
+						<div class="col-md-6 col-lg-6">
+							<label>剩余本金:</label> <input type="text" ng-model="audit.psRemPrcp" class="form-control" />元
+						</div>
+						<div class="col-md-6 col-lg-6">
+							<label>贷款执行利率:</label> <input type="text" ng-model="audit.psIntRate" class="form-control" />%
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="lhw-alert-but">
+				<button type="button" class="btn btn-primary lhw-alert-ok1" ng-click="auditSubmit(1)" style="margin-right:80px;">提交并发送应还款计划</button>
+				<button type="button" class="btn btn-danger lhw-alert-cancel1" ng-click="auditSubmit(0)">该订单不发送应还款计划</button>
+			</div>
+		</div>
+	</div>
+
+	<!--推送应还款计划start-->
+	<div class="lhw-alert-bg" ng-show="yunNanShow">
+		<div class="lhw-alert-box" style="width:1100px;">
+			<div class="lhw-alert-tit relative">以下信息推送给资金方114
+				<div class="lhw-x" ng-click="yunNanShow=false;forShow=true;"></div>
+			</div>
+			<div>
+				<div class="row">
+					<div class="col-md-12" style="padding-top:10px;">
+						<ul class="nav nav-tabs">
+							<li ng-class="{'active':title=='forShow'}">
+								<a href="javascript:void(0);" ng-click="title='forShow'">应还款计划</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div>
+					<div class="row form-inline detail-row w147" style="padding:30px 10px; ">
+						<div class="col-md-6 col-lg-6"><!--form_dateu-->
+							<label>计划还款时间: </label> <input type="text" readonly ng-model="yunnanAudit.repayDate" class="form-control form_datetimeu" />
+						</div>
+						<div class="col-md-6 col-lg-6">
+							<label>借款期限:</label> <input type="text" ng-model="yunnanAudit.borrowingDays" class="form-control" />天
+						</div>
+						<div class="col-md-6 col-lg-6">
+							<label>计划还款本金:</label> <input type="text" ng-model="yunnanAudit.repayPrincipal" class="form-control" />元
+						</div>
+						<div class="col-md-6 col-lg-6">
+							<label>计划还款利息:</label> <input type="text" ng-model="yunnanAudit.repayProfit" class="form-control" />元
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="lhw-alert-but">
+				<button type="button" class="btn btn-primary lhw-alert-ok1" ng-click="yunnanAuditSubmit()" style="margin-right:80px;">提交并发送应还款计划</button>
+				<!--<button type="button" class="btn btn-danger lhw-alert-cancel1" ng-click="auditSubmit(0)">该订单不发送应还款计划</button>-->
+			</div>
+		</div>
+	</div>
+	<!--推送end-->
+
+</div>
+
+<script>
+	$(".processuView-pic").click(function() {
+		$.openPhotoGallery($(this).next("img"), "delZijinPic");
+	})
+
+	function delZijinPic(a) {
+		$(".processuUpdImg").find("img").each(function() {
+			if($(this).attr("src") == a) {
+				$(this).remove();
+			}
+		})
+		var returnPic = "";
+		$(".processuUpdImg").find("img").each(function() {
+			returnPic += returnPic + $(this).attr("src") + ",";
+		})
+		$("#img").val(returnPic.substring(0, returnPic.length - 1));
+		var img = $("#img").val();
+		if(img == '') {
+			$(".processuUpdImg").hide()
+		}
+	}
+
+	function returnDatafinance(url, smallUrl, name) {
+		var img = $("#img").val();
+		if(url != '') {
+			url = url.substring(0, url.length - 1);
+			var  urls =  new  Array();
+			var urls = url.split(",");
+			var h = "";
+			for(var i = 0; i < urls.length; i++) {
+				h += "<img src='" + urls[i] + "' class='gallery-pic' style='display:none;'>";
+			}
+			$(".processuUpdImg").append(h);
+			if(img != '') {
+				url = img + "," + url;
+			}
+			$("#img").val(url);
+			$(".processuUpdImg").show();
+		}
+	}
+</script>

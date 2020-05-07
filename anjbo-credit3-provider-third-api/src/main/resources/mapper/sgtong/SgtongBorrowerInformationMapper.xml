@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.sgtong.SgtongBorrowerInformationMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<if test="null!=custName and ''!=custName"> AND `custName`=#{custName}</if>
+		<if test="null!=idType and ''!=idType"> AND `idType`=#{idType}</if>
+		<if test="null!=idNo and ''!=idNo"> AND `idNo`=#{idNo}</if>
+		<if test="null!=custType and custType>0"> AND `custType`=#{custType}</if>
+		<if test="null!=sex and sex>0"> AND `sex`=#{sex}</if>
+		<if test="null!=birth and ''!=birth"> AND `birth`=#{birth}</if>
+		<if test="null!=edu and edu>0"> AND `edu`=#{edu}</if>
+		<if test="null!=degree and degree>0"> AND `degree`=#{degree}</if>
+		<if test="null!=homeArea and ''!=homeArea"> AND `homeArea`=#{homeArea}</if>
+		<if test="null!=phoneNo and ''!=phoneNo"> AND `phoneNo`=#{phoneNo}</if>
+		<if test="null!=telNo and ''!=telNo"> AND `telNo`=#{telNo}</if>
+		<if test="null!=income and ''!=income"> AND `income`=#{income}</if>
+		<if test="null!=marriage and marriage>0"> AND `marriage`=#{marriage}</if>
+		<if test="null!=children and children>0"> AND `children`=#{children}</if>
+		<if test="null!=comName and ''!=comName"> AND `comName`=#{comName}</if>
+		<if test="null!=comIdtype and ''!=comIdtype"> AND `comIdtype`=#{comIdtype}</if>
+		<if test="null!=comIdno and ''!=comIdno"> AND `comIdno`=#{comIdno}</if>
+		<if test="null!=comTel and ''!=comTel"> AND `comTel`=#{comTel}</if>
+		<if test="null!=relName and ''!=relName"> AND `relName`=#{relName}</if>
+		<if test="null!=relIdtype and ''!=relIdtype"> AND `relIdtype`=#{relIdtype}</if>
+		<if test="null!=relIdno and ''!=relIdno"> AND `relIdno`=#{relIdno}</if>
+		<if test="null!=relTel and ''!=relTel"> AND `relTel`=#{relTel}</if>
+		<if test="null!=batchNo and ''!=batchNo"> AND `batchNo`=#{batchNo}</if>
+		<if test="null!=prePactNo and ''!=prePactNo"> AND `prePactNo`=#{prePactNo}</if>
+		<if test="null!=pushStatus and ''!=pushStatus"> AND `pushStatus`=#{pushStatus}</if>
+		<if test="null!=reqSerial and ''!=reqSerial"> AND `reqSerial`=#{reqSerial}</if>	
+		<if test="null!=pushRepaymentStatus and ''!=pushRepaymentStatus"> AND `pushRepaymentStatus`=#{pushRepaymentStatus}</if>		
+		<if test="null!=lendingStatus and ''!=lendingStatus"> AND `lendingStatus`=#{lendingStatus}</if>			
+		
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="SgtongBorrowerInformationDto" resultType="SgtongBorrowerInformationDto">    
+	SELECT `id`, `orderNo`, `custName`, `idType`, `idNo`, `custType`, `sex`, `birth`, `edu`, `degree`, `homeArea`, `phoneNo`, `telNo`, `income`, `marriage`, `children`, `comName`, `comIdtype`, `comIdno`, `comTel`, `relName`, `relIdtype`, `relIdno`, `relTel` ,`batchNo`, `prePactNo`,pushStatus,reqSerial ,pushRepaymentStatus,lendingStatus,sgtLendingTime
+	FROM tbl_third_sgtong_borrower_information 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="SgtongBorrowerInformationDto" resultType="SgtongBorrowerInformationDto">
+	SELECT `id`, `orderNo`, `custName`, `idType`, `idNo`, `custType`, `sex`, `birth`, `edu`, `degree`, `homeArea`, `phoneNo`, `telNo`, `income`, `marriage`, `children`, `comName`, `comIdtype`, `comIdno`, `comTel`, `relName`, `relIdtype`, `relIdno`, `relTel`, `batchNo`, `prePactNo`,pushStatus ,reqSerial,pushRepaymentStatus,lendingStatus,sgtLendingTime
+	FROM tbl_third_sgtong_borrower_information 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="SgtongBorrowerInformationDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_third_sgtong_borrower_information 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="SgtongBorrowerInformationDto" useGeneratedKeys="true" keyProperty="id">
+    
+     <selectKey keyProperty="count" resultType="int" order="BEFORE">
+    select count(1) from tbl_third_sgtong_borrower_information where `orderNo`=#{orderNo}
+  </selectKey>
+  <if test="count > 0">
+    UPDATE tbl_third_sgtong_borrower_information
+	<set>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=custName">`custName`=#{custName},</if>
+		<if test="null!=idType">`idType`=#{idType},</if>
+		<if test="null!=idNo">`idNo`=#{idNo},</if>
+		<if test="null!=custType">`custType`=#{custType},</if>
+		<if test="null!=sex">`sex`=#{sex},</if>
+		<if test="null!=birth">`birth`=#{birth},</if>
+		<if test="null!=edu">`edu`=#{edu},</if>
+		<if test="null!=degree">`degree`=#{degree},</if>
+		<if test="null!=homeArea">`homeArea`=#{homeArea},</if>
+		<if test="null!=phoneNo">`phoneNo`=#{phoneNo},</if>
+		<if test="null!=telNo">`telNo`=#{telNo},</if>
+		<if test="null!=income">`income`=#{income},</if>
+		<if test="null!=marriage">`marriage`=#{marriage},</if>
+		<if test="null!=children">`children`=#{children},</if>
+		<if test="null!=comName">`comName`=#{comName},</if>
+		<if test="null!=comIdtype">`comIdtype`=#{comIdtype},</if>
+		<if test="null!=comIdno">`comIdno`=#{comIdno},</if>
+		<if test="null!=comTel">`comTel`=#{comTel},</if>
+		<if test="null!=relName">`relName`=#{relName},</if>
+		<if test="null!=relIdtype">`relIdtype`=#{relIdtype},</if>
+		<if test="null!=relIdno">`relIdno`=#{relIdno},</if>
+		<if test="null!=relTel">`relTel`=#{relTel},</if>
+		<if test="null!=batchNo">`batchNo`=#{batchNo},</if>
+		<if test="null!=prePactNo">`prePactNo`=#{prePactNo},</if>
+			<if test="null!=pushStatus">`pushStatus`=#{pushStatus},</if>
+			<if test="null!=reqSerial">`reqSerial`=#{reqSerial},</if>
+			<if test="null!=pushRepaymentStatus">`pushRepaymentStatus`=#{pushRepaymentStatus},</if>
+			<if test="null!=lendingStatus">`lendingStatus`=#{lendingStatus},</if>
+			<if test="null != sgtLendingTime">`sgtLendingTime`=#{sgtLendingTime},</if>
+	
+	</set>
+	WHERE `orderNo`=#{orderNo}
+  </if>
+  <if test="count==0">
+   INSERT INTO tbl_third_sgtong_borrower_information(
+		`orderNo`,
+		`custName`,
+		`idType`,
+		`idNo`,
+		`custType`,
+		`sex`,
+		`birth`,
+		`edu`,
+		`degree`,
+		`homeArea`,
+		`phoneNo`,
+		`telNo`,
+		`income`,
+		`marriage`,
+		`children`,
+		`comName`,
+		`comIdtype`,
+		`comIdno`,
+		`comTel`,
+		`relName`,
+		`relIdtype`,
+		`relIdno`,
+		`relTel`,
+		`batchNo`,
+		`prePactNo`,
+		pushStatus,
+		reqSerial,pushRepaymentStatus
+	) VALUES(
+		#{orderNo},
+		#{custName},
+		#{idType},
+		#{idNo},
+		#{custType},
+		#{sex},
+		#{birth},
+		#{edu},
+		#{degree},
+		#{homeArea},
+		#{phoneNo},
+		#{telNo},
+		#{income},
+		#{marriage},
+		#{children},
+		#{comName},
+		#{comIdtype},
+		#{comIdno},
+		#{comTel},
+		#{relName},
+		#{relIdtype},
+		#{relIdno},
+		#{relTel},
+		#{batchNo},
+		#{prePactNo},
+		#{pushStatus},
+		#{reqSerial},
+		#{pushRepaymentStatus}
+		
+		
+	)	
+  </if>
+
+
+    
+    
+  </insert>
+
+
+  <delete id="delete" parameterType="SgtongBorrowerInformationDto" >
+    DELETE FROM tbl_third_sgtong_borrower_information 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="SgtongBorrowerInformationDto" >
+    UPDATE tbl_third_sgtong_borrower_information
+	<set>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=custName">`custName`=#{custName},</if>
+		<if test="null!=idType">`idType`=#{idType},</if>
+		<if test="null!=idNo">`idNo`=#{idNo},</if>
+		<if test="null!=custType">`custType`=#{custType},</if>
+		<if test="null!=sex">`sex`=#{sex},</if>
+		<if test="null!=birth">`birth`=#{birth},</if>
+		<if test="null!=edu">`edu`=#{edu},</if>
+		<if test="null!=degree">`degree`=#{degree},</if>
+		<if test="null!=homeArea">`homeArea`=#{homeArea},</if>
+		<if test="null!=phoneNo">`phoneNo`=#{phoneNo},</if>
+		<if test="null!=telNo">`telNo`=#{telNo},</if>
+		<if test="null!=income">`income`=#{income},</if>
+		<if test="null!=marriage">`marriage`=#{marriage},</if>
+		<if test="null!=children">`children`=#{children},</if>
+		<if test="null!=comName">`comName`=#{comName},</if>
+		<if test="null!=comIdtype">`comIdtype`=#{comIdtype},</if>
+		<if test="null!=comIdno">`comIdno`=#{comIdno},</if>
+		<if test="null!=comTel">`comTel`=#{comTel},</if>
+		<if test="null!=relName">`relName`=#{relName},</if>
+		<if test="null!=relIdtype">`relIdtype`=#{relIdtype},</if>
+		<if test="null!=relIdno">`relIdno`=#{relIdno},</if>
+		<if test="null!=relTel">`relTel`=#{relTel},</if>
+		<if test="null!=batchNo">`batchNo`=#{batchNo},</if>
+		<if test="null!=prePactNo">`prePactNo`=#{prePactNo},</if>
+		<if test="null!=pushStatus">`pushStatus`=#{pushStatus},</if>
+		<if test="null!=reqSerial">`reqSerial`=#{reqSerial},</if>
+		<if test="null!=lendingStatus">`lendingStatus`=#{lendingStatus},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+</mapper>

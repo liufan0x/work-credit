@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.AgencyMapper">
+	
+	<select id="agencyList" resultType="AgencyDto">
+		select * from tbl_customer_agency  
+	</select>
+	
+	<select id="getAgencyDto" parameterType="int" resultType="AgencyDto">
+		select * from tbl_customer_agency where id = #{0} ORDER BY createTime desc limit 1;
+	</select>
+
+	<insert id="insert" parameterType="AgencyDto">
+		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+			SELECT LAST_INSERT_ID()
+		</selectKey>
+		INSERT  INTO  tbl_customer_agency (
+			`name`,simName,`type`,
+			chanlMan,contactMan,contactTel,
+			manageAccount,managePass,status,
+			createTime,createUid,remark,chargeStandard,
+			isBond,proportionResponsibility,bond,
+			creditLimit,agencyCode,agencyType,signStatus,
+			cooperativeModeId,signDate,applyDate,
+			expandManagerUid,surplusQuota,surplusQuotaRemind,
+			openCity,riskBearMultiple,minBond,accountUid,expandChiefUid
+		)
+		VALUE
+		(
+			#{name},#{simName},#{type},
+			#{chanlMan},#{contactMan},#{contactTel},
+			#{manageAccount},#{managePass},#{status},
+			now(),#{createUid},#{remark},#{chargeStandard},
+			#{isBond},#{proportionResponsibility},#{bond},
+			#{creditLimit},#{agencyCode},#{agencyType},
+			#{signStatus},#{cooperativeModeId},#{signDate},#{applyDate},
+			#{expandManagerUid},#{surplusQuota},#{surplusQuotaRemind},
+			#{openCity},#{riskBearMultiple},#{minBond},#{accountUid},#{expandChiefUid}
+		)
+	</insert>
+	<select id="getEntityByAgencyCode" parameterType="int" resultType="AgencyDto">
+		select * from tbl_customer_agency where agencyCode=#{agencyCode}
+	</select>
+	<select id="selectMaxAgencyCode" resultType="java.lang.Integer">
+		SELECT max(agencyCode) FROM tbl_customer_agency
+	</select>
+
+	<select id="selectAgencyByName" parameterType="java.lang.String" resultType="AgencyDto">
+		SELECT * FROM  tbl_customer_agency WHERE `name`=#{name}
+	</select>
+	<select id="selectAgencyBySimName" parameterType="java.lang.String" resultType="AgencyDto">
+		SELECT * FROM  tbl_customer_agency WHERE simName=#{simName}
+	</select>
+	<update id="updateById" parameterType="AgencyDto">
+		UPDATE tbl_customer_agency
+		<set>
+			<if test="name!=null and name!=''">
+				`name` = #{name},
+			</if>
+			<if test="simName!=null and simName!=''">
+				simName = #{simName},
+			</if>
+			<if test="chanlMan!=null and chanlMan!=''">
+				chanlMan = #{chanlMan},
+			</if>
+			<if test="contactMan!=null and contactMan!=''">
+				contactMan = #{contactMan},
+			</if>
+			<if test="contactTel!=null and contactTel!=''">
+				contactTel = #{contactTel},
+			</if>
+			<if test="manageAccount!=null and manageAccount!=''">
+				manageAccount = #{manageAccount},
+			</if>
+			<if test="managePass!=null and managePass!=''">
+				managePass = #{managePass},
+			</if>
+			<if test="status!=null">
+				status = #{status},
+			</if>
+			<if test="updateUid!=null and updateUid!=''">
+				updateUid = #{updateUid},
+			</if>
+			<if test="remark!=null and remark!=''">
+				remark = #{remark},
+			</if>
+			<if test="chargeStandard!=null">
+				chargeStandard = #{chargeStandard},
+			</if>
+			<if test="isBond!=null and isBond!=''">
+				isBond = #{isBond},
+			</if>
+			<if test="proportionResponsibility!=null">
+				proportionResponsibility = #{proportionResponsibility},
+			</if>
+			<if test="bond!=null">
+				bond = #{bond},
+			</if>
+			<if test="creditLimit!=null">
+				creditLimit = #{creditLimit},
+			</if>
+			<if test="agencyCode!=null">
+				agencyCode = #{agencyCode},
+			</if>
+			<if test="agencyType!=null and agencyType!=''">
+				agencyType = #{agencyType},
+			</if>
+			<if test="signStatus>0">
+				signStatus = #{signStatus},
+			</if>
+			<if test="cooperativeModeId>0">
+				cooperativeModeId = #{cooperativeModeId},
+			</if>
+			<if test="signDate!=null">
+				signDate = #{signDate},
+			</if>
+			<if test="surplusQuota!=null">
+				surplusQuota = #{surplusQuota},
+			</if>
+			<if test="openCity!=null and openCity!=''">
+				openCity = #{openCity},
+			</if>
+			<if test="riskBearMultiple!=null">
+				riskBearMultiple = #{riskBearMultiple},
+			</if>
+			<if test="expandManagerUid!=null and expandManagerUid!=''">
+				expandManagerUid = #{expandManagerUid},
+			</if>
+			<if test="acceptManagerUid!=null and acceptManagerUid!=''">
+				acceptManagerUid = #{acceptManagerUid},
+			</if>
+			<if test="applyDate!=null">
+				applyDate = #{applyDate},
+			</if>
+			<if test="surplusQuotaRemind!=null and surplusQuotaRemind>0">
+				surplusQuotaRemind = #{surplusQuotaRemind},
+			</if>
+			<if test="minBond!=null">
+				minBond = #{minBond},
+			</if>
+			<if test="accountUid!=null and accountUid!=''">
+				accountUid = #{accountUid},
+			</if>
+			<if test="expandChiefUid!=null and expandChiefUid!=''">
+				expandChiefUid = #{expandChiefUid},
+			</if>
+		</set>
+		WHERE id=#{id}
+	</update>
+	<update id="updSurplusQuota" parameterType="java.util.Map">
+	     UPDATE tbl_customer_agency set surplusQuota=#{surplusQuota} where id=#{id}
+	</update>
+	<delete id="delete" parameterType="AgencyDto">
+		DELETE FROM tbl_customer_agency WHERE  id=#{id}
+	</delete>
+
+	<select id="detail" parameterType="AgencyDto" resultType="AgencyDto">
+		SELECT * FROM  tbl_customer_agency WHERE id=#{id}
+	</select>
+	
+	<select id="selectAgencyByMobile" resultType="AgencyDto" parameterType="AgencyDto">
+		SELECT * FROM tbl_customer_agency WHERE contactTel = #{contactTel} ORDER BY createTime DESC limit 1;
+	</select>
+
+	<select id="selectAgencyById" resultType="AgencyDto" parameterType="java.util.Map">
+		SELECT * FROM tbl_customer_agency WHERE id=#{id}
+	</select>
+</mapper>

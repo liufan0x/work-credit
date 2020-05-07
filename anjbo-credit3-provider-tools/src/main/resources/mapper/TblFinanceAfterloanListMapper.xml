@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.TblFinanceAfterloanListMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<if test="null!=cityCode and ''!=cityCode"> AND `cityCode`=#{cityCode}</if>
+		<if test="null!=cityName and ''!=cityName"> AND `cityName`=#{cityName}</if>
+		<if test="null!=productCode and ''!=productCode"> AND `productCode`=#{productCode}</if>
+		<if test="null!=productName and ''!=productName"> AND `productName`=#{productName}</if>
+		<if test="null!=contractNo and ''!=contractNo"> AND `contractNo`=#{contractNo}</if>
+		<if test="null!=borrowerName and ''!=borrowerName"> AND `borrowerName`=#{borrowerName}</if>
+		<if test="null!=loanAmount and loanAmount>0"> AND `loanAmount`=#{loanAmount}</if>
+		<if test="null!=borrowingPeriods and borrowingPeriods>0"> AND `borrowingPeriods`=#{borrowingPeriods}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(lendingTimeBegin)"> AND lendingTime >= #{lendingTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(lendingTimeEnd)"> AND lendingTime &lt;= #{lendingTimeEnd}</if>
+		-->
+		<if test="null!=channelManagerUid and ''!=channelManagerUid"> AND `channelManagerUid`=#{channelManagerUid}</if>
+		<if test="null!=channelManagerName and ''!=channelManagerName"> AND `channelManagerName`=#{channelManagerName}</if>
+		<if test="null!=acceptMemberUid and ''!=acceptMemberUid"> AND `acceptMemberUid`=#{acceptMemberUid}</if>
+		<if test="null!=acceptMemberName and ''!=acceptMemberName"> AND `acceptMemberName`=#{acceptMemberName}</if>
+		<if test="null!=overdueDay and overdueDay>0"> AND `overdueDay`=#{overdueDay}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(newRepaymentBegin)"> AND newRepayment >= #{newRepaymentBegin}</if>
+		<if test="@Ognl@isNotEmpty(newRepaymentEnd)"> AND newRepayment &lt;= #{newRepaymentEnd}</if>
+		-->
+		<if test="null!=repaymentStatus and repaymentStatus>0"> AND `repaymentStatus`=#{repaymentStatus}</if>
+		<if test="null!=repaymentStatusName and ''!=repaymentStatusName"> AND `repaymentStatusName`=#{repaymentStatusName}</if>
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<if test="null!=rate and rate>0"> AND `rate`=#{rate}</if>
+		<if test="null!=overdueRate and overdueRate>0"> AND `overdueRate`=#{overdueRate}</if>
+		<if test="null!=repaymentType and repaymentType>0"> AND `repaymentType`=#{repaymentType}</if>
+		<if test="null!=repaymentName and ''!=repaymentName"> AND `repaymentName`=#{repaymentName}</if>
+		<if test="null!=phoneNumber and ''!=phoneNumber"> AND `phoneNumber`=#{phoneNumber}</if>
+		<if test="null!=channelManagerPhone and ''!=channelManagerPhone"> AND `channelManagerPhone`=#{channelManagerPhone}</if>
+		<if test="null!=overflow and overflow>0"> AND `overflow`=#{overflow}</if>
+		<if test="null!=branchCompany and ''!=branchCompany"> AND `branchCompany`=#{branchCompany}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="TblFinanceAfterloanListDto" resultType="TblFinanceAfterloanListDto">    
+	SELECT `id`, `createTime`, `createUid`, `updateTime`, `updateUid`, `cityCode`, `cityName`, `productCode`, `productName`, `contractNo`, `borrowerName`, `loanAmount`, `borrowingPeriods`, `lendingTime`, `channelManagerUid`, `channelManagerName`, `acceptMemberUid`, `acceptMemberName`, `overdueDay`, `newRepayment`, `repaymentStatus`, `repaymentStatusName`, `orderNo`, `rate`, `overdueRate`, `repaymentType`, `repaymentName`, `phoneNumber`, `channelManagerPhone`, `overflow`, `branchCompany` 
+	FROM tbl_finance_afterloan_list 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="TblFinanceAfterloanListDto" resultType="TblFinanceAfterloanListDto">
+	SELECT `id`, `createTime`, `createUid`, `updateTime`, `updateUid`, `cityCode`, `cityName`, `productCode`, `productName`, `contractNo`, `borrowerName`, `loanAmount`, `borrowingPeriods`, `lendingTime`, `channelManagerUid`, `channelManagerName`, `acceptMemberUid`, `acceptMemberName`, `overdueDay`, `newRepayment`, `repaymentStatus`, `repaymentStatusName`, `orderNo`, `rate`, `overdueRate`, `repaymentType`, `repaymentName`, `phoneNumber`, `channelManagerPhone`, `overflow`, `branchCompany`
+	FROM tbl_finance_afterloan_list 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="TblFinanceAfterloanListDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_finance_afterloan_list 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="TblFinanceAfterloanListDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_finance_afterloan_list(
+		`createTime`,
+		`createUid`,
+		`updateTime`,
+		`updateUid`,
+		`cityCode`,
+		`cityName`,
+		`productCode`,
+		`productName`,
+		`contractNo`,
+		`borrowerName`,
+		`loanAmount`,
+		`borrowingPeriods`,
+		`lendingTime`,
+		`channelManagerUid`,
+		`channelManagerName`,
+		`acceptMemberUid`,
+		`acceptMemberName`,
+		`overdueDay`,
+		`newRepayment`,
+		`repaymentStatus`,
+		`repaymentStatusName`,
+		`orderNo`,
+		`rate`,
+		`overdueRate`,
+		`repaymentType`,
+		`repaymentName`,
+		`phoneNumber`,
+		`channelManagerPhone`,
+		`overflow`,
+		`branchCompany`
+	) VALUES(
+		now(),
+		#{createUid},
+		now(),
+		#{createUid},
+		#{cityCode},
+		#{cityName},
+		#{productCode},
+		#{productName},
+		#{contractNo},
+		#{borrowerName},
+		#{loanAmount},
+		#{borrowingPeriods},
+		#{lendingTime},
+		#{channelManagerUid},
+		#{channelManagerName},
+		#{acceptMemberUid},
+		#{acceptMemberName},
+		#{overdueDay},
+		#{newRepayment},
+		#{repaymentStatus},
+		#{repaymentStatusName},
+		#{orderNo},
+		#{rate},
+		#{overdueRate},
+		#{repaymentType},
+		#{repaymentName},
+		#{phoneNumber},
+		#{channelManagerPhone},
+		#{overflow},
+		#{branchCompany}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="TblFinanceAfterloanListDto" >
+    DELETE FROM tbl_finance_afterloan_list 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="TblFinanceAfterloanListDto" >
+    UPDATE tbl_finance_afterloan_list
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=cityCode">`cityCode`=#{cityCode},</if>
+		<if test="null!=cityName">`cityName`=#{cityName},</if>
+		<if test="null!=productCode">`productCode`=#{productCode},</if>
+		<if test="null!=productName">`productName`=#{productName},</if>
+		<if test="null!=contractNo">`contractNo`=#{contractNo},</if>
+		<if test="null!=borrowerName">`borrowerName`=#{borrowerName},</if>
+		<if test="null!=loanAmount">`loanAmount`=#{loanAmount},</if>
+		<if test="null!=borrowingPeriods">`borrowingPeriods`=#{borrowingPeriods},</if>
+		<if test="null!=lendingTime">`lendingTime`=#{lendingTime},</if>
+		<if test="null!=channelManagerUid">`channelManagerUid`=#{channelManagerUid},</if>
+		<if test="null!=channelManagerName">`channelManagerName`=#{channelManagerName},</if>
+		<if test="null!=acceptMemberUid">`acceptMemberUid`=#{acceptMemberUid},</if>
+		<if test="null!=acceptMemberName">`acceptMemberName`=#{acceptMemberName},</if>
+		<if test="null!=overdueDay">`overdueDay`=#{overdueDay},</if>
+		<if test="null!=newRepayment">`newRepayment`=#{newRepayment},</if>
+		<if test="null!=repaymentStatus">`repaymentStatus`=#{repaymentStatus},</if>
+		<if test="null!=repaymentStatusName">`repaymentStatusName`=#{repaymentStatusName},</if>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=rate">`rate`=#{rate},</if>
+		<if test="null!=overdueRate">`overdueRate`=#{overdueRate},</if>
+		<if test="null!=repaymentType">`repaymentType`=#{repaymentType},</if>
+		<if test="null!=repaymentName">`repaymentName`=#{repaymentName},</if>
+		<if test="null!=phoneNumber">`phoneNumber`=#{phoneNumber},</if>
+		<if test="null!=channelManagerPhone">`channelManagerPhone`=#{channelManagerPhone},</if>
+		<if test="null!=overflow">`overflow`=#{overflow},</if>
+		<if test="null!=branchCompany">`branchCompany`=#{branchCompany},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

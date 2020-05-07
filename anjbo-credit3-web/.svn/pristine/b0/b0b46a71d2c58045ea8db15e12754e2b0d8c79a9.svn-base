@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="robots" content="index, follow" />
+		<meta name="googlebot" content="index, follow" />
+
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=8,IE=9,IE=10" />
+
+		<meta http-equiv="expires" content="0">
+		<meta http-equiv="pragma" content="no-cache">
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="cache-control" content="no-store">
+
+		<!-- uc强制竖屏 -->
+		<meta name="screen-orientation" content="portrait">
+		<!-- QQ强制竖屏 -->
+		<meta name="x5-orientation" content="portrait">
+		<title>选择图片</title>
+		<link rel="stylesheet" href="../other/aui/css/aui.2.0.css" />
+		<link rel="stylesheet" href="../other/mui/mui.min.css" />
+		<link rel="stylesheet" href="../css/mui.css" />
+		<link rel="stylesheet" href="../css/common.css" />
+		<style type="text/css">
+			div#uploadImgCtrl div.imgContainer{
+				width:33.33%;
+				float:left;
+				text-align:center;
+				padding:.2rem;
+			}
+			div#uploadImgCtrl div.imgContainer>div{
+				height:100%;
+				width:100%;
+				border:1px solid #B8B8B8;
+				position:relative;
+			}
+			div#uploadImgCtrl div.imgContainer>div>img{
+				height:100%;
+				width:100%;
+			}
+			div#uploadImgCtrl div.imgContainer>div>input{
+			    opacity:0;
+			    position:absolute;
+			    top:0;
+			    left:0;
+			    bottom:0;
+			    z-index:2;
+			    width:100%;
+			    height: 100%;
+			}
+			div#uploadImgCtrl div.container {
+				margin-top: .5rem;
+				background: #fff;
+				min-height: 5rem;
+				padding: .75rem;
+				font-size: .7rem;
+			}
+			
+			div#uploadImgCtrl div.btnContainer {
+				position: absolute;
+				width: 100%;
+				bottom: 0;
+			}
+			
+			div#uploadImgCtrl div.btnContainer button {
+				border: 0;
+				border-radius: 0;
+				width: 100%;
+				font-size: .85rem;
+				padding: .6rem 0;
+			}
+		</style>
+		
+	</head>
+
+	<body style="background-color:#f5f5f5;">
+		<div id="uploadImgCtrl">
+		  
+		  <div id="imgs">
+		  	
+		  </div>
+		  <form id="imgForm" style="display:none">
+		  	
+		  </form>
+		  
+		  <div class="btnContainer">
+				<button class="bg_color_0cbbd3 color_fff" id="confirmBtn">上传并保存</button>
+		  </div>
+		  
+		  <div class="loadingPart" id="loadingPart"><div style="background:none"><img src="../img/loading-1.gif" alt="" /></div></div>
+		  
+		</div>
+
+	</body>
+	<script src="../other/js/jquery.min.js"></script>
+	<script src="../other/mui/mui.min.js"></script>
+	<script src="../other/mui/mui.previewimage.js"></script>
+	<script src="../other/mui/mui.zoom.js"></script>
+	<script src="../js/common.js"></script>
+	<script src="../js/upload_img.js"></script>
+</html>

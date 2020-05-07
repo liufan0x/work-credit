@@ -1,0 +1,32 @@
+eureka:  
+  instance:
+    preferIpAddress: true
+    instanceId: ${spring.cloud.client.ipAddress}:${server.port}
+  client:
+    service-url:
+      defaultZone: http://server-eureka001:60100/eureka/
+      
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.1.5:3315/anjbo-server-order?useUnicode=true&amp;characterEncoding=utf-8&allowMultiQueries=true
+    username: lic
+    password: lic_select
+  profiles:
+    active: dev
+  application:
+    name: anjbo-credit3-provider-order
+  cloud:
+    bus:
+      trace:
+        enabled: true
+    config:
+      profile: ${spring.profiles.active}
+      label: master
+      name: ${spring.application.name},anjbo-credit3-common,anjbo-credit3-ams
+      discovery:
+        service-id: anjbo-credit3-server-config
+        enabled: true
+
+server:
+  port: 60002

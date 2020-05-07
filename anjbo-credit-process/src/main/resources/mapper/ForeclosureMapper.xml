@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.ForeclosureMapper">
+	
+	<select id="selectForeclosure" parameterType="ForeclosureDto" resultType="ForeclosureDto">
+	   select f.*, DATE_FORMAT(f.foreclosureTime,'%Y-%m-%d') as foreclosureTimeStr,
+	    DATE_FORMAT(fs.licenseRevTime,'%Y-%m-%d') as licenseRevTimeStr,fs.licenseRever,fs.licenseReverUid,
+	   fs.licenseRevBank,fs.licenseRevBankName ,fs.licenseRevBankSub,fs.licenseRevBankSubName
+	   from tbl_process_app_foreclosure f
+	   left join tbl_process_app_forensics fs on fs.orderNo=f.orderNo
+	    where f.orderNo=#{orderNo}
+	</select>
+	
+	<insert id="addForeclosure" parameterType="ForeclosureDto" >
+	   INSERT INTO `tbl_process_app_foreclosure` (
+	    `createUid`, `createTime`, `updateUid`, `orderNo`,`foreclosureTime`, `foreclosureBankNameId`, `foreclosureBankName`, foreclosureBankSubName,foreclosureBankSubNameId,
+	    `remark`,`isBankEnd`,`bankNo`,`bankCardMaster`,`voucherImg`,`foreclosureImg`,foreclosureAddress
+	   ) VALUES (
+	     #{createUid}, now(), #{updateUid}, #{orderNo}, #{foreclosureTime}, #{foreclosureBankNameId}, #{foreclosureBankName}, #{foreclosureBankSubName},#{foreclosureBankSubNameId},
+	     #{remark},#{isBankEnd},#{bankNo},#{bankCardMaster},#{voucherImg},#{foreclosureImg},#{foreclosureAddress}
+	    )
+
+	</insert>
+	
+	<update id="updateForeclosure" parameterType="ForeclosureDto">
+		update tbl_process_app_foreclosure
+			set
+			     <if test="updateUid!= null and updateUid !='' " >
+	        		updateUid = #{updateUid},
+	      		</if>
+				<if test="foreclosureTime!= null  " >
+	        		foreclosureTime = #{foreclosureTime},
+	      		</if>
+				<if test="isBankEnd!= null" >
+	        		isBankEnd = #{isBankEnd},
+	      		</if>
+	      		<if test="foreclosureBankSubNameId != null and foreclosureBankSubNameId !='' " >
+	        		foreclosureBankSubNameId = #{foreclosureBankSubNameId},
+	      		</if>
+	      		<if test="foreclosureBankSubName != null and foreclosureBankSubName !='' " >
+	        		foreclosureBankSubName = #{foreclosureBankSubName},
+	      		</if>
+	      		<if test="foreclosureBankNameId != null and foreclosureBankNameId !='' " >
+	        		foreclosureBankNameId = #{foreclosureBankNameId},
+	      		</if>
+				<if test="foreclosureBankName!= null and foreclosureBankName !='' " >
+	        		foreclosureBankName = #{foreclosureBankName},
+	      		</if>
+	      		<if test="remark!= null and remark !='' " >
+	        		remark = #{remark},
+	      		</if>
+	      		<if test="bankNo!= null and bankNo !='' " >
+	        		bankNo = #{bankNo},
+	      		</if>
+	      		<if test="bankCardMaster!= null and bankCardMaster !='' " >
+	        		bankCardMaster = #{bankCardMaster},
+	      		</if>
+	      		<if test="voucherImg!= null and voucherImg !='' " >
+	        		voucherImg = #{voucherImg},
+	      		</if>
+	      		<if test="foreclosureImg!= null and foreclosureImg !='' " >
+	        		foreclosureImg = #{foreclosureImg},
+	      		</if>
+	      		<if test="foreclosureAddress!= null and foreclosureAddress !='' " >
+	        		foreclosureAddress = #{foreclosureAddress},
+	      		</if>
+	      		orderNo=#{orderNo}
+			where orderNo =#{orderNo}
+		</update>
+	
+</mapper>

@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.AfterLoanLogMapper">
+
+    <resultMap id="listMap" type="AfterLoanLogDto">
+        <result property="id" column="id"/>
+        <result property="createUid" column="createUid"/>
+        <result property="createTime" column="createTime"/>
+        <result property="updateUid" column="updateUid"/>
+        <result property="updateTime" column="updateTime"/>
+        <result property="repaymentPeriods" column="repaymentPeriods"/>
+        <result property="amount" column="amount"/>
+        <result property="repayType" column="repayType"/>
+        <result property="realityPayDate" column="realityPayDate"/>
+        <result property="repayOverdue" column="repayOverdue"/>
+        <result property="givePayOverdue" column="givePayOverdue"/>
+        <result property="givePayInterest" column="givePayInterest"/>
+        <result property="orderNo" column="orderNo"/>
+        <result property="eventType" column="eventType"/>
+        <result property="eventTypeName" column="eventTypeName"/>
+        <result property="remark" column="remark"/>
+        <result property="createName" column="createName"/>
+        <result property="operateTime" column="operateTime"/>
+        <collection property="file" ofType="java.util.Map" select="listLogFile" column="id"/>
+    </resultMap>
+
+    <select id="listLogFile" parameterType="java.lang.Integer" resultType="java.util.Map">
+        SELECT
+          id, createUid,createTime,`name`,url,fileType,orderNo,logId
+        FROM tbl_finance_afterloan_log_file
+        WHERE logId = #{id}
+    </select>
+
+    <sql id="Base_Column_List">
+        id, createUid, createTime, updateUid, updateTime, repaymentPeriods, amount, repayType,
+        realityPayDate, repayOverdue, givePayOverdue, givePayInterest, orderNo, eventType,
+        eventTypeName,remark,createName,operateTime,givePayPrincipal,overflow
+    </sql>
+    <sql id="listWhere">
+        <if test="eventType!=null">
+            AND eventType = #{eventType}
+        </if>
+        <if test="createUid!=null and createUid!=''">
+            AND createUid = #{createUid}
+        </if>
+        <if test="whereName!=null and whereName!=''">
+            AND (eventTypeName LIKE CONCAT('%', #{whereName},'%') OR createName LIKE CONCAT('%', #{whereName},'%') OR remark LIKE CONCAT('%', #{whereName},'%'))
+        </if>
+        <if test="createStartTime!=null">
+            <![CDATA[  and DATE_FORMAT(createTime,'%Y-%m-%d') >= DATE_FORMAT(#{createStartTime}, '%Y-%m-%d')]]>
+        </if>
+        <if test="createEndTime!=null">
+            <![CDATA[  and DATE_FORMAT(createTime,'%Y-%m-%d') <= DATE_FORMAT(#{createEndTime}, '%Y-%m-%d')]]>
+        </if>
+    </sql>
+    <select id="list" parameterType="AfterLoanLogDto" resultMap="listMap">
+        select
+          <include refid="Base_Column_List"/>
+        from tbl_finance_afterloan_log
+        where orderNo = #{orderNo} AND withdraw!=1
+        <include refid="listWhere"/>
+        ORDER BY 1=1
+        <if test="operateTimeOrderBy!=null and operateTimeOrderBy!=''">
+            ,operateTime ${operateTimeOrderBy}
+        </if>
+        limit #{start},#{pageSize}
+    </select>
+
+    <select id="listCount" resultType="java.lang.Integer" parameterType="AfterLoanLogDto">
+      SELECT
+        count(1)
+      FROM tbl_finance_afterloan_log
+      WHERE orderNo = #{orderNo}
+      <include refid="listWhere"/>
+    </select>
+
+    <delete id="delete" parameterType="AfterLoanLogDto">
+        delete from tbl_finance_afterloan_log
+        where id = #{id}
+    </delete>
+    <delete id="deleteAll" parameterType="AfterLoanLogDto">
+        delete from tbl_finance_afterloan_log
+        where orderNo = #{orderNo}
+    </delete>
+    <insert id="insert" parameterType="AfterLoanLogDto">
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into tbl_finance_afterloan_log
+        (
+            createUid,
+            createTime,
+            repaymentPeriods,
+            amount,
+            repayType,
+            realityPayDate,
+            repayOverdue,
+            givePayOverdue,
+            givePayInterest,
+            orderNo,
+            eventType,
+            eventTypeName,
+            remark,
+            operateTime,
+            createName,
+            overflow,
+            givePayPrincipal
+        )
+        values
+        (
+            #{createUid},
+            now(),
+            #{repaymentPeriods},
+            #{amount},
+            #{repayType},
+            #{realityPayDate},
+            #{repayOverdue},
+            #{givePayOverdue},
+            #{givePayInterest},
+            #{orderNo},
+            #{eventType},
+            #{eventTypeName},
+            #{remark},
+            #{operateTime},
+            #{createName},
+            #{overflow},
+            #{givePayPrincipal}
+        )
+    </insert>
+
+    <update id="update" parameterType="AfterLoanLogDto">
+        update tbl_finance_afterloan_log
+        <set>
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+            <if test="repaymentPeriods != null">
+                repaymentPeriods = #{repaymentPeriods},
+            </if>
+            <if test="amount != null">
+                amount = #{amount},
+            </if>
+            <if test="repayType != null">
+                repayType = #{repayType},
+            </if>
+            <if test="realityPayDate != null">
+                realityPayDate = #{realityPayDate},
+            </if>
+            <if test="repayOverdue != null">
+                repayOverdue = #{repayOverdue},
+            </if>
+            <if test="givePayOverdue != null">
+                givePayOverdue = #{givePayOverdue},
+            </if>
+            <if test="givePayInterest != null">
+                givePayInterest = #{givePayInterest},
+            </if>
+            <if test="eventType != null">
+                eventType = #{eventType},
+            </if>
+            <if test="eventTypeName != null and eventTypeName!=''">
+                eventTypeName = #{eventTypeName},
+            </if>
+            <if test="remark != null and remark!=''">
+                remark = #{remark},
+            </if>
+            <if test="operateTime!=null">
+                operateTime = #{operateTime},
+            </if>
+            <if test="createName!=null and createName!=''">
+                createName = #{createName},
+            </if>
+            <if test="overflow!=null">
+                overflow = #{overflow},
+            </if>
+            <if test="givePayPrincipal!=null">
+                givePayPrincipal = #{givePayPrincipal},
+            </if>
+            <if test="withdraw>0">
+                withdraw = #{withdraw},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <select id="listOperate" parameterType="AfterLoanLogDto" resultType="java.util.Map">
+      SELECT createUid,createName FROM tbl_finance_afterloan_log WHERE orderNo = #{orderNo} GROUP BY createUid
+    </select>
+
+    <insert id="bacthInsertFile" parameterType="java.util.List">
+        INSERT INTO tbl_finance_afterloan_log_file
+        (
+          createUid,
+          createTime,
+          `name`,
+          url,
+          fileType,
+          orderNo,
+          logId
+        )
+        VALUES
+        <foreach collection="list" separator="," item="obj">
+        (
+            #{obj.createUid},
+            now(),
+            #{obj.name},
+            #{obj.url},
+            #{obj.fileType},
+            #{obj.orderNo},
+            #{obj.logId}
+        )
+        </foreach>
+    </insert>
+
+    <select id="selectCurrentPeriodsLog" parameterType="AfterLoanLogDto" resultType="AfterLoanLogDto">
+        SELECT
+          <include refid="Base_Column_List"/>
+        FROM
+            tbl_finance_afterloan_log
+        WHERE
+            orderNo = #{orderNo}
+        AND eventType = 3
+        AND repaymentPeriods = #{repaymentPeriods}
+        ORDER BY realityPayDate
+    </select>
+
+    <select id="selectLogById" parameterType="AfterLoanLogDto" resultType="AfterLoanLogDto">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+          tbl_finance_afterloan_log
+        WHERE
+          id = #{id}
+        AND eventType = 3 AND withdraw!=1
+    </select>
+    <select id="selectPreLog" parameterType="AfterLoanLogDto" resultType="AfterLoanLogDto">
+        SELECT
+          <include refid="Base_Column_List"/>
+        FROM
+          tbl_finance_afterloan_log
+        WHERE
+          <![CDATA[  createTime< #{createTime}]]>
+        AND eventType = 3 AND withdraw!=1 AND orderNo = #{orderNo} AND repaymentPeriods = #{repaymentPeriods}
+        ORDER BY createTime DESC
+        LIMIT 0,1
+    </select>
+</mapper>

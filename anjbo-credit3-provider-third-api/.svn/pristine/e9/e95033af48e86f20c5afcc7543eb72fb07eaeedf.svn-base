@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://ws.inf.creditapp.app/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="InfWsProcessService" targetNamespace="http://ws.inf.creditapp.app/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ws.inf.creditapp.app/" elementFormDefault="unqualified" targetNamespace="http://ws.inf.creditapp.app/" version="1.0">
+
+  <xs:element name="process" type="tns:process"/>
+
+  <xs:element name="processResponse" type="tns:processResponse"/>
+
+  <xs:complexType name="process">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="request" type="tns:request"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="request">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="brNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="content" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqDate" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqSerial" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqTime" type="xs:string"/>
+      <xs:element minOccurs="0" name="token" type="xs:string"/>
+      <xs:element minOccurs="0" name="txCode" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="processResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="response" type="tns:response"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="response">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="content" type="xs:string"/>
+      <xs:element minOccurs="0" name="respCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="respDesc" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="processResponse">
+    <wsdl:part element="tns:processResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="process">
+    <wsdl:part element="tns:process" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="InfWsProcess">
+    <wsdl:operation name="process">
+      <wsdl:input message="tns:process" name="process">
+    </wsdl:input>
+      <wsdl:output message="tns:processResponse" name="processResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="InfWsProcessServiceSoapBinding" type="tns:InfWsProcess">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="process">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="process">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="processResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="InfWsProcessService">
+    <wsdl:port binding="tns:InfWsProcessServiceSoapBinding" name="InfWsProcessPort">
+      <soap:address location="http://192.168.1.15:51080/cms/services/creditService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

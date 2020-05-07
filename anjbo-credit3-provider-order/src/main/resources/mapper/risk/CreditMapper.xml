@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.risk.CreditMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<if test="null!=creditCardYears and ''!=creditCardYears"> AND `creditCardYears`=#{creditCardYears}</if>
+		<if test="null!=loanRecordYears and ''!=loanRecordYears"> AND `loanRecordYears`=#{loanRecordYears}</if>
+		<if test="null!=violationProportion and ''!=violationProportion"> AND `violationProportion`=#{violationProportion}</if>
+		<if test="null!=allHouseWorth and allHouseWorth>0"> AND `allHouseWorth`=#{allHouseWorth}</if>
+		<if test="null!=allHouseNumber and allHouseNumber>0"> AND `allHouseNumber`=#{allHouseNumber}</if>
+		<if test="null!=creditCardOverdraft and creditCardOverdraft>0"> AND `creditCardOverdraft`=#{creditCardOverdraft}</if>
+		<if test="null!=creditQuota and creditQuota>0"> AND `creditQuota`=#{creditQuota}</if>
+		<if test="null!=useQuota and useQuota>0"> AND `useQuota`=#{useQuota}</if>
+		<if test="null!=creditLiabilities and creditLiabilities>0"> AND `creditLiabilities`=#{creditLiabilities}</if>
+		<if test="null!=liabilitiesProportion and liabilitiesProportion>0"> AND `liabilitiesProportion`=#{liabilitiesProportion}</if>
+		<if test="null!=loanPercentage and loanPercentage>0"> AND `loanPercentage`=#{loanPercentage}</if>
+		<if test="null!=foreclosurePercentage and foreclosurePercentage>0"> AND `foreclosurePercentage`=#{foreclosurePercentage}</if>
+		<if test="null!=creditOverdueNumber and creditOverdueNumber>0"> AND `creditOverdueNumber`=#{creditOverdueNumber}</if>
+		<if test="null!=latelyHalfYearSelectNumber and latelyHalfYearSelectNumber>0"> AND `latelyHalfYearSelectNumber`=#{latelyHalfYearSelectNumber}</if>
+		<if test="null!=latelyTwoYearMoneyOverdueNumber and latelyTwoYearMoneyOverdueNumber>0"> AND `latelyTwoYearMoneyOverdueNumber`=#{latelyTwoYearMoneyOverdueNumber}</if>
+		<if test="null!=isCompanyProperty and ''!=isCompanyProperty"> AND `isCompanyProperty`=#{isCompanyProperty}</if>
+		<if test="null!=propertyMortgage and ''!=propertyMortgage"> AND `propertyMortgage`=#{propertyMortgage}</if>
+		<if test="null!=remark and ''!=remark"> AND `remark`=#{remark}</if>
+		<if test="null!=isFinish and isFinish>0"> AND `isFinish`=#{isFinish}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="CreditDto" resultType="CreditDto">    
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `creditCardYears`, `loanRecordYears`, `violationProportion`, `allHouseWorth`, `allHouseNumber`, `creditCardOverdraft`, `creditQuota`, `useQuota`, `creditLiabilities`, `liabilitiesProportion`, `loanPercentage`, `foreclosurePercentage`, `creditOverdueNumber`, `latelyHalfYearSelectNumber`, `latelyTwoYearMoneyOverdueNumber`, `isCompanyProperty`, `propertyMortgage`, `remark`, `isFinish` 
+	FROM tbl_risk_credit 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="CreditDto" resultType="CreditDto">
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `creditCardYears`, `loanRecordYears`, `violationProportion`, `allHouseWorth`, `allHouseNumber`, `creditCardOverdraft`, `creditQuota`, `useQuota`, `creditLiabilities`, `liabilitiesProportion`, `loanPercentage`, `foreclosurePercentage`, `creditOverdueNumber`, `latelyHalfYearSelectNumber`, `latelyTwoYearMoneyOverdueNumber`, `isCompanyProperty`, `propertyMortgage`, `remark`, `isFinish`
+	FROM tbl_risk_credit 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="CreditDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_risk_credit 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="CreditDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_risk_credit(
+		`createUid`,
+		`createTime`,
+		`updateUid`,
+		`updateTime`,
+		`orderNo`,
+		`creditCardYears`,
+		`loanRecordYears`,
+		`violationProportion`,
+		`allHouseWorth`,
+		`allHouseNumber`,
+		`creditCardOverdraft`,
+		`creditQuota`,
+		`useQuota`,
+		`creditLiabilities`,
+		`liabilitiesProportion`,
+		`loanPercentage`,
+		`foreclosurePercentage`,
+		`creditOverdueNumber`,
+		`latelyHalfYearSelectNumber`,
+		`latelyTwoYearMoneyOverdueNumber`,
+		`isCompanyProperty`,
+		`propertyMortgage`,
+		`remark`,
+		`isFinish`
+	) VALUES(
+		#{createUid},
+		now(),
+		#{createUid},
+		now(),
+		#{orderNo},
+		#{creditCardYears},
+		#{loanRecordYears},
+		#{violationProportion},
+		#{allHouseWorth},
+		#{allHouseNumber},
+		#{creditCardOverdraft},
+		#{creditQuota},
+		#{useQuota},
+		#{creditLiabilities},
+		#{liabilitiesProportion},
+		#{loanPercentage},
+		#{foreclosurePercentage},
+		#{creditOverdueNumber},
+		#{latelyHalfYearSelectNumber},
+		#{latelyTwoYearMoneyOverdueNumber},
+		#{isCompanyProperty},
+		#{propertyMortgage},
+		#{remark},
+		#{isFinish}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="CreditDto" >
+    DELETE FROM tbl_risk_credit 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="CreditDto" >
+    UPDATE tbl_risk_credit
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=creditCardYears">`creditCardYears`=#{creditCardYears},</if>
+		<if test="null!=loanRecordYears">`loanRecordYears`=#{loanRecordYears},</if>
+		<if test="null!=violationProportion">`violationProportion`=#{violationProportion},</if>
+		<if test="null!=allHouseWorth">`allHouseWorth`=#{allHouseWorth},</if>
+		<if test="null!=allHouseNumber">`allHouseNumber`=#{allHouseNumber},</if>
+		<if test="null!=creditCardOverdraft">`creditCardOverdraft`=#{creditCardOverdraft},</if>
+		<if test="null!=creditQuota">`creditQuota`=#{creditQuota},</if>
+		<if test="null!=useQuota">`useQuota`=#{useQuota},</if>
+		<if test="null!=creditLiabilities">`creditLiabilities`=#{creditLiabilities},</if>
+		<if test="null!=liabilitiesProportion">`liabilitiesProportion`=#{liabilitiesProportion},</if>
+		<if test="null!=loanPercentage">`loanPercentage`=#{loanPercentage},</if>
+		<if test="null!=foreclosurePercentage">`foreclosurePercentage`=#{foreclosurePercentage},</if>
+		<if test="null!=creditOverdueNumber">`creditOverdueNumber`=#{creditOverdueNumber},</if>
+		<if test="null!=latelyHalfYearSelectNumber">`latelyHalfYearSelectNumber`=#{latelyHalfYearSelectNumber},</if>
+		<if test="null!=latelyTwoYearMoneyOverdueNumber">`latelyTwoYearMoneyOverdueNumber`=#{latelyTwoYearMoneyOverdueNumber},</if>
+		<if test="null!=isCompanyProperty">`isCompanyProperty`=#{isCompanyProperty},</if>
+		<if test="null!=propertyMortgage">`propertyMortgage`=#{propertyMortgage},</if>
+		<if test="null!=remark">`remark`=#{remark},</if>
+		<if test="null!=isFinish">`isFinish`=#{isFinish},</if>
+	</set>
+	WHERE orderNo=#{orderNo}
+  </update>
+    
+</mapper>

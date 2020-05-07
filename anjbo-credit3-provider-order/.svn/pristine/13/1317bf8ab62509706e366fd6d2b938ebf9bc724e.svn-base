@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.process.AppFacesignMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(faceSignTimeBegin)"> AND faceSignTime >= #{faceSignTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(faceSignTimeEnd)"> AND faceSignTime &lt;= #{faceSignTimeEnd}</if>
+		-->
+		<if test="null!=faceSignPhoto and ''!=faceSignPhoto"> AND `faceSignPhoto`=#{faceSignPhoto}</if>
+		<if test="null!=remark and ''!=remark"> AND `remark`=#{remark}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="AppFacesignDto" resultType="AppFacesignDto">    
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `faceSignTime`, `faceSignPhoto`, `remark` 
+	,`accountType`,`customerName`,`bankName`,`bankNameId`,`bankCardNo`,`certificateType`,`certificateNo`,`mobile`,`serialNoOne`,
+	`serialNoTwo`,`returnOne`,`returnTwo` 
+	FROM tbl_process_app_facesign 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="AppFacesignDto" resultType="AppFacesignDto">
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `faceSignTime`, `faceSignPhoto`, `remark`
+	,`accountType`,`customerName`,`bankName`,`bankNameId`,`bankCardNo`,`certificateType`,`certificateNo`,`mobile`,`serialNoOne`,
+	`serialNoTwo`,`returnOne`,`returnTwo` 
+	FROM tbl_process_app_facesign 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="AppFacesignDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_process_app_facesign 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="AppFacesignDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_process_app_facesign(
+		`createUid`,
+		`createTime`,
+		`updateUid`,
+		`updateTime`,
+		`orderNo`,
+		`faceSignTime`,
+		`faceSignPhoto`,
+		`remark`,
+		`accountType`,
+		`customerName`,
+		`bankName`,
+		`bankNameId`,
+		`bankCardNo`,
+		`certificateType`,
+		`certificateNo`,
+		`mobile`,
+		`serialNoOne`,
+	    `serialNoTwo`,
+	    `returnOne`,
+	    `returnTwo` 
+	) VALUES(
+		#{createUid},
+		now(),
+		#{createUid},
+		now(),
+		#{orderNo},
+		#{faceSignTime},
+		#{faceSignPhoto},
+		#{remark},
+		#{accountType},
+		#{customerName},
+		#{bankName},
+		#{bankNameId},
+		#{bankCardNo},
+		#{certificateType},
+		#{certificateNo},
+		#{mobile},
+		#{serialNoOne},
+		#{serialNoTwo},
+		#{returnOne},
+		#{returnTwo} 
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="AppFacesignDto" >
+    DELETE FROM tbl_process_app_facesign 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="AppFacesignDto" >
+    UPDATE tbl_process_app_facesign
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=faceSignTime">`faceSignTime`=#{faceSignTime},</if>
+		<if test="null!=faceSignPhoto">`faceSignPhoto`=#{faceSignPhoto},</if>
+		<if test="null!=remark">`remark`=#{remark},</if>
+		<if test="null!=accountType">`accountType`=#{accountType},</if>
+		<if test="null!=customerName">`customerName`=#{customerName},</if>
+		<if test="null!=bankName">`bankName`=#{bankName},</if>
+		<if test="null!=bankNameId and 0!=bankNameId">`bankNameId`=#{bankNameId},</if>
+		<if test="null!=bankCardNo">`bankCardNo`=#{bankCardNo},</if>
+		<if test="null!=certificateType">`certificateType`=#{certificateType},</if>
+		<if test="null!=certificateNo">`certificateNo`=#{certificateNo},</if>
+		<if test="null!=mobile">`mobile`=#{mobile},</if>
+		<if test="null!=serialNoOne">`serialNoOne`=#{serialNoOne},</if>
+		<if test="null!=serialNoTwo">`serialNoTwo`=#{serialNoTwo},</if>
+		<if test="null!=returnOne">`returnOne`=#{returnOne},</if>
+		<if test="null!=returnTwo">`returnTwo`=#{returnTwo},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+  
+  <update id="updateByOrderNo" parameterType="AppFacesignDto" >
+  	UPDATE tbl_process_app_facesign
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=faceSignTime">`faceSignTime`=#{faceSignTime},</if>
+		<if test="null!=faceSignPhoto">`faceSignPhoto`=#{faceSignPhoto},</if>
+		<if test="null!=remark">`remark`=#{remark},</if>
+		<if test="null!=accountType">`accountType`=#{accountType},</if>
+		<if test="null!=customerName">`customerName`=#{customerName},</if>
+		<if test="null!=bankName">`bankName`=#{bankName},</if>
+		<if test="null!=bankNameId and 0!=bankNameId">`bankNameId`=#{bankNameId},</if>
+		<if test="null!=bankCardNo">`bankCardNo`=#{bankCardNo},</if>
+		<if test="null!=certificateType">`certificateType`=#{certificateType},</if>
+		<if test="null!=certificateNo">`certificateNo`=#{certificateNo},</if>
+		<if test="null!=mobile">`mobile`=#{mobile},</if>
+		<if test="null!=serialNoOne">`serialNoOne`=#{serialNoOne},</if>
+		<if test="null!=serialNoTwo">`serialNoTwo`=#{serialNoTwo},</if>
+		<if test="null!=returnOne">`returnOne`=#{returnOne},</if>
+		<if test="null!=returnTwo">`returnTwo`=#{returnTwo},</if>
+	</set>
+	WHERE orderNo=#{orderNo}
+  </update>
+    
+</mapper>

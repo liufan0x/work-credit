@@ -1,0 +1,272 @@
+<form action="" method="POST" name="houseForm" class="form-inline detail-row housefrom-supplement">
+	
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;1.房产信息 
+		<button type="button" ng-click="submitHouse()" class="btn btn-info detail-right-save">保存</button>
+		<button type="button" class="btn btn-info detail-right-save fr" ng-click="addChanDto()">+ 共同房产信息</button>
+	</div>
+	
+	<fangchanxinxi>
+	<div ng-repeat="obj in pro.orderBaseHousePropertyDto" >
+		<div class="col-md-12 danbao-tit">&nbsp;&nbsp; 房产信息（<span class="num-box" ng-bind="$index+1"></span>）
+			<span class="detail-trash text-danger" ng-if="$index>0" ng-click="deleteChanDto($index)">删除</span>
+		</div>
+		
+		<div class="col-md-12 col-lg-12"><label>所在地区：</label>
+			<select id="p3" name="city{{$index}}" style="width:90px;" class="form-control" choice-dict="bookingSzAreaOid" code="cityCode" disabled="disabled" ng-model="obj.city" required>
+			</select>
+			-
+			<select id="p3" ng-disabled="all" name="houseRegion{{$index}}" style="width:150px;" class="form-control" choice-dict-name="bookingSzAreaOid" pcode="{{obj.city}}" ng-model="obj.houseRegion" required>
+				<option value="">请选择</option>
+			</select>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="houseForm.houseRegion{{$index}}.$error.required">必选</error>
+			</span>
+		</div>
+
+
+		<div class="col-md-6 col-lg-4"><label>产权证类型：</label>
+			<select class="form-control" ng-disabled="all" name="housePropertyType{{$index}}" style="width:178px;" choice-dict-name="housePropertyType" ng-model="obj.housePropertyType" required>
+				<option value="">请选择</option>
+			</select>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="houseForm.housePropertyType{{$index}}.$error.required">必选</error>
+			</span>
+		</div>
+
+		<div class="col-md-6 col-lg-4"><label>房产名称：</label>
+			<span ng-bind="idea.houseName"></span>
+			<input type="text" ng-disabled="all" class="form-control" name="houseName{{$index}}" ng-model="obj.houseName" required>
+			<!--<span class="a-span">
+				<img title="{{img.url}}" ng-show="$index==0" ng-repeat="img in houseCardImg" src="/images//chakanfcz.png" onClick="gallery(this);" class="gallery-pic">&nbsp;&nbsp;
+			</span>-->
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="houseForm.houseName{{$index}}.$error.required">必填</error>
+			</span>
+		</div>
+
+		<div class="col-md-6 col-lg-4"><label>&nbsp;</label></div>
+
+		<div class="col-md-6 col-lg-4"><label>产权证号：</label>
+			<input type="text" ng-disabled="all" class="form-control" name="housePropertyNumber{{$index}}" ng-model="obj.housePropertyNumber" required>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="houseForm.housePropertyNumber{{$index}}.$error.required">必填</error>
+			</span>
+		</div>
+			
+		<div class="col-md-6 col-lg-4"><label>登记价：</label>
+			<input type="text" ng-disabled="all" ng-pattern="/^([1-9]\d{0,13}|0)([.]?|(\.\d{1,4})?)$/" class="form-control" name="houseRecordPrice{{$index}}" ng-model="obj.houseRecordPrice" required>
+			<span class="a-span">&nbsp;元</span>
+			<span class="inputError" ng-show="houseForm.houseRecordPrice{{$index}}.$error.pattern">
+				<error class="text-danger">错误</error>
+			</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="houseForm.houseRecordPrice{{$index}}.$error.required">必填</error>
+			</span>
+		</div>
+			
+		<div class="col-md-6 col-lg-4"><label>建筑面积：</label>
+			<input type="text" ng-disabled="all" ng-pattern="/^([1-9]\d{0,9}|0)([.]?|(\.\d{1,4})?)$/" class="form-control" name="houseArchitectureSize{{$index}}" ng-model="obj.houseArchitectureSize" required>
+			<span class="a-span">㎡</span>
+			<span class="inputError" ng-show="houseForm.houseArchitectureSize{{$index}}.$error.pattern">
+				<error class="text-danger">错误</error>
+			</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="houseForm.houseArchitectureSize{{$index}}.$error.required">必填</error>
+			</span>
+		</div>
+	</div>
+	</fangchanxinxi>
+</form>
+<form action="" method="POST" name="housePropertyPeopleForm" class="form-inline detail-row">
+	
+	<div class="col-md-12 detail-right-tit ">&nbsp;&nbsp;  2.产权人信息 
+		<button type="button" class="btn btn-info detail-right-save fr" ng-click="addChanQuan()">+ 产权人信息</button>
+	</div>
+
+	<chanquanrenxinxi>
+	<div ng-repeat="obj in pro.orderBaseHousePropertyPeopleDto" >
+		<div class="col-md-12 danbao-tit">&nbsp;&nbsp; 产权人信息（<span class="num-box" ng-bind="$index+1"></span>）
+			<span class="detail-trash text-danger" ng-if="$index>0" ng-click="deleteChanQuan($index)">删除</span>
+		</div>
+
+		<div class="col-md-6 col-lg-4"><label>姓名：</label>
+			<input type="text" ng-disabled="all" class="form-control" name="propertyName{{index}}" ng-model="obj.propertyName" required>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="housePropertyPeopleForm.propertyName{{index}}.$error.required">必填</error>
+			</span>
+		</div>
+
+		<div class="col-md-6 col-lg-4"><label>证件类型：</label>
+			<select class="form-control" ng-disabled="all" name="propertyCardType{{index}}"  choice-dict-name="cardType" style="width:178px;" ng-model="obj.propertyCardType" required> 
+				<option value="">请选择</option>
+			</select>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="housePropertyPeopleForm.propertyCardType{{index}}.$error.required">必选</error>
+			</span>
+		</div>
+
+		<div class="col-md-6 col-lg-4"><label>证件号码：</label>
+			<input type="text" ng-disabled="all" class="form-control" name="propertyCardNumber{{index}}" ng-model="obj.propertyCardNumber" required>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="housePropertyPeopleForm.propertyCardNumber{{index}}.$error.required">必填</error>
+			</span>
+		</div>
+
+		<div class="col-md-6 col-lg-4"><label>婚姻状况：</label>
+			<select class="form-control" ng-disabled="all" name="propertyMarriageState{{index}}" choice-dict-name="marriageState" style="width:178px;" ng-model="obj.propertyMarriageState" required>
+		        	<option value="">请选择</option>
+			</select>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="housePropertyPeopleForm.propertyMarriageState{{index}}.$error.required">必选</error>
+			</span>
+		</div>
+	</div>
+	</chanquanrenxinxi>
+	
+			
+	<div class="col-md-12 detail-right-tit ">&nbsp;&nbsp;  3.房贷信息 </div>
+	
+	<div class="col-md-6 col-lg-4"><label>原房贷金额：</label>
+		<input type="text" ng-disabled="all" class="form-control" ng-pattern="/^([1-9]\d{0,12}|0)([.]?|(\.\d{1,4})?)$/" name="oldHouseLoanAmount" ng-model="pro.oldHouseLoanAmount" required>&nbsp;
+		<span class="a-span">万元</span>
+		<span class="inputError" ng-show="housePropertyPeopleForm.oldHouseLoanAmount.$error.pattern">
+				<error class="text-danger">错误</error>
+		</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="housePropertyPeopleForm.oldHouseLoanAmount.$error.required">必填</error>
+		</span>
+	</div>
+	
+	<div class="col-md-6 col-lg-4"><label>原房贷余额：</label>
+		<input type="text" ng-disabled="all" class="form-control" ng-pattern="/^([1-9]\d{0,12}|0)([.]?|(\.\d{1,4})?)$/" name="oldHouseLoanBalance"  ng-model="pro.oldHouseLoanBalance" required>&nbsp;
+		<span class="a-span">万元</span>
+		<span class="inputError" ng-show="housePropertyPeopleForm.oldHouseLoanBalance.$error.pattern">
+				<error class="text-danger">错误</error>
+		</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="housePropertyPeopleForm.oldHouseLoanBalance.$error.required">必填</error>
+		</span>
+	</div>
+</form>	
+
+<form action="" method="POST" name="housePurchaserForm" class="form-inline detail-row">
+	<div ng-if="productCode=='01'">
+	<div class="col-md-12 detail-right-tit ">&nbsp;&nbsp;  4.买房人信息 
+		<button type="button" class="btn btn-info detail-right-save fr" ng-click="addMaiFang()">+ 买房人信息</button>
+	</div>
+	
+	<maifangxinxi>
+	<div ng-repeat="buy in pro.orderBaseHousePurchaserDto" >
+		<div class="col-md-12 danbao-tit">&nbsp;&nbsp; 买房信息（<span class="num-box" ng-bind="$index+1"></span>）
+			<span class="detail-trash text-danger" ng-if="$index>0" ng-click="deleteMaiFang($index)">删除</span>
+		</div>
+
+		<div class="col-md-6 col-lg-4"><label>姓名：</label>
+			<input type="text" ng-disabled="all" class="form-control" name="buyName{{index}}" ng-model="buy.buyName" required>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="housePurchaserForm.buyName{{index}}.$error.required">必填</error>
+			</span>
+		</div>
+			
+		<div class="col-md-6 col-lg-4"><label>证件类型：</label>
+			<select class="form-control" ng-disabled="all" name="buyCardType{{index}}" choice-dict-name="cardType" style="width:178px;" ng-model="buy.buyCardType" required>
+				<option value="">请选择</option>
+			</select>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="housePurchaserForm.buyCardType{{index}}.$error.required">必选</error>
+			</span>
+		</div>
+			
+		<div class="col-md-6 col-lg-4"><label>证件号码：</label>
+			<input type="text" ng-disabled="all" class="form-control" name="buyCardNumber{{index}}" ng-model="buy.buyCardNumber" required>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="housePurchaserForm.buyCardNumber{{index}}.$error.required">必填</error>
+			</span>
+		</div>
+			
+		<div class="col-md-6 col-lg-4"><label>手机号码：</label>  
+			<input type="text" ng-disabled="all" class="form-control" name="buyPhoneNumber{{index}}" ng-model="buy.buyPhoneNumber" required>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="housePurchaserForm.buyPhoneNumber{{index}}.$error.required">必填</error>
+			</span>
+		</div>
+	</div>
+	</maifangxinxi>
+	
+	<div class="col-md-12 detail-right-tit ">&nbsp;&nbsp;  5.交易信息</div>
+
+	<div class="col-md-6 col-lg-4"><label>成交价格：</label>
+		<input type="text" ng-disabled="all" ng-pattern="/^([1-9]\d{0,13}|0)([.]?|(\.\d{1,4})?)$/" class="form-control" name="houseDealPrice" ng-model="pro.houseDealPrice" required>
+		<span class="a-span">&nbsp;万元</span>
+		<span class="inputError" ng-show="housePurchaserForm.houseDealPrice.$error.pattern">
+				<error class="text-danger">错误</error>
+		</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="housePurchaserForm.houseDealPrice.$error.required">必填</error>
+		</span>
+	</div>
+		
+	<div class="col-md-6 col-lg-4"><label>成交定金：</label>
+		<input type="text" ng-disabled="all" ng-pattern="/^([1-9]\d{0,13}|0)([.]?|(\.\d{1,4})?)$/" class="form-control" name="houseDealDeposit" ng-model="pro.houseDealDeposit" required>
+		<span class="a-span">&nbsp;万元</span>
+		<span class="inputError" ng-show="housePurchaserForm.houseDealDeposit.$error.pattern">
+				<error class="text-danger">错误</error>
+		</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="housePurchaserForm.houseDealDeposit.$error.required">必填</error>
+		</span>
+	</div>
+		
+	<div class="col-md-6 col-lg-4"><label>资金监管金额：</label>
+		<input type="text" ng-disabled="all" ng-pattern="/^([1-9]\d{0,13}|0)([.]?|(\.\d{1,4})?)$/" class="form-control" name="houseSuperviseAmount" ng-model="pro.houseSuperviseAmount" required>
+		<span class="a-span">&nbsp;万元</span>
+		<span class="inputError" ng-show="housePurchaserForm.houseSuperviseAmount.$error.pattern">
+				<error class="text-danger">错误</error>
+		</span> 
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="housePurchaserForm.houseSuperviseAmount.$error.required">必填</error>
+		</span>
+	</div>
+	
+	<div class="col-md-6 col-lg-4"><label>贷款金额：</label>
+		<input type="text" ng-disabled="all" class="form-control" ng-pattern="/^([1-9]\d{0,13}|0)([.]?|(\.\d{1,4})?)$/" name="houseLoanAmount" ng-model="pro.houseLoanAmount" required>
+		<span class="a-span">&nbsp;万元</span> 
+		<span class="inputError" ng-show="housePurchaserForm.houseLoanAmount.$error.pattern">
+				<error class="text-danger">错误</error>
+		</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="housePurchaserForm.houseLoanAmount.$error.required">必填</error>
+		</span>
+	</div>
+	</div>
+	
+	<div ng-if="productCode!='01'">
+	<div class="col-md-12 detail-right-tit ">&nbsp;&nbsp;  4.新贷款信息</div>
+	<div class="col-md-6 col-lg-4"><label>贷款金额：</label>
+		<input type="text" ng-disabled="all" ng-pattern="/^([1-9]\d{0,13}|0)([.]?|(\.\d{1,4})?)$/"  class="form-control" name="houseLoanAmount" ng-model="pro.houseLoanAmount" required>
+		<span class="a-span">&nbsp;万元</span> 
+		<span class="inputError" ng-show="housePurchaserForm.houseLoanAmount.$error.pattern">
+				<error class="text-danger">错误</error>
+		</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="housePurchaserForm.houseLoanAmount.$error.required">必填</error>
+		</span>
+	</div>
+	</div>
+	<div class="col-md-12 col-lg-12 relative">
+	    <label>&nbsp;</label>
+		<label style="position:absolute;top:0; left:0;">备注：</label>
+		<textarea class="form-control" ng-disabled="all" maxlength="3000" name='remark' ng-model="pro.remark" style="width:1000px;height:100px;"></textarea>
+	</div>
+</form>

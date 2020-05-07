@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.ProductFlowBaseMapper">
+	
+
+	<insert id="insertProductFlowBase" parameterType="java.util.Map">
+		insert into ${tblDataName} 
+		(createUid,updateUid,createTime,currentProcessId,nextProcessId,orderNo,handleUid,handleTime,backReason)
+		values
+		(#{createUid},#{handleUid},now(),#{currentProcessId},#{nextProcessId},#{orderNo},#{handleUid},now(),#{backReason})
+	</insert>
+	
+	<select id="selectProductFlowBaseList" parameterType="java.util.Map" resultType="java.util.Map">
+		select id,createUid,date_format(createTime,'%Y-%m-%d %H:%i:%s') as createTimeStr,createTime,updateUid,updateTime,orderNo,currentProcessId,nextProcessId,handleUid,handleTime,backReason from ${tblDataName} 
+		where orderNo = #{orderNo} order by createTime asc
+	</select>
+	
+	<select id="selectProductFlowBase" parameterType="java.lang.String" resultType="java.util.Map">
+	      select * from tbl_cm_flow where orderNo=#{0} order by createTime desc limit 1
+	</select>
+	
+	<select id="selectProductFlowBaseAll" parameterType="java.util.Map" resultType="java.util.Map" >
+	      SELECT DISTINCT
+			(t2.orderNo),
+			t1.nextProcessId
+		FROM
+			tbl_cm_list t2
+		LEFT JOIN tbl_cm_flow t1 ON t1.orderNo = t2.orderNo
+		WHERE
+			t1.nextProcessId = 'subMortgage'
+		AND t2.state = '已关闭'
+	</select>
+
+	<select id="selectWithdrawAll" resultType="java.util.Map">
+	      SELECT
+			t1.orderNo
+		FROM
+			tbl_cm_list t1
+		LEFT JOIN tbl_cm_flow t2 ON t1.orderNo = t2.orderNo
+		WHERE
+			t2.currentProcessId = 'repaymentChannelManager'
+		AND t1.processId = 'assess'
+		GROUP BY
+			t1.orderNo
+	</select>
+
+	<select id="selectProductFlowByCurrentProcessId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT * FROM  ${tblDataName}
+		WHERE currentProcessId=#{currentProcessId} AND orderNo=#{orderNo} order by createTime desc limit 1
+	</select>
+	<select id="selectProductFlowByNextProcessId" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT * FROM  ${tblDataName}
+		WHERE nextProcessId=#{nextProcessId} AND orderNo=#{orderNo} order by createTime desc limit 1
+	</select>
+
+	<select id="selectProductLastFlow" parameterType="java.util.Map" resultType="java.util.Map">
+		select * from ${tblDataName} where orderNo=#{0} order by createTime desc limit 1
+	</select>
+
+	<delete id="deleteLastFlow" parameterType="java.util.Map">
+		DELETE FROM ${tblDataName} WHERE orderNo=#{orderNo} ORDER BY createTime DESC LIMIT 1;
+	</delete>
+
+	<delete id="deleteAllFlow" parameterType="java.util.Map">
+		DELETE FROM ${tblDataName} WHERE orderNo=#{orderNo}
+	</delete>
+</mapper>

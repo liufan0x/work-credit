@@ -1,0 +1,98 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" css="width=device-width, initial-scale=1">
+
+
+	<!---bootstrap使用的是3-->
+	<link href="/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="/css/bootstrap-editable.css" rel="stylesheet" />
+	<link href="/css/bootstrap-table.min.css" rel="stylesheet" />
+	<script src="/js/jquery-1.10.2.js"></script>
+	<script src="/js/bootstrap.min.js"></script>
+	<!---行内编辑使用的 1.1.5-->
+	<script src="/js/bootstrap-editable.js"></script>
+	<!--bootstrap-table中文包及js-->
+	<script src="/js/bootstrap-table/bootstrap-table.min.js"></script>
+	<script src="/js/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+	<!--封装了bootstrap-table对x-editable的使用-->
+	<script src="/js/bootstrap-table-editable.js"></script>
+	<!---一些其他方法见 http://vitalets.github.io/x-editable/ --->
+	<script src="/js/monitorArchiveList.js"></script>
+	<title>查档任务列表</title>
+</head>
+<body>
+	<div class="row">
+    <div class="panel-body" style="padding-bottom:0px;">
+        <div class="panel panel-default">
+            <div class="panel-heading">查询条件</div>
+            <div class="panel-body">
+                <form id="formSearch" class="form-horizontal">
+                    <div class="form-group" style="margin-top:15px">
+						<input type="hidden" th:value="${agencyId}" id="agencyId"/>
+                        <label class="control-label col-sm-1" for="identityNo">姓名-身份证</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="identityNo">
+                        </div>
+                        <label class="control-label col-sm-1" for="estateNo">房产证号</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control" id="estateNo">
+                        </div>
+                        <div class="col-sm-4" style="text-align:left;">
+                            <button type="button" style="margin-left:50px" id="btn_query" name="refresh" class="btn btn-primary">查询</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div id="toolbar" class="btn-group">
+            <button id="btn_add" type="button" class="btn btn-default">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>新增
+            </button>
+            <button id="btn_edit" type="button" class="btn btn-default" data-toggle="modal" data-target="#edit" οnclick="edit()" >
+            <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>修改
+	        </button>
+	        <button id="btn_delete" type="button" class="btn btn-default" data-toggle="modal">
+	            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
+	        </button>
+	    </div>
+        <table id="tb_departments"></table>
+ 		
+ 		<!--  修改开始-->
+		<div class="modal fade" id="edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<form id="postUrlForm"method="post" action='<c:url value="/license/edit"/>' class="pageForm required-validate" οnsubmit="">
+			    <div id="edit" class="modal-dialog">
+			        <div class="modal-content">
+			            <div class="modal-header">
+			                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			                <h4 class="modal-title" id="myModalLabel">修改</h4>
+			            </div>
+			            <div style="padding: 100px 100px 1px;">
+					        <input id="idE" type="hidden" disabled="disabled" class="form-control" >
+					        <div class="input-group">
+					            <span class="input-group-addon">姓名/身份证号：</span>
+					            <input id="identityNoE" type="text" disabled="disabled" class="form-control" >
+					        </div>
+					        <br>
+			            	<div class="input-group">
+					            <span class="input-group-addon">短信通知（手机号）：</span>
+					            <input id="phoneE" type="text" class="form-control" >
+					        </div>
+					        <br>
+					    </div><!-- style input group-->
+			            
+			            <div class="modal-footer">
+			                <button id="editSave" type="button" class="btn btn-default"  data-dismiss="modal" οnclick="editSave()">保存信息</button>
+			                <button type="button" class="btn btn-default" data-dismiss="modal" οnclick="window.close()">关闭</button>
+			            </div>
+			            <span class="input-group-addon"></span>
+			        </div><!-- /.modal-content -->
+			    </div><!-- /.modal -->
+		    </form>
+		</div>
+	    <!-- 修改结束 -->
+    </div>
+</div>
+</body>
+</html>

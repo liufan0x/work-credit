@@ -1,0 +1,178 @@
+<style>
+.form-inline.w138 label {
+	width: 150px;
+}
+.sgt-form{margin:20px 0;}
+.sgt-form .sel{width:176px;}
+.sgt-form label span{color:red;}
+.sgt-form label.two{
+	line-height: 22px;
+	float:left;
+}
+</style>
+<div class="container-fluid">
+	<form method="post" name="ordinaryAuditForm1" class="form-inline element-supplement detail-row sgt-form">
+		<div class="row detail-row form-inline w138">
+			<div class="col-md-6  col-lg-4">
+				<label><span>*</span>客户姓名：</label> 
+				<input type="text" ng-model="borrowInfo.custName" name="custName" class="form-control" maxlength="12" />
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>证件类型：</label>
+				<select class="form-control sel" name="idType" ng-model="borrowInfo.idType" ng-options="x.id as x.name for x in idTypeA">
+					<option value="">请选择</option>
+				</select>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>证件号码：</label>
+				<input type="text" ng-model="borrowInfo.idNo" name="idNo" class="form-control" maxlength="24"/> 
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>客户类型：</label>
+				<select class="form-control sel" ng-model="borrowInfo.custType" name="custType">
+						<option value="">请选择</option>
+						<option value="1">农户</option>
+						<option value="2">工薪</option>
+						<option value="3">个体工商户</option>
+						<option value="4">学生</option>
+						<option value="99">其他</option>
+					</select>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>性别：</label>
+                <select class="form-control sel" ng-model="borrowInfo.sex" name="sex" >
+					<option value="">请选择</option>
+					<option value="1">男</option>
+					<option value="2">女</option>
+				</select>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>出生日期 ：</label>
+				<input type="text"  ng-model="borrowInfo.birth" name="birth" class="form-control form_date" />
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>最高学历：</label>
+				<select class="form-control sel" ng-model="borrowInfo.edu"  name="edu" >
+					<option value="">请选择</option>
+					<option value="10">研究生</option>
+					<option value="20">大学本科</option>
+					<option value="30">大学专科</option>
+					<option value="40">中等专业学校或中等技术学校</option>
+					<option value="50">技术学校</option>
+					<option value="60">高中</option>
+					<option value="70">初中</option>
+					<option value="80">小学</option>
+					<option value="90">文盲或半文盲</option>
+					<option value="99">未知</option>
+				</select>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>最高学位：</label> 
+				<select class="form-control sel" ng-model="borrowInfo.degree" name="degree"  >
+						<option value="">请选择</option>
+						<option value="0">其他</option>
+						<option value="1">名誉博士</option>
+						<option value="2">博士</option>
+						<option value="3">硕士</option>
+						<option value="4">学士</option>
+						<option value="9">未知</option>
+					</select>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>户籍归属地：</label>
+			<!--  	<input type="text" ng-model="borrowInfo.homeArea" name="homeArea" maxlength="12" class="form-control" /> -->
+				<select class="form-control" name="homeArea" choice-dict-name="appArea" style="width:178px;" ng-model="borrowInfo.homeArea" required>
+				<option value="">请选择</option>
+			</select>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>手机号码:</label>
+				<input type="text" ng-model="borrowInfo.phoneNo" name="phoneNo" maxlength="11" class="form-control"/> 
+			</span>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>联系电话：</label>
+				<input type="text" ng-model="borrowInfo.telNo" name="telNo" maxlength="11"  class="form-control"/>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>月收入：</label>
+				<input type="text" ng-model="borrowInfo.income" name="income" maxlength="12" class="form-control"/> 元
+				 
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>婚姻状况：</label> 
+				<select class="form-control sel"  ng-model="borrowInfo.marriage" name="marriage">
+						<option value="">请选择</option>
+						<option value="10">未婚</option>
+						<option value="20">已婚</option>
+						<option value="30">丧偶</option>
+						<option value="40">离婚</option>
+						<option value="90">未说明的婚姻状况</option>
+						<option value="21">初婚</option>
+						<option value="22">再婚</option>
+						<option value="23">复婚</option>
+					</select>
+			</span>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>是否有子女：</label>
+				<select class="form-control sel" ng-model="borrowInfo.children" name="children"> 
+						<option value="">请选择</option>
+						<option value="0">否</option>
+						<option value="1">是</option>
+						<option value="2">未知</option>
+					</select>
+			</div>
+		</div>
+		<!-- 共同借款人 -->
+		<div class="row detail-row form-inline w138">
+			<div class="col-md-12" style="color:#4a77ac;padding:0 0 0 50px"> 
+			<input type="checkbox" ng-model="ifComLoan" name="ifComLoan" ng-onselect="comSelect()" class="form-control" > 
+			共同借款人：</div>
+			<div class="col-md-6 col-lg-4">
+				<label>借款人姓名：</label>
+				<input type="text" ng-model="borrowInfo.comName" name="comName" class="form-control" ng-disabled="!ifComLoan"/>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label>证件类型：</label>
+				<select class="form-control sel"  name="comIdtype" ng-model="borrowInfo.comIdtype" ng-disabled="!ifComLoan" ng-options="x.id as x.name for x in idTypeA">
+					<option value="">请选择</option>
+				</select>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label>证件号码：</label>
+				<input type="text" ng-model="borrowInfo.comIdno" name="comIdno" class="form-control" ng-disabled="!ifComLoan"  maxlength="24"/>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label>手机号码：</label>
+				<input type="text" ng-model="borrowInfo.comTel" name="comTel" class="form-control" ng-disabled="!ifComLoan"  maxlength="11"/>
+			</div>
+		</div>
+		<!-- 共同借款人 end-->
+        <!-- 借款关联人 -->
+	    <div class="row detail-row form-inline w138">
+			<div class="col-md-12" style="color:#4a77ac;padding:0 0 0 50px"> 
+			<input type="checkbox" ng-model="ifRelLoan" name="ifRelLoan" ng-onselect="relSelect()" class="form-control" > 
+			借款关联人：</div>
+			<div class="col-md-6 col-lg-4">
+				<label>借款人姓名：</label>
+				<input type="text" ng-model="borrowInfo.relName" name="relName" class="form-control" ng-disabled="!ifRelLoan"/>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label>证件类型：</label>
+				<select class="form-control sel"  name="relIdtype" ng-model="borrowInfo.relIdtype" ng-disabled="!ifRelLoan" ng-options="x.id as x.name for x in idTypeA">
+					<option value="">请选择</option>
+				</select>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label>证件号码：</label>
+				<input type="text" ng-model="borrowInfo.relIdno" name="relIdno" class="form-control" ng-disabled="!ifRelLoan"  maxlength="24"/>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label>手机号码：</label>
+				<input type="text" ng-model="borrowInfo.relTel" name="relTel" class="form-control" ng-disabled="!ifRelLoan"/>
+			</div>
+		</div>
+		<!-- 借款关联人 end-->
+	</form>
+</div>

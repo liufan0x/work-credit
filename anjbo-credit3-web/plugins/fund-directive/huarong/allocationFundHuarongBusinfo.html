@@ -1,0 +1,89 @@
+<div class="row huarong-update-file">
+    <div class="col-md-12">
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>分类</th>
+                <th>资料名称</th>
+                <th>文档数</th>
+                <th>操作</th>
+                <th>说明</th>
+            </tr>
+            </thead>
+            <tbody ng-repeat="pType in huarongImageDatas.topType">
+                <tr  ng-repeat="sType in pType.childrenType">
+                    <td ng-if="$index==0" rowspan="{{pType.childrenType.length}}" class="white-bg"></br><span ng-bind="pType.name"></span></br></td>
+                    <td ng-bind="sType.name"></td>
+                    <td ng-bind="sType.listImgs.length||'0'"></td>
+                    <td>
+                        <!--上传图片col-md-12 -->
+                        <span class="caozuo red-word">
+                            <a data-fancybox="iframe"  data-src="/plugins/uploadify/upload_image.html?returnFun=huarongUpdateFile" ng-click="selectTypeCheck(sType.id);" data-type="iframe" href="javascript:void(0);">上传</a>
+                        </span>
+                        <span class="caozuo red-word" ng-show="isImgEdit && sType.listImgs.length>0"><a ng-click="delHrImgShow(sType);" >删除</a></span>
+                        <span class="caozuo chakan-img gallerys" ng-if="sType.listImgs.length>0">
+                        	<img  ng-repeat="imgMap in sType.listImgs"  title="查看图片"  src="{{imgMap.url}}" class="gallery-pic"  alt="查看图片" ng-show="$index==0 && !imgMap.isPdf" hieght="30" width="30">
+                        </span>
+                         <span  class="caozuo chakan-img gallerys" ng-if="sType.listImgs.length>0">
+                           <span ng-repeat="imgMap in sType.listImgs">
+                            <a href="{{imgMap.url}}" target="_blank" class="gallery-pic"  hieght="30" ng-if="imgMap.isPdf" width="30"> 查看合同</a>
+                           </span>
+                         </span>
+                        <input type="hidden" name="typeId" value="{{sType.id}}">
+                    </td>
+                    <td ng-bind="sType.remark"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="lhw-alert-but" ng-show="isImgEdit">
+    <button type="button" class="btn btn-danger lhw-alert-cancel" ng-click="delAllHuarongImg()">删除所有</button>
+    <button type="button" class="btn btn-primary lhw-alert-cancel" ng-click="huarongImgs(true)">单推影像资料</button>
+</div>
+
+<!--华融删除图片弹框start-->
+<div class="lhw-alert-bg2" ng-show="isDelHrImgShow">
+	<div class="lhw-alert-box" style="width:480px;">
+		<div class="lhw-alert-tit">请选择要删除的图片</div>
+		<div>
+			<span>全选/反选:
+				<input type='checkbox' ng-click="selectHrAllImg()" ng-checked="allCheck">
+			</span>
+			<div class="row form-inline detail-row" style="padding:0 10px;">
+				<div class="tan-pic">
+					<div class="tan-pic-box" ng-repeat="img in imgObject.listImgs">
+						<label>
+							<img src="{{img.url}}" style="width: 120px;height:120px">
+							<div class="squaredFour">
+								<input type="checkbox" ng-model="img.check" ng-click="checkImg(imgObject.listImgs)">
+								<span></span>
+							</div>
+						</label>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+		</div>
+		<div class="lhw-alert-but">
+			<button type="button" class="btn btn-primary" style="margin-right:80px;" ng-click="delHrImg()">确定</button>
+			<button type="button" class="btn btn-danger lhw-alert-cancel" ng-click="delHrImgCancel()">取消</button>
+		</div>
+	</div>
+</div>
+<!--弹框end-->
+	
+<script>
+function huarongUpdateFile(url, b, c) {
+	if("" == url) {
+		return;
+	}
+	var scope = angular.element('huarong-docking-edit').scope();
+	var index = url.lastIndexOf(",");
+	if(index > -1) {
+		url = url.substring(0, url.length - 1);
+	}
+	var arr = url.split(",");
+	scope.addHuarongImg(arr);
+}
+</script>

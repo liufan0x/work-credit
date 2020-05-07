@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.CustomerFundAuthMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=auths and ''!=auths"> AND auths=#{auths}</if>
+	</where>
+  </sql>
+    
+  <!-- 查询 -->
+  <select id="search" parameterType="CustomerFundAuthDto" resultType="CustomerFundAuthDto">
+	SELECT id, auths, createUid, createTime, updateUid, updateTime
+	FROM tbl_customer_fund_auth 
+	<include refid="sqlwhereSearch"/>
+  </select>
+  
+  <!-- 获取实体 -->
+  <select id="getEntity" parameterType="long" resultType="CustomerFundAuthDto">    
+	SELECT id, auths, createUid, createTime, updateUid, updateTime 
+	FROM tbl_customer_fund_auth 
+	WHERE ID=#{id}
+  </select>
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="CustomerFundAuthDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_customer_fund_auth(
+    	id, fundCode,
+		<if test="null!=auths">auths,</if>
+		<if test="null!=createUid">createUid,</if>
+		createTime
+	) VALUES(
+		#{id}, #{fundCode},
+		<if test="null!=auths">#{auths},</if>
+		<if test="null!=createUid">#{createUid},</if>
+		NOW()
+	)	
+  </insert>
+  
+  <update id="update" parameterType="CustomerFundAuthDto" >
+    UPDATE tbl_customer_fund_auth
+	<set>
+		<if test="null!=fundCode">fundCode=#{fundCode},</if>
+		<if test="null!=auths">auths=#{auths},</if>
+		<if test="null!=updateUid">updateUid=#{updateUid},</if>
+		updateTime=NOW()
+	</set>
+    WHERE ID=#{id}
+  </update>
+
+  <delete id="delete" parameterType="long" >
+    DELETE FROM tbl_customer_fund_auth WHERE ID=#{id}
+  </delete>
+    
+</mapper>

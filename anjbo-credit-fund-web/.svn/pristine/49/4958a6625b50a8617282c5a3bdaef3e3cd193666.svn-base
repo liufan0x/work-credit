@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>查档</title>
+<!--标准mui.css-->
+<link rel="stylesheet" href="./css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="./css/order.css" />
+<link href="./css/mui.picker.min.css" rel="stylesheet" />
+</head>
+<body>
+ 
+<div class="form-box">
+      <div class="inp-div ">
+           <span class="inp-span mi">产权证书</span><span class="inp-r icon-d">&nbsp;</span>
+           <a href="#"><input type="text" value="" readonly="" class="inp-box sel" name="bank"  ></a>
+     </div>
+     <div class="inp-div">
+           <span class="inp-span mi">房产证号</span><span class="inp-r">&nbsp;</span>
+           <input type="text" value=""  class="inp-box" name="bank3" placeholder="请输入">
+     </div>
+	   <div class="inp-div no-border">
+           <span class="inp-span mi">姓名/身份证</span><span class="inp-r"></span>
+           <input type="text" value=""  class="inp-box" name="bank3" placeholder="请输入">
+     </div>
+	 
+	 <div class="clear" > </div>
+</div>
+
+<div class="clear" style="height:10px;"> </div>
+<div class="sub-but dis">查询</div> 
+
+<p class="tit-p">查询结果 (此结果来自深圳市房地产信息系统)</p>
+<p class="detail-p">查询时间：<span>2017-05-21 22:56 </span><br>
+
+评估总值：<span>20000000 </span>元<br>
+
+评估净值：<span>56566523 </span>元<br>
+
+首套房最高可贷：<span>254 </span>万
+</p>
+
+<br> 
+
+<div class="but-box">
+     <div class="add-but"></div>
+     <div class="del-but"></div>
+</div>
+
+<div class="clear"> </div>
+<br> <br>
+
+ 
+
+<script src="./js/mui.min.js"></script>
+<script src="./js/mui.picker.min.js"></script>
+<script src="./js/jquery.min.js"></script>
+<script>
+
+
+
+mui.init();
+mui.ready(function() {
+	  var arr=[{
+		value: 'yes',
+		text: '同致诚'
+	  }, {
+		value: 'yes2',
+		text: '同致诚2'
+	  },{
+		value: 'yes3',
+		text: '同致诚3'
+	  },{
+		value: 'no',
+		text: '否'
+	  }];
+
+for(var i=0; i<arr.length;i++){
+   if(arr[i].value=="no"){$(".sel").val(arr[i].text)}
+};
+	  var userPicker = new mui.PopPicker();
+	  userPicker.setData(arr);
+      userPicker.pickers[0].setSelectedIndex(3, 200);
+	  $(".sel").click(function(){
+	
+	  var _this=$(this);
+	  userPicker.show(function(items) {
+			_this.val((items[0].text));
+			//返回 false 可以阻止选择框的关闭
+			//return false;
+		});
+ 
+  });
+
+	 
+});
+		 
+</script>
+</body>
+</html>

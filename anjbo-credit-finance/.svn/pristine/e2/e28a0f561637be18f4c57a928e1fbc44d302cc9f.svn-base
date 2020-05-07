@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.AfterloanAdvanceMapper">
+
+    <sql id="Base_Column_List">
+        id, createTime, createUid, updateTime, updateUid, orderNo, repaymentPeriods, repaymentDate,
+        surplusPrincipal, repayAmount, repayPrincipal, repayInterest, repayOverdue, givePayPrincipal, 
+        givePayInterest, givePayOverdue, lateDay, status
+    </sql>
+    <select id="select" parameterType="AlterLoanBudgetRepaymentDto" resultType="AlterLoanBudgetRepaymentDto">
+        select
+        <include refid="Base_Column_List" />
+        from tbl_finance_afterloan_advance
+        where id = #{id}
+    </select>
+    <select id="list" parameterType="AlterLoanBudgetRepaymentDto" resultType="AlterLoanBudgetRepaymentDto">
+        SELECT
+          <include refid="Base_Column_List" />
+        FROM tbl_finance_afterloan_advance
+        WHERE orderNo = #{orderNo} ORDER BY repaymentPeriods
+    </select>
+
+    <select id="listCount" parameterType="AlterLoanBudgetRepaymentDto" resultType="java.lang.Integer">
+        SELECT
+          count(1)
+        FROM tbl_finance_afterloan_advance
+        WHERE orderNo = #{orderNo}
+    </select>
+
+    <insert id="insert" parameterType="AlterLoanBudgetRepaymentDto">
+        INSERT INTO tbl_finance_afterloan_advance
+          (
+            createTime,
+            createUid,
+            orderNo,
+            repaymentPeriods,
+            repaymentDate,
+            surplusPrincipal,
+            repayAmount,
+            repayPrincipal,
+            repayInterest,
+            repayOverdue,
+            givePayPrincipal,
+            givePayInterest,
+            givePayOverdue,
+            lateDay,
+            status
+          )
+        VALUES
+         (
+            now(),
+            #{createUid},
+            #{orderNo},
+            #{repaymentPeriods},
+            #{repaymentDate},
+            #{surplusPrincipal},
+            #{repayAmount},
+            #{repayPrincipal},
+            #{repayInterest},
+            #{repayOverdue},
+            #{givePayPrincipal},
+            #{givePayInterest},
+            #{givePayOverdue},
+            #{lateDay},
+            #{status}
+          )
+    </insert>
+    <insert id="batchInsert" parameterType="java.util.List">
+         INSERT INTO tbl_finance_afterloan_advance
+          (
+            createTime,
+            createUid,
+            orderNo,
+            repaymentPeriods,
+            repaymentDate,
+            surplusPrincipal,
+            repayAmount,
+            repayPrincipal,
+            repayInterest,
+            repayOverdue,
+            givePayPrincipal,
+            givePayInterest,
+            givePayOverdue,
+            lateDay,
+            status
+          )VALUES
+           <foreach collection="list" item="obj" separator=",">
+           (
+               now(),
+               #{obj.createUid},
+               #{obj.orderNo},
+               #{obj.repaymentPeriods},
+               #{obj.repaymentDate},
+               #{obj.surplusPrincipal},
+               #{obj.repayAmount},
+               #{obj.repayPrincipal},
+               #{obj.repayInterest},
+               #{obj.repayOverdue},
+               #{obj.givePayPrincipal},
+               #{obj.givePayInterest},
+               #{obj.givePayOverdue},
+               #{obj.lateDay},
+               #{obj.status}
+           )
+           </foreach>
+    </insert>
+    <update id="update" parameterType="AlterLoanBudgetRepaymentDto">
+        update tbl_finance_afterloan_advance
+        <set>
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+            <if test="repaymentPeriods != null">
+                repaymentPeriods = #{repaymentPeriods},
+            </if>
+            <if test="repaymentDate != null">
+                repaymentDate = #{repaymentDate},
+            </if>
+            <if test="surplusPrincipal != null">
+                surplusPrincipal = #{surplusPrincipal},
+            </if>
+            <if test="repayAmount != null">
+                repayAmount = #{repayAmount},
+            </if>
+            <if test="repayPrincipal != null">
+                repayPrincipal = #{repayPrincipal},
+            </if>
+            <if test="repayInterest != null">
+                repayInterest = #{repayInterest},
+            </if>
+            <if test="repayOverdue != null">
+                repayOverdue = #{repayOverdue},
+            </if>
+            <if test="givePayPrincipal != null">
+                givePayPrincipal = #{givePayPrincipal},
+            </if>
+            <if test="givePayInterest != null">
+                givePayInterest = #{givePayInterest},
+            </if>
+            <if test="givePayOverdue != null">
+                givePayOverdue = #{givePayOverdue},
+            </if>
+            <if test="lateDay != null">
+                lateDay = #{lateDay},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="AlterLoanBudgetRepaymentDto">
+        DELETE  FROM tbl_finance_afterloan_advance WHERE orderNo = #{orderNo}
+    </delete>
+</mapper>

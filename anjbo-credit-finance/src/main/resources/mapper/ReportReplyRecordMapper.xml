@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.ReportReplyRecordMapper">
+    <resultMap id="BaseResultMap" type="ReportReplyRecordDto">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="createUid" jdbcType="VARCHAR" property="createUid" />
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="updateUid" jdbcType="VARCHAR" property="updateUid" />
+        <result column="orderNo" jdbcType="VARCHAR" property="orderNo" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, createTime, createUid, updateTime, updateUid, orderNo,replyContent,reportId
+    </sql>
+    <select id="list" parameterType="ReportReplyRecordDto" resultType="ReportReplyRecordDto">
+        select
+        <include refid="Base_Column_List" />
+        from tbl_finance_report_replyrecord WHERE orderNo in (${orderNo})
+        <if test="reportId>0">
+            AND reportId = #{reportId}
+        </if>
+    </select>
+
+    <insert id="insert" parameterType="ReportReplyRecordDto" useGeneratedKeys="true" keyProperty="id">
+        <selectKey resultType="java.lang.Integer" order="AFTER"
+                   keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into tbl_finance_report_replyrecord
+            (
+            createTime, createUid,
+            orderNo,
+            replyContent,reportId
+            )
+        values
+            (
+            now(),#{createUid},
+            #{orderNo},
+            #{replyContent},#{reportId}
+            )
+    </insert>
+    <update id="update" parameterType="ReportReplyRecordDto">
+        update tbl_finance_report_replyrecord
+        <set>
+            <if test="updateUid != null">
+                updateUid = #{updateUid},
+            </if>
+            <if test="replyContent != null">
+                replyContent = #{replyContent},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

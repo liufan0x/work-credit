@@ -1,0 +1,154 @@
+<style>
+.form-inline.w138 label {
+	width: 150px;
+}
+</style>
+<div class="container-fluid">
+
+	<form method="post" name="ordinaryAuditForm3"  class="form-inline element-supplement detail-row sgt-form">
+		<div class="row detail-row form-inline w138">
+			<div class="col-md-6 col-lg-4">
+				<label class="two"><span>*</span>押品所有权人<br>名称：</label>
+				<input type="text" ng-model="mortgagorInfo.gcustName" name="gcustName" class="form-control" maxlength="9" /> 
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label class="two"><span>*</span>押权所有人证件类型：</label>
+				<select class="form-control sel" name="gcustIdtype" ng-model="mortgagorInfo.gcustIdtype" ng-options="x.id as x.name for x in idTypeA">
+					<option value="">请选择</option>
+				</select>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>证件号码：</label>
+				<input type="text" ng-model="mortgagorInfo.gcustIdno"  name="gcustIdno" class="form-control" maxlength="24" /> 
+			</div>
+            <div class="col-md-6 col-lg-4">
+				<label><span>*</span>所有权人职业：</label>
+				<select class="form-control sel" ng-model="mortgagorInfo.gworkType"  name="gworkType"  ng-options="x.id as x.name for x in gworkTypeA">
+					<option value="">请选择</option>
+				</select>
+			</div>
+			<div class="col-md-6 col-lg-8">
+				<label><span>*</span>评估价值：</label>
+				<input type="text" ng-model="mortgagorInfo.gvalue" name="gvalue" maxlength="12" class="form-control" /> 万	 
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>押品类型：</label> 
+				<select class="form-control sel" name="gtype" ng-model="mortgagorInfo.gtype" >
+					<option value="213">住房抵押</option>
+					<option value="218">交通工具</option>
+					<option value="199">其他质押</option>
+				</select>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>押品名称：</label>
+				<input type="text" ng-model="mortgagorInfo.gname" name="gname" class="form-control" maxlength="11" /> 
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>押品小类：</label>
+				<select class="form-control sel" ng-model="mortgagorInfo.gsmType" name="gsmType">
+					<option value="">请选择</option>
+					<option value="01">普通住宅</option>
+					<option value="02">非普通住宅-经济适用房或保障房</option>
+					<option value="03">非普通住宅-别墅</option>
+					<option value="04">商铺</option>
+					<option value="05">其他房屋</option>
+					<option value="06">汽车</option>
+					<option value="07">其他抵押</option>
+					<option value="08">其他质押</option>
+					<option value="09">商住</option>
+				</select>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>权证号码：</label>
+				<input type="text" class="form-control" maxlength="11" placeholder="指房产名称" ng-model="mortgagorInfo.glicno"  name="glicno" />
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>权证类型：</label>
+				<select class="form-control sel" ng-model="mortgagorInfo.glicType" name="glicType" disabled>
+					<option value="01">房产证</option>
+					<option value="02">机动车登记证书</option>
+				</select>
+			</div>
+			<div class="col-md-6 col-lg-4" >
+				<label><span> </span>前手抵押余额：</label>
+				<input type="text" class="form-control" name="gbegBal" ng-model="mortgagorInfo.gbegBal"/>元
+			</div>
+			<br><br>
+			
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>是否有车：</label> 
+				<select class="form-control sel" name="ifCar"  ng-model="mortgagorInfo.ifCar">
+					<option value="">请选择</option>
+					<option value="1">是</option>
+					<option value="0">否</option>
+					<option value="2">未知</option>
+				</select>
+			</div>
+			<div class="col-md-6 col-lg-8">
+				<label><span>*</span>是否有按揭车贷：</label> 
+				<select class="form-control sel" name="ifCarCred" ng-model="mortgagorInfo.ifCarCred">
+					<option value="">请选择</option>
+					<option value="1">是</option>
+					<option value="0">否</option>
+					<option value="2">未知</option>
+				</select>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>是否有房：</label> 
+				<select class="form-control sel" name="ifRoom" ng-model="mortgagorInfo.ifRoom">
+					<option value="">请选择</option>
+					<option value="1">是</option>
+					<option value="0">否</option>
+					<option value="2">未知</option>
+				</select>
+			</div>
+			<div class="col-md-6 col-lg-8">
+				<label><span>*</span>是否有按揭房贷：</label> 
+				<select class="form-control sel" name="ifMort" ng-model="mortgagorInfo.ifMort">
+					<option value="">请选择</option>
+					<option value="1">是</option>
+					<option value="0">否</option>
+					<option value="2">未知</option>
+				</select>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>是否有贷记卡：</label> 
+				<select class="form-control sel" name="ifCard" ng-model="mortgagorInfo.ifCard">
+					<option value="">请选择</option>
+					<option value="1">是</option>
+					<option value="0">否</option>
+					<option value="2">未知</option>
+				</select>
+			</div>
+			<div class="col-md-6 col-lg-8">
+				<label><span>*</span>最低额度：</label>
+				<input type="text" class="form-control"  name="cardAmt" ng-model="mortgagorInfo.cardAmt"/>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label class="two"><span>*</span>是否填写<br>申请表：</label>
+				<select class="form-control sel" name="ifApp" ng-model="mortgagorInfo.ifApp">
+					<option value="1">是</option>
+					<option value="0">否</option>
+					<option value="2">未知</option>
+				</select>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>是否签订合同：</label>
+				<select class="form-control sel" name="ifPact" ng-model="mortgagorInfo.ifPact">
+					<option value="1">是</option>
+					<option value="0">否</option>
+					<option value="2">未知</option>
+				</select>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>是否有身份证信息：</label>
+				<select class="form-control sel" name="ifId" ng-model="mortgagorInfo.ifId">
+					<option value="1">是</option>
+					<option value="0">否</option>
+					<option value="2">未知</option>
+				</select>
+			</div>
+
+		</div>
+	</form>
+</div>

@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>查档</title>
+<!--标准mui.css-->
+<link rel="stylesheet" href="./css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="./css/order.css" />
+<link href="./css/mui.picker.min.css" rel="stylesheet" />
+<script src="http://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script>
+</head>
+<body>
+<div  ng-app="myApp"  ng-controller="siteCtrl"> 
+	<div class="form-box">
+	      <div class="inp-div ">
+	           <span class="inp-span mi">产权证书</span><span class="inp-r icon-d">&nbsp;</span>
+	           <a href="#" class="inp-box sel">请选择</a>
+	           <input type="hidden" name="estateType" >
+	     </div>
+	     <div class="inp-div">
+	           <span class="inp-span mi">房产证号</span><span class="inp-r">&nbsp;</span>
+	           <input type="text" value=""  class="inp-box" name="bank3" placeholder="请输入" ng-model="archive.estateNo"  >
+	     </div>
+		   <div class="inp-div no-border">
+	           <span class="inp-span mi">姓名/身份证</span><span class="inp-r"></span>
+	           <input type="text" value=""  class="inp-box" name="bank3" placeholder="请输入" ng-model="archive.identityNo">
+	     </div>
+		 <div class="clear" > </div>
+	</div>
+	<div class="clear" style="height:10px;"> </div>
+	<div class="sub-but" ng-click="queryArchive($event)">查询</div> 
+		<chadangjieguo id="jgshow" style="display:none">
+			<p class="tit-p">查询结果 (此结果来自深圳市房地产信息系统)</p>
+			<p class="detail-p">查询时间：<span ng-bind="archive.createTime | date:'yyyy-MM-dd HH:mm'"></span><br>
+			<span ng-bind="archive.dataMsg"></span>
+			</p>
+			<br> 
+		</chadangjieguo>
+	
+	<div class="clear"> </div>
+	<br> <br>
+</div>
+<script src="./js/mui.min.js"></script>
+<script src="./js/mui.picker.min.js"></script>
+<script src="./js/jquery.min.js"></script>
+<script src="./js/process.js"></script>
+<script>
+var orderNo = GetQueryString("orderNo");
+var archiveId = GetQueryString("archiveId");
+var uid = GetQueryString("uid");   
+var deviceId=  GetQueryString("deviceId");   
+var app = angular.module('myApp', []);
+var arr=[{ value: '0',text: '房地产权证书'}, {value: '2015',text: '不动产权证书（粤2015）'}, {value: '2016',text: '不动产权证书（粤2016）'}, {value: '2017',text: '不动产权证书（粤2017）' }];
+app.controller('siteCtrl', function($scope, $http) {
+	//查档信息
+	var params = {"archiveId": archiveId}
+	$scope.archive=new Object();
+	$http({
+		method: 'POST',
+		headers:{"deviceId":deviceId,uid:uid},
+		url: '/credit/risk/archive/v/getArchiveById',
+		data: params
+	}).success(function(data) {
+		$scope.archive = data.data;
+		if($scope.archive!=null){
+			var bank=$scope.archive.estateType+"";
+			for(var i=0; i<arr.length;i++){
+				   if(arr[i].value==bank){
+					    $(".sel").html(arr[i].text);
+				   }
+			};
+			$scope.archive.dataMsg=$scope.archive.message;
+			$("#jgshow").show();
+			$scope.archive.archiveId=$scope.archive.id;
+			$scope.estateNo = $scope.archive.estateNo;
+			$scope.identityNo =$scope.archive.identityNo;
+		}else{
+			$scope.archive=new Object();
+		}
+	})
+	
+	$scope.$watch("archive.estateNo",function(newValue, oldValue){
+		if(typeof(newValue)!='undefined' && newValue!= $scope.estateNo){
+			$scope.archive.archiveId=null;
+		}
+	});
+	$scope.$watch("archive.identityNo",function(newValue, oldValue){
+		if(typeof(newValue)!='undefined' && newValue!= $scope.identityNo){
+			$scope.archive.archiveId=null;
+		}
+	});
+	
+	$scope.queryArchive = function(event) {
+			   var estateNo=$scope.archive.estateNo;
+			   var identityNo=$scope.archive.identityNo;
+				$scope.archive.estateType=$("input[name='estateType']").val();
+				if($scope.archive.estateType != null && ($scope.archive.estateType != "0" || $scope.archive.estateType != 0)) {
+					$scope.yearNo = $scope.archive.estateType;
+					$scope.archive.estateType = "1";
+				} else {
+					$scope.yearNo = "0";
+				}
+				var params = {};
+				if($scope.archive.archiveId!=null){	
+					params = {
+							"id":$scope.archive.archiveId,
+							"uid":uid,	
+							"deviceId":deviceId,
+							"estateNo": $scope.archive.estateNo,
+							"estateType": $scope.archive.estateType,
+							"identityNo": $scope.archive.identityNo,
+							"orderNo": orderNo,
+							"type": 1,
+							"yearNo": $scope.yearNo
+						};
+				}else{
+					params = {
+						"uid":uid,	
+						"deviceId":deviceId,
+						"estateNo": $scope.archive.estateNo,
+						"estateType": $scope.archive.estateType,
+						"identityNo": $scope.archive.identityNo,
+						"orderNo": orderNo,
+						"type": 1,
+						"yearNo": $scope.yearNo
+					};
+				}
+				if($scope.archive.estateType != null && $scope.archive.estateType != "0") {
+					$scope.archive.estateType = $scope.yearNo;
+				}
+			    $(event.target).addClass("dis");
+			    $(event.target).attr("disabled","disabled");
+				$(".sub-but").html("正在查询中...");
+				$http({
+					method: 'POST',
+					data: params,
+					headers:{"deviceId":deviceId,uid:uid},
+					url: "/credit/risk/archive/v/getArchive"
+				}).success(function(data) {
+					if("SUCCESS" == data.code) {
+						$scope.archive = data.data;
+						$scope.archive.identityNo=identityNo;
+						$scope.archive.estateNo = estateNo;
+						$scope.archive.archiveId= $scope.archive.id;
+						$("#jgshow").show();
+					}else{
+						if("SAME_ROOM_NUMBER" == data.code){  //相同房号请在记录详情再次查询
+							var archiveId=data.data.archiveId;
+							$http({
+								method: 'POST',
+								data: {"archiveId":archiveId},
+								headers:{"deviceId":deviceId,uid:uid},
+								url: "/credit/risk/archive/v/getArchiveById"
+							}).success(function(data) {
+								if("SUCCESS" == data.code) {
+									$scope.archive = data.data;
+									$scope.archive.dataMsg = data.data.message;
+									$scope.archive.identityNo=identityNo;
+									$scope.archive.estateNo = estateNo;
+									$scope.archive.archiveId= $scope.archive.id;
+									$("#jgshow").show();
+								}
+							});
+						}else{
+							mui.alert(data.msg);
+						}
+						
+					}
+					$(event.target).removeClass("dis");
+					$(event.target).attr("disabled","false");
+					$(".sub-but").html("查询");	
+			});
+	}
+});
+
+mui.init();
+mui.ready(function() {
+	  var userPicker = new mui.PopPicker();
+	  userPicker.setData(arr);
+	  $(".sel").click(function(){
+	    var _this=$(this);
+	    userPicker.show(function(items) {
+			_this.html((items[0].text));
+			 $("input[name='estateType']").val((items[0].value));
+		});
+     });
+});
+</script>
+</body>
+</html>

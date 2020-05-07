@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.tools.AssessReportDtoMapper" >
+ 	
+ 	<!-- 新增出评估报告信息 -->
+ 	<insert id="insertAssessReport" parameterType="AssessReportDto">
+ 	 	<selectKey resultType="int" keyProperty="id">
+			select last_insert_id()
+		</selectKey>
+ 		insert into tbl_tools_assess_report
+ 		(
+ 			uid,
+ 			orderNo,
+ 			companyId,
+ 			loanPercent,
+ 			loanAmount,
+ 			loanType,
+ 			propertyName,
+ 			bankId,
+ 			bankName,
+ 			subBankId,
+ 			subBankName,
+ 			photographPerson, 
+ 			photographPersonTel,
+ 			clientManager,
+ 			clientManagerTel,
+ 			email,
+ 			address,
+ 			houseCard,
+ 			device,
+ 			version,
+ 			createDate
+ 		)
+ 		values
+ 		(
+ 			#{uid},
+ 			#{orderNo},
+ 			#{companyId},
+ 			#{loanPercent},
+ 			#{loanAmount},
+ 			#{loanType},
+ 			#{propertyName},
+ 			#{bankId},
+ 			#{bankName},
+ 			#{subBankId},
+ 			#{subBankName},
+ 			#{photographPerson},
+ 			#{photographPersonTel},
+ 			#{clientManager},
+ 			#{clientManagerTel},
+ 			#{email},
+ 			#{address},
+ 			#{houseCard},
+ 			#{device},
+ 			#{version},
+ 			now()
+ 		)
+ 	</insert>
+ 	
+ 	<!-- 查找评估报告信息 -->
+ 	<select id="findAssessReportDto" parameterType="java.lang.String" resultType="AssessReportDto">
+ 		select * from tbl_tools_assess_report where orderNo = #{0}
+ 	</select>
+ 	
+ 	<update id="updateAssessReport" parameterType="AssessReportDto">
+		UPDATE tbl_tools_assess_report a 
+		SET 
+ 			loanPercent=#{loanPercent},
+ 			loanAmount=#{loanAmount},
+ 			loanType=#{loanType},
+ 			bankId=#{bankId},
+ 			bankName=#{bankName},
+ 			subBankId=#{subBankId},
+ 			subBankName=#{subBankName},
+ 			photographPerson=#{photographPerson}, 
+ 			photographPersonTel=#{photographPersonTel},
+ 			clientManager=#{clientManager},
+ 			clientManagerTel=#{clientManagerTel},
+ 			email=#{email},
+ 			address=#{address},
+ 			houseCard=#{houseCard},
+ 			createDate=now()
+		WHERE a.orderNo=#{orderNo}
+	</update>
+	
+	<update id="updateAssessReportProgressId" parameterType="java.lang.String">
+		UPDATE tbl_tools_assess_report a 
+		SET 
+ 			progressId=#{progressId}
+		WHERE a.orderNo=#{orderNo}
+	</update>
+ 	
+</mapper>

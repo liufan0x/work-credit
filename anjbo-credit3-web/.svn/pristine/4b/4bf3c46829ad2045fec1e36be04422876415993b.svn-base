@@ -1,0 +1,50 @@
+	<!--title-->
+	<!--title end-->
+
+	<!--导航-->
+	    <div class="row">
+			<div class="col-md-12">
+				<ul class="nav nav-tabs">
+					<li ng-class="{'active':showView==1}" >
+						<a ng-click="changeView(1)">借款信息</a>
+					</li>
+					<li ng-class="{'active':showView==2}" >
+						<a ng-click="changeView(2)">客户信息</a>
+					</li>
+					<li ng-class="{'active':showView==3}" >
+						<a ng-click="changeView(3)">
+							<span ng-show="borrow.productCode=='01'">房产交易信息</span>
+							<span ng-show="borrow.productCode!='01'">房产信息</span>
+						</a>
+					</li>
+					<li ng-class="{'active':showView==4}" >
+						<a ng-click="changeView(4)">要件校验</a>
+					</li>
+					<li ng-class="{'active':showView==5}" >
+						<a ng-click="changeView(5)">询价/查档/诉讼</a>
+					</li>
+					<li ng-class="{'active':showView==6}" >
+						<a ng-click="changeView(6)">影像资料</a>
+					</li>
+					<li ng-class="{'active':showView==7}" >
+						<a ng-click="changeView(7)">征信</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	<!--导航 end-->
+
+	<place-borrow-detail	ng-show="showView==1"></place-borrow-detail>
+	<place-customer-detail	ng-show="showView==2"></place-customer-detail>
+	<place-house-detail		ng-show="showView==3"></place-house-detail>
+	<place-element-detail	ng-show="showView==4 && !isElementEditShow"></place-element-detail>
+	<place-credit-detail	ng-show="showView==7 && !isCreditEditShow"></place-credit-detail>
+
+	<div ui-view="">
+		
+	</div>
+	<div style="width:100%;clear:both;height:1px;"></div>
+	<place-element-box-detail></place-element-box-detail>
+	<script>
+	
+	</script>

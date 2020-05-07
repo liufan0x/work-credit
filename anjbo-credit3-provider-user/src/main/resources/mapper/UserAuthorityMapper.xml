@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.UserAuthorityMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=uid and ''!=uid"> AND `uid`=#{uid}</if>
+		<if test="null!=authorityId and ''!=authorityId"> AND `authorityId`  like CONCAT('%', #{authorityId}, '%')</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="UserAuthorityDto" resultType="UserAuthorityDto">    
+	SELECT id, uid, authorityId, createTime 
+	FROM tbl_user_authority 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="UserAuthorityDto" resultType="UserAuthorityDto">
+	SELECT id, uid, authorityId, createTime
+	FROM tbl_user_authority 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="UserAuthorityDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_user_authority 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="UserAuthorityDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_user_authority(
+		<if test="null!=uid">`uid`,</if>
+		<if test="null!=authorityId">`authorityId`,</if>
+		<if test="null!=createTime">`createTime`</if>
+	) VALUES(
+		<if test="null!=uid">#{uid},</if>
+		<if test="null!=authorityId">#{authorityId},</if>
+		<if test="null!=createTime">#{createTime}</if>
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="UserAuthorityDto" >
+    DELETE FROM tbl_user_authority 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="UserAuthorityDto" >
+    UPDATE tbl_user_authority
+	<set>
+		<if test="null!=uid">`uid`=#{uid},</if>
+		<if test="null!=authorityId">`authorityId`=#{authorityId},</if>
+		<if test="null!=createTime">`createTime`=#{createTime}</if>
+	</set>
+	WHERE uid=#{uid}
+  </update>
+
+    <!-- 批量增删改 -->
+  <insert id="batchInsert" parameterType="UserAuthorityDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_user_authority(
+		uid,
+		authorityId,
+		createTime
+	) VALUES
+	<foreach collection="list" index="index" item="item" separator="," >
+	(
+		#{item.uid},
+		#{item.authorityId},
+		#{item.createTime}
+	)
+	</foreach>
+  </insert>
+
+
+  <delete id="batchDelete" parameterType="UserAuthorityDto" >
+    <foreach collection="list" index="index" item="item" separator=";" >
+    DELETE FROM tbl_user_authority 
+	WHERE ID=#{item.id}
+	</foreach>
+  </delete>
+  
+  <update id="batchUpdate" parameterType="UserAuthorityDto" >
+    <foreach collection="list" index="index" item="item" separator=";" >
+    UPDATE tbl_user_authority
+	<set>
+		<if test="null!=item.uid">`uid`=#{item.uid},</if>
+		<if test="null!=item.authorityId">`authorityId`=#{item.authorityId},</if>
+		<if test="null!=item.createTime">`createTime`=#{item.createTime}</if>
+	</set>
+	WHERE ID=#{item.id}
+	</foreach>
+  </update>
+
+    
+</mapper>

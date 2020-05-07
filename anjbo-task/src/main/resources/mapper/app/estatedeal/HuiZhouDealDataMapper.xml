@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.app.estatedeal.HuiZhouDealDataMapper">
+
+
+   <select id="selectMaxOneHandDate" resultType="java.util.Date">
+      SELECT max(date) FROM `tbl_app_task_dealdata_huizhou_data` where type='1'
+   </select>
+
+   <select id="selectMaxSecondHandDate" resultType="java.util.Date">
+      SELECT max(date) FROM `tbl_app_task_dealdata_huizhou_data` where type='2'
+   </select>
+
+   <insert id="insertHuiZhouOneHandDataBatch" parameterType="java.util.List">
+      INSERT INTO `anjbo-app`.`tbl_app_task_dealdata_huizhou_data`
+      (`areaName`, `houseNum`, `totalNum`, `type`, `date`)
+      VALUES
+      <foreach collection="list" item="dto" index="index" separator=",">
+         (
+         #{dto.areaName},
+         #{dto.houseNum},
+         #{dto.totalNum},
+         #{dto.type},
+         #{dto.date,jdbcType=DATE}
+         )
+      </foreach>
+   </insert>
+
+   <insert id="insertHuiZhouSecondHandDataBatch" parameterType="java.util.List">
+      INSERT INTO `anjbo-app`.`tbl_app_task_dealdata_huizhou_data`
+      (`areaName`, `houseNum`, `totalNum`, `type`, `date`)
+      VALUES
+      <foreach collection="list" item="dto" index="index" separator=",">
+         (
+         #{dto.areaName},
+         #{dto.houseNum},
+         #{dto.totalNum},
+         #{dto.type},
+         #{dto.date,jdbcType=DATE}
+         )
+      </foreach>
+   </insert>
+
+
+  	<delete id="deleteHuiZhouSecondHandTrendByDate" parameterType="java.util.Date">
+        delete from `tbl_app_task_dealdata_trend` where `date`=#{date,jdbcType=DATE} and cityName=#{cityName}
+    </delete>
+    
+     <insert id="insertHuiZhouSecondHandTrend" parameterType="java.util.List">
+        INSERT INTO `tbl_app_task_dealdata_trend`
+        (`cityName`, `totalNum`, `avgPrice`,`date`,`houseType`,`lastMonthRate`,`lastYearRate`,`dataType`)
+        VALUES
+        <foreach collection="list" item="dto" index="index" separator=",">            
+            (
+            #{dto.cityName}, #{dto.totalNum},#{dto.avgPrice},#{dto.date,jdbcType=DATE},#{dto.houseType},#{dto.lastMonthRate},#{dto.lastYearRate},#{dto.dataType}
+            )
+        </foreach>
+    </insert>
+
+
+</mapper>

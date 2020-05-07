@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="robots" content="index, follow" />
+<meta name="googlebot" content="index, follow" />
+
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=8,IE=9,IE=10" />
+
+<meta http-equiv="expires" content="0">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="cache-control" content="no-store">
+
+<!-- uc强制竖屏 -->
+<meta name="screen-orientation" content="portrait">
+<!-- QQ强制竖屏 -->
+<meta name="x5-orientation" content="portrait">
+<title>借用要件</title>
+<link rel="stylesheet" href="../other/aui/css/aui.2.0.css" />
+<link rel="stylesheet" href="../other/aui/css/aui-pull-refresh.css" />
+<link rel="stylesheet" href="../css/common.css" />
+<style>
+.chose-back{
+	width:100vw;
+	height: 100vh;
+	position:fixed;
+	z-index:1111;
+	background:rgba(0,0,0,0.4);
+	top:0;
+	left:0;
+	display: none;
+}
+.chose-top{
+	position: absolute;
+	width:90%;
+	bottom:80px;
+	height: 110px;	
+	background:#fff;
+	left:5%;
+	border-radius:10px;
+	text-align: center;
+}
+.chose-top p{
+	font-size:15px;
+	color:#0cbbd3;
+	line-height: 40px;
+	box-sizing: border-box;
+	border-bottom:1px solid #ddd;
+}
+p.chose-tit{
+	font-size:13px;
+	color:#999;
+	line-height: 30px;
+}
+.chose-cancel{
+	position: absolute;
+	width:90%;
+	bottom:20px;
+	height: 40px;
+	line-height: 40px;
+	background:#fff;
+	left:5%;
+	color:#0cbbd3;
+	border-radius:10px;
+	text-align: center;
+}
+</style>
+</head>
+
+	<body>
+		<div id="borrowDocController">
+			<!--头部模块-->
+			<div class="topBarPart">
+				<span class="fl" id="filter"><font id="filterText">全部</font> <i class="aui-iconfont aui-icon-down"></i></span>
+				<span class="fr" id="search"><i class="aui-iconfont aui-icon-search"></i> 搜索</span>
+				<span style="float: right;padding-right :1.2rem" id="record"><font>记录</font></span>
+				<div style="clear: both;"></div>
+			</div>
+
+			<!--内容部分-->
+			<div class="contentPart aui-refresh-content">
+				<!--cell 部分-->
+			</div>
+			<div class="popPart">
+				<div>全部</div>
+				<div>未存入</div>
+				<div>已存入</div>
+				<div>已借出</div>
+				<div>已归还</div>
+				<div>超时未还</div>
+				<div>已退要件</div>
+			</div>
+			<div class="loadingPart">
+				<div>
+					<img src="../img/loading-1.gif" alt="" />
+					<p>加载中</p>
+				</div>
+			</div>
+		</div> 
+		
+		<div class="chose-back">
+			<div class="chose-top">
+				<p class="chose-tit">请选择要件借用类型</p>
+				<p onclick="goHref(4)">业务流程借出</p>
+				<p onclick="goHref(1)" style="border:none;">非业务流程借出</p>
+			</div>
+			<div class="chose-cancel">取消</div>
+		</div>
+	</body>
+	<script src="../other/js/jquery.min.js"></script>
+	<script>
+		$(function(){
+			$(".chose-cancel").click(function(){
+				  $(".chose-back").fadeOut();
+			})
+		})
+	</script>
+	<script type="text/javascript" src="../other/aui/script/aui-pull-refresh.js"></script>
+	<script type="text/javascript" src="../js/common.js?1.0"></script>
+	<script type="text/javascript" src="../js/borrow_document.js?1.0"></script>
+</html>

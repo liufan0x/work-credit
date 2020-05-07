@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.anjbo.dao.CustomerAgencyAcceptMapper">	
+	<!-- where条件引用sql-->
+	<sql id="customerAgencyAcceptWhereSQL">
+		<where>
+	       		<if test="agencyId != null and agencyId > 0">
+					and `agencyId` = #{agencyId}
+				</if>
+	       		<if test="acceptUid != null and acceptUid != ''">
+					and `acceptUid` = #{acceptUid}
+				</if>
+	       		<if test="createTime != null">
+					and `createTime` = #{createTime}
+				</if>
+	       		<if test="updateTime != null">
+					and `updateTime` = #{updateTime}
+				</if>
+	       		<if test="createUid != null and createUid != ''">
+					and `createUid` = #{createUid}
+				</if>
+	       		<if test="updateUid != null and updateUid != ''">
+					and `updateUid` = #{updateUid}
+				</if>
+	       		<if test="remark != null and remark != ''">
+					and `remark` = #{remark}
+				</if>
+		</where>
+	</sql>
+	<!-- 获取机构受理员列表-->
+	<select id="selectCustomerAgencyAcceptList" parameterType="customerAgencyAcceptDto" resultType="customerAgencyAcceptDto">
+		select * from tbl_customer_agency_accept 
+		<include refid="customerAgencyAcceptWhereSQL" />
+		order by createTime desc 
+		<if test="pageSize>0">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	
+	<!-- 获取机构受理员总数-->
+	<select id="selectCustomerAgencyAcceptCount" parameterType="customerAgencyAcceptDto" resultType="int">
+		select count(*) from tbl_customer_agency_accept 
+		<include refid="customerAgencyAcceptWhereSQL" />
+	</select>	
+		
+	<!-- 新增机构受理员-->
+	<insert id="addCustomerAgencyAccept" parameterType="customerAgencyAcceptDto" useGeneratedKeys="true" keyProperty="id">
+		insert	into tbl_customer_agency_accept(
+			<trim suffixOverrides=",">
+				<if test="agencyId != null">`agencyId`,</if>
+				<if test="acceptUid != null">`acceptUid`,</if>
+				<if test="createTime != null">`createTime`,</if>
+				<if test="updateTime != null">`updateTime`,</if>
+				<if test="createUid != null">`createUid`,</if>
+				<if test="updateUid != null">`updateUid`,</if>
+				<if test="remark != null">`remark`,</if>
+			</trim>
+		)
+		values(	
+			<trim suffixOverrides=",">
+				<if test="agencyId != null">#{agencyId},</if>
+				<if test="acceptUid != null">#{acceptUid},</if>
+				<if test="createTime != null">#{createTime},</if>
+				<if test="updateTime != null">#{updateTime},</if>
+				<if test="createUid != null">#{createUid},</if>
+				<if test="updateUid != null">#{updateUid},</if>
+				<if test="remark != null">#{remark},</if>
+			</trim>
+		)
+	</insert>
+	
+	<!-- 修改机构受理员-->
+	<update id="updateCustomerAgencyAccept" parameterType="customerAgencyAcceptDto" >
+	 update tbl_customer_agency_accept
+	<set> 
+			<trim suffixOverrides=",">
+				<if test="agencyId != null">`agencyId` = #{agencyId},</if>
+				<if test="acceptUid != null">`acceptUid` = #{acceptUid},</if>
+				<if test="createTime != null">`createTime` = #{createTime},</if>
+				<if test="updateTime != null">`updateTime` = #{updateTime},</if>
+				<if test="createUid != null">`createUid` = #{createUid},</if>
+				<if test="updateUid != null">`updateUid` = #{updateUid},</if>
+				<if test="remark != null">`remark` = #{remark},</if>
+			</trim>
+	</set> 
+	 where id = #{id}
+	</update>
+
+	<!-- 根据ID删除机构受理员-->
+    <delete id="deleteCustomerAgencyAcceptByAgencyId" parameterType="int">
+		delete	from tbl_customer_agency_accept where agencyId = #{0}
+    </delete>
+
+	<!-- 根据ID查询机构受理员 -->
+	
+	<select id="selectCustomerAgencyAcceptById" parameterType="int" resultType="customerAgencyAcceptDto">
+		select	* from tbl_customer_agency_accept where id = #{0}
+	</select>
+	
+</mapper>

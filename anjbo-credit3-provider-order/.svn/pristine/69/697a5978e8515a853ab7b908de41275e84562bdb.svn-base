@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.process.AppFddMortgageReleaseMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<if test="null!=region and ''!=region"> AND `region`=#{region}</if>
+		<if test="null!=housePropertyType and ''!=housePropertyType"> AND `housePropertyType`=#{housePropertyType}</if>
+		<if test="null!=houseName and ''!=houseName"> AND `houseName`=#{houseName}</if>
+		<if test="null!=housePropertyNumber and ''!=housePropertyNumber"> AND `housePropertyNumber`=#{housePropertyNumber}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(collateralOutTimeBegin)"> AND collateralOutTime >= #{collateralOutTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(collateralOutTimeEnd)"> AND collateralOutTime &lt;= #{collateralOutTimeEnd}</if>
+		-->
+		<if test="null!=remark and ''!=remark"> AND `remark`=#{remark}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="AppFddMortgageReleaseDto" resultType="AppFddMortgageReleaseDto">    
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `region`, `housePropertyType`, `houseName`, `housePropertyNumber`, `collateralOutTime`, `remark` 
+	FROM tbl_process_app_fdd_mortgage_release 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="AppFddMortgageReleaseDto" resultType="AppFddMortgageReleaseDto">
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `region`, `housePropertyType`, `houseName`, `housePropertyNumber`, `collateralOutTime`, `remark`
+	FROM tbl_process_app_fdd_mortgage_release 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="AppFddMortgageReleaseDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_process_app_fdd_mortgage_release 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="AppFddMortgageReleaseDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_process_app_fdd_mortgage_release(
+		`createUid`,
+		`createTime`,
+		`updateUid`,
+		`updateTime`,
+		`orderNo`,
+		`region`,
+		`housePropertyType`,
+		`houseName`,
+		`housePropertyNumber`,
+		`collateralOutTime`,
+		`remark`
+	) VALUES(
+		#{createUid},
+		now(),
+		#{createUid},
+		now(),
+		#{orderNo},
+		#{region},
+		#{housePropertyType},
+		#{houseName},
+		#{housePropertyNumber},
+		#{collateralOutTime},
+		#{remark}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="AppFddMortgageReleaseDto" >
+    DELETE FROM tbl_process_app_fdd_mortgage_release 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="AppFddMortgageReleaseDto" >
+    UPDATE tbl_process_app_fdd_mortgage_release
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=region">`region`=#{region},</if>
+		<if test="null!=housePropertyType">`housePropertyType`=#{housePropertyType},</if>
+		<if test="null!=houseName">`houseName`=#{houseName},</if>
+		<if test="null!=housePropertyNumber">`housePropertyNumber`=#{housePropertyNumber},</if>
+		<if test="null!=collateralOutTime">`collateralOutTime`=#{collateralOutTime},</if>
+		<if test="null!=remark">`remark`=#{remark},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

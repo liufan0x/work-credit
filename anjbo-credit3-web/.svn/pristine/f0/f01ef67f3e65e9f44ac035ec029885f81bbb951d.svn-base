@@ -1,0 +1,29 @@
+
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;快鸽风控初审意见</div>
+    <div class="clear" style="width:100%; height:1px; clear:both;"></div>
+    <div class="row form-inline relative  detail-row" style="padding:0 10px;">
+        <span class="remark-span remark-lhw">审批意见：</span>
+        <textarea  ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" id="ys" style="border:1px solid #ddd;width:82%;height:150px !improtant;" class="remark-p remark-lhw-p textarea-lhw ng-binding ng-isolate-scope"  ng-model="huaRongDto.kgApproval.trial" name="kgApprovalTrial" required> </textarea>
+         <span class="inputError" ng-show="isAudit">
+                <error class="text-danger" ng-show="huarongKgApprovalForm.kgApprovalTrial.$error.required">必填</error>
+         </span>
+    </div>
+</div>
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;快鸽风控终审意见</div>
+    <div class="clear" style="width:100%; height:1px; clear:both;"></div>
+    <div class="row relative ng-scope">
+        <span class="remark-span remark-lhw">审批意见：</span>
+        <textarea  ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" style="border:1px solid #ddd;width:82%;" class="remark-p remark-lhw-p textarea-lhw ng-binding ng-isolate-scope"  ng-model="huaRongDto.kgApproval.judgment" name="kgApprovalJudgment"> </textarea>
+    </div>
+</div>
+
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;快鸽首席风险官意见</div>
+    <div class="clear" style="width:100%; height:1px; clear:both;"></div>
+    <div class="row relative ng-scope">
+        <span class="remark-span remark-lhw">审批意见：</span>
+        <textarea  ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" style="border:1px solid #ddd;width:82%;" class="remark-p remark-lhw-p textarea-lhw ng-binding ng-isolate-scope"  ng-model="huaRongDto.kgApproval.chiefRiskOpinion" name="kgApprovalChiefRiskOpinion"> </textarea>
+    </div>
+</div>

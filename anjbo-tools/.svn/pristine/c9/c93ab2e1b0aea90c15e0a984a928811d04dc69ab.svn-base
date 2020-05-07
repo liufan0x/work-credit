@@ -1,0 +1,9 @@
+jdbc_driverClassName=com.mysql.jdbc.Driver
+jdbc_url=jdbc:mysql://192.168.1.8:3306/anjbo-tools?useUnicode=true&amp;characterEncoding=utf-8&allowMultiQueries=true
+jdbc_username=deploy_user
+jdbc_password=deploy_pass
+
+#mort
+jdbc_url_mort=jdbc:mysql://192.168.1.8:3306/zxsf360-mortgage-test?useUnicode=true&amp;characterEncoding=utf-8&allowMultiQueries=true
+jdbc_username_mort=deploy_user
+jdbc_password_mort=deploy_pass

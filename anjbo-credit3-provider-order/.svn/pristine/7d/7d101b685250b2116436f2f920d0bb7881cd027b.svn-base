@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.finance.ReceivablePayMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<if test="null!=payImg and ''!=payImg"> AND `payImg`=#{payImg}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(payTimeBegin)"> AND payTime >= #{payTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(payTimeEnd)"> AND payTime &lt;= #{payTimeEnd}</if>
+		-->
+		<if test="null!=remark and ''!=remark"> AND `remark`=#{remark}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(lastUpdateTimeBegin)"> AND lastUpdateTime >= #{lastUpdateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(lastUpdateTimeEnd)"> AND lastUpdateTime &lt;= #{lastUpdateTimeEnd}</if>
+		-->
+		<if test="null!=penaltyPayable and penaltyPayable>0"> AND `penaltyPayable`=#{penaltyPayable}</if>
+		<if test="null!=rebateMoney and rebateMoney>0"> AND `rebateMoney`=#{rebateMoney}</if>
+		<if test="null!=penaltyReal and penaltyReal>0"> AND `penaltyReal`=#{penaltyReal}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="ReceivablePayDto" resultType="ReceivablePayDto">    
+	SELECT `id`, `orderNo`, `createTime`, `createUid`, `updateUid`, `payImg`, `payTime`, `remark`, `lastUpdateTime`, `penaltyPayable` ,`penaltyReal`,`rebateMoney` 
+	FROM tbl_finance_receivable_pay 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="ReceivablePayDto" resultType="ReceivablePayDto">
+	SELECT `id`, `orderNo`, `createTime`, `createUid`, `updateUid`, `payImg`, `payTime`, `remark`, `lastUpdateTime`, `penaltyPayable` ,`penaltyReal`,`rebateMoney` 
+	FROM tbl_finance_receivable_pay 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="ReceivablePayDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_finance_receivable_pay 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="ReceivablePayDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_finance_receivable_pay(
+		`orderNo`,
+		`createTime`,
+		`createUid`,
+		`updateUid`,
+		`payImg`,
+		`payTime`,
+		`remark`,
+		`lastUpdateTime`,
+		`penaltyPayable`,
+		`rebateMoney`,
+		`penaltyReal`
+	) VALUES(
+		#{orderNo},
+		now(),
+		#{createUid},
+		#{createUid},
+		#{payImg},
+		#{payTime},
+		#{remark},
+		#{lastUpdateTime},
+		#{penaltyPayable},
+		#{rebateMoney},
+		#{penaltyReal}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="ReceivablePayDto" >
+    DELETE FROM tbl_finance_receivable_pay 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="ReceivablePayDto" >
+    UPDATE tbl_finance_receivable_pay
+	<set>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=payImg">`payImg`=#{payImg},</if>
+		<if test="null!=payTime">`payTime`=#{payTime},</if>
+		<if test="null!=remark">`remark`=#{remark},</if>
+		<if test="null!=lastUpdateTime">`lastUpdateTime`=#{lastUpdateTime},</if>
+		<if test="null!=penaltyPayable">`penaltyPayable`=#{penaltyPayable},</if>
+		<if test="null!=rebateMoney">`rebateMoney`=#{rebateMoney},</if>
+		<if test="null!=penaltyReal">`penaltyReal`=#{penaltyReal},</if>
+	</set>
+	WHERE orderNo=#{orderNo}
+  </update>
+    
+</mapper>

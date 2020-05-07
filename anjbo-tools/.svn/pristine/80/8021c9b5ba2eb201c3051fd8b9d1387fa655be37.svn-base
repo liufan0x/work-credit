@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>按揭宝版本管理--快鸽按揭</title>
+<meta name="keywords" content="按揭宝版本管理" />
+<meta name="description" content="按揭宝版本管理--快鸽按揭" />
+<meta content="zh-cn" http-equiv="content-language" />
+<meta content="快鸽按揭" name="copyright" />
+<script type="text/javascript" src="/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript">
+	function changeBtn(obj){
+		$(obj).val("正在上传...");
+		$(obj).attr("disabled",true);
+		document.myform.submit();
+	}
+	function changeFileName(obj){
+		var path = obj.value;
+		if(path.indexOf("apk")>-1){
+			$(".android").removeAttr("style");
+			$(".ios").attr("style","display:none;");
+			$("input[name='version']").val("0");
+		}else if(path.indexOf("ipa")>-1){
+			$(".ios").removeAttr("style");
+			$(".android").attr("style","display:none;");
+			$("input[name='version']").val("");
+		}else{
+			$(".ios").removeAttr("style");
+			$(".android").removeAttr("style");
+			$("input[name='version']").val("");
+		}
+	}
+	function versionList(obj){
+		var box = $("#versionList");
+		if(box.html()==""){
+			$(obj).val("收起所有App下载地址");
+		}else{
+			$(obj).val("获取所有App下载地址");
+			box.empty();
+			return;
+		}
+		$.ajax({ 
+	        url: "/tools/version/versionList", 
+	        type: 'post',
+			dataType : 'json',
+			async:true, 
+	        success: function(responseText){
+	        	box.html("<hr/>");
+	        	var list = responseText.data;
+	        	if(list.length>0){
+	        		for(var i=0;i<list.length;i++){
+		        		box.append(list[i].name+"（"+list[i].type+"）  <a href='"+list[i].url+"'>"+list[i].url+"</a><br><br>");
+		        	}
+		        	box.append("草料二维码生成器：<a target='_blank' href='http://cli.im/'>http://cli.im/</a>  ");
+		        	box.append("新浪短链接在线生成器：<a target='_blank' href='http://www.surl.sinaapp.com/'>http://www.surl.sinaapp.com/</a>");
+	        	}else{
+	        		box.append("暂无相关数据");
+	        	}
+	        }
+	   });
+	}
+</script>
+<style type="text/css">
+	td{height:28px;}
+</style>
+</head>
+
+<body>
+	<form name="myform" action="/tools/version/uploadVersion" method="post" enctype="multipart/form-data">
+		<table>
+			<tr>
+				<td align="right">文件:<font color="red">*</font></td>
+				<td>
+					<input type="file" name="file" onchange="changeFileName(this)"/>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">项目编号:</td>
+				<td>
+					<input placeholder="新项目必填，用于创建路径及下载项目名，如：anjbo" type="text" name="code" style="border:solid 1px #ccc;width:350px;"/>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">项目名称:</td>
+				<td>
+					<input placeholder="新项目必填，如：快鸽按揭APP" type="text" name="name" style="border:solid 1px #ccc;width:350px;"/>
+				</td>
+			</tr>
+			<tr class="ios">
+				<td align="right">包名:<font color="red">*</font></td>
+				<td>
+					<input placeholder="唯一标识，如：com.anjbo.loan（iOS版本上传必填）" type="text" name="pack" style="border:solid 1px #ccc;width:350px;"/>
+				</td>
+			</tr>
+			<tr class="ios">
+				<td align="right">版本号:<font color="red">*</font></td>
+				<td>
+					<input placeholder="iOS版本上传必填，如：6000" type="text" name="version" style="border:solid 1px #ccc;width:350px;"/>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">描述:</td>
+				<td>
+					<textarea placeholder="版本更新相关内容说明" name="instructions" cols="50" rows="10"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td align="right">审核:</td>
+				<td>
+					<input type="radio" name="audit" value="0"/>未审核
+					<input type="radio" name="audit" value="1"/>已审核未通过
+					<input type="radio" name="audit" value="2" checked="checked"/>已通过
+				</td>
+			</tr>
+			<tr class="android">
+				<td align="right">是否强制更新（Android）:</td>
+				<td>
+					<input type="radio" name="forceUpdate" value="0" checked="checked"/>否
+					<input type="radio" name="forceUpdate" value="1"/>是
+				</td>
+			</tr>
+			<tr class="ios">
+				<td align="right">是否提示IOS更新:</td>
+				<td>
+					<input type="radio" name="iOSReminder" value="0" checked="checked"/>否
+					<input type="radio" name="iOSReminder" value="1"/>是
+				</td>
+			</tr>
+			<tr class="ios">
+				<td align="right">iOS提示标题:</td>
+				<td>
+					<input type="text" name="iOSReminderTitle" value="有新版本更新" style="border:solid 1px #ccc;width:350px;" placeholder="如：有新版本更新"/>
+				</td>
+			</tr>
+			<tr class="ios">
+				<td align="right">iOS是否强制更新:</td>
+				<td>
+					<input type="radio" name="iOSReminderForce" value="0" checked="checked"/>否
+					<input type="radio" name="iOSReminderForce" value="1"/>是
+				</td>
+			</tr>
+			<tr>
+				<td align="right">&nbsp;</td>
+				<td>
+					<input type="submit" value="开始上传" style="width:80px;height:30px;" onclick="return changeBtn(this)"/>
+					<input type="button" onclick="versionList(this)" value="获取所有App下载地址" style="width:150px;height:30px;"/>
+				</td>
+			</tr>
+		</table>
+	</form>
+	<div id="versionList"></div>
+</body>
+</html>

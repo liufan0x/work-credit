@@ -1,0 +1,424 @@
+<style>
+.form-inline.w145 label{width:145px;}
+</style>
+<form method="post" name="borrowForm" id="borrowForm" class="form-inline w145 detail-row borrowfrom-supplement">
+	<div class="col-md-12 detail-right-tit ">&nbsp;&nbsp;  借款信息 <button type="button" ng-click="submitBorrow()" class="btn btn-info detail-right-save">保存</button>【业务类型：<span ng-bind="order.cityName"></span>-<span ng-bind="order.productName"></span>】</div>
+		<div class="col-md-6 col-lg-4"><label>渠道经理-合作机构：</label>
+        	<select class="form-control channelManagerUid" select2 style="width:150px;"  ng-model="order.channelManagerUid" name="channelManagerUid" required placeholder="请选择渠道经理">
+        		<option value="">请选择</option>
+				<option value="{{channel.uid}}" ng-repeat="channel in listChannel">{{channel.name}}</option>
+	        </select>
+        	- 
+        	<select class="form-control" style="width:150px;" select2 ng-model="order.cooperativeAgencyId" name="cooperativeAgencyId" config="channelAgencyCinfig" required placeholder="请选择渠道经理">
+        		<option value="">请选择</option>
+        	    <option value="{{agency.id}}" ng-repeat="agency in listAgency">{{agency.name}}</option>
+        	</select>
+        	<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="borrowForm.channelManagerUid.$error.required || borrowForm.cooperativeAgencyId.$error.required">必选</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4"><label>受理员：</label>
+        	<select ng-if="!order.acceptMemberUid" class="form-control" choice-personnel="提单" city-code="{{order.cityCode}}" style="width:178px;"  ng-model="order.acceptMemberUid" required>
+				<option value="">请选择</option>
+			</select>
+			<span ng-if="order.acceptMemberUid"><span ng-bind="order.agencyName"></span>-<span ng-bind="order.acceptMemberName"></span></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>分公司（营业部）：</label>
+        	<select class="form-control" name="branchCompany" choice-dict-name="branchCompany" style="width:178px;" ng-model="order.branchCompany" required>
+				<option value="">请选择</option>
+			</select>
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="borrowForm.branchCompany.$error.required">必选</error>
+		    </span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>要件管理员：</label>
+			<select class="form-control" choice-personnel="要件校验" city-code="{{order.cityCode}}" product-code="{{order.productCode}}" style="width:178px;" name="elementUid"  ng-model="order.elementUid" required>
+				<option value="">请选择</option>
+			</select>
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="borrowForm.elementUid.$error.required"  >必选</error>
+		    </span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>公证经办人：</label>
+        	<select ng-if="!order.isNotarization" class="form-control" ng-disabled="all" choice-personnel="公证" city-code="{{order.cityCode}}"  style="width:178px;" name="notarialUid"  ng-model="order.notarialUid" required>
+				<option value="">请选择</option>
+			</select>
+			<span ng-if="order.isNotarization"><span ng-bind="order.notarialName"></span></span>
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="borrowForm.notarialUid.$error.required">必选</error>
+		    </span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>面签员：</label>
+        	<select ng-if="!order.isFaceSign" class="form-control" ng-disabled="all" choice-personnel="面签"  city-code="{{order.cityCode}}" style="width:178px;" name="facesignUid"   ng-model="order.facesignUid" required>
+				<option value="">请选择</option>
+			</select>
+			<span ng-if="order.isFaceSign"><span ng-bind="order.facesignName"></span></span>
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="borrowForm.facesignUid.$error.required">必选</error>
+		    </span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>客户姓名：</label>
+			<input type="text" class="form-control" name="borrowerName" ng-model="order.borrowerName" required >
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="borrowForm.borrowerName.$error.required">必填</error>
+			</span>
+			<!--<span class="a-span">
+				<img title="{{img.url}}" ng-show="$index==0" class="gallery-pic" ng-repeat="img in idCardImg"  src="/images//chakansfz.png"  >
+			</span>-->
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>手机号码：</label>
+			<input type="text" class="form-control" name="phoneNumber" ng-model="order.phoneNumber" required >
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="borrowForm.phoneNumber.$error.required">必填</error>
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-4"><label>&nbsp;</label></div>
+		
+		<div   ng-class="{2 :'col-md-6 col-lg-4', 1 :'col-md-12 col-lg-12'}[order.isOldLoanBank]"><label>原贷款是否银行：</label>
+			<select class="form-control" name="isOldLoanBank" style="width:178px;" ng-model="order.isOldLoanBank">
+	    		<option value="1">是</option>
+	    		<option value="2">否</option>
+	    	</select>
+	    	<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="borrowForm.isOldLoanBank.$error.required">必选</error>
+		    </span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="order.isOldLoanBank == 2"><label>原贷款地点：</label>
+			<input type="text" class="form-control" name="oldLoanBankName" ng-disabled="all" ng-model="order.oldLoanBankName" required >
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="borrowForm.oldLoanBankName.$error.required">必填</error>
+			</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="order.isOldLoanBank == 1"><label>原贷款银行-支行：</label>
+			<bank-sub-bank bank-id="order.oldLoanBankNameId" is-disabled="{{all}}" sub-bank-id="order.oldLoanBankSubNameId"></bank-sub-bank>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="order.isOldLoanBank == 1"><label>原贷款银行经理：</label>
+			<input type="text" class="form-control" ng-disabled="all" name="oldLoanBankManager" ng-model="order.oldLoanBankManager" required >
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="borrowForm.oldLoanBankManager.$error.required">必填</error>
+			</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="order.isOldLoanBank == 1"><label>银行经理电话：</label> 
+			<input type="text" class="form-control" ng-disabled="all" maxlength="11" name="oldLoanBankManagerPhone" ng-model="order.oldLoanBankManagerPhone" required >
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="borrowForm.oldLoanBankManagerPhone.$error.required">必填</error>
+			</span>
+		</div>
+		
+		<div ng-if="order.isOldLoanBank==2" class="col-md-6 col-lg-4"><label>&nbsp;</label></div>
+		<div ng-class="{2 :'col-md-6 col-lg-4', 1 :'col-md-12 col-lg-12'}[order.isOldLoanBank]"><label>新贷款是否银行：</label>
+			<select class="form-control" name="isLoanBank" style="width:178px;" ng-model="order.isLoanBank">
+	    		<option value="1">是</option>
+	    		<option value="2">否</option>
+	    	</select>
+	    	<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="borrowForm.isLoanBank.$error.required">必选</error>
+		    </span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="order.isLoanBank == 2"><label>新贷款地点：</label>
+			<input type="text" class="form-control" name="loanBankName" ng-disabled="all" ng-model="order.loanBankName" required >
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="borrowForm.loanBankName.$error.required">必填</error>
+			</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="order.isLoanBank == 1"><label>新贷款银行-支行：</label>
+			<bank-sub-bank bank-id="order.loanBankNameId" is-disabled="{{all}}" sub-bank-id="order.loanSubBankNameId"></bank-sub-bank>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="order.isLoanBank == 1"><label>新贷款银行经理：</label>
+			<input type="text" class="form-control" ng-disabled="all" name="loanBankNameManager" ng-model="order.loanBankNameManager" required >
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="borrowForm.loanBankNameManager.$error.required">必填</error>
+			</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="order.isLoanBank == 1"><label>银行经理电话：</label> 
+			<input type="text" class="form-control" ng-disabled="all" maxlength="11" name="loanBankNameManagerPhone" ng-model="order.loanBankNameManagerPhone" required >
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="borrowForm.loanBankNameManagerPhone.$error.required">必填</error>
+			</span>
+		</div>
+		
+		<div ng-if="order.isLoanBank == 2" class="col-md-6 col-lg-4"><label>&nbsp;</label></div>
+		<div class="col-md-6 col-lg-4"><label>借款期限：</label>
+			<input type="number" class="form-control" min="1" name="borrowingDays" ng-model="order.borrowingDays"  required >
+			<span class="a-span">天</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="borrowForm.borrowingDays.$invalid">必填</error>
+			</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>借款金额：</label>
+			<input type="number"  class="form-control" min="0" oninput="if(value.length>7)value=value.slice(0,7)" name="loanAmount" ng-model="order.loanAmount" ng-init="initPayMentAmount()" required >
+			<span class="a-span">万</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="borrowForm.loanAmount.$invalid">必填</error>
+			</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>风控等级：</label>
+			<select class="form-control" name="riskGradeId" style="width:178px;" ng-model="order.riskGradeId" ng-change="isStandardCharge()" ng-options="list.riskGradeId as list.name for list in riskGradeList" required>
+				<option value="">请选择</option>
+			</select>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="borrowForm.riskGradeId.$error.required">请选择风控等级</error>
+			</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>费率：</label>
+			<input type="number" min="0" class="form-control readonly-box" step="0.0001" name="rate" ng-model="order.rate" ng-readonly="order.riskGradeId!=0" required > 
+			<span class="a-span" ng-if="modeid==1"> &nbsp;%</span>
+			<span class="a-span" ng-if="modeid!=1"> &nbsp;%/天</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="borrowForm.rate.$invalid">必填</error>
+			</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>逾期费率：</label>
+			<input type="number" min="0"   class=" form-control readonly-box" step="0.0001" name="overdueRate" ng-model="order.overdueRate" ng-readonly="order.riskGradeId!=0" required > 
+		 	<span class="a-span" ng-if="modeid==1"> &nbsp;%</span>
+			<span class="a-span" ng-if="modeid!=1"> &nbsp;%/天</span>
+		 	<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="borrowForm.overdueRate.$invalid">必填</error>
+		 	</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>其他金额：</label>
+			<input type="number" class="form-control"  name="otherPoundage" ng-model="order.otherPoundage" required> 
+			<span class="a-span">元</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="borrowForm.otherPoundage.$error.required">必填</error>
+			</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>关外手续费：</label>
+			<input type="number" class="form-control" name="customsPoundage" min="0" oninput="if(value.length>8)value=value.slice(0,8)" ng-model="order.customsPoundage" required >
+			<span class="a-span">元</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="borrowForm.customsPoundage.$error.required">必填</error>
+			</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-8"><label>收费金额：</label>
+			<span ng-if="order.riskGradeId==0">
+				<input type="number" min="1" name="chargeMoney" class="form-control readonly-box"  ng-model="order.chargeMoney" required>
+			</span>
+			<span ng-if="order.riskGradeId>0">
+				<input type="hidden" name="chargeMoney" ng-model="order.chargeMoney" >
+				<span class="a-span" ng-bind="order.chargeMoney"></span>
+			</span>
+			<span> &nbsp;元&nbsp;(其中包含:固定服务费+关外手续费+其他费用)</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="borrowForm.chargeMoney.$invalid">收费金额必须大于0</error>
+			</span>
+		</div>
+	
+		
+		<div class="col-md-6 col-lg-4"><label>是否有返佣：</label>
+			<select class="form-control" name="isRebate" style="width:178px;"  ng-model="order.isRebate" required> 
+		        <option value="1">是</option> 
+		        <option value="2">否</option>               
+	        </select>
+	        <span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="borrowForm.isRebate.$error.required">必选</error>
+	        </span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="order.isRebate==1"><label>返佣金额：</label>
+			<input type="number" class="form-control" ng-disabled="all" min="0" oninput="if(value.length>8)value=value.slice(0,8)" name="rebateMoney"  ng-model="order.rebateMoney" required> 
+			<span class="a-span">元</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="borrowForm.rebateMoney.$error.required">必填</error>
+			</span>
+		</div>
+
+		<div class="col-md-6 col-lg-4" ng-if="order.isRebate==1"><label>&nbsp;</label></div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="order.isRebate==1"><label>返佣银行-支行：</label>
+			<bank-sub-bank bank-id="order.rebateBankId" is-disabled="{{all}}" sub-bank-id="order.rebateBankSubId"></bank-sub-bank>
+		</div>
+
+		
+		<div class="col-md-6 col-lg-4" ng-if="order.isRebate==1"><label>返佣银行户名：</label>
+			<input type="text" class="form-control" ng-disabled="all" maxlength="100" name="rebateBankCardName" ng-model="order.rebateBankCardName" required>
+			<span class="a-span"></span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="borrowForm.rebateBankCardName.$error.required">必填</error>
+			</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4" ng-if="order.isRebate==1"><label>返佣银行卡号：</label>
+			<input type="text" class="form-control" ng-disabled="all" maxlength="100"  name="rebateBankCardNum" ng-model="order.rebateBankCardNum" required>
+			<span class="a-span"></span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="borrowForm.rebateBankCardNum.$error.required">必填</error>
+			</span>
+		</div>
+		<div ng-if="order.productCode=='01'">
+			<div class="col-md-12 col-lg-12"><label>是否一次性回款：</label>
+				<select class="form-control" name="isOnePay" style="width:178px;" ng-disabled="all" ng-model="order.isOnePay" ng-change="payMentAmountSum()" required>
+				    <option value="1">是</option> 
+				    <option value="2">否</option>                   
+			    </select>
+			    <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="borrowForm.isOnePay.$error.required">是否一次性回款必选</error>
+			    </span> 
+			</div>
+			<list ng-repeat="orderReceivableFor in order.orderReceivableForDto">
+				<div class="col-md-6 col-lg-4" ng-if="order.isOnePay!='' && $index==0"><label>回款金额：</label>
+					<input type="number" class="form-control" min="0" name="payMentAmount0" ng-disabled="all"  ng-model="orderReceivableFor.payMentAmount" step="0.01"  required ng-change="payMentAmountSum()" >
+					<span class="a-span">万</span>
+				    <span class="inputError" ng-show="isAudit">
+						<error class="text-danger" ng-show="borrowForm.payMentAmount0.$error.required">必填</error>
+				    </span>
+				</div>
+				
+				<div class="col-md-6 col-lg-4" ng-if="order.isOnePay!='' && $index==0"><label>计划回款时间：</label>
+					<input size="16" type="text" name="payMentAmountDate0" ng-disabled="all" ng-model="orderReceivableFor.payMentAmountDate" class="form-control form_date" required>
+				    <span class="inputError" ng-show="isAudit">
+						<error class="text-danger" ng-show="borrowForm.payMentAmountDate0.$error.required">必填</error>
+				    </span>
+				</div>
+
+				<div class="col-md-6 col-lg-4" ng-if="order.isOnePay!='' && $index==0"><label>&nbsp;</label></div>
+				
+				<div class="col-md-6 col-lg-4" ng-if="order.isOnePay!='' && $index==1"><label>再次回款金额：</label>
+					<input type="number" class="form-control" min="0" ng-disabled="all" name="payMentAmount1" ng-model="orderReceivableFor.payMentAmount" ng-readonly="true" required>
+					<span class="a-span">万</span>
+				    <span class="inputError" ng-show="isAudit">
+						<error class="text-danger" ng-show="borrowForm.payMentAmount1.$error.required">必填</error>
+				    </span>
+				</div>
+				
+				<div class="col-md-6 col-lg-4" ng-if="order.isOnePay!='' && $index==1"><label>计划再次回款时间：</label>
+					<input size="16" type="text" name="payMentAmountDate1" ng-disabled="all" ng-model="orderReceivableFor.payMentAmountDate" class="form-control form_date" required>
+				    <span class="inputError" ng-show="isAudit">
+						<error class="text-danger" ng-show="borrowForm.payMentAmountDate1.$error.required">必填</error>
+				    </span>
+				</div>
+			</list>
+		</div>
+		
+		<div class="col-md-12 col-lg-12 relative">
+		    <label>&nbsp;</label>
+			<label style="position:absolute;top:0; left:0;">备注：</label>
+			<textarea class="form-control" maxlength="3000" name='remark' ng-model="order.remark"  style="width:1000px;height:100px;"></textarea>
+		</div>
+</form>	
+
+<form method="post" name="changLoanForm" id="changLoanForm" class="form-inline detail-row w145">
+		<!-- 畅贷 -->
+		<!-- 畅贷信息 start -->
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;关联订单信息
+		<button type="button" ng-if="order.orderBaseBorrowRelationDto.length==0" class="btn btn-info detail-right-save fr" ng-click="addCD()">+ 添加关联订单</button>
+		<span ng-if="order.orderBaseBorrowRelationDto.length>0&&!orderList.relationOrderNo" class="detail-trash text-danger" style="right:150px;" ng-click="deleteCangDai($index)">删除</span>
+	</div>
+	
+	<danbaoren>
+	<div ng-repeat="obj in order.orderBaseBorrowRelationDto">
+		<div class="col-md-6 col-lg-4"><label>业务类型：</label>
+			<select name="productCode{{$index}}" class="form-control"  style="width:178px;" ng-model="obj.productCode" required>
+				<option value="03">畅贷</option>
+			</select>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>借款期限：</label>
+			<input type="number" class="form-control" min="1" name="borrowingDays{{$index}}" ng-model="obj.borrowingDays"  required >
+			<span class="a-span">天</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="changLoanForm.borrowingDays{{$index}}.$invalid">必填</error>
+			</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>借款金额：</label>
+			<input type="number"  class="form-control" min="0" oninput="if(value.length>7)value=value.slice(0,7)" name="loanAmount{{$index}}" ng-model="obj.loanAmount" ng-init="initPayMentAmount()" required >
+			<span class="a-span">万</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="changLoanForm.loanAmount{{$index}}.$invalid">必填</error>
+			</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>风控等级：</label>
+			<select class="form-control" name="riskGradeId{{$index}}" style="width:178px;"  ng-model="obj.riskGradeId" ng-change="changeRiskGradeCD()" ng-options="list.riskGradeId as list.name for list in riskGradeListCD" required>
+				<option value="">请选择</option>
+			</select>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="changLoanForm.riskGradeId{{$index}}.$error.required">请选择风控等级</error>
+			</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>费率：</label>
+			<input type="number" min="0" class="form-control readonly-box" step="0.0001" name="rate{{$index}}" ng-model="obj.rate" ng-readonly="obj.riskGradeId!=0" required > 
+			<span class="a-span" ng-if="modeidCD==1"> &nbsp;%</span>
+			<span class="a-span" ng-if="modeidCD!=1"> &nbsp;%/天</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="changLoanForm.rate{{$index}}.$invalid">必填</error>
+			</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>逾期费率：</label>
+			<input type="number" min="0"   class=" form-control readonly-box" step="0.0001" name="overdueRate{{$index}}" ng-model="obj.overdueRate" ng-readonly="obj.riskGradeId!=0" required > 
+		 	<span class="a-span" ng-if="modeidCD==1"> &nbsp;%</span>
+			<span class="a-span" ng-if="modeidCD!=1"> &nbsp;%/天</span>
+		 	<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="changLoanForm.overdueRate{{$index}}.$invalid">必填</error>
+		 	</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>其他金额：</label>
+			<input type="number" class="form-control"  name="otherPoundage{{$index}}" ng-model="obj.otherPoundage" required> 
+			<span class="a-span">元</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="changLoanForm.otherPoundage{{$index}}.$error.required">必填</error>
+			</span>
+		</div>
+		
+		<!-- <div class="col-md-6 col-lg-4"><label>关外手续费：</label>
+			<input type="number" class="form-control" name="customsPoundage" min="0" oninput="if(value.length>8)value=value.slice(0,8)" ng-model="obj.customsPoundage" required >
+			<span class="a-span">元</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="changLoanForm.customsPoundage.$error.required">必填</error>
+			</span>
+		</div> -->
+		
+		<div class="col-md-6 col-lg-8"><label>收费金额：</label>
+			<span ng-if="obj.riskGradeId==0 && obj.riskGradeId !='' ">
+				<input type="number" min="1" name="chargeMoney{{$index}}" class="form-control readonly-box"  ng-model="obj.chargeMoney" required>
+				<span class="a-span"> &nbsp;元&nbsp;(其中包含:固定服务费+其他费用)</span>
+				<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="changLoanForm.chargeMoney{{$index}}.$invalid">收费金额必须大于0</error>
+				</span>
+			</span>
+			
+			<span ng-if="obj.riskGradeId>0||obj.riskGradeId=='null'||!obj.riskGradeId">
+				<input type="hidden" name="chargeMoney{{$index}}" ng-model="obj.chargeMoney" >
+				<span class="a-span" ng-bind="obj.chargeMoney"></span>
+				<span> &nbsp;元&nbsp;(其中包含:固定服务费+其他费用)</span>
+				<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="changLoanForm.chargeMoney{{$index}}.$invalid">收费金额必须大于0</error>
+				</span>
+			</span>
+		</div>
+		<div class="col-md-12 col-lg-12">
+		<label>&nbsp;</label>
+			<label style="position:absolute;top:0; left:0;">备注：</label>
+	 
+			<textarea class="form-control" maxlength="3000" name='remark{{$index}}' ng-model="obj.remark" style="width:1000px;height:100px;"></textarea>
+		</div>
+	</div>
+	</danbaoren>
+	<!-- 畅贷信息 end -->
+	
+</form>

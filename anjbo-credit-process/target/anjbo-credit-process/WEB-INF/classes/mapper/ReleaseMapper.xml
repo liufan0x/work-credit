@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.ReleaseMapper">
+	
+	<select id="findByRelease" parameterType="java.lang.String" resultType="FddReleaseDto">
+	   select * from tbl_process_app_fdd_release  where orderNo=#{0} order by createTime desc  limit 1;
+	</select>
+	
+	<insert id="addRelease" parameterType="FddReleaseDto" >
+	   INSERT INTO `anjbo-server-process`.`tbl_process_app_fdd_release` (
+	     `createUid`, `createTime`,`updateUid`,`updateTime`,`orderNo`,`releaseTime`,`releaseUid`,`rlandBureauName`,`remark`
+	   ) VALUES (
+	      #{createUid}, now(), #{updateUid}, now(), #{orderNo}, #{releaseTime}, #{releaseUid}, #{rlandBureauName}, #{remark}
+	   );
+	</insert>
+	<update id="updRelease" parameterType="FddReleaseDto">
+	   update tbl_process_app_fdd_release
+		<set>
+		    <if test="updateUid!= null and updateUid !='' " >
+        		updateUid = #{updateUid},
+      		</if>
+      		<if test="releaseTime != null" >
+        		releaseTime = #{releaseTime},
+      		</if>
+			<if test="releaseUid != null and releaseUid !='' " >
+        		releaseUid = #{releaseUid},
+      		</if>
+      		<if test="rlandBureauName != null and rlandBureauName !='' " >
+        		rlandBureauName = #{rlandBureauName},
+      		</if>
+      		<if test="remark!= null and remark !='' " >
+	        	remark = #{remark},
+	      	</if>
+	      </set>	
+		where orderNo =#{orderNo}
+	</update>
+</mapper>

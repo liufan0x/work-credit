@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.OrderBaseHouseMapper" >
+	<!-- 添加订单房产交易信息 -->
+	<insert id="saveOrderHouse" parameterType="OrderBaseHouseDto">
+		INSERT INTO tbl_order_base_house (
+			createUid,
+			createTime,
+			orderNo,
+			oldHouseLoanAmount,
+			oldHouseLoanBalance,
+			houseDealPrice,
+			houseDealDeposit,
+			houseSuperviseAmount,
+			houseLoanAmount,
+			mortgageIsBank,
+			mortgageAddress,
+			mortgageBankId,
+			mortgageSubBankId,
+			mortgageBankName,
+			mortgageSubBankName,
+			customerMgr,
+			customerMgrPhone,
+			mortgageCycleStart,
+			mortgageCycleEnd,
+			amountLoan,
+			amountLoanSurplus,
+			lendingCycleStart,
+			lendingCycleEnd,
+			paidType,
+			<if test="isFinish != null and isFinish > 0">
+			isFinish,
+			</if>
+			<if test="bussinessType!=null and bussinessType>0">bussinessType,</if>
+			remark
+		)
+		VALUES
+		(
+			#{createUid},
+			now(),
+			#{orderNo},
+			#{oldHouseLoanAmount},
+			#{oldHouseLoanBalance},
+			#{houseDealPrice},
+			#{houseDealDeposit},
+			#{houseSuperviseAmount},
+			#{houseLoanAmount},
+			#{mortgageIsBank},
+			#{mortgageAddress},
+			#{mortgageBankId},
+			#{mortgageSubBankId},
+			#{mortgageBankName},
+			#{mortgageSubBankName},
+			#{customerMgr},
+			#{customerMgrPhone},
+			#{mortgageCycleStart},
+			#{mortgageCycleEnd},
+			#{amountLoan},
+			#{amountLoanSurplus},
+			#{lendingCycleStart},
+			#{lendingCycleEnd},
+			#{paidType},
+			<if test="isFinish != null and isFinish > 0">
+			#{isFinish},
+			</if>
+			<if test="bussinessType!=null and bussinessType>0">#{bussinessType},</if>
+			#{remark}
+		)
+	</insert>
+	
+	<!-- 修改订单房产交易信息 -->
+	<update id="updateOrderHouse" parameterType="OrderBaseHouseDto">
+	  	UPDATE tbl_order_base_house 
+	  	<set>
+	  		<if test="createUid != null and createUid != ''">
+	  			createUid = #{createUid},
+	  		</if>
+	  		<if test="updateUid != null and updateUid != ''">
+	  			updateUid = #{updateUid},
+	  		</if>
+	  		<if test="oldHouseLoanAmount != null and oldHouseLoanAmount > 0">
+	  			oldHouseLoanAmount = #{oldHouseLoanAmount},
+	  		</if>
+	  		<if test="oldHouseLoanBalance != null and oldHouseLoanBalance > 0">
+	  			oldHouseLoanBalance = #{oldHouseLoanBalance},
+	  		</if>
+	  		<if test="houseDealPrice != null and houseDealPrice > 0">
+	  			houseDealPrice = #{houseDealPrice},
+	  		</if>
+	  		<if test="houseDealDeposit != null and houseDealDeposit > 0">
+	  			houseDealDeposit = #{houseDealDeposit},
+	  		</if>
+	  		<if test="houseSuperviseAmount != null and houseSuperviseAmount > 0">
+	  			houseSuperviseAmount = #{houseSuperviseAmount},
+	  		</if>
+	  		<if test="houseLoanAmount != null and houseLoanAmount > 0">
+	  			houseLoanAmount = #{houseLoanAmount},
+	  		</if>
+	  		<if test="mortgageIsBank != null and mortgageIsBank > 0">
+	  			mortgageIsBank = #{mortgageIsBank},
+	  		</if>
+	  		<if test="mortgageAddress != null and mortgageAddress != ''">
+	  			mortgageAddress = #{mortgageAddress},
+	  		</if>
+	  		<if test="mortgageBankId != null and mortgageBankId > 0">
+	  			mortgageBankId = #{mortgageBankId},
+	  		</if>
+	  		<if test="mortgageSubBankId != null and mortgageSubBankId > 0">
+	  			mortgageSubBankId = #{mortgageSubBankId},
+	  		</if>
+	  		<if test="mortgageBankName != null and mortgageBankName != ''">
+	  			mortgageBankName = #{mortgageBankName},
+	  		</if>
+	  		<if test="mortgageSubBankName != null and mortgageSubBankName != ''">
+	  			mortgageSubBankName = #{mortgageSubBankName},
+	  		</if>
+	  		<if test="customerMgr != null and customerMgr != ''">
+	  			customerMgr = #{customerMgr},
+	  		</if>
+	  		<if test="customerMgrPhone != null and customerMgrPhone != ''">
+	  			customerMgrPhone = #{customerMgrPhone},
+	  		</if>
+	  		<if test="mortgageCycleStart != null and mortgageCycleStart != ''">
+	  			mortgageCycleStart = #{mortgageCycleStart},
+	  		</if>
+	  		<if test="mortgageCycleEnd != null and mortgageCycleEnd != ''">
+	  			mortgageCycleEnd = #{mortgageCycleEnd},
+	  		</if>
+	  		<if test="amountLoan != null and amountLoan > 0">
+	  			amountLoan = #{amountLoan},
+	  		</if>
+	  		<if test="amountLoanSurplus != null and amountLoanSurplus > 0">
+	  			amountLoanSurplus = #{amountLoanSurplus},
+	  		</if>
+	  		<if test="lendingCycleStart != null and lendingCycleStart != ''">
+	  			lendingCycleStart = #{lendingCycleStart},
+	  		</if>
+	  		<if test="lendingCycleEnd != null and lendingCycleEnd != ''">
+	  			lendingCycleEnd = #{lendingCycleEnd},
+	  		</if>
+	  		<if test="paidType != null and paidType > 0">
+	  			paidType = #{paidType},
+	  		</if>
+	  		<if test="remark != null and remark != ''">
+	  			remark = #{remark},
+	  		</if>
+	  		<if test="isFinish != null and isFinish > 0">
+	  			isFinish = #{isFinish},
+	  		</if>
+	  		updateTime = now()
+	  	</set>
+	  	WHERE orderNo = #{orderNo}
+  	</update>
+  	
+  	<!-- 修改订单房产交易信息 -->
+	<update id="updateOrderHouseNull" parameterType="OrderBaseHouseDto">
+	  	UPDATE tbl_order_base_house 
+	  	SET
+	  			oldHouseLoanAmount = #{oldHouseLoanAmount},
+	  			oldHouseLoanBalance = #{oldHouseLoanBalance},
+	  			houseDealPrice = #{houseDealPrice},
+	  			houseDealDeposit = #{houseDealDeposit},
+	  			houseSuperviseAmount = #{houseSuperviseAmount},
+	  			houseLoanAmount = #{houseLoanAmount},
+	  			mortgageIsBank = #{mortgageIsBank},
+				mortgageAddress = #{mortgageAddress},
+				mortgageBankId = #{mortgageBankId},
+				mortgageSubBankId = #{mortgageSubBankId},
+				mortgageBankName = #{mortgageBankName},
+				mortgageSubBankName = #{mortgageSubBankName},
+				customerMgr = #{customerMgr},
+				customerMgrPhone = #{customerMgrPhone},
+				mortgageCycleStart = #{mortgageCycleStart},
+				mortgageCycleEnd = #{mortgageCycleEnd},
+				amountLoan = #{amountLoan},
+				amountLoanSurplus = #{amountLoanSurplus},
+				lendingCycleStart = #{lendingCycleStart},
+				lendingCycleEnd = #{lendingCycleEnd},
+				paidType = #{paidType},
+	  			remark = #{remark},
+	  			<if test="isFinish != null and isFinish > 0">
+	  			isFinish = #{isFinish},
+	  			</if>
+	  			<if test="bussinessType!=null and bussinessType>0">bussinessType=#{bussinessType},</if>	  			
+	  			updateTime = now()
+	  	WHERE orderNo = #{orderNo}
+  	</update>
+  	
+	<!-- 查询订单房产交易信息 -->
+	<select id="selectOrderHouseByOrderNo" parameterType="java.lang.String" resultType="OrderBaseHouseDto">
+  		select 
+  			id,
+  			createUid,
+			createTime,
+			updateUid,
+			updateTime,
+			orderNo,
+			oldHouseLoanAmount,
+			oldHouseLoanBalance,
+			houseDealPrice,
+			houseDealDeposit,
+			houseSuperviseAmount,
+			houseLoanAmount,
+			mortgageIsBank,
+			mortgageAddress,
+			mortgageBankId,
+			mortgageSubBankId,
+			mortgageBankName,
+			mortgageSubBankName,
+			customerMgr,
+			customerMgrPhone,
+			mortgageCycleStart,
+			mortgageCycleEnd,
+			amountLoan,
+			amountLoanSurplus,
+			lendingCycleStart,
+			lendingCycleEnd,
+			paidType,
+			remark,
+			isFinish,
+			bussinessType
+  		from tbl_order_base_house where orderNo=#{orderNo}
+    </select>
+</mapper>

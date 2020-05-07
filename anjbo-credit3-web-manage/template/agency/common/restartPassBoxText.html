@@ -1,0 +1,17 @@
+<style>
+ 	span.tit{width:120px;text-align:right;display:inline-block;}
+</style>
+<div class="form-inline" name="accountForm" style="text-align:left;">
+	<div class="form-group col-md-12">
+		<p style="text-align:center;" ng-bind="title"></p>
+	</div>
+	<div class="form-group col-md-12">
+		<span class="tit">联系人电话&nbsp;</span>
+		<input type="text" class="form-control" name="mobile" ng-disabled="true" ng-model="mobile" required style="width:226px;"/>
+		<span class="inputError" ng-show="isAudit&&accountForm.mobile.$error.required">
+			<font color="red">必填</font>
+		</span>
+	</div>
+	<div style="width:100%;height:1px; clear:both;"></div>
+	</div>
+</form>

@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.tools.EnquiryAssessMapper">
+
+	<select id="findAlreadyassess" parameterType="EnquiryAssessDto"
+		resultType="EnquiryAssessDto">
+		select id,enquiryId,
+		userid,propertyName,bankName,
+		bankCode,dealAmount,userName,mobile,
+		loanAmount,loanPercent,createTime
+		from tbl_tools_enquiry_assess
+		where enquiryId=#{enquiryId}
+</select>
+
+	<select id="selEnquiryAssess" parameterType="EnquiryAssessDto"
+		resultType="EnquiryAssessDto">
+		select id,enquiryId,
+		userid,propertyName,bankName,
+		bankCode,dealAmount,userName,mobile,
+		loanAmount,loanPercent,createTime
+		from tbl_tools_enquiry_assess
+		where enquiryId=#{enquiryId} 
+</select>
+
+	<select id="selEnquiryAssessAll" parameterType="Map" resultType="EnquiryAssessDto">
+		select a.id,
+		a.userid,
+		a.bankName,
+		a.bankCode,
+		a.enquiryId,
+		a.dealAmount,
+		a.userName,
+		a.mobile,
+		a.status,
+		a.type,
+		a.loanAmount,
+		a.loanPercent,
+		a.createTime,
+		a.assessAmount,
+		a.serialId,
+		DATE_FORMAT(a.createTime,'%Y-%m-%d %H:%i:%S') as createtimeStr,
+		a.propertyName,
+	    e.buildingName,
+	    e.roomName,
+	    e.area,
+	    a.isRead,
+	    a.sLAssessAmount,
+	    a.dDAssessAmount,
+	    a.tzcNetPrice,
+	    a.slNetPrice,
+	    a.ddNetPrice,
+	    a.isClose,
+	    a.content
+		from tbl_tools_enquiry_assess as a
+		LEFT JOIN tbl_tools_enquiry_base as e on a.enquiryId=e.id
+		where a.userid=#{userid} and a.enable=1
+		order by createTime desc
+		limit 
+		#{start},#{count}
+	</select>
+
+	<select id="selEnquirAssessDetail" parameterType="java.lang.String" resultType="EnquiryAssessDto">
+	   select a.id,
+		a.userid,
+		a.bankName,
+		a.enquiryId,
+		a.bankCode,
+		a.dealAmount,
+		a.userName,
+		a.mobile,
+		a.status,
+		a.type,
+		a.loanAmount,
+		a.loanPercent,
+		a.createTime,
+		a.assessAmount,
+		DATE_FORMAT(a.createTime,'%Y-%m-%d %H:%i:%S') as createtimeStr,
+		DATE_FORMAT(a.applyTime,'%Y-%m-%d %H:%i') as applyTimeStr,
+		DATE_FORMAT(a.applyReportTime,'%Y-%m-%d %H:%i') as applyReportTimeStr,
+		a.propertyName,
+	    e.buildingName,
+	    e.roomName,
+	    e.area,
+	    a.content,
+	    a.sLAssessAmount,
+	    a.dDAssessAmount,
+	    a.tzcNetPrice,
+	    a.slNetPrice,
+	    a.ddNetPrice,
+	    a.isClose
+		from tbl_tools_enquiry_assess as a
+		LEFT JOIN tbl_tools_enquiry_base as e on a.enquiryId=e.id
+		where a.id=#{id}
+	</select>
+	
+	<update id="updateAssessIsRead" parameterType="Map">
+	     update tbl_tools_enquiry_assess set isRead=#{isRead}
+	     where id=#{id}
+	</update>
+	<insert id="addEnquiryAccess" parameterType="EnquiryAssessDto">
+		insert into tbl_tools_enquiry_assess(
+		id,
+		userid,
+		propertyName,
+		district,
+		bankName,
+		dealAmount,
+		userName,
+		mobile,
+		loanAmount,
+		loanPercent,
+		status,
+		createTime,
+		type,
+		enquiryId,
+		bankCode,
+		enable,
+		serialId,
+		enquiryTotalPrice,
+		device,
+		version
+		<if test="applyTime!=null">
+		,applyTime
+		</if>
+		)values(
+		#{id},
+		#{userid},
+		#{propertyName},
+		#{district},
+		#{bankName},
+		#{dealAmount},
+		#{userName},
+		#{mobile},
+		#{loanAmount},
+		#{loanPercent},
+		#{status},
+		#{createTime},
+		#{type},
+		#{enquiryId},
+		#{bankCode},
+		#{enable},
+		#{serialId},
+		#{enquiryTotalPrice},
+		#{device},
+		#{version}
+		<if test="applyTime!=null">
+		,now()
+		</if>
+		)
+</insert>
+
+	<update id="updateAccessByApply" parameterType="EnquiryAssessDto">
+		update tbl_tools_enquiry_assess a set a.status=#{status}
+		<if test="content!=null and content !=''">
+			,a.content=#{content}
+		</if>
+		<if test="assessAmount !=0">
+			,a.assessAmount=#{assessAmount}
+		</if>
+		<if test="tzcNetPrice !=0">
+			,a.tzcNetPrice=#{tzcNetPrice}
+		</if>
+		<if test="tzcAssessStatus!=0">
+			,a.tzcAssessStatus=#{tzcAssessStatus}
+		</if>
+			,a.reportTime=now() where
+		a.id=#{id}
+	</update>
+	
+	<update id="updateStatus" parameterType="Map">
+		update tbl_tools_enquiry_assess a set a.status=#{status},a.content=#{content} where
+		a.id=#{id}
+	</update>
+
+	<select id="findById" parameterType="java.lang.String" resultType="EnquiryAssessDto">
+		select id,userid,propertyName,bankName,bankCode,dealAmount,userName,mobile,loanAmount,loanPercent,status,applyTime,applyReportTime,
+		type,reportTime,assessAmount,enquiryId,content,serialId from tbl_tools_enquiry_assess where id=#{id,jdbcType=VARCHAR}
+	</select>
+	<select id="findBySerialid" parameterType="java.lang.String" resultType="EnquiryAssessDto">
+		select * from tbl_tools_enquiry_assess where serialid=#{0} ORDER BY createTime DESC LIMIT 1
+	</select>
+	<select id="findEnquiryIdBySerialid" parameterType="java.lang.String" resultType="java.lang.Integer">
+		select id from tbl_tools_enquiry_base where serialid=#{serialid}
+	</select>
+	
+	<select id="findIdByEnquiryId" parameterType="java.lang.Integer" resultType="java.lang.String">
+		select id from tbl_tools_enquiry_assess where enquiryId = #{enquiryId}
+	</select>
+	
+	<select id="findAssessByEnquiryId" parameterType="java.lang.Integer" resultType="EnquiryAssessDto">
+		select * from tbl_tools_enquiry_assess where enquiryId = #{enquiryId}
+	</select>
+	
+	<update id="updateApplyTime" parameterType="Map">
+		update tbl_tools_enquiry_assess a set a.applyTime=now() where
+		a.id=#{id}
+	</update>
+	
+	<update id="updateApplyReportTime" parameterType="Map">
+		update tbl_tools_enquiry_assess a set a.applyReportTime=now() where
+		a.id=#{id}
+	</update>
+	<select id="selectAssessIsRead" parameterType="java.lang.String" resultType="java.lang.Integer">
+	      select count(1) from tbl_tools_enquiry_assess where isRead=0 and userid=#{0}
+	</select>
+	<delete id="detailAssess" parameterType="java.lang.Integer">
+	  delete from tbl_tools_enquiry_assess where enquiryId=#{0}
+	</delete>
+	
+	<select id="selectProgressIdByOrderNo" parameterType="java.lang.String" resultType="java.lang.Integer">
+		select status from tbl_tools_enquiry_assess where orderNo = #{0} 
+	</select>
+	
+	<update id="updateEnquiryAccess" parameterType="EnquiryAssessDto">
+		update tbl_tools_enquiry_assess a set 
+		    a.enquiryTotalPrice=#{enquiryTotalPrice}
+			,a.serialId=#{serialId}
+			,a.status=#{status}
+			,a.propertyName=#{propertyName} where
+		a.id=#{id}
+	</update>
+	
+	<select id="selEnquiryAssessByDistrict" parameterType="Map" resultType="EnquiryAssessDto">
+		select a.id,
+		a.userid,
+		a.bankName,
+		a.bankCode,
+		a.enquiryId,
+		a.dealAmount,
+		a.userName,
+		a.mobile,
+		a.status,
+		a.type,
+		a.loanAmount,
+		a.loanPercent,
+		a.createTime,
+		a.assessAmount,
+		a.serialId,
+		DATE_FORMAT(a.createTime,'%Y-%m-%d %H:%i:%S') as createtimeStr,
+		a.propertyName,
+	    e.buildingName,
+	    e.roomName,
+	    e.area,
+	    a.isRead,
+	    a.sLAssessAmount,
+	    a.dDAssessAmount,
+	    a.tzcNetPrice,
+	    a.slNetPrice,
+	    a.ddNetPrice,
+	    a.isClose,
+	    a.content
+		from tbl_tools_enquiry_assess as a
+		LEFT JOIN tbl_tools_enquiry_base as e on a.enquiryId=e.id
+		where a.enable=1 AND (
+		<foreach collection="district" index="index" item="district" separator="OR">  
+            <![CDATA[ a.district LIKE CONCAT('%', #{district}, '%') ]]>
+    	</foreach>  
+    	OR a.userid=#{userid} )
+		order by createTime desc
+		limit 
+		#{start},#{count} 
+	</select>
+	
+	<delete id="delAssessById" parameterType="java.lang.Integer">
+	  delete from tbl_tools_enquiry_assess where id=#{0}
+	</delete>
+	
+	<update id="updateIsClose" parameterType="Map">
+		UPDATE tbl_tools_enquiry_assess a 
+		SET a.isClose=#{isClose} 
+		WHERE a.id=#{id} 
+		AND a.isClose <![CDATA[ <> ]]> #{isClose}
+	</update>
+	
+	<update id="updateAssessByLimitApply" parameterType="Map">
+		UPDATE tbl_tools_enquiry_assess a 
+		SET a.status=#{status},
+		a.content=#{content},
+		a.applyTime=now(),
+		a.dealAmount=#{dealAmount},
+		a.loanAmount=#{loanAmount} 
+		WHERE a.id=#{id}
+	</update>
+	
+</mapper>

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  <link rel="stylesheet" type="text/css" href="./css/common.css" />
+   <link rel="stylesheet" type="text/css" href="./css/ok.css" />
+ 
+  <title class="name">详情</title>
+ </head>
+ <body>
+ 
+  <img src="./images/gou.png" class="img-box">
+   <h1 style="font-size:17px; color:#4d4d4d"><span class="name">取证</span>已完成<span style="color:#e54738">，等待<span class="name">注销</span></span></h1>
+  <br>
+  <div class="cancel-but">去<span class="name">注销</span></div>
+ <div class="ok-but">回首页</div>
+<script src="./js/jquery.min.js"></script>
+<script src="./js/process.js"></script>
+<script type="text/javascript">
+var name = GetQueryString("name");
+$(".name").html(name);
+</script>
+</body>
+</html>

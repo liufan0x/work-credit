@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.anjbo.dao.AuditFlowMapper">	
+
+	<resultMap type="auditFlowDto" id="base_resultMap">
+		<id column="id" property="id"/>
+		<result column="dbId" property="dbId"/>
+		<result column="auditorUid" property="auditorUid"/>
+		<result column="auditTime" property="auditTime"/>
+		<result column="remark" property="remark"/>
+		<result column="auditLevel" property="auditLevel"/>
+		<result column="hasNext" property="hasNext"/>
+		<result column="state" property="state"/>
+		<result column="orderNo" property="orderNo"/>
+		<result column="auditorName" property="auditorName"/>
+		<result column="deliverTo" property="deliverTo"/>
+		<association property="auditBase" javaType="auditBaseDto" columnPrefix="b_" 
+				resultMap="com.anjbo.dao.AuditBaseMapper.base_resultMap"/>
+	</resultMap>
+	
+	<!-- where条件引用sql-->
+	<sql id="baseWhereSql">
+		<where>
+	       		<if test="dbId != null and dbId > 0">
+					and `dbId` = #{dbId}
+				</if>
+	       		<if test="auditorUid != null and auditorUid != ''">
+					and `auditorUid` = #{auditorUid}
+				</if>
+	       		<if test="auditTime != null">
+					and `auditTime` = #{auditTime}
+				</if>
+	       		<if test="remark != null and remark != ''">
+					and `remark` = #{remark}
+				</if>
+	       		<if test="auditLevel != null and auditLevel > 0">
+					and `auditLevel` = #{auditLevel}
+				</if>
+	       		<if test="hasNext != null">
+					and `hasNext` = #{hasNext}
+				</if>
+	       		<if test="state != null and state > 0">
+					and `state` = #{state}
+				</if>
+		</where>
+	</sql>
+	<!-- 获取审批流水表列表-->
+	<select id="selectElementAuditFlowList" parameterType="auditFlowDto" resultType="auditFlowDto">
+		select * from tbl_element_audit_flow 
+		<include refid="baseWhereSql" />
+		order by createTime desc 
+		<if test="pageSize>0">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	
+	<!-- 获取审批流水表总数-->
+	<select id="selectElementAuditFlowCount" parameterType="auditFlowDto" resultType="int">
+		select count(*) from tbl_element_audit_flow 
+		<include refid="baseWhereSql" />
+	</select>	
+		
+	<!-- 新增审批流水表-->
+	<insert id="addElementAuditFlow" parameterType="auditFlowDto" useGeneratedKeys="true" keyProperty="id">
+		insert	into tbl_element_audit_flow(
+			<trim suffixOverrides=",">
+				<if test="dbId != null">`dbId`,</if>
+				<if test="orderNo != null">`orderNo`,</if>
+				<if test="auditorUid != null">`auditorUid`,</if>
+				<if test="auditTime != null">`auditTime`,</if>
+				<if test="remark != null">`remark`,</if>
+				<if test="auditLevel != null">`auditLevel`,</if>
+				<if test="hasNext != null">`hasNext`,</if>
+				<if test="state != null">`state`,</if>
+				<if test="auditorName != null">`auditorName`,</if>
+				<if test="isExtend != null and isExtend>0">`isExtend`,</if>
+			</trim>
+		)
+		values(	
+			<trim suffixOverrides=",">
+				<if test="dbId != null">#{dbId},</if>
+				<if test="orderNo != null">#{orderNo},</if>
+				<if test="auditorUid != null">#{auditorUid},</if>
+				<if test="auditTime != null">#{auditTime},</if>
+				<if test="remark != null">#{remark},</if>
+				<if test="auditLevel != null">#{auditLevel},</if>
+				<if test="hasNext != null">#{hasNext},</if>
+				<if test="state != null">#{state},</if>
+				<if test="auditorName != null">#{auditorName},</if>
+				<if test="isExtend != null and isExtend>0">#{isExtend},</if>
+			</trim>
+		)
+	</insert>
+	
+	<!-- 修改审批流水表-->
+	<update id="updateElementAuditFlow" parameterType="auditFlowDto" >
+	 update tbl_element_audit_flow
+	<set> 
+			<trim suffixOverrides=",">
+				<if test="dbId != null">`dbId` = #{dbId},</if>
+				<if test="auditTime != null">`auditTime` = #{auditTime},</if>
+				<if test="remark != null">`remark` = #{remark},</if>
+				<if test="state != null">`state` = #{state},</if>
+				<if test="deliverTo != null">`deliverTo` = #{deliverTo},</if>
+			</trim>
+	</set> 
+	 where id = #{id}
+	</update>
+
+	<!-- 根据ID删除审批流水表-->
+    <delete id="deleteElementAuditFlowById" parameterType="int">
+		delete	from tbl_element_audit_flow where id = #{0}
+    </delete>
+    <!-- 根据审批ID删除审批流水表-->
+     <delete id="deleteByDbId" parameterType="int">
+		delete	from tbl_element_audit_flow where dbId = #{0}
+    </delete>
+
+	<!-- 根据ID查询审批流水表 -->
+	
+	<select id="selectElementAuditFlowById" parameterType="int" resultType="auditFlowDto">
+		select	* from tbl_element_audit_flow where id = #{0}
+	</select>
+	
+	<select id="selectFlowInauditByUidAndAuditId" resultMap="base_resultMap">
+		select flow.*,base.id b_id,base.title b_title,base.createTime b_createTime,base.modifyTime b_modifyTime,base.orderNo b_orderNo,base.currentAuditName b_currentAuditName,
+				base.type b_type,base.applierName b_applierName,base.createUid b_createUid,base.elementIds b_elementIds,
+				base.beginTime b_beginTime,base.endTime b_endTime,base.reason b_reason,base.state b_state,base.elementOperation b_elementOperation,base.copyTo b_copyTo,
+				base.riskElement b_riskElement,base.receivableElement b_receivableElement,base.publicSeal b_publicSeal
+		from tbl_element_audit_flow flow JOIN tbl_element_audit_base base
+		ON flow.auditorUid=#{uid} AND flow.dbId=#{id} AND flow.dbId=base.id
+		<where>
+			<if test="level != null">flow.auditLevel=#{level}</if>
+			<if test="level == null">flow.state=1</if>
+		</where>
+		limit 1
+	</select>
+	
+	<select id="selectAuditUidByAuditIdAndLevel" resultType="string">
+		select auditorUid from tbl_element_audit_flow WHERE dbId=#{auditId} AND auditLevel=#{level} order by id desc limit 1
+	</select>
+	
+	<select id="selectToAuditCount" resultType="integer">
+		select count(*) from tbl_element_audit_flow WHERE auditorUid=#{uid} AND state=1
+	</select>
+	
+	<select id="selectAuditHistoryById" resultType="map" parameterType="java.util.Map">
+		select * from tbl_element_audit_flow WHERE dbId=#{dbId} 
+		<if test="isExtend!=null and isExtend>0">
+			and isExtend=#{isExtend}
+		</if>
+		AND state&gt;0 ORDER BY auditLevel,state DESC,auditTime
+	</select>
+	
+	<select id="selectBorrowedOverTimeReceiverUid" resultType="string">
+		select auditorUid from tbl_element_audit_flow WHERE dbId=#{auditId} AND NOT state=4
+	</select>
+	
+	<!-- 查询审批id有没有审批通过的 -->
+	<select id="selectAuditFlow" parameterType="auditFlowDto" resultType="auditFlowDto">
+		select * from tbl_element_audit_flow where dbId = #{dbId}
+		<if test="state!=null and state > -1">
+			and state = #{state}
+		</if>
+	</select>
+	
+</mapper>

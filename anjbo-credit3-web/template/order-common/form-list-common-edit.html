@@ -1,0 +1,93 @@
+<form-list ng-repeat="m in formList">
+
+	<div ng-if="m.type < 100 && m.title != '是否完成' && !m.isHide " ng-class="{'col-md-12 col-lg-12':m.col==3 , 'col-md-6 col-lg-8':m.col==2,'col-md-6 col-lg-4':m.col==1 }">
+		<!-- 表单标题: -->
+		<label ng-if="!m.isHide && m.title">
+			<span class="text-danger" ng-if="m.isNeed==2">*</span>
+			<span ng-if="!(m.title == '负债比例' || m.title == '借款成数')" ng-bind="m.title + '：'"></span>
+			<span class="tooltip-toggle" ng-if="m.title == '负债比例'" data-toggle="tooltip-toggle" title="负债比例=征信总负债 / 所有房产评估总值">负债比例： <span class="help"></span></span>
+			<span class="tooltip-toggle" ng-if="m.title == '借款成数'" data-toggle="tooltip-toggle" title="借款成数=借款金额 / 新贷款金额">借款成数： <span class="help"></span></span>
+		</label>
+
+		<!-- 详情框 -->
+		<type1 ng-if="m.type==0 && !m.isHide">
+			<span ng-bind="m.value"></span>
+		</type1>
+
+		<!-- 输入框 -->
+		<type1 ng-if="m.type==1 && !m.isHide">
+			<input type="text" class="form-control" name="{{m.key}}" ng-model="m.value" ng-disabled="m.isDisable || m.isReadOnly==2" placeholder="{{m.placeholder}}" />
+		</type1>
+
+		<!-- 自带数据下拉框 -->
+		<type2 ng-if="m.type==2 && !m.isHide">
+			<select class="form-control" style="width:178px;" select2 ng-model="m.specialValue" name="{{m.key}}" ng-disabled="m.isDisable || m.isReadOnly==2" placeholder="{{m.placeholder}}" ng-change="setSelect(m,m.dataList)">
+				<option value="">请选择</option>
+				<option value="{{list.id}}" ng-repeat="list in m.dataList">{{list.name}}</option>
+			</select>
+		</type2>
+
+		<!-- 请求接口url -->
+		<type3 ng-if="m.type==3 && !m.isHide">
+			<select class="form-control" style="width:178px;" select2 ng-model="m.specialValue" name="{{m.key}}" ng-disabled="m.isDisable || m.isReadOnly==2" placeholder="{{m.placeholder}}" ng-change="setSelect(m,m.dataList)">
+				<option value="">请选择</option>
+				<option value="{{list.id}}" ng-repeat="list in m.dataList">{{list.name}}</option>
+			</select>
+		</type3>
+
+		<!-- 时间控件 -->
+		<type4 ng-if="m.type==4 && !m.isHide">
+			<input ng-if="m.typeDepend == 'form_date'" type="text" name="{{m.key}}" ng-disabled="m.isDisable" ng-readonly="true" ng-model="m.value" class="form-control form_date" />
+			<input ng-if="m.typeDepend == 'form_datetime'" type="text" name="{{m.key}}" ng-disabled="m.isDisable" ng-readonly="true" ng-model="m.value" class="form-control form_datetime" />
+		</type4>
+
+		<!-- 上传图片 -->
+		<type5 ng-if="m.type==5 && !m.isHide">
+			<a data-fancybox="iframe" ng-click="showUploadImg(m)" data-src="/plugins/uploadify/upload_image.html?imgConfig" data-type="iframe" href="javascript:;" ng-bind="'上传' + m.title"></a>
+			&nbsp;&nbsp;
+			<span class="chakan-img gallerys">
+			<list ng-repeat="imgMap in m.dataList">
+				<span class="gallery-pic-img" title="{{imgMap}}" ng-show="$index==0"></span>
+			</list>
+			<span ng-if="m.dataList.length>0">({{m.dataList.length}})</span>
+			</span>
+			&nbsp;&nbsp;
+			<span class="text-danger" ng-if="m.dataList.length>0" ng-click="showDelImg(m)">删除</span>
+		</type5>
+
+		<!-- 备注框 -->
+		<type6 ng-if="m.type==6 && !m.isHide">
+			<textarea class="form-control" maxlength="200" name='{{m.key}}' ng-model="m.value" style="width:1000px;height:100px;" placeholder="{{m.placeholder}}" />
+		</type6>
+
+		<!-- 单位 -->
+		<span class="a-span" ng-if="!m.isHide" ng-bind="m.single"></span>
+
+		<!-- 展示错误信息 -->
+		<span class="inputError" ng-if="!m.isHide">
+			<error class="text-danger" ng-bind="m.errorInfo"></error>
+		</span>
+	</div>
+
+	<special-type ng-if="m.type >= 100">
+		<special-type100 ng-if="m.type==100 && !m.isHide">
+			<div ng-class="{'col-md-12 col-lg-12':m.col==3 , 'col-md-6 col-lg-8':m.col==2,'col-md-6 col-lg-4':m.col==1 }">
+				<label>
+					<span class="text-danger" ng-if="m.isNeed==2">*</span>
+					<span ng-bind="m.title + ':'"></span>
+				</label>
+				<input type="text" class="form-control" name="{{m.key}}" ng-change="changePhone(m.value,formList)" ng-model="m.value" ng-disabled="m.isDisable" ng-readonly="m.isReadOnly==2" placeholder="{{m.placeholder}}" />
+				<!-- 单位 -->
+				<span class="a-span">
+										<a ng-click="getMatchCusManager(m.value,formList)">匹配客户经理信息</a>
+									</span>
+				<!-- 展示错误信息 -->
+				<span class="inputError">
+					<error class="text-danger" ng-bind="m.errorInfo"></error>
+				</span>
+			</div>
+		</special-type100>
+
+	</special-type>
+
+</form-list>

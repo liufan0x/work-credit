@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.TblFinanceAfterloanLinePaymentMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		
+		 <if test="createStartTime!=null">
+            <![CDATA[  and DATE_FORMAT(createTime,'%Y-%m-%d') >= DATE_FORMAT(#{createStartTime}, '%Y-%m-%d')]]>
+        </if>
+        <if test="createEndTime!=null">
+            <![CDATA[  and DATE_FORMAT(createTime,'%Y-%m-%d') <= DATE_FORMAT(#{createEndTime}, '%Y-%m-%d')]]>
+        </if>
+		
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=borrowerName and ''!=borrowerName"> AND `borrowerName`=#{borrowerName}</if>
+		<if test="null!=lineflag and ''!=lineflag"> AND `lineflag`=#{lineflag}</if>
+		<if test="null!=offlineReceivingTag and ''!=offlineReceivingTag"> AND `offlineReceivingTag`=#{offlineReceivingTag}</if>
+		<if test="null!=repaymentMode and repaymentMode>0"> AND `repaymentMode`=#{repaymentMode}</if>
+		<if test="null!=deductionsType and ''!=deductionsType"> AND `deductionsType`=#{deductionsType}</if>
+		<if test="null!=deductionsBank and ''!=deductionsBank"> AND `deductionsBank`=#{deductionsBank}</if>
+		<if test="null!=debitAccount and ''!=debitAccount"> AND `debitAccount`=#{debitAccount}</if>
+		<if test="null!=deductionsChannels and ''!=deductionsChannels"> AND `deductionsChannels`=#{deductionsChannels}</if>
+		<if test="null!=specialAccountBankSerialNumber and ''!=specialAccountBankSerialNumber"> AND `specialAccountBankSerialNumber`=#{specialAccountBankSerialNumber}</if>
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<if test="null!=currentPeriod and currentPeriod>0"> AND `currentPeriod`=#{currentPeriod}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(dueDateBegin)"> AND dueDate >= #{dueDateBegin}</if>
+		<if test="@Ognl@isNotEmpty(dueDateEnd)"> AND dueDate &lt;= #{dueDateEnd}</if>
+		-->
+		<!--
+		<if test="@Ognl@isNotEmpty(repaymentDateBegin)"> AND repaymentDate >= #{repaymentDateBegin}</if>
+		<if test="@Ognl@isNotEmpty(repaymentDateEnd)"> AND repaymentDate &lt;= #{repaymentDateEnd}</if>
+		-->
+		<!--
+		<if test="@Ognl@isNotEmpty(bankActualDateBegin)"> AND bankActualDate >= #{bankActualDateBegin}</if>
+		<if test="@Ognl@isNotEmpty(bankActualDateEnd)"> AND bankActualDate &lt;= #{bankActualDateEnd}</if>
+		-->
+		<if test="null!=receivablePrincipal and receivablePrincipal>0"> AND `receivablePrincipal`=#{receivablePrincipal}</if>
+		<if test="null!=receivableInterest and receivableInterest>0"> AND `receivableInterest`=#{receivableInterest}</if>
+		<if test="null!=receivableDefaultInterest and receivableDefaultInterest>0"> AND `receivableDefaultInterest`=#{receivableDefaultInterest}</if>
+		<if test="null!=periodAmount and periodAmount>0"> AND `periodAmount`=#{periodAmount}</if>
+		<if test="null!=receivedPrincipal and receivedPrincipal>0"> AND `receivedPrincipal`=#{receivedPrincipal}</if>
+		<if test="null!=receivedInterest and receivedInterest>0"> AND `receivedInterest`=#{receivedInterest}</if>
+		<if test="null!=receivedDefaultInterest and receivedDefaultInterest>0"> AND `receivedDefaultInterest`=#{receivedDefaultInterest}</if>
+		<if test="null!=receivedPrincipalTotal and receivedPrincipalTotal>0"> AND `receivedPrincipalTotal`=#{receivedPrincipalTotal}</if>
+		<if test="null!=receivedInterestTotal and receivedInterestTotal>0"> AND `receivedInterestTotal`=#{receivedInterestTotal}</if>
+		<if test="null!=receivedDefaultInterestTotal and receivedDefaultInterestTotal>0"> AND `receivedDefaultInterestTotal`=#{receivedDefaultInterestTotal}</if>
+		<if test="null!=totalAmountReceived and totalAmountReceived>0"> AND `totalAmountReceived`=#{totalAmountReceived}</if>
+		<if test="null!=remissionPrincipal and remissionPrincipal>0"> AND `remissionPrincipal`=#{remissionPrincipal}</if>
+		<if test="null!=remissionInterest and remissionInterest>0"> AND `remissionInterest`=#{remissionInterest}</if>
+		<if test="null!=remissionDefaultInterest and remissionDefaultInterest>0"> AND `remissionDefaultInterest`=#{remissionDefaultInterest}</if>
+		<if test="null!=totalDeductionAmount and totalDeductionAmount>0"> AND `totalDeductionAmount`=#{totalDeductionAmount}</if>
+		<if test="null!=eventTypeName and ''!=eventTypeName"> AND `eventTypeName`=#{eventTypeName}</if>
+		<if test="null!=eventType and ''!=eventType"> AND `eventType`=#{eventType}</if>
+		<if test="null!=extendField1 and ''!=extendField1"> AND `extendField1`=#{extendField1}</if>
+		<if test="null!=extendField2 and ''!=extendField2"> AND `extendField2`=#{extendField2}</if>
+		<if test="null!=extendField3 and ''!=extendField3"> AND `extendField3`=#{extendField3}</if>
+		<if test="null!=extendField4 and ''!=extendField4"> AND `extendField4`=#{extendField4}</if>
+		<if test="null!=extendField5 and ''!=extendField5"> AND `extendField5`=#{extendField5}</if>
+	</where>
+  </sql>
+    
+    <sql id="listWhere">
+        <if test="eventType!=null">
+            AND eventType = #{eventType}
+        </if>
+        <if test="createUid!=null and createUid!=''">
+            AND createUid = #{createUid}
+        </if>
+        <if test="whereName!=null and whereName!=''">
+            AND (eventTypeName LIKE CONCAT('%', #{whereName},'%') OR createName LIKE CONCAT('%', #{whereName},'%') OR remark LIKE CONCAT('%', #{whereName},'%'))
+        </if>
+        <if test="createStartTime!=null">
+            <![CDATA[  and DATE_FORMAT(createTime,'%Y-%m-%d') >= DATE_FORMAT(#{createStartTime}, '%Y-%m-%d')]]>
+        </if>
+        <if test="createEndTime!=null">
+            <![CDATA[  and DATE_FORMAT(createTime,'%Y-%m-%d') <= DATE_FORMAT(#{createEndTime}, '%Y-%m-%d')]]>
+        </if>
+    </sql>
+  <!-- 获取实体 -->
+  <select id="find" parameterType="TblFinanceAfterloanLinePaymentDto" resultType="TblFinanceAfterloanLinePaymentDto">    
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `borrowerName`, `lineflag`, `offlineReceivingTag`, `repaymentMode`, `deductionsType`, `deductionsBank`, `debitAccount`, `deductionsChannels`, `specialAccountBankSerialNumber`, `orderNo`, `currentPeriod`, `dueDate`, `repaymentDate`, `bankActualDate`, `receivablePrincipal`, `receivableInterest`, `receivableDefaultInterest`, `periodAmount`, `receivedPrincipal`, `receivedInterest`, `receivedDefaultInterest`, `receivedPrincipalTotal`, `receivedInterestTotal`, `receivedDefaultInterestTotal`, `totalAmountReceived`, `remissionPrincipal`, `remissionInterest`, `remissionDefaultInterest`, `totalDeductionAmount`, `eventTypeName`, `eventType`, `extendField1`, `extendField2`, `extendField3`, `extendField4`, `extendField5` 
+	FROM tbl_finance_afterloan_line_payment 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="TblFinanceAfterloanLinePaymentDto" resultType="TblFinanceAfterloanLinePaymentDto">
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `borrowerName`, `lineflag`, `offlineReceivingTag`, `repaymentMode`, `deductionsType`, `deductionsBank`, `debitAccount`, `deductionsChannels`, `specialAccountBankSerialNumber`, `orderNo`, `currentPeriod`, `dueDate`, `repaymentDate`, `bankActualDate`, `receivablePrincipal`, `receivableInterest`, `receivableDefaultInterest`, `periodAmount`, `receivedPrincipal`, `receivedInterest`, `receivedDefaultInterest`, `receivedPrincipalTotal`, `receivedInterestTotal`, `receivedDefaultInterestTotal`, `totalAmountReceived`, `remissionPrincipal`, `remissionInterest`, `remissionDefaultInterest`, `totalDeductionAmount`, `eventTypeName`, `eventType`, `extendField1`, `extendField2`, `extendField3`, `extendField4`, `extendField5`
+	FROM tbl_finance_afterloan_line_payment 
+	<include refid="sqlwhereSearch"/>
+         ORDER BY id desc
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="TblFinanceAfterloanLinePaymentDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_finance_afterloan_line_payment 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="TblFinanceAfterloanLinePaymentDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_finance_afterloan_line_payment(
+		`createUid`,
+		`createTime`,
+		`updateUid`,
+		`updateTime`,
+		`borrowerName`,
+		`lineflag`,
+		`offlineReceivingTag`,
+		`repaymentMode`,
+		`deductionsType`,
+		`deductionsBank`,
+		`debitAccount`,
+		`deductionsChannels`,
+		`specialAccountBankSerialNumber`,
+		`orderNo`,
+		`currentPeriod`,
+		`dueDate`,
+		`repaymentDate`,
+		`bankActualDate`,
+		`receivablePrincipal`,
+		`receivableInterest`,
+		`receivableDefaultInterest`,
+		`periodAmount`,
+		`receivedPrincipal`,
+		`receivedInterest`,
+		`receivedDefaultInterest`,
+		`receivedPrincipalTotal`,
+		`receivedInterestTotal`,
+		`receivedDefaultInterestTotal`,
+		`totalAmountReceived`,
+		`remissionPrincipal`,
+		`remissionInterest`,
+		`remissionDefaultInterest`,
+		`totalDeductionAmount`,
+		`eventTypeName`,
+		`eventType`,
+		`extendField1`,
+		`extendField2`,
+		`extendField3`,
+		`extendField4`,
+		`extendField5`
+	) VALUES(
+		#{createUid},
+		now(),
+		#{createUid},
+		now(),
+		#{borrowerName},
+		#{lineflag},
+		#{offlineReceivingTag},
+		#{repaymentMode},
+		#{deductionsType},
+		#{deductionsBank},
+		#{debitAccount},
+		#{deductionsChannels},
+		#{specialAccountBankSerialNumber},
+		#{orderNo},
+		#{currentPeriod},
+		#{dueDate},
+		#{repaymentDate},
+		#{bankActualDate},
+		#{receivablePrincipal},
+		#{receivableInterest},
+		#{receivableDefaultInterest},
+		#{periodAmount},
+		#{receivedPrincipal},
+		#{receivedInterest},
+		#{receivedDefaultInterest},
+		#{receivedPrincipalTotal},
+		#{receivedInterestTotal},
+		#{receivedDefaultInterestTotal},
+		#{totalAmountReceived},
+		#{remissionPrincipal},
+		#{remissionInterest},
+		#{remissionDefaultInterest},
+		#{totalDeductionAmount},
+		#{eventTypeName},
+		#{eventType},
+		#{extendField1},
+		#{extendField2},
+		#{extendField3},
+		#{extendField4},
+		#{extendField5}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="TblFinanceAfterloanLinePaymentDto" >
+    DELETE FROM tbl_finance_afterloan_line_payment 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="TblFinanceAfterloanLinePaymentDto" >
+    UPDATE tbl_finance_afterloan_line_payment
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=borrowerName">`borrowerName`=#{borrowerName},</if>
+		<if test="null!=lineflag">`lineflag`=#{lineflag},</if>
+		<if test="null!=offlineReceivingTag">`offlineReceivingTag`=#{offlineReceivingTag},</if>
+		<if test="null!=repaymentMode">`repaymentMode`=#{repaymentMode},</if>
+		<if test="null!=deductionsType">`deductionsType`=#{deductionsType},</if>
+		<if test="null!=deductionsBank">`deductionsBank`=#{deductionsBank},</if>
+		<if test="null!=debitAccount">`debitAccount`=#{debitAccount},</if>
+		<if test="null!=deductionsChannels">`deductionsChannels`=#{deductionsChannels},</if>
+		<if test="null!=specialAccountBankSerialNumber">`specialAccountBankSerialNumber`=#{specialAccountBankSerialNumber},</if>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=currentPeriod">`currentPeriod`=#{currentPeriod},</if>
+		<if test="null!=dueDate">`dueDate`=#{dueDate},</if>
+		<if test="null!=repaymentDate">`repaymentDate`=#{repaymentDate},</if>
+		<if test="null!=bankActualDate">`bankActualDate`=#{bankActualDate},</if>
+		<if test="null!=receivablePrincipal">`receivablePrincipal`=#{receivablePrincipal},</if>
+		<if test="null!=receivableInterest">`receivableInterest`=#{receivableInterest},</if>
+		<if test="null!=receivableDefaultInterest">`receivableDefaultInterest`=#{receivableDefaultInterest},</if>
+		<if test="null!=periodAmount">`periodAmount`=#{periodAmount},</if>
+		<if test="null!=receivedPrincipal">`receivedPrincipal`=#{receivedPrincipal},</if>
+		<if test="null!=receivedInterest">`receivedInterest`=#{receivedInterest},</if>
+		<if test="null!=receivedDefaultInterest">`receivedDefaultInterest`=#{receivedDefaultInterest},</if>
+		<if test="null!=receivedPrincipalTotal">`receivedPrincipalTotal`=#{receivedPrincipalTotal},</if>
+		<if test="null!=receivedInterestTotal">`receivedInterestTotal`=#{receivedInterestTotal},</if>
+		<if test="null!=receivedDefaultInterestTotal">`receivedDefaultInterestTotal`=#{receivedDefaultInterestTotal},</if>
+		<if test="null!=totalAmountReceived">`totalAmountReceived`=#{totalAmountReceived},</if>
+		<if test="null!=remissionPrincipal">`remissionPrincipal`=#{remissionPrincipal},</if>
+		<if test="null!=remissionInterest">`remissionInterest`=#{remissionInterest},</if>
+		<if test="null!=remissionDefaultInterest">`remissionDefaultInterest`=#{remissionDefaultInterest},</if>
+		<if test="null!=totalDeductionAmount">`totalDeductionAmount`=#{totalDeductionAmount},</if>
+		<if test="null!=eventTypeName">`eventTypeName`=#{eventTypeName},</if>
+		<if test="null!=eventType">`eventType`=#{eventType},</if>
+		<if test="null!=extendField1">`extendField1`=#{extendField1},</if>
+		<if test="null!=extendField2">`extendField2`=#{extendField2},</if>
+		<if test="null!=extendField3">`extendField3`=#{extendField3},</if>
+		<if test="null!=extendField4">`extendField4`=#{extendField4},</if>
+		<if test="null!=extendField5">`extendField5`=#{extendField5},</if>
+	</set>
+	WHERE 1=1
+	<if test="null!=id"> and ID=#{id}</if>
+	<if test="null!=orderNo">and orderNo=#{orderNo}</if>
+	<if test="null!=currentPeriod">and `currentPeriod`=#{currentPeriod}</if>
+	
+  </update>
+    
+</mapper>

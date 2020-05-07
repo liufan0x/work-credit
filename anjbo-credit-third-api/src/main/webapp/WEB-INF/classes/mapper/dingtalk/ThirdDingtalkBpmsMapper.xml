@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.anjbo.dao.dingtalk.ThirdDingtalkBpmsMapper">	
+	<!-- where条件引用sql-->
+	<sql id="thirdDingtalkBpmsWhereSQL">
+		<where>
+	       		<if test="null!=bpmsFrom and ''!=bpmsFrom">
+					and bpmsFrom = #{bpmsFrom}
+				</if>	
+		</where>
+	</sql>
+	<!-- 获取列表-->
+	<select id="search" parameterType="ThirdDingtalkBpmsDto" resultType="ThirdDingtalkBpmsDto">
+		select * from tbl_third_dingtalk_bpms 
+		<include refid="thirdDingtalkBpmsWhereSQL" />
+		order by createTime desc 
+	</select>
+	<select id="searchCount" parameterType="ThirdDingtalkBpmsDto" resultType="int">
+		select count(1) from tbl_third_dingtalk_bpms <include refid="thirdDingtalkBpmsWhereSQL" />
+	</select>
+		
+	<!-- 新增-->
+	<insert id="add" parameterType="ThirdDingtalkBpmsDto" useGeneratedKeys="true" keyProperty="id">
+		insert	into tbl_third_dingtalk_bpms(
+			<trim suffixOverrides=",">
+				<if test="bpmsFrom != null">`bpmsFrom`,</if>
+				<if test="bpmsFromId != null">`bpmsFromId`,</if>
+				<if test="agentId != null">`agentId`,</if>
+				<if test="processCode != null">`processCode`,</if>
+				<if test="originatorUserId != null">`originatorUserId`, originatorUserName,</if>
+				<if test="originatorDeptId != null">`originatorDeptId`,</if>
+				<if test="approvers != null">`approvers`, approversName,</if>
+				<if test="ccList != null">`ccList`, ccListName,</if>
+				<if test="formComponent != null">`formComponent`,</if>
+				<if test="processInstanceId != null">`processInstanceId`,</if>
+				<if test="createUid != null">`createUid`,</if>
+				createTime
+			</trim>
+		)
+		values(	
+			<trim suffixOverrides=",">
+				<if test="bpmsFrom != null">#{bpmsFrom},</if>
+				<if test="bpmsFromId != null">#{bpmsFromId},</if>
+				<if test="agentId != null">#{agentId},</if>
+				<if test="processCode != null">#{processCode},</if>
+				<if test="originatorUserId != null">#{originatorUserId}, #{originatorUserName},</if>
+				<if test="originatorDeptId != null">#{originatorDeptId},</if>
+				<if test="approvers != null">#{approvers}, #{approversName},</if>
+				<if test="ccList != null">#{ccList}, #{ccListName},</if>
+				<if test="formComponent != null">#{formComponent},</if>
+				<if test="processInstanceId != null">#{processInstanceId},</if>
+				<if test="createUid != null">#{createUid},</if>
+				NOW()
+			</trim>
+		)
+	</insert>
+	
+</mapper>

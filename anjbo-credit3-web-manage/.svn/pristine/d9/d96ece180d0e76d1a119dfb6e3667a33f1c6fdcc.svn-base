@@ -1,0 +1,167 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<ul class="breadcrumb">
+				<li><a ui-sref="{{state}}" ng-bind="stateName"></a> <span class="divider"></span></li>
+				<li class="active">权限</li>
+				<li class="active" ng-bind="showName"></li>
+				<li class="go-back"> <a ui-sref="{{state}}" >返回上一步</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="row" style="margin-left:30px;">
+		<div class="col-md-12">&nbsp;
+			<div class="btn-group">
+			    <button type="button" class="btn" ng-click="systemType=1" ng-class="{true: 'btn-primary', false: 'btn-default'}[systemType==1]">信贷系统/小鸽App</button>
+			    <button type="button" class="btn" ng-click="systemType=2" ng-class="{true: 'btn-primary', false: 'btn-default'}[systemType==2]">管理系统</button>
+			</div>
+		</div>
+	</div>
+	<xindaixitong ng-if="systemType==1">
+	<div class="row"> 
+		<div class="col-md-8 detail-right-tit">&nbsp;&nbsp;基本权限配置</div>
+	</div>
+	<!--表格-->
+	<div class="row" style="margin-left:30px;">
+		<div class="col-md-8">
+			<table class="table table-hover table-bordered">
+				<thead>
+					<tr><th>序号</th><th>模块</th><th>操作</th></tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="base in baseList" ng-if="base.authType==1 && base.type==2 && 'ALL'==base.platformNature">
+						<td ng-bind="$index+1"></td>
+						<td ng-bind="base.resourceName"></td>
+						<td>
+							<label class="checkbox-inline" ng-repeat="authority in base.authorityList ">
+								<input type="checkbox" name="optionsRadiosinline{{$parent.$index}}{{$index}}" ng-model="authority.authId" ng-true-value="'{{authority.id}}'" >
+								<input type="checkbox" name="optionsRadiosinline{{$parent.$index}}{{$index}}" ng-if="$index==2" ng-checked="true" >
+								<span ng-if="$index==0">
+									<span ng-if="base.resourceName=='看单权限配置' || base.resourceName=='看机构列表单权限配置'">所有</span>
+									<span ng-if="base.resourceName=='看完结订单的影像资料'">查看</span>
+									<span ng-if="base.resourceName!='看单权限配置' && base.resourceName!='看完结订单的影像资料' && base.resourceName!='看机构列表单权限配置'">操作</span>
+								</span>
+								<span ng-if="$index==1">
+									<span ng-if="base.resourceName=='看单权限配置' || base.resourceName=='看机构列表单权限配置'">部门</span>
+									<span ng-if="base.resourceName=='看完结订单的影像资料'">禁用</span>
+									<span ng-if="base.resourceName!='看单权限配置' && base.resourceName!='看完结订单的影像资料' && base.resourceName!='看机构列表单权限配置'">只读</span>
+								</span>
+								<span ng-if="$index==2">
+									<span ng-if="base.resourceName=='看单权限配置' || base.resourceName=='看机构列表单权限配置' ">自己</span>
+								</span>
+							</label>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="row" style="margin-left:30px;">
+		<div class="col-md-12">&nbsp;城市：
+			<div class="btn-group" style="margin-left:30px;">
+			    <button type="button" class="btn" ng-repeat="city in cityList" ng-click="setCityCode(city.id,city.productList)" ng-class="{true: 'btn-primary', false: 'btn-default'}[cityCode=={{city.id}}]">{{city.name}}</button>
+			</div>
+		</div>
+	</div>
+
+	<div class="clear" style="height:25px;"></div>
+	<div class="row" style="margin-left:30px;">
+		<div class="col-md-12">&nbsp;业务产品：
+			<div class="btn-group" ng-repeat="city in cityList" >
+			    <button ng-show="city.id==cityCode" ng-repeat="product in city.productList" ng-if="(product.id|limitTo:6:4)!='10000'" type="button" class="btn" ng-click="setProductId(product.id)" ng-class="{true: 'btn-primary', false: 'btn-default'}[productId=='{{product.id}}']">
+			    	{{product.name}}
+			    </button>
+			</div>
+		</div>
+	</div>
+	
+	<div class="clear" style="height:25px;"></div>
+
+
+	<div class="row"> 
+		<div class="col-md-8 detail-right-tit">&nbsp;&nbsp;产品节点权限配置</div>
+	</div>
+
+	<div class="row" style="margin-left:30px;"  >
+		<div class="col-md-8"  style="height:304px;overflow-y:scroll;">
+			<table class="table table-hover table-bordered" ng-repeat="city in cityList" ng-show="city.id==cityCode">
+				<thead ng-repeat="product in city.productList" ng-show="product.id==productId">
+					<tr>
+						<th>序号</th>
+						<th>模块</th>
+						<th>
+							<input type="checkbox" ng-model="product.allCz" ng-click="allChecked(0,productId,product.allCz)">操作全选　
+							<input type="checkbox" ng-model="product.allZd" ng-click="allChecked(1,productId,product.allZd)">只读全选
+						</th>
+					</tr>
+				</thead>
+				<tbody ng-repeat="product in city.productList" ng-show="product.id==productId">
+					<tr ng-repeat="node in product.nodeList" ng-if="node.name!='已完结'">
+						<td ng-bind="$index+1"></td>
+						<td ng-bind="node.name"></td>
+						<td>
+							<label class="checkbox-inline" ng-repeat="authority in node.authorityList ">
+								<input type="checkbox" name="optionsRadiosinline1{{$parent.$index}}" ng-model="authority.authId" ng-true-value="'{{authority.id}}'" ng-false-value="">
+								<span ng-if="$index==0">操作</span>
+								<span ng-if="$index==1">只读</span>
+							</label>
+						</td>
+					</tr>
+				</tbody>
+			 </table>
+		</div>
+	</div>
+	
+	<div class="clear" style="height:35px;"></div>
+	<div class="row"> 
+		<div class="col-md-8 detail-right-tit">&nbsp;&nbsp;信贷系统菜单配置</div>
+	</div>	
+	<div class="row" style="margin-left:30px;">
+		    <div class="col-md-12" ng-repeat="pBase in baseList" ng-if="pBase.authType==1 && pBase.type==1 && pBase.platformNature!='ORG'">
+				<div class="first-div nav-row" ng-if="pBase.pid == 0">
+					<a class="nav-left first-div-left"><span class="left-arrow"></span><span ng-bind="pBase.resourceName"></span></a>
+				 </div>
+				 <div class="nav-hide" >
+					 <div class="second-div nav-row" ng-repeat ="base in baseList" ng-if="base.pid==pBase.id && base.pid!=0 && base.platformNature!='ORG'">
+						<a  class="nav-left" style="width:200px;"><span class="left-null" ></span><span ng-bind="base.resourceName"></span></a>
+						<label class="checkbox-inline" ng-repeat="authority in base.authorityList ">
+							<input type="checkbox" name="optionsRadiosinline2{{$parent.$index}}{{$index}}"  ng-model="authority.authId" ng-true-value="'{{authority.id}}'" ng-false-value="">
+							<span ng-if="$index==0">操作</span>
+							<span ng-if="$index==1">只读</span>
+						</label>
+					 </div>
+				 </div>
+			</div>
+	</div>
+		
+	</xindaixitong>
+
+	<guanlixitong ng-show="systemType==2">
+		<div class="row" style="margin-left:30px;">
+		    <div class="col-md-12" ng-repeat="pBase in baseList" ng-if="pBase.authType==2 && pBase.platformNature!='ORG'">
+				<div class="first-div nav-row" ng-if="pBase.pid == 0">
+					<a class="nav-left first-div-left"><span class="left-arrow"></span><span ng-bind="pBase.resourceName"></span></a>
+				 </div>
+				 <div class="nav-hide" >
+					 <div class="second-div nav-row" ng-repeat ="base in baseList" ng-if="base.pid==pBase.id && base.pid!=0 && base.platformNature!='ORG'">
+						<a  class="nav-left" style="width:200px;"><span class="left-null" ></span><span ng-bind="base.resourceName"></span></a>
+						<label class="checkbox-inline" ng-repeat="authority in base.authorityList ">
+							<input type="checkbox" name="optionsRadiosinline2{{$parent.$index}}{{$index}}"  ng-model="authority.authId" ng-true-value="'{{authority.id}}'" ng-false-value="">
+							<span ng-if="$index==0">操作</span>
+							<span ng-if="$index==1">只读</span>
+						</label>
+					 </div>
+				 </div>
+			</div>
+		</div>
+	</guanlixitong>
+
+	<div class="clear" style="height:35px;"></div>
+	<div class="row" style="margin-left:30px;">
+		<div class="col-md-12">&nbsp; 
+			<button type="button" class="btn btn-primary" ng-click="submit()">提交</button>
+			<button type="button" class="btn btn-warning" ng-click="reset()">重置</button>
+		</div>
+	</div>
+</div>

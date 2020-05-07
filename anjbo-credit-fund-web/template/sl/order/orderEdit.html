@@ -1,0 +1,42 @@
+<div class="detail-left">
+     <p class="detail-left-tit">订单状态</p>
+	 <div class="detail-left-nav">
+		  <div class="detail-left-nav-box" ng-repeat="orderFlow in orderFlowList">
+		    	<div class="detail-left-line" ng-show="orderFlowList.length != $index+1"></div>
+				<a ng-if="orderFlow.backReason==null || orderFlow.backReason==''" ng-click="showDetail(orderFlow.currentProcessId)" class="relative">
+						<div class="detail-left-circle"></div>
+						<span ng-bind="orderFlow.currentProcessName"></span>
+						<span ng-if="orderFlow.currentProcessId!='wanjie'">已完成 </span>
+				</a>
+				<span ng-if="orderFlow.backReason!=null  && orderFlow.backReason!='' " href="javascript:void(0)" class="relative text-warning"><div class="detail-left-circle"></div>订单已从【<span ng-bind="orderFlow.currentProcessName"></span>】退回给【<span ng-bind="orderFlow.nextProcessName"></span>】</span>
+				<p ng-if="orderFlow.backReason!=null  && orderFlow.backReason!='' " ng-bind="'退回原因：'+orderFlow.backReason"></p>
+				<p class="text-muted" ng-if="orderFlow.currentProcessId!='wanjie'">操作人：<span ng-bind="orderFlow.handleName"></span></p>
+				<p class="text-muted" ng-bind="orderFlow.handleTime | date:'yyyy-MM-dd HH:mm:ss'" ></p>
+		  </div>
+	 </div>
+	 <div class="showBtn" style="position: fixed;height: 50px;width: 10px;z-index: 1000;background: #333a47;left:290px;top: 450px;border-top-right-radius: 8px;border-bottom-right-radius: 8px;color: white;line-height: 50px; cursor:pointer"><</div>
+</div>
+ 
+<div class="detail-right" ui-view="">
+	
+</div>
+<!--TODO WYC 侧边栏样式和JS 7-20-->
+<script>
+	$(function() {
+		$('div.showBtn').on('click', function() {
+			if($('div.detail-left').width() == 290) {
+				$('div.detail-left').animate({ width: '0px' });
+				$('div.showBtn').animate({ left: '0px' });
+				$('div.detail-right').animate({ left: '10px' },function(){
+					$('div.showBtn').html('>');
+				});
+			} else {
+				$('div.detail-left').animate({ width: '290px' });
+				$('div.showBtn').animate({ left: '290px' });
+				$('div.detail-right').animate({ left: '300px' },function(){
+					$('div.showBtn').html('<');
+				});
+			}
+		});
+	});
+</script>

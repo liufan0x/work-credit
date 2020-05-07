@@ -1,0 +1,57 @@
+
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;快鸽提单信息--房产信息
+     <button type="button" ng-click="saveA(4)" class="btn btn-info detail-right-save"  >保存</button>
+    </div>
+    <div class="row form-inline detail-row" style="padding:0 10px;">
+        <div class="col-md-6 col-lg-4">
+            <label>所有权人: </label> <input  ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" name="kgHouseOwner" ng-model="huaRongDto.kgHouse.owner" class="form-control" required/>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgHouseForm.kgHouseOwner.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>房屋地址:</label> <input  ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" name="kgHouseAddress" ng-model="huaRongDto.kgHouse.houseAddress" class="form-control" required/>
+             <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgHouseForm.kgHouseAddress.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>建筑面积:</label> <input  ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" name="kgHouseBuiltArea" ng-model="huaRongDto.kgHouse.builtArea" class="form-control" required/>m²
+             <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgHouseForm.kgHouseBuiltArea.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>房产证号:</label> <input  ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" name="kgHouseHouseNo" ng-model="huaRongDto.kgHouse.houseNo"  class="form-control" required/>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgHouseForm.kgHouseHouseNo.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>询价-评估总值:</label> <input  ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" name="kgHouseTotalAssessment" ng-model="huaRongDto.kgHouse.totalAssessment"  class="form-control"/>元
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>询价-评估净值:</label> <input  ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" name="kgHouseWorthAssessment" ng-model="huaRongDto.kgHouse.worthAssessment"  class="form-control"/>元
+        </div>
+        <div class="col-md-12 col-lg-12">
+            <label style="width:160px">询价-首套房最高可贷:</label> <input  ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" name="kgHouseFirstHouseLoan" ng-model="huaRongDto.kgHouse.firstHouseLoan"  class="form-control"/>元
+        </div>
+    </div>
+</div>
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;</div>
+    <div class="clear" style="width:100%; height:1px; clear:both;"></div>
+    <div class="row relative ng-scope">
+        <span class="remark-span remark-lhw">查档：</span>
+        <textarea ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" style="border:1px solid #ddd;width:82%;" class="remark-p remark-lhw-p textarea-lhw ng-binding ng-isolate-scope"  ng-model="huaRongDto.kgHouse.consult" name="kgHouseConsult"> </textarea>
+    </div>
+</div>
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;</div>
+    <div class="clear" style="width:100%; height:1px; clear:both;"></div>
+    <div class="row relative ng-scope">
+        <span class="remark-span remark-lhw">备注：</span>
+        <textarea ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" style="border:1px solid #ddd;width:82%;" class="remark-p remark-lhw-p textarea-lhw ng-binding ng-isolate-scope"  ng-model="huaRongDto.kgHouse.remark" name="kgHouseRemark"> </textarea>
+    </div>
+</div>

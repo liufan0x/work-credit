@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.mort.msloan.MSLoanMapper">
+    <!-- 更新可贷金额 -->
+    <update id="updateQuotaById" parameterType="com.anjbo.bean.msloan.MSCustomerDto">
+     UPDATE `zxsf360-mortgage-test`.`tbl_loan_ms_order`
+            SET `loanAmount`=#{loanAmount},`state`=#{state},`opinion`=#{opinion}
+            WHERE (`workorderId`=#{workorderId}) 
+    </update>
+    <!-- 更新节点表的可贷款金额
+     <update id="updateLoanAmount" parameterType="com.anjbo.bean.msloan.MSCustomerDto">
+     UPDATE `zxsf360-mortgage-test`.`tbl_order_third`
+            SET `loanAmount`=#{loanAmount}
+            WHERE (`orderNo`=#{workorderId}) 
+    </update> -->
+    <!-- 更新发送信息状态 -->
+     <update id="updateMSSmsStatebyId" parameterType="com.anjbo.bean.msloan.MSCustomerDto">
+     UPDATE `zxsf360-mortgage-test`.`tbl_loan_ms_order`
+            SET `SmsState`=#{SmsState}
+            WHERE (`workorderId`=#{workorderId}) 
+    </update>
+    <!-- 查询正在审批的订单 -->
+    <select id="selectMSDetailByQuota" resultType="com.anjbo.bean.msloan.MSCustomerDto">
+		<!-- select * from tbl_loan_ms_order where loanAmount is NULL or loanAmount='0' -->
+		select * from tbl_loan_ms_order where  processId=2 or processId=3
+	</select>
+</mapper>

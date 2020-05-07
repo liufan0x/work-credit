@@ -1,0 +1,243 @@
+<form name="huaanForm">
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;客户信息</div>
+    <div class="row form-inline detail-row" style="padding:0 10px;">
+        <div class="col-md-6 col-lg-4">
+            <label>客户姓名: </label> <input type="text" name="customerName" ng-model="huaan.customerName" class="form-control" required/>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huaanForm.customerName.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>手机号码:</label> <input type="text" name="phoneNumber" ng-model="huaan.phoneNumber" class="form-control" required/>
+             <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huaanForm.phoneNumber.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>身份证号码:</label> <input type="text" name="idCardNo" ng-model="huaan.idCardNo" class="form-control" required/>
+             <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huaanForm.idCardNo.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4"
+             ng-if="huaan.customerMarriageState=='已婚无子女'
+             ||huaan.customerMarriageState=='已婚有子女'
+             ||huaan.customerMarriageState =='复婚'">
+            <label>配偶姓名:</label> <input type="text" name="customerWifeName" ng-model="huaan.customerWifeName"  class="form-control"/>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>婚姻状况:</label>
+            <select class="form-control" name="customerMarriageState" ng-model="huaan.customerMarriageState" choice-dict-name="marriageState" required>
+                <option value="">请选择</option>
+            </select>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huaanForm.customerMarriageState.$error.required">必填</error>
+		    </span>
+        </div>
+    </div>
+</div>
+
+
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;贷款信息</div>
+    <div class="row form-inline detail-row" style="padding:0 10px;">
+        <div class="col-md-6 col-lg-4">
+            <label>业务类型: </label><span ng-bind="huaan.productName"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>借款金额: </label> <input type="number"  string-to-number  ng-model="huaan.loanAmount" name="loanAmount" class="form-control" required/>万元
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huaanForm.loanAmount.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>原房贷余额: </label> <input type="number" string-to-number ng-model="huaan.oldHouseLoanBalance" name="oldHouseLoanBalance" class="form-control" required/>万元
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huaanForm.oldHouseLoanBalance.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>回款开户银行: </label> <input type="text" ng-model="huaan.paymentBankName" name="paymentBankName" class="form-control"/>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label style="width:115px;">回款银行卡户名: </label> <input type="text" ng-model="huaan.paymentBankCardName" name="paymentBankCardName" class="form-control"/>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label style="width:115px;">回款银行卡账号: </label> <input type="text" ng-model="huaan.paymentBankNumber" name="paymentBankNumber" class="form-control"/>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;房产信息</div>
+    <div class="row form-inline detail-row" style="padding:0 10px;">
+        <div class="col-md-6 col-lg-4">
+            <label>房产名称: </label> <input type="text" name="houseName" ng-model="huaan.houseName" class="form-control" required/>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huaanForm.houseName.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>产权人姓名: </label> <input type="text" name="propertyName" ng-model="huaan.propertyName" class="form-control" required/>
+             <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huaanForm.propertyName.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>证件号码: </label> <input type="text" name="propertyCardNumber" ng-model="huaan.propertyCardNumber"  class="form-control" required/>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huaanForm.propertyCardNumber.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>产权证号: </label> <input type="text" name="housePropertyNumber" ng-model="huaan.housePropertyNumber"  class="form-control" required/>
+             <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huaanForm.housePropertyNumber.$error.required">必填</error>
+		    </span>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;买家贷款信息</div>
+    <div class="row form-inline detail-row" style="padding:0 10px;">
+
+        <div class="col-md-6 col-lg-4" ng-if="borrow.productCode=='01'">
+            <label>资金监管金额: </label> <input type="text" name="houseSuperviseAmount" ng-model="huaan.houseSuperviseAmount"  class="form-control" required/>万元
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huaanForm.houseSuperviseAmount.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4" ng-if="borrow.productCode=='01'">
+            <label>贷款金额: </label> <input type="text" name="houseLoanAmount" ng-model="huaan.houseLoanAmount"  class="form-control" required/>万元
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huaanForm.houseLoanAmount.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>贷款是否银行: </label>
+            <select class="form-control" name="isOldLoanBank" ng-model="huaan.isOldLoanBank">
+                <option value="1">是</option>
+                <option value="2">否</option>
+            </select>
+        </div>
+        <div class="col-md-12 col-lg-12" ng-if="huaan.isOldLoanBank==1">
+            <label>贷款银行-支行: </label>
+            <bank-sub-bank bank-id="huaan.houseLoanBankId" sub-bank-id="huaan.houseLoanSubBankId" ></bank-sub-bank>
+            <span class="text-danger" ng-show="isBankAudit">必选</span>
+        </div>
+        <div class="col-md-6 col-lg-4" ng-if="huaan.isOldLoanBank==2">
+            <label>贷款地址: </label> <input type="text" name="houseLoanAddress" ng-model="huaan.houseLoanAddress"  class="form-control" required/>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huaanForm.houseLoanAddress.$error.required">必填</error>
+		    </span>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;卖家信息</div>
+    <div class="row form-inline detail-row" style="padding:0 10px;">
+        <div class="col-md-6 col-lg-4">
+            <label>客户姓名: </label> <input type="text" name="cusName" ng-model="huaan.cusName"  class="form-control" required/>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huaanForm.cusName.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>客户证件号码: </label> <input type="text" name="certCode" ng-model="huaan.certCode"  class="form-control" required/>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huaanForm.certCode.$error.required">必填</error>
+		    </span>
+        </div>
+    </div>
+</div>
+<div ng-if="borrow.productCode=='01'">
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;买家信息</div>
+    <div class="row form-inline detail-row" style="padding:0 10px;">
+        <div class="col-md-6 col-lg-4">
+            <label>买房人姓名: </label> <input type="text" name="buyName" ng-model="huaan.buyName" class="form-control" required/>
+             <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huaanForm.buyName.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>证件号码: </label> <input type="text" name="buyCardNumber"  ng-model="huaan.buyCardNumber" class="form-control" required/>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huaanForm.buyCardNumber.$error.required">必填</error>
+		    </span>
+        </div>
+    </div>
+</div>
+
+<div ng-if="null!=customer.customerGuaranteeDto&&customer.customerGuaranteeDto.length>0">
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;保证人信息</div>
+    <div class="row form-inline detail-row" style="padding:0 10px;" ng-if="customer.customerGuaranteeDto[0].guaranteeType!='保证'">
+        <div class="col-md-6 col-lg-4">
+            <label>证件号码: </label> <input type="text" name="guaranteeCardNumber" ng-model="huaan.guaranteeCardNumber" class="form-control"/>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>姓名: </label> <input type="text" name="guaranteeName" ng-model="huaan.guaranteeName" class="form-control"/>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>与借款人关系: </label> <input type="text" name="guaranteeRelationship" ng-model="huaan.guaranteeRelationship" class="form-control"/>
+        </div>
+    </div>
+    <div class="row form-inline detail-row" style="padding:0 10px;" ng-if="customer.customerGuaranteeDto[0].guaranteeType=='保证'">
+        <div class="col-md-6 col-lg-4">
+            <label>证件号码: </label> <input type="text" name="guaranteeCardNumber" ng-model="huaan.guaranteeCardNumber" class="form-control" required/>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huaanForm.guaranteeCardNumber.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>姓名: </label> <input type="text" name="guaranteeName" ng-model="huaan.guaranteeName" class="form-control" required/>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huaanForm.guaranteeName.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>与借款人关系: </label> <input type="text" name="guaranteeRelationship" ng-model="huaan.guaranteeRelationship" class="form-control" required/>
+             <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huaanForm.guaranteeRelationship.$error.required">必填</error>
+		    </span>
+        </div>
+    </div>
+</div>
+
+
+<div >
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;特殊推送信息</div>
+    <div class="row form-inline detail-row" style="padding:0 10px;">
+        <div class="col-md-6 col-lg-4">
+            <label>费率：</label> <input type="text" class="form-control" name="rate" ng-model="huaan.rate"/>%/天
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>执行费率：</label> <input type="text" name="implementRate" ng-model="huaan.implementRate" class="form-control" required/>%/天
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huaanForm.implementRate.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>期限类型：</label>
+            <select class="form-control" name="periodType" ng-model="huaan.periodType" required>
+                <option value="1">天</option>
+                <option value="2">月</option>
+            </select>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huaanForm.periodType.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>申请期限：</label>
+            <input type="text" class="form-control" name="applicationPeriod" ng-model="huaan.applicationPeriod" required/>
+            <span ng-if="huaan.periodType==1">天</span>
+            <span ng-if="huaan.periodType==2">月</span>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huaanForm.applicationPeriod.$error.required">必填</error>
+		    </span>
+        </div>
+    </div>
+</div>
+</form>

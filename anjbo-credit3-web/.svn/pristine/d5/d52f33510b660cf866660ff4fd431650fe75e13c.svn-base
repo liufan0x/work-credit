@@ -1,0 +1,223 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<ul class="breadcrumb relative">
+				<li>
+					<a>订单管理</a>
+					<span class="divider"></span>
+				</li>
+				<li class="active">全部订单</li>
+				<button type="button" class="btn btn-info detail-right-save fr" ng-show="isPlaceOrder" ng-click="showPlaceOrder()" style="position:absolute; top:4px; right:10px;">我要提单</button>
+			</ul>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12"> 
+			<form class="form-inline search" style="margin-bottom:20px;margin-left:30px; ">
+				<div class="form-group">
+					<label>订单类型：</label>
+					<select class="form-control" ng-model="page.type" style="width: 245px;">
+						<option value="0" >全部订单</option>
+						<option value="1">我处理过的订单</option>
+						<option value="2">待处理的订单</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label>城市-产品-状态：</label>
+					<select class="form-control" ng-model="page.cityCode" style="width: 100px;">
+						<option value="">全部</option>
+						<option ng-repeat="list in conditions.citys" ng-if="$index!=0" value="{{list.cityCode}}">{{list.cityName}}</option>
+					</select>
+					- 
+					<select class="form-control" ng-model="page.productCode" style="width: 200px;">
+						<option value="">全部</option>
+						<option ng-repeat="list in productList" ng-if="$index!=0" value="{{list.productCode}}">{{list.productName}}</option>
+					</select>
+					-
+					<select class="form-control" ng-model="page.state" style="width: 180px;" >
+						<option value="">全部</option>
+						<option ng-repeat="list in stateList" ng-if="$index!=0" value="{{list.stateName}}">{{list.stateName}}</option>
+					</select>
+				</div>
+				
+				<div class="form-group">
+					<label>合作机构：</label>
+					<select class="form-control" style="width: 180px;" ng-model="page.cooperativeAgencyId" agency-list>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label>城市-受理员：</label>
+					<select class="form-control" ng-model="acceptMemberCityCode" style="width: 130px;" ng-change="getAcceptList(acceptMemberCityCode)">
+						<option value="">全部</option>
+						<option ng-repeat="list in conditions.citys" ng-if="$index!=0" value="{{list.cityCode}}">{{list.cityName}}</option>
+					</select>
+					-
+					<select class="form-control" ng-model="page.acceptMemberUid" select2 style="width: 130px;" >
+						<option value="">全部</option>
+						<option ng-repeat="list in acceptList" value="{{list.id}}">{{list.name}}</option>
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label>城市-渠道经理：</label>
+					<select class="form-control" ng-model="channelManagerCityCode" style="width: 100px;" >
+						<option value="">全部</option>
+						<option ng-repeat="list in conditions.citys" ng-if="$index!=0" value="{{list.cityCode}}">{{list.cityName}}</option>
+					</select>
+					-
+					<select class="form-control" choice-personnel="渠道经理" type="role" style="width: 130px;" city-code="{{channelManagerCityCode}}" ng-model="page.channelManagerUid">
+					</select>
+				</div>
+
+				<div class="form-group">
+					<label>客户类型：</label>
+					<select class="form-control" ng-model="page.customerType" style="width: 224px;">
+						<option value="" >全部</option>
+						<option value="1">个人</option>
+						<option value="2">小微企业</option>
+					</select>
+				</div>	
+				<div class="form-group">
+					<label >客户姓名：</label>
+					<input type="text" class="form-control" ng-model="page.customerName">
+				</div>
+				
+				<div class="form-group">
+					<label >放款时间：</label>
+					<input size="16" type="text" name="lendingTimeStart" ng-model="page.lendingTimeStart " class="form-control form_date">
+					-
+					<input size="16" type="text" name="lendingTimeEnd" ng-model="page.lendingTimeEnd " class="form-control form_date">
+				</div>
+				
+				<button type="submit" class="btn btn-default" ng-click="query()" style="margin-bottom:10px; margin-right:10px;">
+					查询
+				</button>
+			</form>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 bs-table">
+			<table bs-table-control="orderList" data-show-export="false" id="table" ></table>
+		</div>
+	</div>
+</div>
+
+<div ng-show="false" id="placeOrderId">
+	<div class="row panelW500">
+		<div class="col-md-12">
+			<form class="form-inline" name="orderForm" id="orderForm">
+				<div class="form-group">
+					<label><span class="text-danger">*</span>城市：</label>
+					<select class="form-control" name="cityCode" ng-model="orderDto.cityCode" id="cityId" required>
+					</select>
+					<span class="inputError" ng-show="isAudit">
+						<error class="text-danger" ng-show="orderForm.cityCode.$error.required">必选</error>
+					</span>
+				</div>
+				<div class="form-group">
+					<label><span class="text-danger">*</span>产品：</label>
+					<select class="form-control" name="productCode"  ng-model="orderDto.productCode" id="productCode" required>
+					</select>
+					<span class="inputError" ng-show="isAudit">
+						<error class="text-danger" ng-show="orderForm.productCode.$error.required">必选</error>
+					</span>
+				</div>				
+				<div class="form-group" ng-show="orderDto.productCode=='03'">
+					<label><span class="text-danger">*</span>是否关联订单：</label>
+					<select class="form-control" ng-model="orderDto.isRelationOrder" ng-init="orderDto.isRelationOrder='0'">
+						<option value="0" >否</option>
+						<option value="1">是</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label><span class="text-danger">*</span>客户姓名：</label>
+					<input type="text" class="form-control" name="borrowerName" ng-model="orderDto.borrowerName" id="borrowerName" required >
+					<span class="inputError" ng-show="isAudit">
+						<error class="text-danger" ng-show="orderForm.borrowerName.$error.required">必填</error>
+					</span>
+				</div>
+				<div class="form-group">
+					<label><span class="text-danger">*</span>手机号码：</label>
+					<input type="text" class="form-control" name="phoneNumber" ng-model="orderDto.phoneNumber" required >
+					<span class="inputError" ng-show="isAudit">
+						<error class="text-danger" ng-show="orderForm.phoneNumber.$error.required">必填</error>
+					</span>
+				</div>
+				<div class="form-group" ng-if="orderDto.isRelationOrder=='1'">
+					<label><span class="text-danger">*</span>选择关联订单：</label>
+					<select class="form-control" name="relationOrderNo" ng-model="orderDto.relationOrderNo" id="relationOrderNo">
+						<option value="">请选择</option>
+					</select>
+					<span class="inputError" ng-show="isAudit">
+						<error class="text-danger" ng-show="orderForm.relationOrderNo.$error.required">必选</error>
+					</span>
+				</div>
+				<div class="form-group">
+					<label><span class="text-danger">*</span>借款金额：</label>
+					<input type="number"  class="form-control char1" min="0" oninput="if(value.length>7)value=value.slice(0,7)" name="loanAmount" ng-model="orderDto.loanAmount" ng-init="initPayMentAmount()" required >
+					<span class="a-span">万</span>
+					<span class="inputError" ng-show="isAudit">
+						<error class="text-danger" ng-show="orderForm.loanAmount.$invalid">值必须大于或等于0.0001</error>
+					</span>
+				</div>
+				<div class="form-group">
+					<label><span class="text-danger">*</span>借款期限：</label>
+					<input type="number" class="form-control char1" min="1" name="borrowingDays" ng-model="orderDto.borrowingDays"  required >
+					<span class="a-span" ng-show="'04'!=orderDto.productCode">天</span>
+					<span class="a-span" ng-show="orderDto.productCode==04">期</span>
+					<span class="inputError" ng-show="isAudit">
+						<error class="text-danger" ng-show="orderForm.borrowingDays.$invalid">值必须大于或等于1</error>
+					</span>
+				</div>
+				<div class="form-group">					
+					<label>
+						<span class="text-danger">*</span>
+						<span class="tooltip-toggle" data-toggle="tooltip-toggle" title="" data-original-title="请先选择城市和业务产品">受理员：<span class="help"></span></span>
+					</label>
+					<span id="acceptMemberUid"></span>
+				</div>
+				<br>
+				<div class="form-group" ng-if="orderDto.isRelationOrder!='1' && '06'!=orderDto.productCode && '07'!=orderDto.productCode">
+					<label>
+						<span class="text-danger">*</span>
+						<span class="tooltip-toggle" data-toggle="tooltip-toggle" title="" data-original-title="请先选择城市和业务产品">公证经办人：<span class="help"></span></span>
+					</label>
+					<span ng-show="orderDto.isRelationOrder!='1'" id="notarialUid" ></span><span ng-show="orderDto.isRelationOrder=='1'"><input type="text" class="form-control" name="placeOrderNotarialName" ng-model="placeOrderNotarialName" disabled="disabled"></span>
+				</div>
+				<div class="form-group" ng-if="orderDto.isRelationOrder!='1'&& '06'!=orderDto.productCode && '07'!=orderDto.productCode">
+					<label>
+						<span class="text-danger">*</span>
+					 	<span class="tooltip-toggle" data-toggle="tooltip-toggle" title="" data-original-title="请先选择城市和业务产品">面签员：<span class="help"></span></span>
+					</label>
+					<span id="facesignUid" ></span>
+				</div>
+				<div class="form-group" ng-if="orderDto.isRelationOrder!='1' && '04'!=orderDto.productCode && '06'!=orderDto.productCode && '07'!=orderDto.productCode">
+					<label>
+					      <span class="text-danger">*</span>
+						  <span class="tooltip-toggle" data-toggle="tooltip-toggle" title="" data-original-title="请先选择城市和业务产品">要件管理员：<span class="help"></span></span>
+					</label>
+					<span id="elementUid" ></span>
+				</div>
+				<div class="form-group" ng-if="orderDto.isRelationOrder!='1' && '06'!=orderDto.productCode && '07'!=orderDto.productCode">
+					<label>
+					      <span class="text-danger">*</span>
+						  <span class="tooltip-toggle" data-toggle="tooltip-toggle" title="">订单审批顺序：</span>
+					</label>
+					<span id="auditSort" > 
+						<select class="form-control"  name="auditSort"  ng-model="orderDto.auditSort" required>
+							<option value="">请选择</option>
+							<option value="1">先审批再面签</option>
+							<option value="2">先面签再审批</option>
+						</select>
+						<span class="inputError" ng-show="isAudit">
+							<error class="text-danger" ng-show="orderForm.auditSort.$invalid">必填</error>
+						</span>
+					</span>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+ 

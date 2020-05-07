@@ -1,0 +1,36 @@
+<div class="container-fluid">
+    <place-order-detail></place-order-detail>
+    <element-supplement></element-supplement>
+    <div id="viewRow">
+    </div>
+</div>
+
+<!--弹窗start-->
+<div class="lhw-alert-bg"  ng-show="isDelImgShow">
+    <div class="lhw-alert-box" style="width:480px;">
+        <div class="lhw-alert-tit">请选择要删除的图片</div>
+        <div>
+            <span>全选/反选:<input type='checkbox' ng-click="selectAllImg()" ng-checked="allCheck"></span>
+            <div class="row form-inline detail-row" style="padding:0 10px;">
+                <div class="tan-pic">
+                    <div class="tan-pic-box" ng-repeat="img in docImgList">
+                        <label>
+                            <img src="{{img.url}}" width="120" height="120">
+                            <div class="squaredFour">
+                                <input type="checkbox" ng-model="img.isCheck" ng-click="docCheckImg(docImgList)">
+                                <span></span>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+        <div class="lhw-alert-but">
+            <button type="button" class="btn btn-primary lhw-alert-ok" style="margin-right:80px;" ng-click="docDelImg()">确定</button>
+            <button type="button" class="btn btn-danger lhw-alert-cancel" ng-click="isDelImgShow=false">取消</button>
+        </div>
+    </div>
+</div>
+
+<!--弹窗end-->

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="GBK"?>
+<CMS>
+	<eb>
+		<pub>
+			<TransCode>QHISD</TransCode>
+			<CIS>400090001604411</CIS>
+			<BankCode>102</BankCode>
+			<ID>rp.y.4000</ID>
+			<TranDate>20171019</TranDate>
+			<TranTime>091759000</TranTime>
+			<fSeqno>20171019T091759000</fSeqno>
+		</pub>
+		<in>
+			<AccNo>4000023029200124946</AccNo>
+			<BeginDate>20161001</BeginDate>
+			<EndDate>20171031</EndDate>
+			<MinAmt>0</MinAmt>
+			<MaxAmt>10000000000</MaxAmt>
+			<NextTag></NextTag>
+			<ReqReserved1></ReqReserved1>
+			<ReqReserved2></ReqReserved2>
+		</in>
+	</eb>
+</CMS>

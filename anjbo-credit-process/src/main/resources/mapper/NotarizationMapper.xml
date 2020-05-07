@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.NotarizationMapper">
+	
+	<select id="selectNotarization" parameterType="NotarizationDto" resultType="NotarizationDto">
+	   select *, 
+	    DATE_FORMAT(notarizationTime,'%Y-%m-%d') as notarizationTimeStr, 
+	    DATE_FORMAT(estimatedTime,'%Y-%m-%d') as estimatedTimeStr from tbl_process_app_notarization where orderNo=#{orderNo}
+	</select>
+	
+	<insert id="addNotarizetion" parameterType="NotarizationDto" >
+	   INSERT INTO `tbl_process_app_notarization` (
+	    `createUid`, `createTime`, `updateUid`, `orderNo`, `notarizationTime`, `notarizationImg`, `estimatedTime`, `notarizationAddressCode`,`notarizationAddress`,  `remark`,`notarizationType`
+	    ) VALUES (
+	     #{createUid}, now(), #{updateUid}, #{orderNo}, #{notarizationTime}, #{notarizationImg}, #{estimatedTime}, #{notarizationAddressCode}, #{notarizationAddress},  #{remark},#{notarizationType}
+	    )
+	</insert>
+	
+	<update id="updateNotarizetion" parameterType="NotarizationDto">
+	   update tbl_process_app_notarization set  
+	       updateUid=#{updateUid},
+	        notarizationTime=#{notarizationTime},
+	   		notarizationImg=#{notarizationImg},
+	   		estimatedTime=#{estimatedTime},
+	   		notarizationAddress=#{notarizationAddress},
+	   		notarizationAddressCode=#{notarizationAddressCode},
+	   		remark=#{remark},
+	   		notarizationType=#{notarizationType}
+	   where orderNo=#{orderNo}
+	</update>
+	
+</mapper>

@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://ws.inf.creditapp.app/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="InfWsSearchService" targetNamespace="http://ws.inf.creditapp.app/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ws.inf.creditapp.app/" elementFormDefault="unqualified" targetNamespace="http://ws.inf.creditapp.app/" version="1.0">
+
+  <xs:element name="search" type="tns:search"/>
+
+  <xs:element name="searchResponse" type="tns:searchResponse"/>
+
+  <xs:complexType name="search">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="request" type="tns:request"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="request">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="brNo" type="xs:string"/>
+      <xs:element minOccurs="0" name="content" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqDate" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqSerial" type="xs:string"/>
+      <xs:element minOccurs="0" name="reqTime" type="xs:string"/>
+      <xs:element minOccurs="0" name="token" type="xs:string"/>
+      <xs:element minOccurs="0" name="txCode" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="searchResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="response" type="tns:response"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="response">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="content" type="xs:string"/>
+      <xs:element minOccurs="0" name="respCode" type="xs:string"/>
+      <xs:element minOccurs="0" name="respDesc" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="search">
+    <wsdl:part element="tns:search" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="searchResponse">
+    <wsdl:part element="tns:searchResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="InfWsSearch">
+    <wsdl:operation name="search">
+      <wsdl:input message="tns:search" name="search">
+    </wsdl:input>
+      <wsdl:output message="tns:searchResponse" name="searchResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="InfWsSearchServiceSoapBinding" type="tns:InfWsSearch">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="search">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="search">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="searchResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="InfWsSearchService">
+    <wsdl:port binding="tns:InfWsSearchServiceSoapBinding" name="InfWsSearchPort">
+      <soap:address location="http://183.238.238.162:51080/cms/services/searchService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

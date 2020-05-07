@@ -1,0 +1,15 @@
+<form class="form-inline"  >
+	<div class="form-group">
+		<span class="text-danger">*</span>尽调经理&nbsp;<!--<select class="form-control" agencg-id="{{sumbitDto.agencgId}}" style="width: 200px;" city-code="{{sumbitDto.cityCode}}" choice-personnel2="{{personnelType}}" ng-model="sumbitDto.uid">
+		</select>-->
+
+		<select class="form-control"  style="width: 200px;" ng-model="sumbitDto.uid">
+			<option value="">请选择</option>
+			<option value="{{u.uid}}" ng-repeat="u in personnels">{{u.name}}</option>
+		</select>
+		<br/>
+		<span><font style="color: grey">注：确认尽调经理并提交立项后，我们将会短信通知尽调经理.</font></span>
+	</div>
+
+	<textarea ng-model="remarks" class="form-control" rows="5" cols="45" placeholder="此处可以备注一些尽调经理在调查过程中需要重点了解的机构信息..."/>
+</form>

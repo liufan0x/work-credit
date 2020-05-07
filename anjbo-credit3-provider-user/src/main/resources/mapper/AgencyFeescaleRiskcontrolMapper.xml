@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.AgencyFeescaleRiskcontrolMapper">
+	<sql id="sqlwhereSearch">
+		<where>
+			<if test="null!=id and id>0"> AND `id`=#{id}</if>
+			<if test="null!=grade and grade>0"> AND `grade`=#{grade}</if>
+			<if test="null!=feescaleid and feescaleid>0"> AND `feescaleid`=#{feescaleid}</if>
+			<!-- <if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if> 
+				<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if> -->
+			<!-- <if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if> 
+				<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if> -->
+			<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+			<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+			<if test="null!=remark and ''!=remark"> AND `remark`=#{remark}</if>
+		</where>
+	</sql>
+
+
+	<!-- 获取实体 -->
+	<select id="find" parameterType="AgencyFeescaleRiskcontrolDto"
+		resultType="AgencyFeescaleRiskcontrolDto">
+		SELECT `id`, `grade`, `feescaleid`, `createTime`, `updateTime`,
+		`createUid`, `updateUid`, `remark`
+		FROM
+		tbl_customer_agency_feescale_riskcontrol
+		<include refid="sqlwhereSearch" />
+	</select>
+
+	<!-- 查询 -->
+	<select id="search" parameterType="AgencyFeescaleRiskcontrolDto"
+		resultType="AgencyFeescaleRiskcontrolDto">
+		SELECT `id`, `grade`, `feescaleid`, `createTime`, `updateTime`,
+		`createUid`, `updateUid`, `remark`
+		FROM
+		tbl_customer_agency_feescale_riskcontrol
+		<include refid="sqlwhereSearch" />
+
+		<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+	</select>
+
+	<!-- 查询 -->
+	<select id="count" parameterType="AgencyFeescaleRiskcontrolDto"
+		resultType="int">
+		SELECT count(1)
+		FROM tbl_customer_agency_feescale_riskcontrol
+		<include refid="sqlwhereSearch" />
+	</select>
+
+
+	<!-- 增删改 -->
+	<insert id="insert" parameterType="AgencyFeescaleRiskcontrolDto"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO
+		tbl_customer_agency_feescale_riskcontrol(
+		`grade`,
+		`feescaleid`,
+		`createTime`,
+		`updateTime`,
+		`createUid`,
+		`updateUid`,
+		`remark`
+		) VALUES(
+		#{grade},
+		#{feescaleid},
+		now(),
+		now(),
+		#{createUid},
+		#{createUid},
+		#{remark}
+		)
+	</insert>
+
+
+	<delete id="delete" parameterType="AgencyFeescaleRiskcontrolDto">
+		DELETE FROM
+		tbl_customer_agency_feescale_riskcontrol
+		WHERE ID=#{id}
+	</delete>
+
+	<update id="update" parameterType="AgencyFeescaleRiskcontrolDto">
+		UPDATE tbl_customer_agency_feescale_riskcontrol
+		<set>
+			<if test="null!=grade">`grade`=#{grade},</if>
+			<if test="null!=feescaleid">`feescaleid`=#{feescaleid},</if>
+			<if test="null!=createTime">`createTime`=now(),</if>
+			<if test="null!=updateTime">`updateTime`=now(),</if>
+			<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+			<if test="null!=remark">`remark`=#{remark},</if>
+		</set>
+		WHERE ID=#{id}
+	</update>
+
+	<!-- 获取指定机构类型的阶段费率 -->
+	<select id="findStageRate" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		SELECT
+		t7.rate,t7.feescaleid,t7.overdueRate,t7.modeid,t7.field,t7.maxfield,t6.section
+		FROM tbl_customer_agency t2
+		LEFT JOIN
+		tbl_customer_agency_feescale t3
+		ON
+		t3.agencyTypeId=t2.id
+		LEFT JOIN (
+		SELECT
+		sectionid,
+		raskcontrolid,
+		rate,
+		feescaleid,
+		overdueRate,
+		modeid,
+		field,
+		maxfield
+		FROM
+		tbl_customer_agency_feescale_detail
+		WHERE
+				<![CDATA[field < #{borrowingDays} 
+			AND maxfield = 0]]>
+		UNION
+		SELECT
+		sectionid,
+		raskcontrolid,
+		rate,
+		feescaleid,
+		overdueRate,
+		modeid,
+		field,
+		maxfield
+		FROM
+		tbl_customer_agency_feescale_detail
+		WHERE
+					<![CDATA[field < #{borrowingDays} 
+				AND maxfield >= #{borrowingDays} ]]>
+		) t7 ON t7.feescaleid = t3.id
+		LEFT JOIN
+		tbl_customer_agency_feescale_riskcontrol t5 ON t5.id =
+		t7.raskcontrolid
+		LEFT JOIN tbl_customer_agency_feescale_section t6 ON
+		t6.id = t7.sectionid
+		WHERE
+		t5.grade = #{riskGradeId}
+		AND t3.productionid
+		= #{productId}
+		AND t2.id = #{cooperativeAgencyId}
+		ORDER BY
+		t6.section
+		DESC,t6.id desc
+	</select>
+</mapper>

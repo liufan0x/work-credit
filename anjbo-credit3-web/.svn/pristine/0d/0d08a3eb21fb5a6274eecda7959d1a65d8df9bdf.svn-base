@@ -1,0 +1,68 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			 <ul class="breadcrumb">
+				 <li><a ui-sref="orderList">订单列表 </a></li>
+				 <li><span>提单</span></li>
+				 <li>
+				 	<span ng-show="showView == 1">借款信息</span>
+				 	<span ng-show="showView == 2">客户信息</span>
+				 	<span ng-show="showView == 3&&order.productCode=='01'">房产交易信息</span>
+				 	<span ng-show="showView == 3&&order.productCode!='01'">房产信息</span>
+				 	<span ng-show="showView == 4">要件校验</span>
+				 	<span ng-show="showView == 5">询价/查档/诉讼</span>
+				 	<span ng-show="showView == 6">影像资料</span>
+				 	<span ng-show="showView == 7">征信</span>
+				 </li>
+				 <li style="display:inline-block;float:right;padding-right: 10px;">
+				 	<a  ui-sref="orderList">返回上一步</a>
+				 </li>
+			 </ul>
+		</div>
+	</div>
+
+	<!--导航-->
+	<div class="row">
+		<form role="form" class="form-inline">
+			<div class="col-md-12">
+				<ul class="nav nav-tabs">
+					<li ng-class="{'active':showView==1}" >
+						<a ng-click="changeView(1)">借款信息</a>
+					</li>
+					<li ng-class="{'active':showView==2}" >
+						<a ng-click="changeView(2)">客户信息</a>
+					</li>
+					<li ng-class="{'active':showView==3}" >
+						<a ng-click="changeView(3)">
+							<span ng-show="order.productCode=='01'">房产交易信息</span>
+							<span ng-show="order.productCode!='01'">房产信息</span>
+						</a>
+					</li>
+					<li ng-class="{'active':showView==4}" >
+						<a ng-click="changeView(4)">要件校验</a>
+					</li>
+					<li ng-class="{'active':showView==5}" >
+						<a ng-click="changeView(5)">询价/查档/诉讼</a>
+					</li>
+					<li ng-class="{'active':showView==6}" >
+						<a ng-click="changeView(6)">影像资料</a>
+					</li>
+					<li ng-class="{'active':showView==7}" >
+						<a ng-click="changeView(7)">征信</a>
+					</li>
+					<li class="pull-right">
+						<button type="button" class="btn btn-primary" ng-click="showSubmitManager(showView)">提交审核 </button>
+					</li>
+				</ul>
+			</div>
+		</form>
+	</div>
+	
+	<div ui-view="">
+		
+	</div>
+</div>
+	
+<div id="viewRow">
+			
+</div>

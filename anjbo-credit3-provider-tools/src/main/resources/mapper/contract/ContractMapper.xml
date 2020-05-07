@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.contract.ContractMapper">
+	<sql id="sqlwhereSearch">
+		<where>
+			<if test="null!=id and id>0"> AND `id`=#{id}</if>
+			<if test="null!=groupId and groupId>0"> AND `groupId`=#{groupId}</if>
+			<if test="null!=name and ''!=name"> AND `name`=#{name}</if>
+			<if test="null!=path and ''!=path"> AND `path`=#{path}</if>
+			<if test="null!=noTextPath and ''!=noTextPath"> AND `noTextPath`=#{noTextPath}</if>
+			<if test="null!=fieldIds and ''!=fieldIds"> AND `fieldIds`=#{fieldIds}</if>
+			<if test="null!=sort and sort>0"> AND `sort`=#{sort}</if>
+			<if test="null!=isEnable and isEnable>0"> AND `isEnable`=#{isEnable}</if>
+		</where>
+	</sql>
+
+
+	<!-- 获取实体 -->
+	<select id="find" parameterType="ContractDto"
+		resultType="ContractDto">
+		SELECT `id`, `groupId`, `name`, `path`, `noTextPath`, `fieldIds`,
+		`sort`, `isEnable`
+		FROM tbl_common_contract
+		<include refid="sqlwhereSearch" />
+	</select>
+
+	<!-- 查询 -->
+	<select id="search" parameterType="ContractDto"
+		resultType="ContractDto">
+		SELECT `id`, `groupId`, `name`, `path`, `noTextPath`, `fieldIds`,
+		`sort`, `isEnable`
+		FROM tbl_common_contract
+		<include refid="sqlwhereSearch" />
+		order by `sort`
+		<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+	</select>
+
+	<!-- 查询 -->
+	<select id="count" parameterType="ContractDto" resultType="int">
+		SELECT count(1)
+		FROM tbl_common_contract
+		<include refid="sqlwhereSearch" />
+	</select>
+
+
+	<!-- 增删改 -->
+	<insert id="insert" parameterType="ContractDto"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tbl_common_contract(
+		`groupId`,
+		`name`,
+		`path`,
+		`noTextPath`,
+		`fieldIds`,
+		`sort`,
+		`isEnable`
+		) VALUES(
+		#{groupId},
+		#{name},
+		#{path},
+		#{noTextPath},
+		#{fieldIds},
+		#{sort},
+		#{isEnable}
+		)
+	</insert>
+
+
+	<delete id="delete" parameterType="ContractDto">
+		DELETE FROM tbl_common_contract
+		<include refid="sqlwhereSearch" />
+	</delete>
+
+	<update id="update" parameterType="ContractDto">
+		UPDATE tbl_common_contract
+		<set>
+			<if test="null!=groupId">`groupId`=#{groupId},</if>
+			<if test="null!=name">`name`=#{name},</if>
+			<if test="null!=path">`path`=#{path},</if>
+			<if test="null!=noTextPath">`noTextPath`=#{noTextPath},</if>
+			<if test="null!=fieldIds">`fieldIds`=#{fieldIds},</if>
+			<if test="null!=sort">`sort`=#{sort},</if>
+			<if test="null!=isEnable">`isEnable`=#{isEnable},</if>
+		</set>
+		WHERE ID=#{id}
+	</update>
+
+	<select id="selectMaxSort" resultType="int">
+		SELECT
+		IF
+		( IFNULL( max( `sort` ), "" ) = "", 1, max( `sort` ) )
+		FROM
+		tbl_common_contract
+	</select>
+
+</mapper>

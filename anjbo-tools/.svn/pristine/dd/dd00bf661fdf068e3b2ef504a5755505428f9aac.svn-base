@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="GBK"?>
+<!-- 版本检测 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.tools.VersionMapper">
+
+    <select id="selectVersion" parameterType="java.lang.String" resultType="VersionDto">
+    	select id,code,name,pack,url from tbl_tools_version where pack=#{0} and type=#{1} limit 1
+    </select>
+    <select id="selectVersionDetail" parameterType="java.lang.Integer" resultType="VersionDto">
+    	select
+			path,
+			instructions,
+			DATE_FORMAT(upload_time,'%Y-%m-%d %H:%i:%s') as uploadTime,
+			version,
+			author,
+			forceUpdate,
+			iOSReminder,
+			iOSReminderTitle,
+			iOSReminderForce
+		from tbl_tools_version_detail
+		where audit=2 and version_id=#{0} order by upload_time desc limit 1
+    </select>
+    <insert id="addVersion" parameterType="VersionDto">
+	    <selectKey resultType="int" keyProperty="id">
+			select last_insert_id()
+		</selectKey>
+    	insert into tbl_tools_version(
+    		code,
+			name,
+			pack,
+			url,
+			type
+    	)values(
+    		#{code},
+    		#{name},
+			#{pack},
+			#{url},
+			#{type}
+    	)
+    </insert>
+    <insert id="addVersionDetail" parameterType="VersionDto">
+    	insert into tbl_tools_version_detail(
+    		version_id,
+			path,
+			instructions,
+			version,
+			author,
+			audit,
+			forceUpdate,
+			iOSReminder,
+			iOSReminderTitle,
+			iOSReminderForce
+    	)values(
+    		#{versionId},
+			#{path},
+			#{instructions},
+			#{version},
+			#{author},
+			#{audit},
+			#{forceUpdate},
+			#{iOSReminder},
+			#{iOSReminderTitle},
+			#{iOSReminderForce}
+    	)
+    </insert>
+    <select id="selectVersionList" resultType="VersionDto">
+    	select name,url,type from tbl_tools_version
+    </select>
+    
+    <select id="selectAudit" resultType="java.lang.Integer">
+    	SELECT
+			audit
+		FROM
+			tbl_tools_version_setting
+		WHERE
+			pack = #{0}
+		AND `code` = #{1}
+		AND `version` = #{2}
+		ORDER BY
+			createTime,
+			id DESC
+		LIMIT 1
+    </select>
+    
+    <select id="selectAuditList" resultType="map">
+    	SELECT
+			*
+		FROM
+			tbl_tools_version_setting
+		WHERE
+			pack = #{pack}
+			<if test="code != null and code != ''">
+				AND `code` = #{code}
+			</if>
+			<if test="version != null and version != ''">
+				AND `version` = #{version}
+			</if>
+		ORDER BY pack,code,createTime DESC
+    </select>
+    
+    <insert id="addAuditDetail" parameterType="map">
+    	insert into tbl_tools_version_setting(
+			createTime,
+			code,
+			name,
+			pack,
+			version,
+			audit
+    	)values(
+    		NOW(),
+			#{code},
+			#{name},
+			#{pack},
+			#{version},
+			0
+    	)
+    </insert>
+    
+    <update id="updateAudit" parameterType="java.util.Map">
+		UPDATE tbl_tools_version_setting
+    	SET audit=#{audit}
+		WHERE
+			id = #{id}
+  	</update>
+    
+    <update id="deleteAudit" parameterType="java.util.Map">
+    	DELETE FROM 
+    		tbl_tools_version_setting
+		WHERE 
+			id = #{id}
+    </update>
+</mapper>

@@ -1,0 +1,232 @@
+body{
+ background:#efefef;
+   font-family: "Microsoft YaHei","宋体"; 
+}
+.detail-box{border-bottom:1px solid #ddd; padding-bottom:10px; display:none;}
+.detail-box p{
+  width:92%;
+  margin:0 auto;
+  line-height:33px;
+  color:#333;
+  font-size:13px;
+}
+.tit-span{ color:#4d4d4d; display:inline-block;
+  width:109px;
+}
+.nav-box{
+  width:90%;
+  height:40px;
+  line-height:40px;
+  font-size:14px;
+  border-radius:3px;
+  border:1px solid #4ab1ce;
+  background:#fff;
+  color:#4d4d4d;
+  text-align:center;
+  margin:20px auto;
+  overflow:hidden;
+}
+.nav-box-in{
+  width:50%;
+   float:left;
+   color:#4d4d4d;
+}
+.nav-box-in.on{
+  color:#fff;
+  background:#4ab1ce;
+}
+.nav-boxs{
+  height:40px;
+  font-size:14px;
+  color:#4d4d4d;
+  text-align:center;
+  margin:20px auto;
+  overflow: hidden;
+  overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
+  white-space: nowrap;
+}
+.nav-box-div{
+   white-space: nowrap;
+   display: inline-block;
+   text-align:center;
+   padding:5px 20px;
+   color:#4d4d4d;
+   border:1px solid #4ab1ce;
+}
+.nav-box-div.on{
+  color:#fff;
+  background:#4ab1ce;
+  border:none;
+  border:1px solid #4ab1ce;
+}
+.toggle-p{
+  line-height:50px;
+  color:#8d8d8d;
+  height:50px;
+  text-align:center;
+  font-size:14px;
+}
+.mi:before{
+  content:"*";
+  color:#e54738;
+  position:absolute;
+  left:-8px;
+  font-size:16px;
+  top:2px;
+}
+.clear{width:100%; clear:both; height:1px;}
+.form-box{
+  margin-top:7px;
+  background:#fff;
+}
+.detail-p{
+  line-height:26px;
+  color:#333;
+  font-size:13px;
+  padding-left:12px;
+  margin:10px 0;
+}
+.detail-p span{ color:#ffa51e;}
+.tit-p{
+  line-height:38px;
+  color:#333;
+  font-size:13px;
+  padding-left:12px;
+  margin:0;
+
+}
+.tip-word{
+  color: #e54738;
+  display:block;
+  float:right;
+      font-size: 14px;
+    padding-top: 12px;
+	line-height:20px;
+}
+.textarea-box{
+    width: 92%;
+	font-size:14px;
+	color:#4d4d4d;
+	display:block;
+	margin:0 auto 10px auto;
+	border: 1px solid rgba(0,0,0,.2);
+    border-radius: 3px;
+}
+.inp-div{
+  width:98%;
+  float:right;
+  position:relative;
+  height:45px;
+  border-bottom:1px solid #e6e6e6;
+}
+.inp-div.no-border{border:none;}
+.inp-span{
+  display:block;
+  position:absolute;
+  font-size:15px;
+  color:#555;
+  top:10px;
+  left:12px;
+}
+.inp-label{
+  text-align:right;
+  color:#4d4d4d;
+  font-size:14px;
+}
+.inp-r{
+  width:35px;
+  float:right;
+  display:block;
+  font-size: 12px;
+  color:#4d4d4d;
+  padding-top: 12px;
+  text-indent:5px;
+  position:relative;
+}
+.arrow{
+   background: url(../images/right.png) no-repeat 12px 15px;
+   background-size: 7px;
+}
+.icon-d{
+   background: url(../images/date.png) no-repeat 10px 16px;
+   background-size: 8px;
+}
+input.inp-box{
+  float:right;
+  width:60%;
+  border: 0;
+  outline:none;
+  display: block;
+  text-align:right;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: rgba(255,0,0,0);
+  line-height: 20px;
+  font-size: 14px;
+  padding-top: 12px;
+  color: #4d4d4d;   
+}
+.but-box{
+  width:90%;
+  margin:0 auto;
+  height:100px;
+  position:relative;
+}
+.sub-but{
+  width:90%;
+  height:41px;
+  line-height:41px;
+  color:#fff;
+  text-align:center;
+  background:#4ab1ce;
+  border-radius:3px;
+  margin:10px auto;
+  font-size:15px;
+}
+.sub-but.dis{
+  background:#ccc;
+}
+.but-two{
+  width:240px;
+  margin:10px auto;
+}
+.fl{float:left;}
+.fr{float:right;}
+.order-but{
+  width:100px;
+  height:33px;
+  line-height:33px;
+  color:#fff;
+  text-align:center;
+  background:#4ab1ce;
+  font-size:13px;
+}
+.order-but.dis{  background:#ccc;}
+.order-but.del{  background:#e54738;}
+.save-but{
+  width:37px;
+  height:37px;
+  position:fixed;
+  bottom:25px;
+  right:10px;
+  background:url(../images/save.png) no-repeat center center;
+  background-size:37px;
+}
+.add-but{
+  width:31px;
+  height:31px;
+  position:absolute;
+  top:0px;
+  right:10px;
+  background:url(../images/add.png) no-repeat center center;
+  background-size:31px;
+}
+.del-but{
+  width:31px;
+  height:31px;
+  position:absolute;
+  top:0px;
+  left:10px;
+  background:url(../images/del.png) no-repeat center center;
+  background-size:31px;
+}

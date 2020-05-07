@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.ReceivablePayMapper">
+
+  <!-- 查询详情 --> 
+  <select id="findByReceivablePay" parameterType="ReceivablePayDto" resultType="ReceivablePayDto">
+      select * from tbl_finance_receivable_pay where orderNo=#{orderNo} order by createTime desc limit 1
+  </select>
+
+  <!-- 添加数据 -->
+   <insert id="addReceivablePay" parameterType="ReceivablePayDto">
+	   INSERT INTO `tbl_finance_receivable_pay` (
+	       `createTime`, `createUid`, `updateUid`, `orderNo`, `payImg`,`payTime`,`remark`,`penaltyPayable`,`rebateMoney`,`penaltyReal`
+	   ) VALUES (
+	       now(), #{createUid}, #{updateUid},  #{orderNo},#{payImg},#{payTime},#{remark},#{penaltyPayable},#{rebateMoney},#{penaltyReal}
+	   )
+  </insert>
+  <!-- 完善信息 -->
+   <update id="updateReceivablePay" parameterType="ReceivablePayDto">
+      update tbl_finance_receivable_pay set 
+      updateUid=#{updateUid},payImg=#{payImg},payTime=#{payTime},remark=#{remark},penaltyPayable=#{penaltyPayable},
+      rebateMoney=#{rebateMoney},penaltyReal=#{penaltyReal}
+      where orderNo = #{orderNo}
+  </update>
+
+  
+</mapper>

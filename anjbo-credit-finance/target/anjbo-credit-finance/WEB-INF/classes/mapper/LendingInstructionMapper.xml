@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.LendingInstructionMapper" >
+    
+  <select id="findByInstruction" parameterType="java.lang.String" resultType="LendingInstructionsDto">
+     select * from tbl_finance_lending_instructions where orderNo=#{orderNo} order by createTime desc limit 1
+  </select>
+  
+  <insert id="addLendingInstruction" parameterType="LendingInstructionsDto">
+    INSERT INTO `tbl_finance_lending_instructions` 
+    (
+       `createUid`, `updateUid`, `createTime`, `orderNo`, `lendingBankId` , `openingBankId` ,`bankName`,`bankAccount`,`chargesReceivedImg`,`remark`
+    ) VALUES (
+       #{createUid}, #{updateUid}, now(), #{orderNo}, #{lendingBankId},#{openingBankId},#{bankName},#{bankAccount},#{chargesReceivedImg},#{remark}
+    )
+  </insert>
+  
+  <update id="updateLendingInstruction" parameterType="LendingInstructionsDto">
+      update tbl_finance_lending_instructions set updateUid=#{updateUid},remark=#{remark},
+      lendingBankId=#{lendingBankId},openingBankId=#{openingBankId},bankName=#{bankName},
+      bankAccount=#{bankAccount},chargesReceivedImg=#{chargesReceivedImg}
+      where id = #{id}
+  </update>
+
+  <delete id="delectInstruction" parameterType="java.lang.String">
+      delete  from tbl_finance_lending_instructions where status=0 and orderNo=#{0} order by createTime desc limit 1
+  </delete>
+  
+	<update id="updwithdraw" parameterType="LendingInstructionsDto" >
+  	     update tbl_finance_lending_instructions set status=0 where orderNo=#{orderNo} and status=1 order by updateTime desc limit 1
+  	</update>
+  	
+</mapper>

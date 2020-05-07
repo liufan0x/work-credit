@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.ForensicsMapper">
+	
+	<select id="selectForensics" parameterType="ForensicsDto" resultType="ForensicsDto">
+	   select f.*,f.licenseRevTime,DATE_FORMAT(f.licenseRevTime,'%Y-%m-%d') as licenseRevTimeStr,f.licenseRevStartTime,DATE_FORMAT(f.licenseRevStartTime,'%Y-%m-%d') as licenseRevStartTimeStr,f.licenseRevEndTime,DATE_FORMAT(f.licenseRevEndTime,'%Y-%m-%d') as licenseRevEndTimeStr,
+	   c.cancelTime,c.cancelTime,DATE_FORMAT(c.cancelTime,'%Y-%m-%d') as cancelTimeStr,c.clandBureau,c.clandBureauUid,c.clandBureauName,c.clandBureauUserName 
+	   from tbl_process_app_forensics f 
+	   left join tbl_process_app_cancellation c on c.orderNo=f.orderNo
+	   where f.orderNo=#{orderNo}
+	   order by f.updateTime desc 
+	   limit 1;
+	</select>
+	
+	<insert id="addForensics" parameterType="ForensicsDto" >
+	   INSERT INTO `tbl_process_app_forensics` (
+	    `createUid`, `createTime`, `updateUid`, `orderNo`,licenseRever,`licenseReverUid`,
+	     `licenseRevTime`, `licenseRevBank`, `licenseRevBankSub`, `licenseRevBankName`, `remark`,
+	    `licenseRevBankSubName`,`licenseRevStartTime`,`licenseRevEndTime`,`forensiceImg`,`isLicenseRevBank`,`licenseRevAddress`,`flandBureau`,`flandBureauName`
+	    ) VALUES (
+	     #{createUid}, now(), #{updateUid}, #{orderNo},#{licenseRever}, #{licenseReverUid}, 
+	    #{licenseRevTime}, #{licenseRevBank}, #{licenseRevBankSub}, #{licenseRevBankName}, #{remark},
+	     #{licenseRevBankSubName},#{licenseRevStartTime},#{licenseRevEndTime},#{forensiceImg},#{isLicenseRevBank},#{licenseRevAddress},#{flandBureau},#{flandBureauName}
+	    )
+	</insert>
+	<update id="upateForensics" parameterType="ForensicsDto">
+	   update tbl_process_app_forensics
+		set
+		    <if test="updateUid!= null and updateUid !='' " >
+        		updateUid = #{updateUid},
+      		</if>
+      		<if test="licenseRever != null and licenseRever !='' " >
+        		licenseRever = #{licenseRever},
+      		</if>
+			<if test="licenseReverUid != null and licenseReverUid !='' " >
+        		licenseReverUid = #{licenseReverUid},
+      		</if>
+			<if test="licenseRevTime!= null  " >
+        		licenseRevTime = #{licenseRevTime},
+      		</if>
+      		<if test="licenseRevBank!= null and licenseRevBank !='' " >
+        		licenseRevBank = #{licenseRevBank},
+      		</if>
+      		<if test="licenseRevBankSub!= null and licenseRevBankSub !='' " >
+        		licenseRevBankSub = #{licenseRevBankSub},
+      		</if>
+      		<if test="licenseRevBankName!= null and licenseRevBankName !='' " >
+        		licenseRevBankName = #{licenseRevBankName},
+      		</if>
+			<if test="licenseRevBankSubName!= null and licenseRevBankSubName !='' " >
+        		licenseRevBankSubName = #{licenseRevBankSubName},
+      		</if>
+      		<if test="licenseRevStartTime!= null  " >
+        		licenseRevStartTime = #{licenseRevStartTime},
+      		</if>
+			<if test="licenseRevEndTime!= null " >
+        		licenseRevEndTime = #{licenseRevEndTime},
+      		</if>
+			<if test="forensiceImg !=null and forensiceImg!=''">
+			    forensiceImg = #{forensiceImg},
+			</if>
+			<if test="isLicenseRevBank !=null and isLicenseRevBank > 0">
+			    isLicenseRevBank = #{isLicenseRevBank},
+			</if>
+			<if test="licenseRevAddress !=null and licenseRevAddress != ''">
+			    licenseRevAddress = #{licenseRevAddress},
+			</if>
+      		<if test="remark!= null and remark !='' " >
+	        		remark = #{remark},
+	      	</if>
+	      	<if test="flandBureau !=null and flandBureau !=''">
+	      	     flandBureau=#{flandBureau},
+	      	</if>
+	      	<if test="flandBureauName !=null and flandBureauName !=''">
+	      	     flandBureauName=#{flandBureauName},
+	      	</if>
+		   orderNo=#{orderNo}
+		where orderNo =#{orderNo}
+	</update>
+</mapper>

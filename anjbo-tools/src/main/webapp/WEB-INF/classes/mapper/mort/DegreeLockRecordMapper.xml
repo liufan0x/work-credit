@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.mort.DegreeLockRecordMapper" >
+ 	
+ 	<insert id="insertLockRecord" parameterType="DegreeLockRecordDto">
+ 	 	<selectKey resultType="int" keyProperty="id">
+			select last_insert_id()
+		</selectKey>
+ 		insert into tbl_degree_lock_record
+		(
+			uid,
+			houseAddress,
+			content,
+			createTime,
+			areaName,
+			houseNo,
+			appName,
+			device
+		)
+		values
+		(
+			#{uid},
+			#{houseAddress},
+			#{content},
+			now(),
+			#{areaName},
+			#{houseNo},
+			#{version},
+			#{device}
+		)
+ 	</insert>
+ 	
+ 	 <select id="findLockRecord" parameterType="DegreeLockRecordDto" resultType="DegreeLockRecordDto">
+ 	 	select id,uid,houseAddress,content,createTime,DATE_FORMAT(createTime,'%Y/%m/%d %H:%i') as createTimeStr,houseNo
+ 	 	from tbl_degree_lock_record 
+ 	 	where uid = #{uid} 
+ 	 	<if test="houseAddress != null and houseAddress != ''">
+ 	 		AND houseAddress LIKE CONCAT('%',#{houseAddress},'%')
+ 	 	</if>
+ 	 	order by createTime desc
+ 	 	<if test="pagesize > 0">
+			limit #{start},#{pagesize}
+		</if>
+    </select> 
+    
+    <select id="findLockRecordCount" resultType="int">
+    	select count(*) from tbl_degree_lock_record
+    	where uid = #{uid}<if test="houseAddress != null and houseAddress != ''"> AND houseAddress LIKE CONCAT('%',#{houseAddress},'%')</if>
+    </select>
+</mapper>

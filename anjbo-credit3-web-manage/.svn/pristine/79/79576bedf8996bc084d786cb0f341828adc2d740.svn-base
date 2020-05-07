@@ -1,0 +1,23 @@
+<div class="col-md-12 form-inline" >
+        <div class="form-group">
+			<div class="jigou-span">字典类型：</div>
+			<input type="text" class="form-control" ng-model="dictDto.type">
+		</div> 
+		<div class="form-group">
+			<div class="jigou-span">字典名称：</div>
+			<input type="text" class="form-control" ng-model="dictDto.name">
+		</div>
+		<div class="form-group">
+			<div class="jigou-span">编码：</div>
+			<input type="text" class="form-control" ng-model="dictDto.code">
+		</div>
+		<div class="form-group">
+			<div class="jigou-span">pcode：</div>
+			<input type="text" class="form-control" ng-model="dictDto.pcode">
+		</div>
+		<div class="form-group">
+			<div class="jigou-span">排序：</div>
+			<input type="text" class="form-control" ng-model="dictDto.sort">
+		</div>
+		<div style="width:100%;clear:both;"></div>
+</div>

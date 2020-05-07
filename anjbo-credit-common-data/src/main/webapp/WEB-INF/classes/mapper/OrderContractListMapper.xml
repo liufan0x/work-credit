@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.OrderContractListMapper">
+	
+	<!-- 新增合同列表 -->
+	<insert id="insertOrderContractList" parameterType="OrderListDto">
+		insert into tbl_common_order_contract_list 
+		(
+			createUid,
+			createTime,
+			updateUid,
+			<if test="agencyId != null and  agencyId > 0 ">
+			agencyId,
+			</if>
+			orderNo,
+			cityCode,
+			cityName,
+			productCode,
+			productName,
+			customerName,
+			borrowingAmount,
+			borrowingDay,
+			relationOrderNo
+		)
+		values
+		(
+			#{createUid},
+			now(),
+			#{createUid},
+			<if test="agencyId != null and  agencyId > 0 ">
+			#{agencyId},
+			</if>
+			#{orderNo},
+			#{cityCode},
+			#{cityName},
+			#{productCode},
+			#{productName},
+			#{customerName},
+			#{borrowingAmount},
+			#{borrowingDay},
+			#{relationOrderNo}
+		)
+	</insert>
+	
+	<!-- 合同列表 -->
+	<select id="selectContractList" parameterType="OrderListDto" resultType="OrderListDto">
+		<choose>
+			<when test="null!= loginUid and ''!= loginUid">
+				SELECT ou.orderNo AS isUp, olb.* FROM (
+					select * from tbl_common_order_contract_list where 
+					<include refid="selectOrderWhere"/>
+				) AS olb
+				LEFT JOIN tbl_order_contract_up ou ON (ou.orderNo=olb.orderNo AND ou.createUid=#{loginUid})
+				ORDER BY ou.createTime DESC
+				<if test="sortName !=null and sortName !=''">,${sortName} ${sortOrder}</if>
+				<if test="sortName ==null or sortName ==''">,olb.createTime desc</if>
+			</when><otherwise>
+				select * from tbl_common_order_contract_list where 
+				<include refid="selectOrderWhere"/>
+				<if test="sortName !=null and sortName !=''">
+					ORDER BY ${sortName} ${sortOrder} 
+				</if>
+				<if test="sortName ==null or sortName ==''">
+					ORDER BY createTime desc
+				</if>
+			</otherwise>
+		</choose>
+		
+		limit #{start},#{pageSize} 	
+	</select>
+	<select id="selectContractCount" parameterType="OrderListDto"	resultType="int">
+		select count(1) from tbl_common_order_contract_list where 
+		<include refid="selectOrderWhere"/>
+	</select>
+	
+	<sql id="selectOrderWhere">
+		1=1
+		<if test="createTimeStart !=null and createTimeStart !=''">
+			and  <![CDATA[ createTime >= #{createTimeStart} ]]>
+		</if>
+		<if test="createTimeEnd !=null and createTimeEnd !=''">
+			and  <![CDATA[ createTime < date_sub(#{createTimeEnd},interval -1 day) ]]>
+		</if>
+		<if test="cityCode !=null and cityCode!=''">
+			and cityCode = #{cityCode} 
+		</if>
+		<if test="productCode != null and  productCode != '' ">
+			and productCode = #{productCode} 
+		</if>
+		<if test="customerName !=null and customerName != ''">
+			and customerName like CONCAT('%',#{customerName},'%')
+		</if>
+	</sql>
+	
+	<!-- 查询新建合同可关联的订单 -->
+	<select id="selectContractAbleRelationOrder" parameterType="java.util.Map" resultType="java.util.Map" >
+		SELECT cityCode, productCode,customerName,orderNo,borrowingAmount,borrowingDay
+		FROM `anjbo-server-order`.tbl_order_list_base olb
+		where productCode!='04' 
+		AND customerName=#{customerName}	
+		and olb.state != '已关闭'
+		<if test="currentHandlerUid != null and currentHandlerUid != '' ">
+		and 
+			(currentHandlerUid in (${currentHandlerUid}) or previousHandlerUid = #{updateUid} or notarialUid in (${currentHandlerUid}) or facesignUid in (${currentHandlerUid})
+			 
+			 or acceptMemberUid in  (${currentHandlerUid}) 
+			 
+			 or channelManagerUid in (${currentHandlerUid}) 
+			 
+			<if test="orderNo != '' and orderNo != null">
+			 or orderNo in (${orderNo})
+			</if>
+			  )
+		</if>	
+	</select>
+	
+</mapper>

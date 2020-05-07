@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.RoleMapper">
+
+	<select id="findRoleByRoleId" parameterType="int" resultType="RoleDto">
+		select * from tbl_user_role where id = #{0} 
+	</select>
+	
+	<select id="selectRoleList" resultType="RoleDto" parameterType="RoleDto">
+		select * from tbl_user_role where `name` != '超级管理员'
+		<if test="agencyId!=null and agencyId>0">
+			and agencyId = #{agencyId}
+		</if>
+		<if test="name != null and name != ''">
+			and `name` like CONCAT('%',#{name},'%') 
+		</if>
+		<if test="start!=null">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	
+	<select id="selectRoleCount" resultType="int" parameterType="RoleDto">
+		select count(1) from tbl_user_role where `name` != '超级管理员'
+		<if test="agencyId != null and agencyId>0">
+			and agencyId = #{agencyId}
+		</if>
+		<if test="name != null and name != ''">
+			and `name` like CONCAT('%',#{name},'%') 
+		</if>
+	</select>
+	
+	<select id="selectAdminId" resultType="int">
+		SELECT id FROM tbl_user_role WHERE fromRole=-1 AND agencyId=#{agencyId} LIMIT 1
+	</select>
+	
+	<update id="updateRole" parameterType="RoleDto">
+		update tbl_user_role set `name` = #{name} , `describe` = #{describe} where id = #{id}
+	</update>
+	
+	<insert id="insertRole" parameterType="RoleDto">
+		<selectKey resultType="int" keyProperty="id">
+			select
+			last_insert_id()
+		</selectKey>
+		insert into tbl_user_role (`name`,`describe`,agencyId,common,enable,createUid,updateUid,createTime)
+		values (#{name},#{describe},#{agencyId},1,0,#{createUid},#{createUid},now())
+	</insert>
+	<insert id="insertByAgency" >		
+		INSERT INTO tbl_user_role(name,`describe`,agencyId,common,enable,createUid,fromRole)
+		SELECT * FROM (
+			SELECT name,`describe`,#{agencyId},common,enable,#{createUid},id AS fromRole 
+			FROM tbl_user_role
+			WHERE agencyId=1 AND name in('受理经理','渠道经理','受理员','公证经办人','面签员','取证员','国土局驻点（注销）','国土局驻点（过户）','国土局驻点（领新证）','国土局驻点（抵押）','还款专员')
+		) ruNew WHERE fromRole NOT IN(SELECT fromRole FROM tbl_user_role WHERE agencyId=#{agencyId})
+	</insert>
+	
+</mapper>

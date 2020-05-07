@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.PageListMapper">
+
+	<select id="selectTableColumns" parameterType="Map"
+		resultType="String">
+		select
+		column_name as columnName from
+		information_schema.columns
+		where table_name= #{tblDataName} and
+		column_name != 'id'
+	</select>
+
+	<insert id="insertListByKey" parameterType="Map">
+		insert into
+		${tblDataName}
+		(createUid ${keys})
+		values
+		(#{updateUid} ${values})
+	</insert>
+
+	<update id="updateListByKey" parameterType="Map">
+		update ${tblDataName}
+		<set>
+			${keyValue}
+			updateTime = now()
+		</set>
+		where
+		orderNo = #{orderNo}
+	</update>
+
+	<select id="pageListData" parameterType="Map" resultType="Map">
+		select
+		* from ${tblDataName}
+		where orderNo = #{orderNo}
+		limit 1
+	</select>
+
+	<select id="pageListList" parameterType="Map" resultType="Map">
+		select
+		*
+		from ${tblDataName} ${whereOrderBy}
+		limit
+		#{start},#{pageSize}
+	</select>
+
+	<select id="pageListCount" parameterType="Map" resultType="int">
+		select
+		count(1) from ${tblDataName} ${whereOrderBy}
+	</select>
+
+
+<sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=productCode and ''!=productCode"> AND `productCode`=#{productCode}</if>
+		<if test="null!=cityCode and ''!=cityCode"> AND `cityCode`=#{cityCode}</if>
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<if test="null!=state and ''!=state"> AND `state`=#{state}</if>
+		<if test="null!=processId and ''!=processId"> AND `processId`=#{processId}</if>
+		<if test="null!=source and ''!=source"> AND `source`=#{source}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(previousHandleTimeBegin)"> AND previousHandleTime >= #{previousHandleTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(previousHandleTimeEnd)"> AND previousHandleTime &lt;= #{previousHandleTimeEnd}</if>
+		-->
+		<if test="null!=previousHandler and ''!=previousHandler"> AND `previousHandler`=#{previousHandler}</if>
+		<if test="null!=previousHandlerUid and ''!=previousHandlerUid"> AND `previousHandlerUid`=#{previousHandlerUid}</if>
+		<if test="null!=currentHandlerUid and ''!=currentHandlerUid"> AND `currentHandlerUid`=#{currentHandlerUid}</if>
+		<if test="null!=currentHandler and ''!=currentHandler"> AND `currentHandler`=#{currentHandler}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="PageListDto" resultType="PageListDto">    
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `productCode`, `cityCode`, `orderNo`,  `state`,  `processId`, `source`, `previousHandleTime`, `previousHandler`, `previousHandlerUid`, `currentHandlerUid`, `currentHandler`
+	FROM ${tblDataName} 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="PageListDto" resultType="PageListDto">
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `productCode`, `cityCode`, `orderNo`,  `state`,  `processId`, `source`, `previousHandleTime`, `previousHandler`, `previousHandlerUid`, `currentHandlerUid`, `currentHandler`
+	FROM ${tblDataName} 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="PageListDto" resultType="int">
+	SELECT count(1) 
+	FROM ${tblDataName} 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="PageListDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO ${tblDataName}(
+		`createUid`,
+		`createTime`,
+		`updateUid`,
+		`updateTime`,
+		`productCode`,
+		`cityCode`,
+		`orderNo`,
+		`state`,
+		`processId`,
+		`source`,
+		`previousHandleTime`,
+		`previousHandler`,
+		`previousHandlerUid`,
+		`currentHandlerUid`,
+		`currentHandler`
+	) VALUES(
+		#{createUid},
+		now(),
+		#{createUid},
+		now(),
+		#{productCode},
+		#{cityCode},
+		#{orderNo},
+		#{state},
+		#{processId},
+		#{source},
+		now(),
+		#{previousHandler},
+		#{previousHandlerUid},
+		#{currentHandlerUid},
+		#{currentHandler}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="PageListDto" >
+    DELETE FROM ${tblDataName}  
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="PageListDto" >
+    UPDATE ${tblDataName} 
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=productCode">`productCode`=#{productCode},</if>
+		<if test="null!=cityCode">`cityCode`=#{cityCode},</if>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=state">`state`=#{state},</if>
+		<if test="null!=processId">`processId`=#{processId},</if>
+		<if test="null!=source">`source`=#{source},</if>
+		<if test="null!=previousHandleTime">`previousHandleTime`=#{previousHandleTime},</if>
+		<if test="null!=previousHandler">`previousHandler`=#{previousHandler},</if>
+		<if test="null!=previousHandlerUid">`previousHandlerUid`=#{previousHandlerUid},</if>
+		<if test="null!=currentHandlerUid">`currentHandlerUid`=#{currentHandlerUid},</if>
+		<if test="null!=currentHandler">`currentHandler`=#{currentHandler},</if>
+	</set>
+	WHERE orderNo=#{orderNo}
+  </update>
+
+</mapper>

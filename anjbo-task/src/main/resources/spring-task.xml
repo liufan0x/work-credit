@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Application context definition for PetClinic on JDBC. -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+
+	<!--查房价任务 -->
+	<bean id="cfjTask" class="com.anjbo.task.estateprice.CFJTask" />
+	<bean id="cfjDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="concurrent" value="false" />
+		<property name="targetObject">
+			<ref bean="cfjTask" />
+		</property>
+		<property name="targetMethod">
+			<value>run</value>
+		</property>
+	</bean>
+
+	<bean id="cfjDetailNow" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail" ref="cfjDetail" />
+		<property name="startDelay" value="2000" />
+		<property name="repeatInterval" value="0" />
+		<property name="repeatCount" value="0" />
+	</bean>
+
+	<bean id="cfjTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="cfjDetail" />
+		</property>
+		<property name="cronExpression">
+			<value>0 0 23 * * ?</value>
+			<!--<value>0/5 * * * * ?</value>-->
+		</property>
+	</bean>
+
+	<!--按揭圈各地区数据抓取 -->
+	<bean id="dealDataTask" class="com.anjbo.task.estatedeal.DealDataTask" />
+	<bean id="dealDataDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="concurrent" value="false" />
+		<property name="targetObject">
+			<ref bean="dealDataTask" />
+		</property>
+		<property name="targetMethod">
+			<value>run</value>
+		</property>
+	</bean>
+
+	<bean id="dealDataDetailNow" class="org.springframework.scheduling.quartz.SimpleTriggerBean">
+		<property name="jobDetail" ref="dealDataDetail" />
+		<property name="startDelay" value="2000" />
+		<property name="repeatInterval" value="0" />
+		<property name="repeatCount" value="0" />
+	</bean>
+
+	<bean id="dealDataTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="dealDataDetail" />
+		</property>
+		<property name="cronExpression">
+			<value>0 0 */3 * * ?</value>
+			<!--<value>0/5 * * * * ?</value>-->
+		</property>
+	</bean>
+
+
+	<!--房产价格更新日定时任务 -->
+	<bean id="housePriceDayTask" class="com.anjbo.task.house.HousePriceTaskDay" />
+	<!--房产价格月定时任务 -->
+	<bean id="housePriceMouthTask" class="com.anjbo.task.house.HousePriceTaskMouth" />
+	<!--抓取小区成交数据月定时任务 -->
+	<bean id="houseMarketBargainTask" class="com.anjbo.task.house.HouseMarketBargainTask" />
+
+	<bean id="hmBargainTaskDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="concurrent" value="false" />
+		<property name="targetObject">
+			<ref bean="houseMarketBargainTask" />
+		</property>
+		<property name="targetMethod">
+			<value>run</value>
+		</property>
+	</bean>
+	<bean id="hpDayTaskDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="concurrent" value="false" />
+		<property name="targetObject">
+			<ref bean="housePriceDayTask" />
+		</property>
+		<property name="targetMethod">
+			<value>run</value>
+		</property>
+	</bean>
+	<bean id="hpMouthTaskDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="concurrent" value="false" />
+		<property name="targetObject">
+			<ref bean="housePriceMouthTask" />
+		</property>
+		<property name="targetMethod">
+			<value>run</value>
+		</property>
+	</bean>
+	<!-- 房产信息日调度触发器 -->
+	<bean id="housePriceDayTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="hpDayTaskDetail" />
+		</property>
+		<property name="cronExpression">
+			<value>0 0 1 * * ?</value>
+		</property>
+	</bean>
+	<!-- 房产信息月调度触发器 -->
+	<bean id="housePriceMouthTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="hpMouthTaskDetail" />
+		</property>
+		<property name="cronExpression">
+			<value>0 0 1 L * ?</value>
+		</property>
+	</bean>
+	<!-- 抓取小区成交数据月定时任务触发器 -->
+	<bean id="hmBargainTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="hmBargainTaskDetail" />
+		</property>
+		<property name="cronExpression">
+			<value>0 0 2 L * ?</value>
+		</property>
+	</bean>
+	<!-- 赎楼订单同步 -->
+	<bean id="orderTask" class="com.anjbo.task.fc.order.OrderTask"/>
+	<bean id="orderDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+   		<property name="targetObject" ref="orderTask"></property>
+   		<property name="targetMethod" value="run"></property>
+   		<property name="concurrent" value="false"></property>
+   </bean>
+	<bean id="orderTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+   		<property name="jobDetail">
+   			<ref bean="orderDetail"/>
+   		</property>
+   		<property name="cronExpression">
+   			<value>0 0/5 * * * ?</value>
+   		</property>
+   </bean>
+   
+   	<!-- 房抵贷短信通知 -->
+	<bean id="fddTask" class="com.anjbo.task.fc.fdd.FddTask"/>
+	<bean id="fddAMSTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+   		<property name="targetObject" ref="fddTask"></property>
+   		<property name="targetMethod" value="run"></property>
+   		<property name="concurrent" value="false"></property>
+   </bean>
+	<bean id="fddTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+   		<property name="jobDetail">
+   			<ref bean="fddAMSTask"/>
+   		</property>
+   		<property name="cronExpression">
+   			<value>0 0 7,10,14 * * ?</value>
+   		</property>
+   </bean>
+   
+	<!-- 民生贷款申请定时查询审核结果 -->
+	<bean id="msLoanTask" class="com.anjbo.task.msloan.MSLoanTask"/>
+	<bean id="msLoanDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+   		<property name="targetObject" ref="msLoanTask"></property>
+   		<property name="targetMethod" value="MSLoanJob"></property>
+   		<property name="concurrent" value="false"></property>
+   </bean>
+	<bean id="msLoanTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+   		<property name="jobDetail">
+   			<ref bean="msLoanDetail"/>
+   		</property>
+   		<property name="cronExpression">
+   			<value>0 0 0/2 * * ?</value><!-- 2小时-->
+   		</property>
+   </bean>
+   
+   <!-- 钉钉数据同步 -->
+   <bean id="dingtalkSyncTask" class="com.anjbo.task.user.DingtalkSyncTask"/>
+   <bean id="dingtalkSyncTaskDeptDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+   		<property name="targetObject" ref="dingtalkSyncTask"></property>
+   		<property name="targetMethod" value="runDept"></property>
+   		<property name="concurrent" value="false"></property>
+   </bean>
+	<bean id="dingtalkSyncTaskDeptTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+   		<property name="jobDetail"><ref bean="dingtalkSyncTaskDeptDetail"/></property>
+   		<property name="cronExpression">
+   			<value>15 15 0/12 * * ?</value>
+   		</property>
+   </bean>
+   <bean id="dingtalkSyncTaskUserDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+   		<property name="targetObject" ref="dingtalkSyncTask"></property>
+   		<property name="targetMethod" value="runUser"></property>
+   		<property name="concurrent" value="false"></property>
+   </bean>
+	<bean id="dingtalkSyncTaskUserTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+   		<property name="jobDetail"><ref bean="dingtalkSyncTaskUserDetail"/></property>
+   		<property name="cronExpression">
+   			<value>15 20 0/12 * * ?</value>
+   		</property>
+   </bean>
+    <!-- 订单总体概况定时 -->
+	<bean id="receivableReportTask" class="com.anjbo.task.fc.order.ReceivableReportTask"/>
+	<bean id="receivableReportDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+   		<property name="targetObject" ref="receivableReportTask"></property>
+   		<property name="targetMethod" value="run"></property>
+   		<property name="concurrent" value="false"></property>
+   </bean>
+	<bean id="receivableReportTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+   		<property name="jobDetail">
+   			<ref bean="receivableReportDetail"/>
+   		</property>
+   		<property name="cronExpression">
+   			<value>0 0 0/12 * * ?</value>
+   		</property>
+   </bean>
+   
+   <!-- 订单放款量统计定时 -->
+	<bean id="lendingStatisticsTask" class="com.anjbo.task.fc.order.LendingStatisticsTask"/>
+	<bean id="lendingStatisticsDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+   		<property name="targetObject" ref="lendingStatisticsTask"></property>
+   		<property name="targetMethod" value="run"></property>
+   		<property name="concurrent" value="false"></property>
+   </bean>
+	<bean id="lendingStatisticsTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+   		<property name="jobDetail">
+   			<ref bean="lendingStatisticsDetail"/>
+   		</property>
+   		<property name="cronExpression">
+   		    <!-- 每30分钟执行一次 -->
+   			<value>0 0/30 * * * ?</value>
+   		</property>
+   </bean>
+	<!-- 调度工厂 -->
+	<bean id="scheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<!--
+				 <ref bean="cfjTrigger"/>
+				<ref bean="cfjDetailNow"/>
+				<ref bean="dealDataTrigger"/>
+				<ref bean="dealDataDetailNow"/>
+				<ref bean="housePriceDayTrigger"/>
+				<ref bean="hmBargainTaskTrigger"/> 
+				<ref bean="msLoanTrigger"/>
+				-->
+				<!--<ref bean="housePriceMouthTrigger"/>-->
+
+				<!--暂时注释下个赎楼版本再去掉2017-04-07 
+				<ref bean="orderTrigger"/>
+				 -->
+				 <ref bean="fddTrigger"/>
+				<!--
+				 <ref bean="dingtalkSyncTaskDeptTrigger"/>
+				 <ref bean="dingtalkSyncTaskUserTrigger"/>
+				 -->
+				 <ref bean="receivableReportTrigger"/>
+				 <ref bean="lendingStatisticsTrigger" />
+			</list>
+		</property>
+	</bean>
+
+	<!--定时查档作业 -->
+	<bean id="fcJob" class="com.anjbo.task.fc.monitor.MonitorSpringQtz" />
+	<!--定时器 -->
+	<bean id="defaultScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false" autowire="no">
+		<property name="triggers">
+			<list>
+				<ref bean="fcTriggerStart" />
+				<ref bean="fcTrigger" /> 
+			</list>
+		</property>
+		<property name="autoStartup" value="true" />
+	</bean>
+
+	<bean id="fcTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+		<property name="jobDetail" ref="fcJobDetail" />
+		<property name="cronExpression" value="0 0 22 * * ?" />
+	</bean>
+	
+	<!-- 配置项目启动后任务就执行一次 -->  
+    <bean id="fcTriggerStart" class="org.springframework.scheduling.quartz.SimpleTriggerBean">  
+        <property name="jobDetail" ref="fcJobDetail" />  
+        <property name="startDelay" value="2000" />  
+        <property name="repeatInterval" value="0" />  
+        <property name="repeatCount" value="0" />  
+    </bean>  
+
+	<bean id="fcJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject" ref="fcJob" />
+		<property name="targetMethod" value="execute" />
+		<property name="concurrent" value="false" />
+		<!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->
+	</bean>
+
+	<!--动态调度器 -->
+	<bean id="fcScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false" autowire="no">
+		<property name="triggers">
+			<list></list>
+		</property>
+	</bean>
+
+	<!--资金放款状态定时查询start-->
+		<bean id="riskJob" class="com.anjbo.task.fc.risk.FundAuditSpring" />
+		<!--定时器 -->
+		<bean id="defaultRiskScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false" autowire="no">
+			<property name="triggers">
+				<list>
+					<ref bean="riskTriggerStart" />
+					<ref bean="riskTrigger" />
+				</list>
+			</property>
+			<property name="autoStartup" value="true" />
+		</bean>
+		<bean id="riskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+			<property name="jobDetail" ref="riskJobDetail" />
+			<property name="cronExpression" value="0 0 0/3 * * ?" />  <!-- 三小时 -->
+		</bean>
+		<!-- 配置项目启动后任务就执行一次 -->  
+	    <bean id="riskTriggerStart" class="org.springframework.scheduling.quartz.SimpleTriggerBean">  
+	        <property name="jobDetail" ref="riskJobDetail" />  
+	        <property name="startDelay" value="2000" />  
+	        <property name="repeatInterval" value="0" />  
+	        <property name="repeatCount" value="0" />  
+	    </bean>  
+		<bean id="riskJobDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+			<property name="targetObject" ref="riskJob" />
+			<property name="targetMethod" value="execute" />
+			<property name="concurrent" value="false" />
+			<!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->
+		</bean>
+		<!--动态调度器 -->
+		<bean id="riskScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false" autowire="no">
+			<property name="triggers">
+				<list></list>
+			</property>
+		</bean>
+	 <!--资金放款状态定时查询end-->
+	
+</beans>

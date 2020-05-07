@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.ResourceMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=resourceName and ''!=resourceName"> AND `resourceName`=#{resourceName}</if>
+		<if test="null!=resourceContent and ''!=resourceContent"> AND `resourceContent`=#{resourceContent}</if>
+		<if test="null!=type and type>0"> AND `type`=#{type}</if>
+		<if test="null!=pid and pid>0"> AND `pid`=#{pid}</if>
+		<if test="null!=sort and sort>0"> AND `sort`=#{sort}</if>
+		<if test="null!=authType and authType>0"> AND `authType`=#{authType}</if>
+		<if test="null!=isEnable and isEnable>0"> AND `isEnable`=#{isEnable}</if>
+		<if test="null!=platformNature and ''!=platformNature"> AND `platformNature`=#{platformNature}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="ResourceDto" resultType="ResourceDto">    
+	SELECT `id`, `resourceName`, `resourceContent`, `type`, `pid`, `sort`, `authType`, `isEnable`, `platformNature` 
+	FROM tbl_resource 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="ResourceDto" resultType="ResourceDto">
+	SELECT `id`, `resourceName`, `resourceContent`, `type`, `pid`, `sort`, `authType`, `isEnable`, `platformNature`
+	FROM tbl_resource 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="ResourceDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_resource 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="ResourceDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_resource(
+		`resourceName`,
+		`resourceContent`,
+		`type`,
+		`pid`,
+		`sort`,
+		`authType`,
+		`isEnable`,
+		`platformNature`
+	) VALUES(
+		#{resourceName},
+		#{resourceContent},
+		#{type},
+		#{pid},
+		#{sort},
+		#{authType},
+		#{isEnable},
+		#{platformNature}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="ResourceDto" >
+    DELETE FROM tbl_resource 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="ResourceDto" >
+    UPDATE tbl_resource
+	<set>
+		<if test="null!=resourceName">`resourceName`=#{resourceName},</if>
+		<if test="null!=resourceContent">`resourceContent`=#{resourceContent},</if>
+		<if test="null!=type">`type`=#{type},</if>
+		<if test="null!=pid">`pid`=#{pid},</if>
+		<if test="null!=sort">`sort`=#{sort},</if>
+		<if test="null!=authType">`authType`=#{authType},</if>
+		<if test="null!=isEnable">`isEnable`=#{isEnable},</if>
+		<if test="null!=platformNature">`platformNature`=#{platformNature},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

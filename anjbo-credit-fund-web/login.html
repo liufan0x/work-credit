@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="Keywords" content="">
+<meta name="Description" content="">
+<link rel="shortcut icon" href="images/icon.png" />
+<link href="css/login.css" rel="stylesheet" type="text/css" />
+<title>登录</title>
+</head>
+<body ng-app="anjboApp" ng-controller="login" >
+     <div class="main-box">
+		<form name="loginForm">
+		<div class="login-box" style="margin:0 auto;display:block; float:none; ">
+			<div class="login-in">
+				
+				<p class="login-tit"><img src="images/logo.png" class="logo-img"><span>快鸽按揭信贷业务系统</span></p>
+				<div class="inp-box" style="margin-top:15px;">
+					<span class="icon-box user"></span> <input type="text"
+						AUTOCOMPLETE="off" ng-keyup="myKeyup($event)" required
+						placeholder="请输入用户名" name="userAccount" ng-model="userAccount"
+						class="inp" style="top: 125px;">
+				</div>
+				<div class="inp-box">
+					<span class="icon-box password"></span> <input type="password"
+						AUTOCOMPLETE="off" ng-keyup="myKeyup($event)" required
+						placeholder="请输入密码" name="userPassword" ng-model="userPassword"
+						class="inp" style="top: 206px;">
+				</div>
+				<div class="yanzheng-box">
+					<div class="inp-box2">
+						<input type="text" maxLength="4" AUTOCOMPLETE="off"
+							ng-keyup="myKeyup($event)" required placeholder="请输入验证码"
+							name="validateCode" ng-model="validateCode" class="inp2"
+							style="top: 286px; width: 80px;">
+					</div>
+					<img ng-src="{{validateCodeUrl}}" class="inp-img" ng-click="changeValidateCode();">
+				</div>
+				<a class="login-but" ng-click="login()">登&nbsp;录</a>
+				<div class="error">
+					<error
+						ng-show="loginForm.userAccount.$error.required&&loginForm.userAccount.$dirty"
+						ng-init="userAccountError='* 用户名不能为空'" ng-bind="userAccountError"></error>
+					<error
+						ng-show="!loginForm.userAccount.$error.required&&loginForm.userPassword.$error.required&&loginForm.userPassword.$dirty"
+						ng-init="userPasswordError='* 密码不能为空'" ng-bind="userPasswordError"></error>
+					<error
+						ng-show="!loginForm.userAccount.$error.required&&!loginForm.userPassword.$error.required&&loginForm.validateCode.$error.required&&loginForm.validateCode.$dirty"
+						ng-init="validateCodeError='* 验证码不能为空'"
+						ng-bind="validateCodeError"></error>
+					<error ng-show="!loginForm.validateCode.$error.required&&errorTxt"ng-bind="errorTxt"></error>
+				</div>
+			</div>
+		</div>
+	</form>
+	</div>
+
+	<div class="bottom-box">网络经营许可证：粤ICP备15063626号-1 Copyright © 2016 anjbo.com 版权所有</div>
+</body>
+<script type="text/javascript" src="script/common/angular.min.js"></script>
+<script type="text/javascript" src="script/common/angular-cookies.min.js"></script>
+<script type="text/javascript" src="script/login.js"></script>
+</html>

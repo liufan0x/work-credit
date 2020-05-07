@@ -1,0 +1,191 @@
+<div class="container-fluid">
+
+	<place-order-detail></place-order-detail>
+
+	<div id="viewRow">
+		
+	</div>
+
+		
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;核实利息信息</div>
+	<div class="row detail-row form-inline" >
+		<div class="col-md-6 col-lg-4" ng-if="isProductCode!='06'&&isProductCode!='07'">
+			<label>收费类型：</label>
+			<select class="form-control" name="riskGradeId" style="width:178px;" ng-model="harvest.riskGradeId" ng-change="isStandardCharge()" ng-options="list.riskGradeId as list.riskGradeName for list in riskGradeList" required>
+				<option value="">请选择</option>
+			</select>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>期限：</label>
+			<span>
+			  <input type="text"  ng-model="harvest.borrowingDays" class="form-control" ng-disabled="harvest.borrowingDays&&harvest.borrowingDays!=''"> 
+			  <span class="a-span" ng-if="modeid!=1 || harvest.riskGradeId=='0'"> &nbsp;天</span>  
+			</span>
+		</div>		
+		<div class="col-md-6 col-lg-4">
+			<label>费率：</label>
+			<span>
+			  <input type="text"  ng-model="harvest.rate" class="form-control" maxlength="9"   ng-if="isProductCode=='06'||isProductCode=='07'"> 
+			  <input type="text"  ng-model="harvest.rate" class="form-control" maxlength="9"   ng-readonly="harvest.riskGradeId!=0" ng-if="isProductCode!='06'&&isProductCode!='07'"> 
+			  <span class="a-span" ng-if="modeid==1 && harvest.riskGradeId!='0'"> &nbsp;%</span>
+			  <span class="a-span" ng-if="modeid!=1 || harvest.riskGradeId=='0'"> &nbsp;%/天</span>  
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>逾期费率：</label>
+			<span>
+				<input type="text"  ng-model="harvest.overdueRate" class="form-control" maxlength="9"   ng-if="isProductCode=='06'||isProductCode=='07'">
+			    <input type="text"  ng-model="harvest.overdueRate" class="form-control" maxlength="9"   ng-readonly="harvest.riskGradeId!=0" ng-if="isProductCode!='06'&&isProductCode!='07'">
+			    <span class="a-span" ng-if="modeid==1 && harvest.riskGradeId!='0'"> &nbsp;%</span>
+			    <span class="a-span" ng-if="modeid!=1 || harvest.riskGradeId=='0'"> &nbsp;%/天</span>  
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>服务费：</label>
+			<span><input type="text"  ng-model="harvest.serviceCharge"  class="form-control" maxlength="9"  > 元</span>
+		</div>
+		<div class="col-md-6 col-lg-4" ng-if="isProductCode!='03'&&isProductCode!='06'&&isProductCode!='07'">
+			<label>关外手续费：</label>
+			<span><input type="text"  ng-model="harvest.customsPoundage"  class="form-control" maxlength="9"  > 元</span>
+		</div>
+		<div class="col-md-6 col-lg-4" ng-if="isProductCode!='06'&&isProductCode!='07'">
+			<label>其他费用：</label>
+			<span><input type="text"  ng-model="harvest.otherPoundage"  class="form-control" maxlength="9"  > 元</span>
+		</div>
+		<div class="col-md-12 col-lg-4">
+			<label>应收利息：</label>
+			<input type="text" ng-model="harvest.receivableInterestMoney" id="receivableInterestMoney" maxlength="9" class="form-control"   > 元
+		</div>
+		<div class="col-md-6 col-lg-12" >
+			<label>应收金额：</label>
+			<span><input type="text"  ng-model="harvest.chargeMoney"  class="form-control" maxlength="9"  > 元(其中包含:服务费+<span ng-if="isProductCode!='03'&&isProductCode!='06'&&isProductCode!='07'">关外手续费+</span><span ng-if="isProductCode!='06'&&isProductCode!='07'">其他费用+</span>应收利息)</span>
+		</div>
+		<div class="col-md-6 col-lg-4" ng-if="isProductCode!='06'&&isProductCode!='07'">
+			<label>返佣金额：</label>
+			<input type="text" ng-model="harvest.returnMoney" id="returnMoney" class="form-control" maxlength="9"   > 元
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>收利息时间：</label>
+			<input ng-if="isProductCode!='06'&&isProductCode!='07'"  size="16" type="text" readonly ng-model="harvest.interestTime" ng-disabled="harvest.interestTime && harvest.interestTime!=''" class="form-control form_dateu">
+			<input ng-if="isProductCode=='06'||isProductCode=='07'"  size="16" type="text"  ng-model="harvest.interestTime"  class="form-control form_dateu">
+ 			<a href="#"><span data-fancybox="iframe" data-src="/plugins/uploadify/upload_image.html?returnFun=returnDatafinance" data-type="iframe" >点此上传截屏照片（可不传）</span></a> 
+			<input type="hidden" id="img" >
+			  <span class="gallerys " ng-if="harvest.imgs!=null && harvest.imgs!='' && harvest.imgs.length>0 " >
+			        
+			       <a href="#" onclick="picView(this)">查看图片</a>
+			       <img ng-repeat="img in harvest.imgs" ng-src="{{img}}"  class='gallery-pic' style='display:none;'>
+			  </span>
+			  <span class="gallerys processuUpdImg" style="display:none">
+			        
+			       <a href="#" onclick="picView(this)">查看图片</a>
+			       <img ng-repeat="img in harvest.imgs" ng-src="{{img}}"  class='gallery-pic' style='display:none;'>
+			  </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>实收费用合计：</label>
+			<input type="text" ng-if="isProductCode!='06'&&isProductCode!='07'"  ng-disabled="harvest.collectInterestMoney && harvest.collectInterestMoney>0" ng-model="harvest.collectInterestMoney" id="collectInterestMoney" class="form-control" maxlength="9"  > 
+			<input type="text" ng-if="isProductCode=='06'||isProductCode=='07'"   ng-model="harvest.collectInterestMoney" id="collectInterestMoney" class="form-control" maxlength="9"  > 元
+		</div>
+		<div class="col-md-6 col-lg-4">
+			如费率有修改，请在此上传修改费率审批凭证：<a href="#"><span data-fancybox="iframe" data-src="/plugins/uploadify/upload_image.html?returnFun=returnDatarate" data-type="iframe" >点击上传</span></a>
+			<input type="hidden" id="rateImg" >
+			  <span class="gallerys processuUpdRateImg" style="display:none">
+			       <a href="#" class="processuView-ratePic">查看图片</a>
+			       <img ng-repeat="img in harvest.rateImg" ng-src="{{img}}"  class='gallery-pic' style='display:none;'>
+			  </span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="form-group">
+			<textarea class="form-control" ng-model="harvest.remark" rows="5" placeholder="如有特殊说明，请在此处备注（非必填）"/>
+		</div>
+		<div class="col-md-12">
+		    <button type="button" class="btn btn-primary" ng-click="showSubmit()">提交</button>
+			<button type="button" ng-show="!orderIsBack" class="btn btn-warning" ng-click="showBack()">退回</button>
+		</div>
+	</div>
+</div>
+<script>
+ function picView(e){
+	 $.openPhotoGallery($(e).next("img"));
+ }
+  
+
+// $(".processuView-pic").click(function(){alert();
+//     $.openPhotoGallery($(this).next("img"),"delZijinPic");
+// })
+function delZijinPic(a){ 
+  $(".processuUpdImg").find("img").each(function(){ 
+      if($(this).attr("src")==a){
+       $(this).remove();
+    }
+   })
+   var returnPic="";
+   $(".processuUpdImg").find("img").each(function(){
+        returnPic+=returnPic+$(this).attr("src")+",";
+   })
+   $("#img").val(returnPic.substring(0,returnPic.length-1)); 
+   var img=$("#img").val();
+   if(img==''){
+	   $(".processuUpdImg").hide() 
+   }
+}
+function returnDatafinance(url,smallUrl,name){
+	var img=$("#img").val();
+	if(url!=''){
+		 url=url.substring(0,url.length-1);
+		 var urls= new Array();
+		 var urls=url.split(",");	
+		 var h="";
+		 for (var i=0;i<urls.length ;i++ )  { 
+			 h+="<img src='"+urls[i]+"' class='gallery-pic' style='display:none;'>";
+		 }   
+		 $(".processuUpdImg").append(h);
+		 if(img!=''){
+			 url=img+","+url;
+		 }
+		 $("#img").val(url); 
+		 $(".processuUpdImg").show();
+	}
+}
+$(".processuView-ratePic").click(function(){
+    $.openPhotoGallery($(this).next("img"),"delRateImg");
+})
+
+function delRateImg(a){ 
+	  $(".processuUpdRateImg").find("img").each(function(){ 
+	      if($(this).attr("src")==a){
+	       $(this).remove();
+	    }
+	   })
+	   var returnPic="";
+	   $(".processuUpdRateImg").find("img").each(function(){
+	        returnPic+=returnPic+$(this).attr("src")+",";
+	   })
+	   $("#rateImg").val(returnPic.substring(0,returnPic.length-1)); 
+	   var img=$("#rateImg").val();
+	   if(img==''){
+		   $(".processuUpdRateImg").hide() 
+	   }
+	}
+
+function returnDatarate(url,smallUrl,name){
+	var img=$("#rateImg").val();
+	if(url!=''){
+		 url=url.substring(0,url.length-1);
+		 var urls= new Array();
+		 var urls=url.split(",");	
+		 var h="";
+		 for (var i=0;i<urls.length ;i++ )  { 
+			 h+="<img src='"+urls[i]+"' class='gallery-pic' style='display:none;'>";
+		 }   
+		 $(".processuUpdRateImg").append(h);
+		 if(img!=''){
+			 url=img+","+url;
+		 }
+		 $("#rateImg").val(url); 
+		 $(".processuUpdRateImg").show();
+	}
+}
+	
+</script>

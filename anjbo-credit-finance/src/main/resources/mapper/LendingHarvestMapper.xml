@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.LendingHarvestMapper" >
+	<!-- 查询信息 -->
+   <select id="findByHarvest" parameterType="LendingHarvestDto" resultType="LendingHarvestDto">
+       select *,DATE_FORMAT(interestTime,'%Y-%m-%d') as interestTimeStr  from tbl_finance_lending_harvest  where orderNo=#{orderNo} order by createTime desc limit 1
+  </select>
+  
+  <!-- 添加信息 -->
+   <insert id="addLendingHarvest" parameterType="LendingHarvestDto">
+     insert into tbl_finance_lending_harvest (
+         orderNo,
+         createUid,
+         updateUid,
+         createTime,
+         interestTime,
+         interestImg,
+         collectInterestMoney,
+         payInterestMoney,
+         returnMoney,
+         receivableInterestMoney,
+         remark,
+         rateImg,
+         backExpensesMoney,
+         type,
+         rebateUid
+     )values(
+        #{orderNo},
+        #{createUid},
+        #{updateUid},
+        now(),
+        #{interestTime},
+        #{interestImg},
+        #{collectInterestMoney},
+        #{payInterestMoney},
+        #{returnMoney},
+        #{receivableInterestMoney},
+        #{remark},
+        #{rateImg},
+        #{backExpensesMoney},
+        #{type},
+        #{rebateUid}
+     )
+  </insert>	
+  
+   <!-- 完善信息 -->	
+   <update id="updateHarves" parameterType="LendingHarvestDto">
+     update tbl_finance_lending_harvest  
+     set  updateUid=#{updateUid},interestTime=#{interestTime},interestImg=#{interestImg},
+	      collectInterestMoney=#{collectInterestMoney}, payInterestMoney=#{payInterestMoney},
+	      returnMoney=#{returnMoney},receivableInterestMoney=#{receivableInterestMoney},remark=#{remark},rateImg=#{rateImg},backExpensesMoney=#{backExpensesMoney}
+	      <if test="rebateUid !=null and rebateUid !=''">
+			,rebateUid=#{rebateUid}	      
+	      </if>
+     where orderNo=#{orderNo} and type=#{type}
+  </update>
+  
+	<delete id="deleteHarvest" parameterType="LendingHarvestDto">
+         delete  from tbl_finance_lending_harvest where status=0 and orderNo=#{orderNo} and type=#{type} order by createTime desc limit 1
+    </delete>
+</mapper>

@@ -1,0 +1,91 @@
+<style>
+.form-inline.w138 label {
+	width: 150px;
+}
+.sgt-form .tip{
+	font-size:13px;
+	padding-left:157px;
+	clear:both;
+}
+</style>
+<div class="container-fluid">
+	<form method="post" name="ordinaryAuditForm2" class="form-inline element-supplement  detail-row sgt-form">
+		<div class="row detail-row form-inline w138">
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>合同金额：</label>
+				<input type="text" ng-model="contractInfo.pactAmt" name="pactAmt" class="form-control" maxlength="9"/> 万
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>利率类型：</label>
+				<select class="form-control sel" ng-model="contractInfo.rateType" name="rateType" >
+					<option value="1">日</option>
+					<option value="2">月</option>
+					<option value="3">年</option>
+				</select>
+			</div>
+			<div class="col-md-6 col-lg-4">
+					<label><span>*</span>利率：</label>
+					<input type="text" ng-model="contractInfo.lnRate" name="lnRate" maxlength="11" class="form-control"/> %
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>借款期限：</label>
+				<input type="text" ng-model="contractInfo.termLoan" name="termLoan" maxlength="11" class="form-control" />月 
+			</div>
+
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>申请地点：</label>
+				
+					<select class="form-control" name="appArea" choice-dict-name="appArea" style="width:178px;" ng-model="contractInfo.appArea" required>
+				<option value="">请选择</option>
+			</select>
+				<!-- <input type="text" ng-model="contractInfo.appArea" name="appArea" maxlength="11" class="form-control" />   -->
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>申请用途：</label>
+				<select class="form-control sel" ng-model="contractInfo.appUse" name="appUse" >
+					<option value="1">经营类</option>
+					<option value="2">消费类</option>
+					<option value="3">经营创业类</option>
+				</select>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>扣款日类型：</label>
+				<select class="form-control sel" ng-model="contractInfo.payType" name="payType" > 
+					<option value="01">相对扣款日</option>
+					<option value="02">固定扣款日</option>
+				</select>
+			</div>
+            <div class="col-md-6 col-lg-4">
+				<label><span>*</span>还款方式：</label>
+				<select class="form-control sel" ng-model="contractInfo.repayment" name="repayment" >
+					<option value="0">请选择</option>
+					<option value="1">先息后本</option>
+					<option value="2">等额本息</option>
+				</select>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>担保方式：</label> 
+				<select class="form-control sel" ng-model="contractInfo.vouType" name="vouType" disabled>
+						<option value="1">质押</option>
+						<option value="2">抵押</option>
+						<option value="4">信用</option>
+					</select>
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>合同期限：</label>
+				<input type="text" ng-model="contractInfo.termMon" name="termMon" maxlength="11" class="form-control" />月
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label><span>*</span>合同期限：</label>
+				<input type="text" ng-model="contractInfo.termDay" name="termDay" maxlength="11" class="form-control" />日
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<p class="tip" style="padding-left:0">注：如果一笔借款需要15天，那么月填写0，日填写15天</p>
+			</div>
+			
+			 
+		</div>
+	 
+		 
+	</form>
+</div>

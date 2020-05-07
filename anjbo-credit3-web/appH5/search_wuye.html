@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="stylesheet" type="text/css" href="./css/common.css" />
+   <link rel="stylesheet" type="text/css" href="./css/search.css" />
+  <title>物业楼栋 </title>
+ </head>
+ <body>
+	 <div class="search-box">
+	      <div class="clear"></div>
+	      <div class="search-in">
+		       <input type="text" value="" placeholder="请输入物业名称" id="search" class="search-inp" name="keyword">
+		       <span class="search-but" onclick="search()"></span>
+		  </div>
+	 </div>
+	 <div class="select-p" style="height:5px"></div>
+	 <div class="wuye"></div>
+<script src="./js/mui.min.js"></script>
+<script src="./js/mui.picker.min.js"></script>
+<script src="./js/jquery.min.js"></script>
+<script>
+var enquiry = JSON.parse(localStorage.getItem('enquiry'));
+var uid = "";   
+var deviceId=  "";   
+if(enquiry!=null){
+	$("input[name='keyword']").val(enquiry.propertyName);
+	uid=enquiry.uid;
+	deviceId=enquiry.deviceId;
+ 	console.log(enquiry);
+}
+//删除函数
+$(function(){
+	search();
+})
+
+function del(_this){
+	 
+		    if($(_this).parent().next(".label-s").length=="0")
+		    {	 
+		    	var idd=$(_this).parent().prev(".label-s").attr("title");
+		    	searchL(idd);
+		    	$(_this).parent().remove(); 
+		    	$(".wuye").html("");
+		    	 }
+		    else{
+		    	 $(".label-s").remove();
+		    	 $(".wuye").html("");
+		    	 search();
+		    }
+		      //if(){}
+		      // alert($(this).index());
+		       
+			   $(_this).parent().remove();
+			   
+			   if($(".label-s").length==0){
+					$(".search-inp").show();
+			   };
+	  
+	
+}
+
+//点击事件函数
+var flag=true;
+function sel(_this,b){
+    if(flag){
+	   $(".search-inp").hide();
+	   var returnArr=[];
+	   returnArr[0]=$(_this).find("p").html();
+       returnArr[1]=$(_this).attr("title");
+	   $(".search-in").append('<span class="label-s" title="'+returnArr[1]+'">'+returnArr[0]+'<span class="label-x" onclick="del(this)"></span></span>');
+	  
+	   flag=false;
+	   if("searchL"== b){
+		   searchL(returnArr[1]);  //楼栋
+	   }else if("searchF"== b){
+		   searchF(returnArr[1]);  //房号
+	   }else if("rebank" == b){  //返回
+		   rebank();
+	   }
+	   //return returnArr;
+   }
+}//点击事件函数end
+
+//查询物业
+function search(){
+	var keyword= $("input[name='keyword']").val();
+	$.ajax({
+		type: 'post' ,
+        dataType: 'json',  
+        headers:{"deviceId":deviceId,uid:uid},
+		url: "/credit/risk/enquiry/v/queryConstruction?keyword="+keyword
+	}).success(function(data) {
+		var obj = data.data;
+		if(obj!=null){
+			var ht="";
+			for(var i=0;i<obj.length;i++){
+				ht+=" <div class='sel-li' title='"+obj[i].id+"' onclick='sel(this,\"searchL\")'><p id='name'>"+obj[i].name+"</p></div>";
+			}
+			$(".wuye").html(ht);
+		}
+ 	});
+}
+
+//查询楼栋
+function searchL(pid){
+    $.ajax({
+      type: 'post' ,
+      dataType: 'json',  
+      contentType:'application/json;charset=utf-8',
+      headers:{"deviceId":deviceId,"uid":uid},
+      data:JSON.stringify({"propertyId":pid}), 
+	  url: "/credit/risk/enquiry/v/queryBuilding",
+	  success:function(data) {
+			var buildingList = data.data;
+			if(buildingList!=null){
+				var ht="";
+				for(var i=0;i<buildingList.length;i++){
+					ht+=" <div class='sel-li' onclick='sel(this,\"searchF\")' title='"+buildingList[i].id+"'><p id='name'>"+buildingList[i].name+"</p></div>";
+				}
+				$(".wuye").html(ht);
+				flag=true;
+			}
+		}
+	});
+}
+
+
+
+//查询房号
+function searchF(rid){
+ $.ajax({
+	  data:JSON.stringify({"buildingId":rid}), 
+      type: 'post' ,
+      headers:{"deviceId":deviceId,uid:uid},
+      dataType: 'json',  
+      contentType:'application/json;charset=utf-8',
+		url: "/credit/risk/enquiry/v/queryHouse" 
+	}).success(function(data) {
+		var buildingList = data.data;
+		if(buildingList!=null){
+			var ht="";
+			for(var i=0;i<buildingList.length;i++){
+				ht+=" <div class='sel-li' onclick='sel(this,\"rebank\")' title='"+buildingList[i].id+"'><p id='name'>"+buildingList[i].name+"</p></div>";
+			}
+			$(".wuye").html(ht);
+			flag=true;
+		}
+	});
+ 
+
+}
+
+function rebank(){
+	   var s="",id="";
+       $(".label-s").each(function(){
+    	   s=s+$(this).text()+",";
+    	   id=id+$(this).attr("title")+",";
+       })
+        var name=s.split(",");
+        var id = id.split(",");
+        enquiry.propertyId=id[0];
+	    enquiry.propertyName = name[0];
+	    enquiry.buildingId = id[1];
+	    enquiry.buildingName =  name[1];
+	    enquiry.roomName = name[2];
+	    enquiry.roomId = id[2];
+	    localStorage.setItem('enquiry',JSON.stringify(enquiry));
+	    if(enquiry.enquiryId==null){
+	    	location.href="/appH5/enquiry.html?orderNo="+enquiry.orderNo+"&productCode="+enquiry.productCode+"&deviceId="+deviceId+"&uid="+uid;
+	    }else{
+	    	location.href="/appH5/enquiry.html?orderNo="+enquiry.orderNo+"&enquiryId="+enquiry.enquiryId+"&productCode="+enquiry.productCode+"&deviceId="+deviceId+"&uid="+uid;
+		}
+}
+
+$(document).on('input propertychange','#search',function (e) {
+    if (e.type === "input" || e.orignalEvent.propertyName === "value") {
+        if(this.value!="") {  search(); }else{}
+    }else{}
+})
+ </script>
+</body>
+</html>

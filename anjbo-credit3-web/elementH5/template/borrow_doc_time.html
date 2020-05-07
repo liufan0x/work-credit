@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="robots" content="index, follow" />
+		<meta name="googlebot" content="index, follow" />
+
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=8,IE=9,IE=10" />
+
+		<meta http-equiv="expires" content="0">
+		<meta http-equiv="pragma" content="no-cache">
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="cache-control" content="no-store">
+
+		<!-- uc强制竖屏 -->
+		<meta name="screen-orientation" content="portrait">
+		<!-- QQ强制竖屏 -->
+		<meta name="x5-orientation" content="portrait">
+		<title>延长要件借用时间</title>
+		<link rel="stylesheet" href="../other/aui/css/aui.2.0.css" />
+		<link rel="stylesheet" href="../css/common.css" />
+		<link rel="stylesheet" href="../css/lCalendar.css" />
+<style>
+input::-webkit-input-placeholder,.plac {
+	color:#aaa; 
+}
+div#docDetailController div.cell{padding:0 !important;}
+.in-row{
+	width:100%;
+	padding:0 5%;
+	margin:0 auto;
+	line-height:2.25rem;
+	clear:both;
+	font-size:.7rem;
+	color:#424242;
+	box-sizing: border-box;
+	position: relative;
+	border-bottom:.05rem solid #ddd;
+}
+.last-time{display: inline-block;float: right;}
+.inp-box{float:right;width:50% !important;text-align: right;}
+.aui-icon-right{position: absolute;right:.2rem;}
+input::-webkit-input-placeholder,.plac {
+	color:#aaa; 
+}
+.right-word{
+	color:#424242;
+	font-size: .7rem !important;
+}
+#reason{
+	overflow:auto;min-height:6rem;
+	line-height:1.2rem;
+	padding:.5rem;
+}
+div#docDetailController div.cell p{
+	padding:.2rem 0 !important;
+}
+span.heafImgContainer{
+	left:.8rem;
+}
+.userInfo{
+	margin:.3rem 0;
+}
+</style>
+	 
+	</head>
+
+	<body>
+		<div id="docDetailController">
+		
+		<div class="contentPart">
+				<div>原要件借用时间</div>
+				<p class="in-row">
+					<font>开始时间</font>
+					<span class="last-time" id="lastStart"></span>
+				</p>
+				<p class="in-row">
+					<font>结束时间</font>
+					<span class="last-time" id="lastEnd"></span>
+				</p>
+				<p class="in-row">
+					<font>借用时长</font>
+					<span class="last-time" id="lastLong"></span>
+				</p>
+		</div>
+		
+					 
+
+			<!--3-->
+			<div class="contentPart">
+				<div>请重新选择要件借用时间</div>
+        <p class="in-row">
+						<font>开始时间</font>
+						<input class="inp-box right-word" id="startTime" disabled type="text" placeholder="请选择开始时间" />
+						 
+        </p>
+				<p class="in-row">
+						<font>结束时间</font>
+						<input class="inp-box right-word" id="endTime" type="text" placeholder="请选择结束时间" />
+						<i class="aui-iconfont aui-icon-right"></i>
+				</p>
+				<p class="in-row">
+						<font>借用时长</font>
+						<font class="fr plac" id="day">根据选择的借用时间自动计算</font>
+				</p>
+			</div>
+			
+			
+      <div class="contentPart" id="textRea">
+				<div>延长要件借用时间的原因</div>
+				<textarea id="reason" placeholder="请输入要件借用原因,必填项"  ></textarea>
+			</div>
+			 
+
+			<!--5-->
+			<div class="contentPart">
+				<div>审批人</div>
+
+				<div class="cell text_center">
+					<div style="border: 0;margin: 0;">
+						<div class="aui-row" id="auditors">
+							<!-- 审批人 -->
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!--6-->
+			<div class="contentPart">
+				<div>抄送人</div>
+
+				<div class="cell text_center">
+					<div style="border: 0;margin: 0;">
+						<div class="aui-row" id="copyUsers">
+							<!-- 抄送人 -->
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="btnContainer">
+				<button id="submitBtn" class="color_fff">提交审批</button>
+			</div>
+		</div>
+		<div class="loadingPart" id="loadingPart" ><div style="background:none"><img src="../img/loading-1.gif" alt="" /></div></div>
+		<img src="../img/choice.png" style="display:none;">
+	
+<!--	
+	<script src="../js/zepto.min.js"></script>
+	<script src="../js/lCalendar.min.js"></script>
+	<script src="../js/common.js?1.0"></script>
+	<script src="../js/borrow_doc_time.js?1.1"></script>
+	-->
+	
+<script src="../build/time.js?1.1"></script>
+</body>
+</html>

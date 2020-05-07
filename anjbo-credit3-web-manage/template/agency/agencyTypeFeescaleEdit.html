@@ -1,0 +1,239 @@
+<div class="container-fluid">
+	<div class="clear" style="height:10px;"></div>
+	<div class="row">
+		<div class="col-md-12">
+			<ul class="breadcrumb">
+				<li>机构管理</li>
+				<li><a ui-sref="agencyList">已签约机构</a></li>
+				<li ng-if="!isDetail"><a ui-sref="agencyMaintainEdit({'agencyId':'{{agencyId}}','productCode':'{{productCode}}','orderNo':'{{orderNo}}','tblName':'tbl_sm_','source':'maintain'})" >维护</a></li>
+				<li ng-if="isDetail"><a ui-sref="agencyMaintainDetail({'agencyId':'{{agencyId}}','productCode':'{{productCode}}','orderNo':'{{orderNo}}','tblName':'tbl_sm_'})" >维护</a></li>
+				<li>产品定价配置</li>
+				<li class="go-back" ng-if="!isDetail"> <a ui-sref="agencyMaintainEdit({'agencyId':'{{agencyId}}','productCode':'{{productCode}}','orderNo':'{{orderNo}}','tblName':'tbl_sm_','source':'maintain'})" >返回上一步</a></li>
+				<li class="go-back" ng-if="isDetail"> <a ui-sref="agencyMaintainDetail({'agencyId':'{{agencyId}}','productCode':'{{productCode}}','orderNo':'{{orderNo}}','tblName':'tbl_sm_'})" >返回上一步</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="row">
+		<form role="form" name="feescaleForm" class="form-inline">
+
+			<risk-grade ng-repeat="riskcontrol in agencyTypeFeescaleDto.agencyFeescaleRiskcontrolDtos">
+			<span ng-init="riskcontrolIndex=$index"></span>
+			<div class="col-md-12 detail-row">
+				<div class="form-group">
+					<div class="jigou-span">收费标准：</div>
+					<select class="form-control" ng-disabled="isDetail" choice-dict="riskControl" ng-model="riskcontrol.grade" name="grade{{$index}}" required>
+						<option value="">请选择</option>
+					</select>
+					<a ng-if="$index == agencyTypeFeescaleDto.agencyFeescaleRiskcontrolDtos.length-1 &&!isDetail&&agencyTypeFeescaleDto.agencyFeescaleRiskcontrolDtos.length<2" ng-click="addRiskcontrol(agencyTypeFeescaleDto.agencyFeescaleRiskcontrolDtos)">继续添加</a>
+					<a ng-if="$index > 0 &&!isDetail" ng-click="delRiskcontrol($index,agencyTypeFeescaleDto.agencyFeescaleRiskcontrolDtos)">删除</a>
+					<span style="color:red" ng-show="isShowError && feescaleForm.grade{{$index}}.$invalid">
+						<span ng-show="feescaleForm.grade{{$index}}.$error.required">收费标准必选</span>
+					</span>
+				</div>
+			</div>
+			
+			<feescale ng-repeat="feescaleSection in riskcontrol.agencyFeescaleSectionDtos">
+			<div class="col-md-12" ng-init="feescaleSectionIndex=$index">
+				<div class="form-group detail-row">
+					<div class="jigou-span" style="margin-left: 50px;">收费设置：</div>
+					<input type="text" ng-disabled="isDetail" class="form-control" ng-model="feescaleSection.section"
+						   ng-change="setSection(riskcontrol.agencyFeescaleSectionDtos,$index,feescaleSection.section,-1)"
+						   name="section{{riskcontrolIndex}}{{feescaleSectionIndex}}" ng-pattern="/(^[1-9](\.\d{0,})?)|(^[0-9]\.\d{1,})\d*$/" required />
+					<span ng-if="$index==0">万元以内
+					<span style="width:100px;display:inline-block;" >
+						<span style="color:red" ng-show="isShowError && feescaleForm.section{{riskcontrolIndex}}{{feescaleSectionIndex}}.$invalid">
+							<span ng-show="feescaleForm.section{{riskcontrolIndex}}{{feescaleSectionIndex}}.$error.required">必填</span>
+							<span ng-show="feescaleForm.section{{riskcontrolIndex}}{{feescaleSectionIndex}}.$error.pattern">格式有误</span>
+						</span>
+					</span>
+					</span>
+					<span ng-if="$index!=0 && $index!=riskcontrol.agencyFeescaleSectionDtos.length-1">
+						万元以上<input type="text" ng-disabled="isDetail" class="form-control" ng-model="feescaleSection.sectionTemp"
+								   ng-change="setSection(riskcontrol.agencyFeescaleSectionDtos,$index,feescaleSection.sectionTemp,1)"
+								   name="sectionTemp{{riskcontrolIndex}}{{feescaleSectionIndex}}" ng-pattern="/(^[1-9](\.\d{0,})?)|(^[0-9]\.\d{1,})\d*$/" required/>万元以内
+						<span ng-if="$index!=0" style="display:inline-block;" >
+							<span style="color:red" ng-show="isShowError && feescaleForm.sectionTemp{{riskcontrolIndex}}{{feescaleSectionIndex}}.$invalid">
+								<span ng-show="feescaleForm.sectionTemp{{riskcontrolIndex}}{{feescaleSectionIndex}}.$error.required">必填</span>
+								<span ng-show="feescaleForm.sectionTemp{{riskcontrolIndex}}{{feescaleSectionIndex}}.$error.pattern">格式有误</span>
+							</span>
+						</span>
+						<a ng-click="delFeescaleSection($index,riskcontrol.agencyFeescaleSectionDtos)">删除区间</a>
+						
+					</span>
+					<span ng-if="$index!=0&&$index==riskcontrol.agencyFeescaleSectionDtos.length-1">万元以上&nbsp;&nbsp;</span>
+					<a ng-if="riskcontrol.agencyFeescaleSectionDtos.length -1 ==$index &&!isDetail" ng-click="addFeescaleSection(riskcontrol.agencyFeescaleSectionDtos)">添加区间</a>
+				</div>
+			</div>
+			
+			<feescale-detail ng-repeat="feescaleDetail in feescaleSection.agencyFeescaleDetailDtos">
+			<div class="col-md-12" style="margin-left: 80px;" ng-init="feescaleDetailIndex=$index">
+				<div class="row detail-row">
+					<div class="form-group auto-width">
+						<div class="jigou-span">天数：</div>
+						<input ng-if="$index==0" ng-disabled="isDetail" type="text" class="form-control wsmall" ng-model="feescaleDetail.maxfield"
+							   ng-change="setField(feescaleSection.agencyFeescaleDetailDtos,$index,feescaleDetail.maxfield,-1)"
+							   name="maxfield{{riskcontrolIndex}}{{feescaleSectionIndex}}{{feescaleDetailIndex}}" ng-pattern="/^\d*$/" required/>
+						<span ng-if="$index==0">天内</span><span ng-if="$index==0" class="wsmall">&nbsp;</span>
+						<span ng-show="$index==0" style="display:inline-block;" >
+							<span style="color:red" ng-show="isShowError && feescaleForm.maxfield{{riskcontrolIndex}}{{feescaleSectionIndex}}{{feescaleDetailIndex}}.$invalid">
+								<span ng-show="feescaleForm.maxfield{{riskcontrolIndex}}{{feescaleSectionIndex}}{{feescaleDetailIndex}}.$error.required">必填</span>
+								<span ng-show="feescaleForm.maxfield{{riskcontrolIndex}}{{feescaleSectionIndex}}{{feescaleDetailIndex}}.$error.pattern">格式有误</span>
+							</span>
+						</span>
+
+						<input ng-if="$index!=0" ng-disabled="isDetail" type="text" class="form-control wsmall" ng-model="feescaleDetail.field" ng-change="setField(feescaleSection.agencyFeescaleDetailDtos,$index,feescaleDetail.field,1)" />
+						
+						<span ng-if="$index!=0 && $index!=feescaleSection.agencyFeescaleDetailDtos.length-1">
+							天至<input type="text" ng-disabled="isDetail" class="form-control wsmall"
+									 ng-model="feescaleDetail.maxfield" ng-change="setField(feescaleSection.agencyFeescaleDetailDtos,$index,feescaleDetail.maxfield,-1)"
+									 name="maxfield{{riskcontrolIndex}}{{feescaleSectionIndex}}{{feescaleDetailIndex}}" ng-pattern="/^\d*$/" required/>天
+							<span style="display:inline-block;" >
+								<span style="color:red" ng-show="isShowError && feescaleForm.maxfield{{riskcontrolIndex}}{{feescaleSectionIndex}}{{feescaleDetailIndex}}.$invalid">
+									<span ng-show="feescaleForm.maxfield{{riskcontrolIndex}}{{feescaleSectionIndex}}{{feescaleDetailIndex}}.$error.required">必填</span>
+									<span ng-show="feescaleForm.maxfield{{riskcontrolIndex}}{{feescaleSectionIndex}}{{feescaleDetailIndex}}.$error.pattern">格式有误</span>
+								</span>
+							</span>
+						</span>
+						<span ng-if="$index == feescaleSection.agencyFeescaleDetailDtos.length-1">天以上</span>
+					</div>
+
+					<div class="form-group">
+						<div class="jigou-span">费率：</div>
+						<input type="text" ng-disabled="isDetail" class="form-control wsmall" ng-model="feescaleDetail.rate"
+							   name="rate{{riskcontrolIndex}}{{feescaleSectionIndex}}{{feescaleDetailIndex}}" ng-pattern="/(^0$)|((^[1-9]?)|(^[0-9]\.\d{0,}?))\d$/" required=""/>%
+						<span style="width:100px;display:inline-block;" >
+							<span style="color:red" ng-show="isShowError && feescaleForm.rate{{riskcontrolIndex}}{{feescaleSectionIndex}}{{feescaleDetailIndex}}.$invalid">
+								<span ng-show="feescaleForm.rate{{riskcontrolIndex}}{{feescaleSectionIndex}}{{feescaleDetailIndex}}.$error.required">必填</span>
+								<span ng-show="feescaleForm.rate{{riskcontrolIndex}}{{feescaleSectionIndex}}{{feescaleDetailIndex}}.$error.pattern">格式有误</span>
+							</span>
+						</span>
+					</div>
+					<div class="form-group">
+						<div class="jigou-span">逾期费率：</div>
+						<input type="text" ng-disabled="isDetail" class="form-control wsmall" ng-model="feescaleDetail.overduerate"
+							   name="overduerate{{riskcontrolIndex}}{{feescaleSectionIndex}}{{feescaleDetailIndex}}" ng-pattern="/(^0$)|((^[1-9]?)|(^[0-9]\.\d{0,}?))\d$/"  required/>%
+						<span style="width:100px;display:inline-block;" >
+							<span style="color:red" ng-show="isShowError && feescaleForm.overduerate{{riskcontrolIndex}}{{feescaleSectionIndex}}{{feescaleDetailIndex}}.$invalid">
+								<span ng-show="feescaleForm.overduerate{{riskcontrolIndex}}{{feescaleSectionIndex}}{{feescaleDetailIndex}}.$error.required">必填</span>
+								<span ng-show="feescaleForm.overduerate{{riskcontrolIndex}}{{feescaleSectionIndex}}{{feescaleDetailIndex}}.$error.pattern">格式有误</span>
+							</span>
+						</span>
+					</div>
+					<div class="form-group">
+						<div class="jigou-span">收费方式：</div>
+							<select class="form-control" ng-disabled="isDetail" ng-model="feescaleDetail.modeid" name="modeid{{riskcontrolIndex}}{{feescaleSectionIndex}}{{feescaleDetailIndex}}" required>
+								<option value="">请选择收费方式</option>
+								<option value="0">%/天 按天收费率</option>
+								<option value="1">%      按段收费率</option>
+							</select>
+							<span style="color:red" ng-show="isShowError && feescaleForm.modeid{{riskcontrolIndex}}{{feescaleSectionIndex}}{{feescaleDetailIndex}}.$invalid">
+								<span ng-show="feescaleForm.modeid{{riskcontrolIndex}}{{feescaleSectionIndex}}{{feescaleDetailIndex}}.$error.required">必选</span>
+							</span>
+						</div>
+						<div class="form-group relative" style="height:32px;">
+							<span class="jia-but" ng-if="$index == feescaleSection.agencyFeescaleDetailDtos.length-1&&!isDetail" ng-click="addFeescaleDetai(feescaleSection.agencyFeescaleDetailDtos)"></span>
+							<span class="jian-but" ng-if="$index!=0 && $index!=feescaleSection.agencyFeescaleDetailDtos.length-1&&!isDetail" ng-click="delFeescaleDetai($index,feescaleSection.agencyFeescaleDetailDtos)"></span>
+						</div>
+		       		</div>
+				</div>
+
+			</feescale-detail>
+			</feescale>
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="jigou-span">固定服务费：</div>
+					<input type="text" ng-disabled="isDetail" class="form-control" ng-model="riskcontrol.servicefee"
+						   name="servicefee{{riskcontrolIndex}}" ng-pattern="/^[0-9]\d*$/" required/>元
+				<span style="color:red" ng-show="isShowError && feescaleForm.servicefee{{riskcontrolIndex}}.$invalid">
+					<span ng-show="feescaleForm.servicefee{{riskcontrolIndex}}.$error.required">固定服务费必填</span>
+					<span ng-show="feescaleForm.servicefee{{riskcontrolIndex}}.$error.pattern">输入格式有误</span>
+				</span>
+
+				</div>
+			</div>
+
+			<div class="col-md-12" ng-if="!isChandLoan">
+				<div class="form-group">
+					<div class="jigou-span">关外手续费：</div>
+					<input type="text" ng-disabled="isDetail" class="form-control" ng-model="riskcontrol.counterfee"
+						   name="counterfee{{riskcontrolIndex}}" ng-pattern="/^[0-9]\d*$/" required=""/>元
+				<span style="color:red" ng-show="isShowError && feescaleForm.counterfee{{riskcontrolIndex}}.$invalid">
+					<span ng-show="feescaleForm.counterfee{{riskcontrolIndex}}.$error.required">关外手续费必填</span>
+					<span ng-show="feescaleForm.counterfee{{riskcontrolIndex}}.$error.pattern">输入格式有误</span>
+				</span>
+				</div>
+			</div>
+
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="jigou-span">其他费用：</div>
+					<input type="text" ng-disabled="isDetail" class="form-control" ng-model="riskcontrol.otherfee"
+						   name="otherfee{{riskcontrolIndex}}" ng-pattern="/^[0-9]\d*$/" required/>元
+				<span style="color:red" ng-show="isShowError && feescaleForm.otherfee{{riskcontrolIndex}}.$invalid">
+					<span ng-show="feescaleForm.otherfee{{riskcontrolIndex}}.$error.required">其他费用必填</span>
+					<span ng-show="feescaleForm.otherfee{{riskcontrolIndex}}.$error.pattern">输入格式有误</span>
+				</span>
+				</div>
+			</div>
+			<div class="clear"></div>
+			<div class="jigou-line"></div>
+			<div class="clear"></div>
+		 	</risk-grade>
+
+			<!--
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="jigou-span">固定服务费：</div>
+					<input type="text" ng-disabled="isDetail" class="form-control" ng-model="agencyTypeFeescaleDto.servicefee"
+						    name="servicefee" ng-pattern="/^[0-9]\d*$/" required/>元
+					<span style="color:red" ng-show="isShowError && feescaleForm.servicefee.$invalid">
+						<span ng-show="feescaleForm.servicefee.$error.required">固定服务费必填</span>
+						<span ng-show="feescaleForm.servicefee.$error.pattern">输入格式有误</span>
+					</span>
+
+				</div>
+			</div>
+
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="jigou-span">关外手续费：</div>
+					<input type="text" ng-disabled="isDetail" class="form-control" ng-model="agencyTypeFeescaleDto.counterfee"
+						    name="counterfee" ng-pattern="/^[0-9]\d*$/" required=""/>元
+					<span style="color:red" ng-show="isShowError && feescaleForm.counterfee.$invalid">
+						<span ng-show="feescaleForm.counterfee.$error.required">关外手续费必填</span>
+						<span ng-show="feescaleForm.counterfee.$error.pattern">输入格式有误</span>
+					</span>
+				</div>
+			</div>
+
+			<div class="col-md-12">
+				<div class="form-group">
+					<div class="jigou-span">其他费用：</div>
+					<input type="text" ng-disabled="isDetail" class="form-control" ng-model="agencyTypeFeescaleDto.otherfee"
+						   name="otherfee" ng-pattern="/^[0-9]\d*$/" required/>元
+					<span style="color:red" ng-show="isShowError && feescaleForm.otherfee.$invalid">
+						<span ng-show="feescaleForm.otherfee.$error.required">其他费用必填</span>
+						<span ng-show="feescaleForm.otherfee.$error.pattern">输入格式有误</span>
+					</span>
+				</div>
+			</div>
+			-->
+		</form>
+	</div>
+	<div class="clear" style="height:15px;"></div>
+	<div class="row" ng-if="!isDetail">
+		<div class="col-md-12">
+			<div class="jigou-span">&nbsp;</div>
+			<button type="button" class="btn btn-primary" ng-click="addOrEdit()">提交</button>
+			<!--
+			<button type="button" class="btn btn-default" ui-sref="agencyTypeFeescaleEdit" ui-sref-opts="{reload:'agencyTypeFeescaleEdit'}">重置</button>
+			-->
+			<button type="button" class="btn btn-default" ng-click="restart()">重置</button>
+		</div>
+	</div>
+</div>
+<script>
+ 
+$(function () { $(".tooltip-toggle").tooltip({html : true });});
+</script>

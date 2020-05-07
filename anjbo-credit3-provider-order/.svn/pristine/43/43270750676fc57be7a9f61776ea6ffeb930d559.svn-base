@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.element.PaymentTypeMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and ''!=id"> AND `id`=#{id}</if>
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<if test="null!=paymentMode and ''!=paymentMode"> AND `paymentMode`=#{paymentMode}</if>
+		<if test="null!=paymentaccountType and ''!=paymentaccountType"> AND `paymentaccountType`=#{paymentaccountType}</if>
+		<if test="null!=paymentBankName and ''!=paymentBankName"> AND `paymentBankName`=#{paymentBankName}</if>
+		<if test="null!=paymentBankSubName and ''!=paymentBankSubName"> AND `paymentBankSubName`=#{paymentBankSubName}</if>
+		<if test="null!=paymentBankCardName and ''!=paymentBankCardName"> AND `paymentBankCardName`=#{paymentBankCardName}</if>
+		<if test="null!=paymentBankCardPwdState and paymentBankCardPwdState>0"> AND `paymentBankCardPwdState`=#{paymentBankCardPwdState}</if>
+		<if test="null!=paymentBankNumber and ''!=paymentBankNumber"> AND `paymentBankNumber`=#{paymentBankNumber}</if>
+		<if test="null!=paymentIdCardNo and ''!=paymentIdCardNo"> AND `paymentIdCardNo`=#{paymentIdCardNo}</if>
+		<if test="null!=paymentmobileBankState and paymentmobileBankState>0"> AND `paymentmobileBankState`=#{paymentmobileBankState}</if>
+		<if test="null!=paymentOnlineBankState and paymentOnlineBankState>0"> AND `paymentOnlineBankState`=#{paymentOnlineBankState}</if>
+		<if test="null!=paymentOfficialSealState and paymentOfficialSealState>0"> AND `paymentOfficialSealState`=#{paymentOfficialSealState}</if>
+		<if test="null!=paymentFinanceSealState and paymentFinanceSealState>0"> AND `paymentFinanceSealState`=#{paymentFinanceSealState}</if>
+		<if test="null!=paymentPrivateSealState and paymentPrivateSealState>0"> AND `paymentPrivateSealState`=#{paymentPrivateSealState}</if>
+		<if test="null!=paymentLegalPersonIdCardState and paymentLegalPersonIdCardState>0"> AND `paymentLegalPersonIdCardState`=#{paymentLegalPersonIdCardState}</if>
+		<if test="null!=paymentBusinessLicenseState and paymentBusinessLicenseState>0"> AND `paymentBusinessLicenseState`=#{paymentBusinessLicenseState}</if>
+		<if test="null!=netBankLoginName and ''!=netBankLoginName"> AND `netBankLoginName`=#{netBankLoginName}</if>
+		<if test="null!=quota and quota>0"> AND `quota`=#{quota}</if>
+		<if test="null!=isNetBankLoginPwd and isNetBankLoginPwd>0"> AND `isNetBankLoginPwd`=#{isNetBankLoginPwd}</if>
+		<if test="null!=verfuyNetBankPwd and verfuyNetBankPwd>0"> AND `verfuyNetBankPwd`=#{verfuyNetBankPwd}</if>
+		<if test="null!=paymentBankNameId and paymentBankNameId>0"> AND `paymentBankNameId`=#{paymentBankNameId}</if>
+		<if test="null!=paymentBankSubNameId and paymentBankSubNameId>0"> AND `paymentBankSubNameId`=#{paymentBankSubNameId}</if>
+		<if test="null!=bankProducts and ''!=bankProducts"> AND `bankProducts`=#{bankProducts}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="PaymentTypeDto" resultType="PaymentTypeDto">    
+	SELECT `id`, `orderNo`, `paymentMode`, `paymentaccountType`, `paymentBankName`, `paymentBankSubName`, `paymentBankCardName`, `paymentBankCardPwdState`, `paymentBankNumber`, `paymentIdCardNo`, `paymentmobileBankState`, `paymentOnlineBankState`, `paymentOfficialSealState`, `paymentFinanceSealState`, `paymentPrivateSealState`, `paymentLegalPersonIdCardState`, `paymentBusinessLicenseState`, `netBankLoginName`, `quota`, `isNetBankLoginPwd`, `verfuyNetBankPwd`, `paymentBankNameId`, `paymentBankSubNameId`, `bankProducts` 
+	FROM tbl_element_payment_type 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="PaymentTypeDto" resultType="PaymentTypeDto">
+	SELECT `id`, `orderNo`, `paymentMode`, `paymentaccountType`, `paymentBankName`, `paymentBankSubName`, `paymentBankCardName`, `paymentBankCardPwdState`, `paymentBankNumber`, `paymentIdCardNo`, `paymentmobileBankState`, `paymentOnlineBankState`, `paymentOfficialSealState`, `paymentFinanceSealState`, `paymentPrivateSealState`, `paymentLegalPersonIdCardState`, `paymentBusinessLicenseState`, `netBankLoginName`, `quota`, `isNetBankLoginPwd`, `verfuyNetBankPwd`, `paymentBankNameId`, `paymentBankSubNameId`, `bankProducts`
+	FROM tbl_element_payment_type 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="PaymentTypeDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_element_payment_type 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="PaymentTypeDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_element_payment_type(
+		`orderNo`,
+		`paymentMode`,
+		`paymentaccountType`,
+		`paymentBankName`,
+		`paymentBankSubName`,
+		`paymentBankCardName`,
+		`paymentBankCardPwdState`,
+		`paymentBankNumber`,
+		`paymentIdCardNo`,
+		`paymentmobileBankState`,
+		`paymentOnlineBankState`,
+		`paymentOfficialSealState`,
+		`paymentFinanceSealState`,
+		`paymentPrivateSealState`,
+		`paymentLegalPersonIdCardState`,
+		`paymentBusinessLicenseState`,
+		`netBankLoginName`,
+		`quota`,
+		`isNetBankLoginPwd`,
+		`verfuyNetBankPwd`,
+		`paymentBankNameId`,
+		`paymentBankSubNameId`,
+		`bankProducts`
+	) VALUES(
+		#{orderNo},
+		#{paymentMode},
+		#{paymentaccountType},
+		#{paymentBankName},
+		#{paymentBankSubName},
+		#{paymentBankCardName},
+		#{paymentBankCardPwdState},
+		#{paymentBankNumber},
+		#{paymentIdCardNo},
+		#{paymentmobileBankState},
+		#{paymentOnlineBankState},
+		#{paymentOfficialSealState},
+		#{paymentFinanceSealState},
+		#{paymentPrivateSealState},
+		#{paymentLegalPersonIdCardState},
+		#{paymentBusinessLicenseState},
+		#{netBankLoginName},
+		#{quota},
+		#{isNetBankLoginPwd},
+		#{verfuyNetBankPwd},
+		#{paymentBankNameId},
+		#{paymentBankSubNameId},
+		#{bankProducts}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="PaymentTypeDto" >
+    DELETE FROM tbl_element_payment_type 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="PaymentTypeDto" >
+    UPDATE tbl_element_payment_type
+	<set>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=paymentMode">`paymentMode`=#{paymentMode},</if>
+		<if test="null!=paymentaccountType">`paymentaccountType`=#{paymentaccountType},</if>
+		<if test="null!=paymentBankName">`paymentBankName`=#{paymentBankName},</if>
+		<if test="null!=paymentBankSubName">`paymentBankSubName`=#{paymentBankSubName},</if>
+		<if test="null!=paymentBankCardName">`paymentBankCardName`=#{paymentBankCardName},</if>
+		<if test="null!=paymentBankCardPwdState">`paymentBankCardPwdState`=#{paymentBankCardPwdState},</if>
+		<if test="null!=paymentBankNumber">`paymentBankNumber`=#{paymentBankNumber},</if>
+		<if test="null!=paymentIdCardNo">`paymentIdCardNo`=#{paymentIdCardNo},</if>
+		<if test="null!=paymentmobileBankState">`paymentmobileBankState`=#{paymentmobileBankState},</if>
+		<if test="null!=paymentOnlineBankState">`paymentOnlineBankState`=#{paymentOnlineBankState},</if>
+		<if test="null!=paymentOfficialSealState">`paymentOfficialSealState`=#{paymentOfficialSealState},</if>
+		<if test="null!=paymentFinanceSealState">`paymentFinanceSealState`=#{paymentFinanceSealState},</if>
+		<if test="null!=paymentPrivateSealState">`paymentPrivateSealState`=#{paymentPrivateSealState},</if>
+		<if test="null!=paymentLegalPersonIdCardState">`paymentLegalPersonIdCardState`=#{paymentLegalPersonIdCardState},</if>
+		<if test="null!=paymentBusinessLicenseState">`paymentBusinessLicenseState`=#{paymentBusinessLicenseState},</if>
+		<if test="null!=netBankLoginName">`netBankLoginName`=#{netBankLoginName},</if>
+		<if test="null!=quota">`quota`=#{quota},</if>
+		<if test="null!=isNetBankLoginPwd">`isNetBankLoginPwd`=#{isNetBankLoginPwd},</if>
+		<if test="null!=verfuyNetBankPwd">`verfuyNetBankPwd`=#{verfuyNetBankPwd},</if>
+		<if test="null!=paymentBankNameId">`paymentBankNameId`=#{paymentBankNameId},</if>
+		<if test="null!=paymentBankSubNameId">`paymentBankSubNameId`=#{paymentBankSubNameId},</if>
+		<if test="null!=bankProducts">`bankProducts`=#{bankProducts},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

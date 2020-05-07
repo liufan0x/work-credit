@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.RoleAuthorityMapper">
+
+	<insert id="insertByAgency" >
+		INSERT INTO tbl_role_authority(roleId,authorityId,createTime) 
+		SELECT ur.id AS roleId,ra.authorityId,NOW() FROM tbl_user_role ur
+		LEFT JOIN tbl_role_authority ra ON ra.roleId=ur.fromRole
+		WHERE ur.agencyId=#{0} AND ur.id NOT IN(SELECT roleId FROM tbl_role_authority ra,tbl_user_role ur WHERE ur.id=ra.roleId AND agencyId=#{0})
+	</insert>
+	
+</mapper>

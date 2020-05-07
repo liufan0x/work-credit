@@ -1,0 +1,27 @@
+<div class="container-fluid">
+	
+	<place-order-detail></place-order-detail>
+
+	<div id="viewRow">
+		
+	</div>
+
+		
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;指派还款专员</div>
+	<div class="row detail-row form-inline" >
+		<div class="col-md-6 col-lg-4">
+			还款专员：
+			<select class="form-control" choice-personnel="结清原贷款" city-code="{{cityCode}}" ng-model="rep.foreclosureMemberUid">
+				<option value="">请选择还款专员</option>
+			</select>
+        </div>
+    </div>
+	<div class="row">
+		<div class="form-group">
+			<textarea ng-model="rep.remark" class="form-control" rows="5" placeholder="如有特殊说明，请在此处备注（非必填）"/>
+		</div>
+		<div class="col-md-12">
+			<button type="button" class="btn btn-primary" ng-click="submit()">提交</button>
+		</div>
+	</div>
+</div>

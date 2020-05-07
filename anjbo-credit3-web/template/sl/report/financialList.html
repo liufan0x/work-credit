@@ -1,0 +1,90 @@
+<div class="container-fluid">
+	<div class="row">
+
+
+		<div class="col-md-12">
+			<ul class="breadcrumb">
+				<li>报表管理</li>
+				<li>财务报表</li>
+			</ul>
+		</div>
+	</div>
+	<!--row-->
+
+
+  <div class="row">
+    <div class="col-md-12"> 
+      <form class="form-inline search" style="margin-bottom:20px;margin-left:30px; ">
+        <br></br>
+        <div class="form-group" >
+          <label>城市</label>
+            <select  class="form-control selectcity001"  ng-model="page.cityCode" id="page.cityId">
+               <option selected hidden value="">全国</option> 
+              <option  ng-repeat="city in orderCitys" ng-value={{city.name}}>{{city.name}}</option>
+        </select>
+      </div>
+      <div class="form-group"><label>分公司：</label>
+        	<select class="form-control" name="branchCompany" choice-dict-name="branchCompany" style="width:150px;" ng-model="page.branchCompany" >
+				<!-- <option value="">请选择</option> -->
+			</select>
+		</div>
+      <div class="form-group">
+					<label >客户姓名：</label>
+					<input type="text" class="form-control" ng-model="page.customerName">
+				</div>
+				<div class="form-group">
+					<label >渠道经理：</label>
+					<input type="text" class="form-control" ng-model="page.channelManagerName">
+				</div>
+				
+        <br></br>
+        <div class="form-group">
+         &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<label>出款时间：</label>
+          <input  size="16" type="text" readonly  class="form-control form_date_one" ng-model="page.startLendingTime" >
+          <span class="clear-date" ng-click="clearDate($event,'start')">X</span>
+              &nbsp;&nbsp;至
+          <input  size="16" type="text" readonly  class="form-control form_date_one" ng-model="page.endLendingTime" >
+           <span class="clear-date" ng-click="clearDate($event,'end')">X</span>
+        </div>
+       <div class="form-group">
+          &nbsp&nbsp&nbsp&nbsp&nbsp<label>应还款时间：</label>
+          <input  size="16" type="text" readonly  class="form-control form_date_one" ng-model="page.startPlanPaymentTime" >
+          <span class="clear-date" ng-click="clearDate1($event,'start')">X</span>
+              &nbsp;&nbsp;至
+          <input  size="16" type="text" readonly  class="form-control form_date_one" ng-model="page.endPlanPaymentTime" >
+           <span class="clear-date" ng-click="clearDate1($event,'end')">X</span>
+        </div></p>
+        <div class="form-group">
+          <label>实际还款时间：</label>
+          <input  size="16" type="text" readonly  class="form-control form_date_one" ng-model="page.startPayMentAmountDate" >
+          <span class="clear-date" ng-click="clearDate2($event,'start')">X</span>
+              &nbsp;&nbsp;至
+          <input  size="16" type="text" readonly  class="form-control form_date_one" ng-model="page.endPayMentAmountDate" >
+           <span class="clear-date" ng-click="clearDate2($event,'end')">X</span>
+        </div>
+        <div class="form-group">
+          <label>罚息收取时间：</label>
+          <input  size="16" type="text" readonly  class="form-control form_date_one" ng-model="page.startPayTime" >
+          <span class="clear-date" ng-click="clearDate3($event,'start')">X</span>
+              &nbsp;&nbsp;至
+          <input  size="16" type="text" readonly  class="form-control form_date_one" ng-model="page.endPayTime" >
+           <span class="clear-date" ng-click="clearDate3($event,'end')">X</span>
+        </div>
+        <button type="submit" class="btn btn-default" ng-click="query()" style="margin-bottom:10px; margin-right:10px;">查询</button>
+            <div class="form-group">
+  </form>
+    </div>
+  </div>
+
+	<div class="row" id="customer">
+		<div style="margin-left: 30px">
+			<span
+				style="width: 4px; display: inline-block; height: 11px; margin-right: 5px; background-color: #333;"></span>财务报表统计
+		</div>
+		<div class="col-md-12 cityTable">
+			<table bs-table-control="financialList" id="financialList"
+				data-show-export="true" style="min-width: 1000px;"></table>
+		</div>
+	</div>
+</div>
+

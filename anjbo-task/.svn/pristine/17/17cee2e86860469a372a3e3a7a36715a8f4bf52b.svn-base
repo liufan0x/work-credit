@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.app.house.HouseMapper">
+    <update id="updateHouse" parameterType="java.util.Map">
+        update tbl_app_house_base
+        <set>
+            <if test="propertyName != null" >
+                propertyName = #{propertyName,jdbcType=VARCHAR},
+            </if>
+            <if test="buildingName != null" >
+                buildingName = #{buildingName,jdbcType=VARCHAR},
+            </if>
+            <if test="roomName != null" >
+                roomName = #{roomName,jdbcType=VARCHAR},
+            </if>
+            <if test="area != null" >
+                area = #{area,jdbcType=VARCHAR},
+            </if>
+            <if test="areaChild != null" >
+                areaChild = #{areaChild,jdbcType=VARCHAR},
+            </if>
+            <if test="acreage != null" >
+                acreage = #{acreage,jdbcType=DECIMAL},
+            </if>
+            <if test="houseType != null" >
+                houseType = #{houseType,jdbcType=VARCHAR},
+            </if>
+            <if test="placeType != null" >
+                placeType = #{placeType,jdbcType=VARCHAR},
+            </if>
+            <if test="floor != null" >
+                floor = #{floor,jdbcType=INTEGER},
+            </if>
+            <if test="sumFloor != null" >
+                sumFloor = #{sumFloor,jdbcType=INTEGER},
+            </if>
+            <if test="boughtPrice != null" >
+                boughtPrice = #{boughtPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="boughtTime != null" >
+                boughtTime = #{boughtTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="loanBalance != null" >
+                loanBalance = #{loanBalance,jdbcType=DECIMAL},
+            </if>
+            <if test="price != null" >
+                price = #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="sumPrice != null" >
+                sumPrice = #{sumPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="appreciation != null" >
+                appreciation = #{appreciation,jdbcType=DECIMAL},
+            </if>
+            <if test="rentalPrice != null" >
+                rentalPrice = #{rentalPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="loanablePrice != null" >
+                loanablePrice = #{loanablePrice,jdbcType=DECIMAL},
+            </if>
+            <if test="saleTaxes != null" >
+                saleTaxes = #{saleTaxes},
+            </if>
+            <if test="degree != null" >
+                degree = #{degree},
+            </if>
+            <if test="property != null" >
+                property = #{property},
+            </if>
+            <if test="state != null" >
+                state = #{state},
+            </if>
+        </set>
+        where orderNo = #{orderNo}
+    </update>
+    <delete id="deleteHouseBase" parameterType="java.util.Map">
+        delete from tbl_app_house_base
+        where orderNo = #{orderNo}
+    </delete>
+    <delete id="deleteHouseDayPrice" parameterType="java.util.Map">
+        delete from tbl_app_house_price_day_water
+        where orderNo = #{orderNo}
+    </delete>
+    <delete id="deleteHouseMouthPrice" parameterType="java.util.Map">
+        delete from tbl_app_house_price_month_water
+        where orderNo = #{orderNo}
+    </delete>
+    <select id="getHousePrice" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT
+          *
+        FROM
+        tbl_app_task_property_avg AS b
+        WHERE
+        propertyName=#{propertyName}
+        <if test="areaChild!=null">
+            AND b.city=#{areaChild}
+        </if>
+
+    </select>
+    
+    <insert id="insertEnquiryMarketBargain" parameterType="java.util.Map">
+        insert into tbl_app_house_housing_estate_deal_water
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+
+            <if test="propertyName != null" >
+                propertyName,
+            </if>
+            <if test="houseType != null" >
+                houseType,
+            </if>
+            <if test="signTime != null" >
+                signTime,
+            </if>
+            <if test="unitPrice != null" >
+                unitPrice,
+            </if>
+            <if test="months != null" >
+                months,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+
+            <if test="propertyName != null" >
+                #{propertyName,jdbcType=VARCHAR},
+            </if>
+            <if test="houseType != null" >
+                #{houseType},
+            </if>
+            <if test="signTime != null" >
+                #{signTime},
+            </if>
+            <if test="unitPrice != null" >
+                #{unitPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="months != null" >
+                #{months},
+            </if>
+        </trim>
+    </insert>
+
+    <!--查询所有rp值配置-->
+    <select id="selectRpValue"  resultType="com.anjbo.bean.house.HouseRpValueDto">
+        SELECT
+        a.`name`,
+        b.`key`,
+        b.`value`
+        FROM
+        tbl_app_system_property_config a
+        INNER JOIN tbl_app_system_property_config_rp b ON a.rpNo = b.rpNo
+        ORDER BY
+        a.`name`
+
+    </select>
+</mapper>

@@ -1,0 +1,88 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="breadcrumb">
+                <li>
+                    <a>要件管理</a>
+                    <span class="divider"></span>
+                </li>
+                <li class="active"> 要件管理列表</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label>城市：</label>
+                    <select class="form-control" ng-model="page.city">
+                        <option value="" >全部</option>
+                        <option ng-repeat="city in cityList" value="{{city}}">{{city}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>要件类型：</label>
+                    <select class="form-control" ng-model="page.orderType">
+                        <option value="" >请选择</option>
+                        <option value="1">要件</option>
+                        <option value="3">公章</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label >客户姓名：</label>
+                    <input type="text" class="form-control" ng-model="page.customerName">
+                </div>
+
+                <div class="form-group">
+                    <label >申请人：</label>
+                    <input type="text" class="form-control" ng-model="page.applierName">
+                </div>
+                <div class="form-group">
+                    <label>要件状态：</label>
+                    <select class="form-control" ng-model="page.orderStatus">
+                        <option value="" >请选择</option>
+                        <option value="1">未存入</option>
+                        <option value="2">已存入</option>
+                        <option value="3">已借出</option>
+                        <option value="4">已归还</option>
+                        <option value="5">超时未还</option>
+                        <option value="6">已退要件</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label >要件箱编号：</label>
+                    <input type="text" class="form-control" ng-model="page.boxNo">
+                </div>
+                <div class="form-group">
+                    <label>操作时间：</label>
+                    <input size="16" type="text" name="startTime" ng-model="page.startTime " class="form-control form_date">
+                    -
+                    <input size="16" type="text" name="endTime" ng-model="page.endTime " class="form-control form_date">
+                </div>
+
+
+
+                <button type="submit" class="btn btn-default" ng-click="query()" style="margin-bottom:10px; margin-right:10px;">
+                    查询
+                </button>
+                <button type="submit" class="btn btn-default" ng-click="reset()" style="margin-bottom:10px; margin-right:10px;">
+                    重置
+                </button>
+
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <table bs-table-control="eleAccessList"  id="table"></table>
+        </div>
+    </div>
+</div>
+
+<!--<style>
+    table#table td{
+        padding:0 !important;vertical-align: middle !important;
+
+    }
+</style>-->

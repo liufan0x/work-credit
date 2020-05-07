@@ -1,0 +1,100 @@
+<div>
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;快鸽提单信息--借款人信息
+	<button type="button" ng-click="submitBorrow(1)" class="btn btn-info detail-right-save">保存</button>
+	</div>
+	<div class="row form-inline detail-row" style="padding:0 10px;">
+		<div class="col-md-6 col-lg-4">                               <!-- kgYunnanOrder.shortName -->
+			<label>借款人姓名:</label> <input ng-disabled="ynStatus.processStatus" type="text" name="kgYunnanOrderShortName" ng-model="kgYunnanOrder.shortName" class="form-control" required/>
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="kgYunnanOrderForm.kgYunnanOrderShortName.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>证件类型:</label>
+			<select class="form-control" ng-disabled="ynStatus.processStatus" name="kgYunnanOrderCardType" ng-model="kgYunnanOrder.cardType" ng-model-text="kgYunnanOrder.cardTypeName" required style="width:179px;">
+				<option value="">请选择</option>
+				<option ng-selected="true" value="1">身份证</option>
+			</select>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="kgYunnanOrderForm.kgYunnanOrderCardType.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>证件号码:</label> <input ng-disabled="ynStatus.processStatus" type="text" name="kgYunnanOrderIDCardNo" ng-model="kgYunnanOrder.iDCardNo" class="form-control" required/>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="kgYunnanOrderForm.kgYunnanOrderIDCardNo.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>手机号:</label>
+			<input type="text" ng-disabled="ynStatus.processStatus" name="kgYunnanOrderBankReservedPhoneNo" ng-model="kgYunnanOrder.telephoneNo" class="form-control" required/>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="kgYunnanOrderForm.kgYunnanOrderBankReservedPhoneNo.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>婚姻状况:</label>
+			<select class="form-control" ng-disabled="ynStatus.processStatus" name="kgYunnanOrderMarStatus" ng-model="kgYunnanOrder.maritalStatus" ng-model-text="kgYunnanOrder.maritalStatusName" required style="width:179px;">
+				<option value="">请选择</option>
+				<option value="10">未婚</option>
+				<option value="20">已婚</option>
+				<option value="21">初婚</option>
+				<option value="22">再婚</option>
+				<option value="23">复婚</option>
+				<option value="30">丧偶</option>
+				<option value="40">离婚</option>
+				<option value="90">未说明的婚姻状况</option>
+			</select>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="kgYunnanOrderForm.kgYunnanOrderMarStatus.$error.required">必选</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>职业分类:</label>
+			<select class="form-control" ng-disabled="ynStatus.processStatus" name="kgYunnanOrderJobType" ng-model="kgYunnanOrder.jobType" ng-model-text="kgYunnanOrder.jobTypeName" required>
+				<option value="">请选择</option>
+				<option value="1">政府部门</option>
+				<option value="2">教科文</option>
+				<option value="3">金融</option>
+				<option value="4">商贸</option>
+				<option value="5">房地产</option>
+				<option value="6">制造业</option>
+				<option value="7">自由职业</option>
+				<option value="8">其他</option>
+			</select>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="kgYunnanOrderForm.kgYunnanOrderJobType.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>现居住城市: </label>
+			<input type="text" ng-disabled="ynStatus.processStatus" name="kgYunnanOrderCityName" ng-model="kgYunnanOrder.cityName" class="form-control" required/>
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="kgYunnanOrderForm.kgYunnanOrderCityName.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>角色分类: </label>
+			<select class="form-control" ng-disabled="ynStatus.processStatus" name="kgYunnanOrderRoleType" ng-model="kgYunnanOrder.roleType" ng-model-text="kgYunnanOrder.roleTypeName" required>
+				<option value="">请选择</option>  
+				<option value="1">贷款借款人</option>
+				<option value="2">其他投融资交易对手</option>
+				<option value="3">抵质押人担保人贷款类</option>
+				<option value="4">抵质押人担保人非贷款类</option>
+				<option value="5">委托方</option>
+				<option value="6">其他对手方等付费对象</option>
+			</select>
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="kgYunnanOrderForm.kgYunnanOrderRoleType.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>期数: </label>
+			<span ng-show="kgYunnanOrder.ynProductCode == 'I16800'">一期</span>
+			<span ng-show="kgYunnanOrder.ynProductCode == 'I22500'">二期</span>
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="kgYunnanOrderForm.ynProductCode.$error.required">必填</error>
+		    </span>
+		</div>
+	</div>
+</div>

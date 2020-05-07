@@ -1,0 +1,17 @@
+<div class="col-md-12 form-inline" >
+ 		<div class="form-group">
+			<div class="jigou-span">银行名称：</div> 
+			<select select2 ng-model="bankSubDto.pid" style="width:180px;">
+				<option ng-repeat="x in bankList" ng-selected="bankSubDto.pid == x.id" value="{{x.id}}">{{x.name}}</option>
+			</select>
+		</div>
+		<div class="form-group">
+			<div class="jigou-span">支行名称：</div>
+			<input type="text" class="form-control" ng-model="bankSubDto.name">
+		</div>
+		<div class="form-group">
+			<div class="jigou-span">排序：</div>
+			<input type="text" class="form-control" ng-model="bankSubDto.sort">
+		</div>
+		<div style="width:100%;clear:both;"></div>
+</div>

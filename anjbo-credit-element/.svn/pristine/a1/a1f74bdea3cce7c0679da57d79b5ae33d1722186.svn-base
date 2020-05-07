@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.AccessFlowMapper">
+
+
+    <insert id="insertAccessFlowRecorde" parameterType="java.util.Map" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+    <selectKey keyProperty="id" resultType="int" order="AFTER" >
+      SELECT LAST_INSERT_ID() as id
+    </selectKey>
+       	INSERT INTO tbl_element_access_flow (
+		orderNo,
+		operationTime,
+		operationType,
+		currentHandlerUid,
+		currentHandler,
+		applierName,
+		applierUid,
+		beginBorrowElementTime,
+		endBorrowElementTime,
+		borrowDay,
+		remark,
+		dbId,
+		elementSet,
+		currentBoxElementSet,
+		boxNo,
+		customerName,
+		orderType,
+		riskPicture,
+		receivablePicture,
+		elsePicture,
+		sealPicture,
+		fileToSeal,
+		sealFileCount,
+		fileType,
+		fileImgUrl,
+		paymentRemark,
+		riskRemark
+		)
+		VALUES
+		
+			(
+			#{orderNo},
+			#{operationTime},
+			#{operationType},
+			#{currentHandlerUid},
+			#{currentHandler},
+			#{applierName},
+			#{applierUid},
+			#{beginBorrowElementTime},
+			#{endBorrowElementTime},
+			#{borrowDay},
+			#{remark},
+			#{dbId},
+			#{elementSet},
+			#{currentBoxElementSet},
+			#{boxNo},
+			#{customerName},
+			#{orderType},
+			#{riskPicture},
+			#{receivablePicture},
+			#{elsePicture},
+			#{sealPicture},
+			#{fileToSeal},
+			#{sealFileCount},
+			#{fileType},
+			#{fileImgUrl},
+			#{paymentRemark},
+			#{riskRemark}
+			)
+	
+    </insert>
+    
+    <update id="updateById" parameterType="java.util.Map">
+    	update tbl_element_access_flow set currentBoxElementSet = #{currentBoxElementSet} where id=#{id} 
+    </update>
+    
+    <select id="selectAccessFlowRecorde" parameterType="java.util.Map" resultType="java.util.Map">
+    	select * from tbl_element_access_flow WHERE 1=1 
+    	<if test="orderNo != null">
+				and orderNo=#{orderNo}
+		</if>
+		
+		<if test="operationType != null">
+				 and operationType=#{operationType};
+		</if>
+    </select>
+    
+     <select id="selectAccessFlowList" parameterType="java.util.Map" resultType="java.util.Map">
+    	select * from tbl_element_access_flow WHERE orderNo=#{orderNo} and operationType!=7 order by id desc
+    </select>
+    
+    <select id="selectAccessFlowById" parameterType="java.util.Map" resultType="java.util.Map">
+    	select * from tbl_element_access_flow WHERE id=#{id};
+    </select>
+    
+    <select id="selectAccessFlowListByOrderNo" parameterType="java.util.Map" resultType="java.util.Map">
+    	select * from tbl_element_access_flow WHERE orderNo=#{orderNo}  and operationType=1;
+    </select>
+    
+    <select id="selectAccessFlowbyDbId" parameterType="java.util.Map" resultType="java.util.Map">
+    	select * from tbl_element_access_flow WHERE orderNo=#{orderNo}  and operationType=2 and dbId=#{dbId};
+    </select>
+    
+     <select id="selectLastAccessByMap" parameterType="java.util.Map" resultType="java.util.Map">
+    	select * from tbl_element_access_flow WHERE orderNo=#{orderNo}  and operationType=#{operationType} order by id desc;
+    </select>
+
+</mapper>

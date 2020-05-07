@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.hrtrust.HrtrustLoanStatusMapper">
+
+	<select id="getLoanStatus" parameterType="String"
+		resultType="map">
+		select * from tbl_third_hrtrust_Loan_Status where orderNo=#{orderNo} order
+		by id DESC limit 0,1
+	</select>
+
+	<!-- 快鸽提单信息,业务信息 -->
+	<insert id="saveLoanStatus" parameterType="Map">
+		INSERT INTO
+		tbl_third_hrtrust_Loan_Status (
+		orderNo,
+		dealStatus,
+		grantStatus,
+		dealOpinion,
+		realLoanTime,
+		vetos,
+		repulse
+		)
+		VALUES
+		(
+		#{orderNo},
+		#{dealStatus},
+		#{grantStatus},
+		#{dealOpinion},
+		#{realLoanTime},
+		#{vetos},
+		#{repulse}
+		)
+	</insert>
+
+</mapper>

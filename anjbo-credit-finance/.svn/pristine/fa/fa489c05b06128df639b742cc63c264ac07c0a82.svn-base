@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.LendingPayMapper" >
+   <select id="findByPay" parameterType="LendingPayDto" resultType="LendingPayDto">
+     select p.*
+     from tbl_finance_lending_pay p 
+     where p.orderNo=#{orderNo} 
+     order by p.createTime desc limit 1
+  </select>
+  
+  <insert id="addLendingPay" parameterType="LendingPayDto">
+    insert into tbl_finance_lending_pay(
+       createUid,
+       orderNo,
+       updateUid,
+       createTime,
+       payTime,
+       payImg,
+       remark
+    )values(
+      #{createUid},
+      #{orderNo},
+      #{updateUid},
+      now(),
+      #{payTime},
+      #{payImg},
+      #{remark}
+    )
+  </insert>
+  <update id="updatePay" parameterType="LendingPayDto">
+      update tbl_finance_lending_pay set updateUid=#{updateUid},payTime=#{payTime},payImg=#{payImg},remark=#{remark}
+      where id = #{id}
+  </update>
+
+  <delete id="deletePay" parameterType="java.lang.String">
+      delete  from tbl_finance_lending_pay where status=0 and orderNo=#{0} order by createTime desc limit 1
+  </delete>
+</mapper>

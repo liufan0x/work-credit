@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.process.DistributionMemberMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<if test="null!=foreclosureMemberUid and ''!=foreclosureMemberUid"> AND `foreclosureMemberUid`=#{foreclosureMemberUid}</if>
+		<if test="null!=remark and ''!=remark"> AND `remark`=#{remark}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(distributionTimeBegin)"> AND distributionTime >= #{distributionTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(distributionTimeEnd)"> AND distributionTime &lt;= #{distributionTimeEnd}</if>
+		-->
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="DistributionMemberDto" resultType="DistributionMemberDto">    
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `foreclosureMemberUid`, `remark`, `distributionTime` 
+	FROM tbl_process_distribution_member 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="DistributionMemberDto" resultType="DistributionMemberDto">
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `foreclosureMemberUid`, `remark`, `distributionTime`
+	FROM tbl_process_distribution_member 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="DistributionMemberDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_process_distribution_member 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="DistributionMemberDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_process_distribution_member(
+		`createUid`,
+		`createTime`,
+		`updateUid`,
+		`updateTime`,
+		`orderNo`,
+		`foreclosureMemberUid`,
+		`remark`,
+		`distributionTime`
+	) VALUES(
+		#{createUid},
+		now(),
+		#{createUid},
+		now(),
+		#{orderNo},
+		#{foreclosureMemberUid},
+		#{remark},
+		#{distributionTime}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="DistributionMemberDto" >
+    DELETE FROM tbl_process_distribution_member 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="DistributionMemberDto" >
+    UPDATE tbl_process_distribution_member
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=foreclosureMemberUid">`foreclosureMemberUid`=#{foreclosureMemberUid},</if>
+		<if test="null!=remark">`remark`=#{remark},</if>
+		<if test="null!=distributionTime">`distributionTime`=#{distributionTime},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

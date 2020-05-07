@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.yntrust.YntrustLoanMapper">
+
+    <sql id="Base_Column_List">
+        id, createTime, createUid, updateTime, updateUid, orderNo, ynxtLoanContractNumber,
+        auditStatus, auditMessage, amount, accountNo,`name`, bankSerialNo, processStatus,
+        result, actExcutedTime,auditStatusName,processStatusName,cancelStatus
+    </sql>
+    <select id="list" parameterType="YntrustLoanDto" resultType="YntrustLoanDto">
+        select
+        <include refid="Base_Column_List" />
+        from tbl_third_yntrust_loan
+        where orderNo = #{orderNo}
+        <if test="cancelStatus!=null">
+            AND cancelStatus = #{cancelStatus}
+        </if>
+    </select>
+
+    <delete id="delete" parameterType="YntrustLoanDto">
+        delete from tbl_third_yntrust_loan
+        where id = #{id}
+    </delete>
+
+    <delete id="deleteByOrderNo" parameterType="YntrustLoanDto">
+        delete from tbl_third_yntrust_loan
+        where orderNo = #{orderNo}
+    </delete>
+
+    <insert id="insert" parameterType="YntrustLoanDto">
+        insert into tbl_third_yntrust_loan
+        (
+            createTime,
+            createUid,
+            orderNo,
+            ynxtLoanContractNumber,
+            auditStatus,
+            auditMessage,
+            amount,
+            accountNo,
+            `name`,
+            bankSerialNo,
+            processStatus,
+            result,
+            actExcutedTime,
+            auditStatusName,
+            processStatusName,
+            cancelStatus
+        )
+        values
+        (
+            now(),
+            #{createUid},
+            #{orderNo},
+            #{ynxtLoanContractNumber},
+            #{auditStatus},
+            #{auditMessage},
+            #{amount},
+            #{accountNo},
+            #{name},
+            #{bankSerialNo},
+            #{processStatus},
+            #{result},
+            #{actExcutedTime},
+            #{auditStatusName},
+            #{processStatusName},
+            1
+        )
+    </insert>
+
+    <insert id="batchInsert" parameterType="YntrustLoanDto">
+        INSERT INTO tbl_third_yntrust_loan
+        (
+            createTime,
+            createUid,
+            orderNo,
+            ynxtLoanContractNumber,
+            auditStatus,
+            auditMessage,
+            amount,
+            accountNo,
+            `name`,
+            bankSerialNo,
+            processStatus,
+            result,
+            actExcutedTime,
+            auditStatusName,
+            processStatusName,
+            cancelStatus
+        )
+        VALUES
+        <foreach collection="list" item="obj" separator=",">
+            (
+            now(),
+            #{obj.createUid},
+            #{obj.orderNo},
+            #{obj.ynxtLoanContractNumber},
+            #{obj.auditStatus},
+            #{obj.auditMessage},
+            #{obj.amount},
+            #{obj.accountNo},
+            #{obj.name},
+            #{obj.bankSerialNo},
+            #{obj.processStatus},
+            #{obj.result},
+            #{obj.actExcutedTime},
+            #{obj.auditStatusName},
+            #{obj.processStatusName},
+            1
+            )
+        </foreach>
+
+    </insert>
+
+    <update id="update" parameterType="YntrustLoanDto">
+        update tbl_third_yntrust_loan
+        <set>
+
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+
+            <if test="ynxtLoanContractNumber != null and ynxtLoanContractNumber!=''">
+                ynxtLoanContractNumber = #{ynxtLoanContractNumber},
+            </if>
+            <if test="auditStatus != null and auditStatus!=''">
+                auditStatus = #{auditStatus},
+            </if>
+            <if test="auditMessage != null and auditMessage!=''">
+                auditMessage = #{auditMessage},
+            </if>
+            <if test="amount != null">
+                amount = #{amount},
+            </if>
+            <if test="accountNo != null and accountNo!=''">
+                accountNo = #{accountNo},
+            </if>
+            <if test="name != null and name!=''">
+                `name` = #{name},
+            </if>
+            <if test="bankSerialNo != null and bankSerialNo!=''">
+                bankSerialNo = #{bankSerialNo},
+            </if>
+            <if test="processStatus != null">
+                processStatus = #{processStatus},
+            </if>
+            <if test="result != null and result!=''">
+                result = #{result},
+            </if>
+            <if test="actExcutedTime != null">
+                actExcutedTime = #{actExcutedTime},
+            </if>
+            <if test="cancelStatus!=null">
+                cancelStatus = #{cancelStatus},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <update id="updateByOrderNo" parameterType="YntrustLoanDto">
+        update tbl_third_yntrust_loan
+        <set>
+
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+
+            <if test="ynxtLoanContractNumber != null and ynxtLoanContractNumber!=''">
+                ynxtLoanContractNumber = #{ynxtLoanContractNumber},
+            </if>
+            <if test="auditStatus != null and auditStatus!=''">
+                auditStatus = #{auditStatus},
+            </if>
+            <if test="auditMessage != null and auditMessage!=''">
+                auditMessage = #{auditMessage},
+            </if>
+            <if test="amount != null">
+                amount = #{amount},
+            </if>
+            <if test="accountNo != null and accountNo!=''">
+                accountNo = #{accountNo},
+            </if>
+            <if test="name != null and name!=''">
+                `name` = #{name},
+            </if>
+            <if test="bankSerialNo != null and bankSerialNo!=''">
+                bankSerialNo = #{bankSerialNo},
+            </if>
+            <if test="processStatus != null">
+                processStatus = #{processStatus},
+            </if>
+            <if test="result != null and result!=''">
+                result = #{result},
+            </if>
+            <if test="actExcutedTime != null">
+                actExcutedTime = #{actExcutedTime},
+            </if>
+            <if test="cancelStatus!=null">
+                cancelStatus = #{cancelStatus},
+            </if>
+        </set>
+        where orderNo = #{orderNo}
+    </update>
+
+</mapper>

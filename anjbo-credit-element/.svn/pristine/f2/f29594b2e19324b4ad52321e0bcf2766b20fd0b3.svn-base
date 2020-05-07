@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.anjbo.dao.AuditBaseMapper">
+	<resultMap type="auditBaseDto" id="base_resultMap">
+		<id column="id" property="id"/>
+		<result column="title" property="title"/>
+		<result column="createTime" property="createTime"/>
+		<result column="modifyTime" property="modifyTime"/>
+		<result column="orderNo" property="orderNo"/>
+		<result column="type" property="type"/>
+		<result column="applierName" property="applierName"/>
+		<result column="createUid" property="createUid"/>
+		<result column="elementIds" property="elementIds"/>
+		<result column="beginTime" property="beginTime"/>
+		<result column="endTime" property="endTime"/>
+		<result column="reason" property="reason"/>
+		<result column="state" property="state"/>
+		<result column="elementOperation" property="elementOperation"/>
+		<result column="copyTo" property="copyTo"/>
+		<result column="currentAuditName" property="currentAuditName"/>
+		<result column="customerName" property="customerName"/>
+		<result column="riskElement" property="riskElement"/>
+		<result column="receivableElement" property="receivableElement"/>
+		<result column="sealDepartment" property="sealDepartment"/>
+		<result column="publicSeal" property="publicSeal"/>
+		<result column="borrowDay" property="borrowDay"/>
+	</resultMap>	
+		
+	<!-- 新增审批信息表-->
+	<insert id="addElementAuditBase" parameterType="auditBaseDto" useGeneratedKeys="true" keyProperty="id">
+		insert	into tbl_element_audit_base(
+			<trim suffixOverrides=",">
+				<if test="title != null">`title`,</if>
+				<if test="createTime != null">`createTime`,</if>
+				<if test="modifyTime != null">`modifyTime`,</if>
+				<if test="orderNo != null">`orderNo`,</if>
+				<if test="type != null">`type`,</if>
+				<if test="createUid != null">`createUid`,</if>
+				<if test="applierName != null">`applierName`,</if>
+				<if test="elementIds != null">`elementIds`,</if>
+				<if test="beginTime != null">`beginTime`,</if>
+				<if test="endTime != null">`endTime`,</if>
+				<if test="reason != null">`reason`,</if>
+				<if test="state != null">`state`,</if>
+				<if test="elementOperation != null">`elementOperation`,</if>
+				<if test="copyTo != null">`copyTo`,</if>
+				<if test="currentAuditName != null">`currentAuditName`,</if>
+				<if test="customerName != null">`customerName`,</if>
+				<if test="riskElement != null">`riskElement`,</if>
+				<if test="receivableElement != null">`receivableElement`,</if>
+				<if test="sealDepartment != null">`sealDepartment`,</if>
+				<if test="publicSeal != null">`publicSeal`,</if>
+				<if test="borrowDay != null">`borrowDay`,</if>
+				<if test="fileToSeal != null">`fileToSeal`,</if>
+				<if test="sealFileCount != null">`sealFileCount`,</if>
+				<if test="fileType != null">`fileType`,</if>
+				<if test="fileImgUrl != null">`fileImgUrl`,</if>
+				<if test="hasTake != null and hasTake">`hasTake`,</if>
+				<if test="extendId != null and extendId>0">`extendId`,</if>
+			</trim>
+		)
+		values(	
+			<trim suffixOverrides=",">
+				<if test="title != null">#{title},</if>
+				<if test="createTime != null">#{createTime},</if>
+				<if test="modifyTime != null">#{modifyTime},</if>
+				<if test="orderNo != null">#{orderNo},</if>
+				<if test="type != null">#{type},</if>
+				<if test="createUid != null">#{createUid},</if>
+				<if test="applierName != null">#{applierName},</if>
+				<if test="elementIds != null">#{elementIds},</if>
+				<if test="beginTime != null">#{beginTime},</if>
+				<if test="endTime != null">#{endTime},</if>
+				<if test="reason != null">#{reason},</if>
+				<if test="state != null">#{state},</if>
+				<if test="elementOperation != null">#{elementOperation},</if>
+				<if test="copyTo != null">#{copyTo},</if>
+				<if test="currentAuditName != null">#{currentAuditName},</if>
+				<if test="customerName != null">#{customerName},</if>
+				<if test="riskElement != null">#{riskElement},</if>
+				<if test="receivableElement != null">#{receivableElement},</if>
+				<if test="sealDepartment != null">#{sealDepartment},</if>
+				<if test="publicSeal != null">#{publicSeal},</if>
+				<if test="borrowDay != null">#{borrowDay},</if>
+				<if test="fileToSeal != null">#{fileToSeal},</if>
+				<if test="sealFileCount != null">#{sealFileCount},</if>
+				<if test="fileType != null">#{fileType},</if>
+				<if test="fileImgUrl != null">#{fileImgUrl},</if>
+				<if test="hasTake != null and hasTake">#{hasTake},</if>
+				<if test="extendId != null and extendId>0">#{extendId},</if>
+			</trim>
+		)
+	</insert>
+	
+	<!-- 修改审批信息表-->
+	<update id="updateElementAuditBase" parameterType="auditBaseDto" >
+	 update tbl_element_audit_base
+	<set> 
+			<trim suffixOverrides=",">
+				<if test="modifyTime != null">`modifyTime` = #{modifyTime},</if>
+				<if test="reason != null">`reason` = #{reason},</if>
+				<if test="extendReason != null">`extendReason` = #{extendReason},</if>
+				<if test="state != null">`state` = #{state},</if>
+				<if test="currentAuditName != null">`currentAuditName` = #{currentAuditName},</if>
+				<if test="currentAuditName != null">`currentAuditUid` = #{currentAuditUid},</if>
+				<if test="type != null and type >0">`type` = #{type},</if>
+				<if test="applierName != null and applierName !=''">`applierName` = #{applierName},</if>
+				<if test="createUid != null and createUid !=''">`createUid` = #{createUid},</if>
+				<if test="elementIds != null and elementIds !=''">`elementIds` = #{elementIds},</if>
+				<if test="beginTime != null">`beginTime` = #{beginTime},</if>
+				<if test="endTime != null">`endTime` = #{endTime},</if>
+				<if test="newEndTime != null">`newEndTime` = #{newEndTime},</if>
+				<if test="elementOperation != null and elementOperation !=''">`elementOperation` = #{elementOperation},</if>
+				<if test="copyTo != null and copyTo !=''">`copyTo` = #{copyTo},</if>
+				<if test="customerName != null and customerName !=''">`customerName` = #{customerName},</if>
+				<if test="riskElement != null and riskElement !=''">`riskElement` = #{riskElement},</if>
+				<if test="receivableElement != null and receivableElement !=''">`receivableElement` = #{receivableElement},</if>
+				<if test="publicSeal != null and publicSeal !=''">`publicSeal` = #{publicSeal},</if>
+				<if test="sealDepartment != null and sealDepartment !=''">`sealDepartment` = #{sealDepartment},</if>
+				<if test="hasTake != null and hasTake !=''">`hasTake` = #{hasTake},</if>
+				<if test="borrowDay != null and borrowDay !=''">`borrowDay` = #{borrowDay},</if>
+				<if test="fileToSeal != null and fileToSeal !=''">`fileToSeal` = #{fileToSeal},</if>
+				<if test="sealFileCount != null and sealFileCount !=''">`sealFileCount` = #{sealFileCount},</if>
+				<if test="fileType != null and fileType !=''">`fileType` = #{fileType},</if>
+				<if test="fileImgUrl != null and fileImgUrl !=''">`fileImgUrl` = #{fileImgUrl},</if>
+			</trim>
+	</set> 
+	 where id = #{id}
+	</update>
+	
+	<!-- 更新延长借用时间 -->
+	<update id="updateEndTime">
+		update tbl_element_audit_base set endTime = newEndTime where id = #{id}
+	</update>
+	
+	<!-- 根据ID删除审批信息表-->
+    <delete id="deleteElementAuditBaseById" parameterType="int">
+		delete	from tbl_element_audit_base where id = #{0}
+    </delete>
+
+	<!-- 根据ID查询审批信息表 -->
+	
+	<select id="selectElementAuditBaseById" parameterType="int" resultType="auditBaseDto">
+		select	* from tbl_element_audit_base where id = #{0}
+	</select>
+	
+	<!-- 查询审批设置 -->
+	<select id="selectCandidates" resultType="map">
+		select * from tbl_element_audit_config WHERE type=#{type} AND city=#{city}
+	</select>
+	
+	
+	<sql id="audit_where">
+		<where>
+			<if test="keyword != null and keyword != ''">
+				base.applierName LIKE CONCAT('%',#{keyword},'%') OR base.customerName LIKE CONCAT('%',#{keyword},'%')
+				OR base.title  LIKE CONCAT('%',#{keyword},'%') OR base.riskElement LIKE CONCAT('%',#{keyword},'%')
+				OR base.receivableElement LIKE CONCAT('%',#{keyword},'%') OR base.publicSeal LIKE CONCAT('%',#{keyword},'%')
+			</if>
+		</where>
+	</sql>
+	<!-- 查询审批申请列表 -->
+	<select id="selectApplyList" resultType="auditInfoVo">
+		select base.*,IFNULL(msg.hasRead,1) hasRead from tbl_element_audit_base base LEFT JOIN 
+		(select * from tbl_element_system_message WHERE messageType=4 AND applicantUid=#{uid}) msg
+		ON  msg.dbId = base.id
+		WHERE base.createUid=#{uid}
+		<if test="keyword != null and keyword != ''">
+				AND (
+				base.customerName LIKE CONCAT('%',#{keyword},'%')
+				OR base.title  LIKE CONCAT('%',#{keyword},'%') OR base.riskElement LIKE CONCAT('%',#{keyword},'%')
+				OR base.receivableElement LIKE CONCAT('%',#{keyword},'%') OR base.publicSeal LIKE CONCAT('%',#{keyword},'%')
+				)
+		</if>
+		ORDER BY base.createTime DESC
+		<if test="pageSize != null and pageSize > 0">
+		LIMIT ${start},${pageSize}
+		</if>
+	</select>
+	
+	<!-- 查询待我审批列表 -->
+	<select id="selectToAuditList" resultType="auditInfoVo">
+		select base.*,0 hasRead,list.orderType,list.creditTypeUid from  tbl_element_audit_base base
+		JOIN tbl_element_audit_flow flow ON flow.auditorUid=#{uid} AND flow.state=1 AND flow.dbId=base.id
+		LEFT JOIN tbl_element_list list ON base.orderNo = list.orderNo
+		<include refid="audit_where"/>
+		ORDER BY base.createTime DESC
+		<if test="pageSize != null and pageSize > 0">
+		LIMIT ${start},${pageSize}
+		</if>
+	</select>
+	
+	<!-- 查询我已审批列表 -->
+	<select id="selectAuditedList" resultType="auditInfoVo">
+		select base.id,base.title,base.createTime,base.customerName,base.riskElement,base.receivableElement,base.beginTime,
+				base.publicSeal,base.sealDepartment,base.applierName,base.endTime,(flow.state-1) state,base.type,flow.deliverTo
+		from  tbl_element_audit_base base
+		JOIN tbl_element_audit_flow flow ON flow.auditorUid=#{uid} AND flow.state &gt; 1 AND flow.dbId=base.id
+		<include refid="audit_where"/>
+		ORDER BY base.createTime DESC
+		<if test="pageSize != null and pageSize > 0">
+		LIMIT ${start},${pageSize}
+		</if>
+	</select>
+	
+	<select id="selectBorrowRecord" resultType="auditInfoVo">
+		select * from tbl_element_audit_base WHERE createUid=#{uid} 
+ 		<if test="type != null and type == 1">AND type!=3</if>
+ 		<if test="type != null and type != 1">AND type=3</if>
+ 		ORDER BY createTime DESC
+ 		<if test="pageSize != null and pageSize > 0">
+		LIMIT ${start},${pageSize}
+		</if>
+	</select>
+	
+	<!-- 查询抄送给我的审批列表 -->
+	<select id="selectCopyList" resultType="auditInfoVo">
+		select base.*,msg.hasRead from tbl_element_audit_base base 
+		JOIN tbl_element_system_message msg ON msg.receiverUid=#{uid}
+		AND msg.messageType=3 AND msg.dbId=base.id 
+		<include refid="audit_where"/>
+		ORDER BY base.createTime DESC
+		<if test="pageSize != null and pageSize > 0">
+		LIMIT ${start},${pageSize}
+		</if>
+	</select>
+	
+	<select id="selectElementNames" resultType="string">
+		select cardType from tbl_element_element_file 
+		WHERE id IN
+		<foreach collection="idList" open="(" close=")" separator="," item="id">#{id}</foreach>
+		AND elementType=#{type}
+	</select>
+	
+	<select id="selectInfoByOrderNo" resultType="map">
+		select orderType,customerName,sealDepartment,boxNo,currentBoxElementSet,creditType,borrowingAmount,
+				acceptMemberName,channelManagerName,borrowingDay,state,cityName,cityCode
+		from tbl_element_list WHERE orderNo=#{orderNo}
+	</select>
+	
+	<select id="selectBoxInfoByBoxNo" resultType="map">
+		select city,subsidiary from tbl_element_box_base WHERE boxNo=#{boxNo}
+	</select>
+	
+	<select id="selectAuditConfigByCityAndType" resultType="map">
+		select * from tbl_element_audit_config WHERE city=#{city} AND type=#{type}
+	</select>
+	
+	<select id="selectLastApplayByUid" resultType="auditBaseDto">
+		select * from tbl_element_audit_base WHERE createUid=#{uid} ORDER BY createTime DESC LIMIT 0,1
+	</select>
+	
+	<select id="selectElementsByIds" resultType="map">
+		<foreach collection="array" item="id" separator="UNION">
+		select * from tbl_element_element_file WHERE id = #{id}
+		</foreach>
+	</select>
+	
+	<sql id="order_where">
+		<where>
+			<if test="orderStatus != null and orderStatus ==3 ">AND (orderStatus=3 or orderStatus=5)</if>
+			<if test="orderStatus != null and orderStatus > 0 and orderStatus!=3">AND orderStatus=#{orderStatus}</if>
+			<!-- 公章 -->
+			<if test="orderType!= null and orderType == 3">
+			AND orderType=3
+				<if test="keyword != null and keyword != ''">AND sealDepartment LIKE concat('%',#{keyword},'%')</if>
+			</if>
+			
+			<!-- 要件 -->
+			<if test="orderType == null || orderType != 3">
+			
+				AND (orderType = 2 AND (channelManagerUid=#{uid} OR acceptMemberUid=#{uid} OR createUid=#{uid} OR currentHandlerUid=#{uid}) 
+				
+				OR orderType = 1
+				<if test="currentHandlerUid != null and currentHandlerUid != '' ">
+				 AND (currentHandlerUid in (${currentHandlerUid}) or previousHandlerUid = #{updateUid} or notarialUid in (${currentHandlerUid}) or facesignUid in (${currentHandlerUid})
+				 
+				 or acceptMemberUid in  (${currentHandlerUid}) 
+				 
+				 or channelManagerUid in (${currentHandlerUid}) 
+				 
+				 or createUid=#{uid}
+				<if test="orderNos != '' and orderNos != null">
+				or orderNo in (${orderNos})
+				</if>
+				  )
+				</if>
+				)
+				<if test="keyword != null and keyword != ''">AND customerName LIKE concat('%',#{keyword},'%')</if>
+			</if>
+		</where>
+	</sql>
+	<select id="selectOrderList" resultType="elementOrderVo">
+		select * from tbl_element_list <include refid="order_where"/> ORDER BY createTime DESC
+		<if test="pageSize != null and pageSize > 0">
+		LIMIT ${start},${pageSize}
+		</if> 
+	</select>
+	
+	<!-- 超时未还相关 start -->
+	<select id="selectBorrowedOverTimeAudits" resultType="auditBaseDto">
+		select * from tbl_element_audit_base WHERE id 
+		IN(select dbId from tbl_element_borrow_element WHERE status=0 and endBorrowElementTime &lt; #{time} 
+			<if test="hasSendMsg != null">AND hasSendMsg=#{hasSendMsg}</if>
+			<if test="hasMarkOverTime != null">AND hasMarkOverTime=#{hasMarkOverTime}</if>
+		 	GROUP BY dbId)
+	</select>
+	
+	<select id="selectBorrowedOverTimeEle" resultType="integer">
+		select elementId from tbl_element_borrow_element
+		<if test="type == 1">WHERE dbId=#{id}</if>
+		<if test="type == 2">WHERE elementOperationId=#{id}</if>
+		and status=0
+	</select>
+	
+	<select id="selectBorrowOperatorUid" resultType="string">
+		select ac.currentHandlerUid from tbl_element_borrow_element bo
+		JOIN tbl_element_access_flow ac ON 
+		<if test="type == 1">bo.dbId=#{id} AND </if><if test="type == 2">bo.elementOperationId=#{id} AND </if>bo.elementOperationId=ac.id
+		group BY bo.elementOperationId
+	</select>
+	
+	<update id="updateBorrowedOverTimeMsgState">
+		update tbl_element_borrow_element set hasSendMsg=#{noticeState} 
+		<if test="type == 1">WHERE dbId=#{id}</if>
+		<if test="type == 2">WHERE elementOperationId=#{id}</if>
+	</update>
+	
+	<update id="updateSysmsgState">
+		update tbl_element_borrow_element set hasMarkOverTime=1 
+		<if test="type == 1">WHERE dbId=#{id}</if>
+		<if test="type == 2">WHERE elementOperationId=#{id}</if>
+	</update>
+	
+	<select id="selectBorrowedOverTimeOperation" resultType="map">
+		select flow.id,flow.orderNo,flow.beginBorrowElementTime,flow.endBorrowElementTime,list.customerName,list.orderType,flow.currentHandlerUid
+			from tbl_element_access_flow flow JOIN tbl_element_list list ON 
+			flow.id IN(select DISTINCT elementOperationId from tbl_element_borrow_element 
+				WHERE status=0 and dbId IS NULL AND endBorrowElementTime &lt; #{time}
+				<if test="hasSendMsg != null">AND hasSendMsg=#{hasSendMsg}</if>
+				<if test="hasMarkOverTime != null">AND hasMarkOverTime=#{hasMarkOverTime}</if>
+				)
+			AND flow.orderNo = list.orderNo
+	</select>
+	
+	<select id="selectBorrowedOverTimeEleByOrderNo" resultType="string">
+		select elementId from tbl_element_borrow_element WHERE orderNo = #{orderNo} and endBorrowElementTime &lt; now() and status=0
+	</select>
+	<!-- 超时未还相关 end -->
+	
+	<select id="selectAuditIdByOrderNo" resultType="int">
+		select base.id from tbl_element_audit_base base JOIN tbl_element_audit_flow flow
+				ON base.orderNo=#{orderNo} AND base.id=flow.dbId  WHERE  flow.auditorUid=#{uid} AND flow.state=1
+				ORDER BY base.modifyTime LIMIT 0,1
+	</select>
+	
+	<update id="updateBtnOnState">
+		update tbl_element_list set
+		<if test="type == 1">takeButton = 1</if>
+		<if test="type == 2">orderStatus = 5</if>
+		WHERE orderNo = #{orderNo}
+	</update>
+	
+	<update id="updateTimeOfElementList">
+		update tbl_element_list set updateTime=#{time} WHERE orderNo=#{orderNo}
+	</update>
+	
+	<select id="selectAuditorUids" resultType="string">
+		select auditorUid from tbl_element_audit_flow WHERE dbId = #{id} AND NOT state=4 ORDER BY auditLevel
+	</select>
+	
+	<select id="selectAuditLevelFrist" resultType="java.util.Map">
+		select * from tbl_element_audit_flow WHERE dbId = #{dbId} AND auditLevel=1 and state=1 limit 1
+	</select>
+	
+	<select id="selectElesInAuditByOrderNo" resultType="string">
+		select elementIds from tbl_element_audit_base WHERE orderNo = #{orderNo} AND state != 2 AND state != 3 AND hasTake = 0
+	</select>
+	
+	<select id="selectApplayMsgIdByAuditId" resultType="integer">
+		select id from tbl_element_system_message WHERE messageType = 4 AND dbId = #{id} limit 1
+	</select>
+</mapper>

@@ -1,0 +1,54 @@
+<div>
+	<div>
+		<div class="row form-inline detail-row w147" style="padding:30px 10px; ">
+			<div class="col-md-6 col-lg-4">
+				<label>估计还款时间: </label>
+				<input type="text" ng-disabled="HTStaus == '推送完成'" readonly ng-model="huaRongDto.repaymentInfo.repaymentTime" class="form-control form_dateu" />
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label>已经还款时间:</label>
+				<input type="text" ng-disabled="HTStaus == '推送完成'" readonly ng-model="huaRongDto.repaymentInfo.repaymentYestime" class="form-control form_dateu" />
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label>期供金额:</label>
+				<input type="text" ng-disabled="HTStaus == '推送完成'" ng-model="huaRongDto.repaymentInfo.repaymentAccount" class="form-control" onkeyup="value=value.replace(/[^\d.]/g,'')" />元
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label>实还金额:</label>
+				<input type="text" ng-disabled="HTStaus == '推送完成'" ng-model="huaRongDto.repaymentInfo.repaymentYesaccount" class="form-control" onkeyup="value=value.replace(/[^\d.]/g,'')" />元
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label>逾期天数:</label>
+				<input type="text" ng-disabled="HTStaus == '推送完成'" ng-model="huaRongDto.repaymentInfo.lateDays" class="form-control" onkeyup="value=value.replace(/[^\d.]/g,'')" />天
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label>逾期利息:</label>
+				<input type="text" ng-disabled="HTStaus == '推送完成'" ng-model="huaRongDto.repaymentInfo.lateInterest" class="form-control" onkeyup="value=value.replace(/[^\d.]/g,'')" />元
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label>应还利息:</label>
+				<input type="text" ng-disabled="HTStaus == '推送完成'" ng-model="huaRongDto.repaymentInfo.interest" class="form-control" onkeyup="value=value.replace(/[^\d.]/g,'')" />元
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label>应还本金:</label>
+				<input type="text" ng-disabled="HTStaus == '推送完成'" ng-model="huaRongDto.repaymentInfo.capital" class="form-control" onkeyup="value=value.replace(/[^\d.]/g,'')" />元
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label>已还本金:</label>
+				<input type="text" ng-disabled="HTStaus == '推送完成'" ng-model="huaRongDto.repaymentInfo.setlCapital" class="form-control" onkeyup="value=value.replace(/[^\d.]/g,'')" />元
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label>已还利息:</label>
+				<input type="text" ng-disabled="HTStaus == '推送完成'" ng-model="huaRongDto.repaymentInfo.setlInterest" class="form-control" onkeyup="value=value.replace(/[^\d.]/g,'')" />元
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label>已还罚息:</label>
+				<input type="text" ng-disabled="HTStaus == '推送完成'" ng-model="huaRongDto.repaymentInfo.setlLateInterest" class="form-control" onkeyup="value=value.replace(/[^\d.]/g,'')" />元
+			</div>
+			<div class="col-md-6 col-lg-4">
+				<label>贷款执行利率:</label>
+				<input type="text" ng-disabled="HTStaus == '推送完成'" ng-model="huaRongDto.repaymentInfo.psIntRate" class="form-control" onkeyup="value=value.replace(/[^\d.]/g,'')" />%
+			</div>
+		</div>
+	</div>
+</div>

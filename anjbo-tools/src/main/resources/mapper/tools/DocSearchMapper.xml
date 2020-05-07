@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.tools.DocSearchMapper">
+	<!-- 新增办文查询 -->
+	<insert id="addDocSearch" parameterType="DocSearch">
+		<selectKey resultType="int" keyProperty="id">
+			select
+			last_insert_id()
+		</selectKey>
+		insert into
+		tbl_tools_doc_search_base(
+			uid,
+			docNo,
+			serialNo,
+			docItem,
+			createTime,
+			status,
+			device,
+			version
+		)values(
+			#{uid},
+			#{docNo},
+			#{serialNo},
+			#{docItem},
+			now(),
+			#{status},
+			#{device},
+			#{version}
+		)
+	</insert>
+	<!-- 新增办文查询流水 -->
+	<insert id="addDocSearchFlow" parameterType="DocSearch">
+		insert into
+		tbl_tools_doc_search_flow(
+			searchId,
+			acceptTime,
+			replyDate,
+			status,
+			createTime
+		)values(
+			#{searchId},
+			#{acceptTime},
+			#{replyDate},
+			#{status},
+			now()
+		)
+	</insert>
+	<!-- 办文查询分页 -->
+	<select id="selectDocSearchPage" parameterType="DocSearch" resultType="DocSearch">
+		select * from tbl_tools_doc_search_base
+		where uid=#{uid}
+		order by createTime desc
+		limit #{start},#{pagesize}
+	</select>
+	<!-- 办文查询流水分页 -->
+	<select id="selectDocSearchFlowPage" parameterType="DocSearch" resultType="DocSearch">
+		select * from tbl_tools_doc_search_flow
+		where searchId=#{searchId}
+		order by createTime desc
+		limit #{start},#{pagesize}
+	</select>
+	<!-- 办文查询详细 -->
+	<select id="selectDocSearch" parameterType="int" resultType="DocSearch">
+		select * from tbl_tools_doc_search_base where id=#{0}
+	</select>
+	<select id="selectDocSearchId" parameterType="java.lang.String" resultType="java.lang.Integer">
+		select id from tbl_tools_doc_search_base where docNo=#{0} and uid=#{1} limit 1
+	</select>
+	<update id="updateDocSearchStatus" parameterType="DocSearch">
+		update tbl_tools_doc_search_base set status=#{status} where id=#{id}
+	</update>
+</mapper>

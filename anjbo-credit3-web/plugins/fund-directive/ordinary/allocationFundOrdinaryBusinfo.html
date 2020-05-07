@@ -1,0 +1,77 @@
+<div class="row huarong-update-file">
+    <div class="col-md-12">
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>分类</th>
+                <th>资料名称</th>
+                <th>文档数</th>
+                <th>操作</th>
+                <th>说明</th>
+            </tr>
+            </thead>
+            <tbody ng-repeat="pType in ordinaryimageDatas.topType">
+                <tr  ng-repeat="sType in pType.childrenType">
+                    <td ng-if="$index==0" rowspan="{{pType.childrenType.length}}" class="white-bg"></br><span ng-bind="pType.name"></span></br></td>
+                    <td ng-bind="sType.name"></td>
+                    <td ng-bind="sType.listImgs.length||'0'"></td>
+                    <td>
+                        <!--上传图片col-md-12 -->
+                        <span class="caozuo red-word" ng-show="isImgEdit">
+                            <a data-fancybox="iframe" data-src="/plugins/uploadify/upload_image.html?returnFun=fundordinaryUpdateFile" ng-click="selectTypeCheck(sType.id);" data-type="iframe" href="javascript:void(0);">上传</a>
+                        </span>
+                        <span class="caozuo red-word" ng-show="isImgEdit"><a ng-click="delOrdinaryImgShow(sType.listImgs);" ng-show="sType.listImgs.length>0">删除</a></span>
+                        <span class="caozuo chakan-img gallerys" ng-show="sType.listImgs.length>0">
+                            <img  title="查看图片"  ng-repeat="imgMap in sType.listImgs" src="{{imgMap.url}}" class="gallery-pic"  alt="查看图片" ng-show="$index==0" hieght="30" width="30">
+                        </span>
+                        <input type="hidden" name="typeId" value="{{sType.id}}">
+                    </td>
+                    <td ng-bind="sType.remark"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<!--弹框start-->
+<div class="lhw-alert-bg2" ng-show="isDelOrdinaryImgShow" style="z-index: 1000;">
+	<div class="lhw-alert-box" style="width:480px;">
+		<div class="lhw-alert-tit">请选择要删除的图片</div>
+		<div>
+			<span>全选/反选:
+				<input type='checkbox' ng-click="selectAllImg()" ng-checked="allCheck">
+			</span>
+			<div class="row form-inline detail-row" style="padding:0 10px;">
+				<div class="tan-pic">
+					<div class="tan-pic-box" ng-repeat="img in imgList">
+						<label>
+							<img src="{{img.url}}" style="width: 120px;height:120px">
+							<div class="squaredFour">
+								<input type="checkbox" ng-model="img.check" ng-click="checkImg(imgList)">
+								<span></span>
+							</div>
+						</label>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+		</div>
+		<div class="lhw-alert-but">
+			<button type="button" class="btn btn-primary" style="margin-right:80px;" ng-click="delOrdinaryImg()">确定</button>
+			<button type="button" class="btn btn-danger lhw-alert-cancel" ng-click="delOrdinaryImgCancel()">取消</button>
+		</div>
+	</div>
+</div>
+<!--弹框end-->
+
+<script>
+/*普通资方添加照片*/
+function fundordinaryUpdateFile(a, b, c) {
+	if("" == a) {
+		return;
+	}
+	var scope = angular.element('ordinary-docking-edit').scope();
+	scope.addOrdinaryImg(a);
+}
+</script>

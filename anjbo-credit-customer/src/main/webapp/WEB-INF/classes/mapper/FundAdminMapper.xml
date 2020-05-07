@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.FundAdminMapper">
+
+    <sql id="Base_Column_List">
+        id, fundName, status, fundCode, contactMan, contactTel, createTime, updateTime, createUid, 
+        updateUid, remark,fundDesc
+    </sql>
+    <!--status=100 为临时数值效果为查全部-->
+   <select id="list" parameterType="FundAdminDto" resultType="FundAdminDto">
+   	SELECT 
+	f.*
+	FROM tbl_customer_fund f
+	LEFT JOIN tbl_customer_fund_cost fc ON f.id = fc.fundId
+	WHERE 1=1
+   	<if test="status!=null and status!=100">
+   		AND status = #{status}
+   	</if>
+   	GROUP BY f.fundCode ORDER BY fc.dayRate 
+   </select>
+   
+   <select id="detail" parameterType="FundAdminDto" resultType="FundAdminDto">
+   	SELECT
+   		<include refid="Base_Column_List"/>
+   	FROM tbl_customer_fund 
+   	WHERE id=#{id}
+   	<if test="status!=null">
+   		AND status = #{status}
+   	</if>
+   	ORDER BY createTime DESC LIMIT 1;
+   </select>
+    <update id="update" parameterType="FundAdminDto">
+        update tbl_customer_fund
+        <set>
+            <if test="fundName != null and fundName!=''">
+                fundName = #{fundName},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="fundCode != null and fundCode!=''">
+                fundCode = #{fundCode},
+            </if>
+            <if test="contactMan != null and contactMan!=''">
+                contactMan = #{contactMan},
+            </if>
+            <if test="contactTel != null and contactTel!=''">
+                contactTel = #{contactTel},
+            </if>
+            <if test="createUid != null">
+                createUid = #{createUid},
+            </if>
+            <if test="updateUid != null">
+                updateUid = #{updateUid},
+            </if>
+            <if test="remark != null and remark!=''">
+                remark = #{remark},
+            </if>
+            <if test="fundDesc != null and fundDesc!=''">
+                fundDesc = #{fundDesc},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    
+      <select id="selectFundsByProductIdAgencyId" resultType="java.util.Map" parameterType="java.util.Map"  >
+	  	SELECT
+			f.*
+		FROM
+			tbl_customer_fund_cost fp,
+			tbl_customer_fund f
+		WHERE
+			1=1
+		AND
+			f.status = 1
+		AND
+			fp.fundId = f.id 
+	  <if test="productId != null and productId != 0 " >
+		  AND fp.productId = ${productId} 
+	  </if>
+	  	  ORDER BY f.id
+	  </select>
+</mapper>

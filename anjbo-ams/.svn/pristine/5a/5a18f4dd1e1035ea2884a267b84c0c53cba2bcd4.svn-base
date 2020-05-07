@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="GBK"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.system.SMSMapper">
+
+	<insert id="insertSMS">
+		insert into tbl_sms_record
+		(ip,date,mobile,comeFrom,content)
+		values
+		(#{ip},#{date},#{mobile},#{comeFrom},#{content})
+	</insert>
+	<select id="selectSMS" resultType="Integer">
+		select count(1) from
+		tbl_sms_record where DATE_FORMAT(date,'%Y-%m-%d')=#{todayDate}
+		and
+		mobile=#{mobile}
+		and comeFrom=#{comeFrom}
+	</select>
+	<select id="selectSMSByIp" resultType="Integer">
+		select count(1) from
+		tbl_sms_record where DATE_FORMAT(date,'%Y-%m-%d')=#{todayDate}
+		and
+		ip=#{ip}
+		and comeFrom=#{comeFrom}
+	</select>
+
+	<select id="selectSMSMounth" resultType="Integer">
+		select count(1) from
+		tbl_sms_record where mobile = #{mobile} and
+		DATE_FORMAT(date,'%Y-%m')=#{todayYearMonth}
+		and comeFrom=#{comeFrom}
+	</select>
+	<select id="selectSMSMounthByIp" resultType="Integer">
+		select count(1) from
+		tbl_sms_record where ip = #{ip} and
+		DATE_FORMAT(date,'%Y-%m')=#{todayYearMonth}
+		and comeFrom=#{comeFrom}
+	</select>
+</mapper>

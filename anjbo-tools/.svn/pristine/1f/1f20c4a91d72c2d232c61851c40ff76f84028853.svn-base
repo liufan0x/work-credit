@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.tools.ArchiveMapper" >
+ 	<update id="updateArchiveMsg" parameterType="Map">
+ 		update tbl_tools_archive_base a set a.status = #{status} , a.message = #{message} where a.id = #{id}
+ 	</update>
+ 	<update id="updateArchiveFlow" parameterType="java.lang.String">
+ 		update tbl_tools_archive_flow set message=#{1},status=#{2} where archiveId=#{0} and (message is null or message='') order by createTime desc limit 1
+ 	</update>
+ 	<update id="updateArchiveFlowLast" parameterType="java.lang.String">
+ 		update tbl_tools_archive_flow set message=#{1},status=#{2} where archiveId=#{0} 
+		order by createTime desc limit 1
+ 	</update>
+ 	
+ 	<select id="findArchiveById" resultType="ArchiveDto" parameterType="java.lang.String">
+ 		select * from tbl_tools_archive_base t where t.id = #{id}
+ 	</select>
+ 	<insert id="addArchive" parameterType="ArchiveDto">
+ 		insert into tbl_tools_archive_base(id,uid,type,estateType,estateNo,identityNo,createTime,status,device,version,yearNo,houseImgUrl)
+ 		values(#{id},#{uid},#{type},#{estateType},#{estateNo},#{identityNo},#{createTime},#{status},#{device},#{version},#{yearNo},#{houseImgUrl})
+ 	</insert>
+ 	<insert id="addArchiveFlow" parameterType="ArchiveFlowDto">
+ 		insert into tbl_tools_archive_flow(
+			archiveId,
+			message,
+			createTime,
+			status
+ 		)values(
+ 			#{archiveId},
+			#{message},
+			#{createTime},
+			#{status}
+ 		)
+ 	</insert>
+ 	<select id="findAlreadyArchiveCount" parameterType="ArchiveDto" resultType="int">
+ 		select count(1) from tbl_tools_archive_base a where a.uid=#{uid} and a.estateNo=#{estateNo} and a.identityNo=#{identityNo}
+ 	</select>
+ 	<select id="findAlreadyArchiveId" parameterType="ArchiveDto" resultType="java.lang.String">
+ 		select id from tbl_tools_archive_base a where a.uid=#{uid} and a.estateNo=#{estateNo} and a.identityNo=#{identityNo} limit 1
+ 	</select>
+ 	<select id="findArchiveByStatus" parameterType="java.lang.Integer" resultType="ArchiveDto">
+ 		select * from tbl_tools_archive_base t where t.status = #{status} 
+ 		and estateNo regexp '[0-9]'
+ 		order by t.createTime 
+ 	</select>
+ 	<select id="findAllArchiveByUid" parameterType="Map" resultType="ArchiveDto">
+ 		select * from tbl_tools_archive_base t where t.uid = #{uid}  order by createTime desc limit #{currentSize},#{pageSize} 
+ 	</select>
+ 	<delete id="deleteArchive" parameterType="java.lang.String">
+ 	    delete  from tbl_tools_archive_base where id=#{0}
+ 	</delete>
+ 	<delete id="deleteArchiveFlow" parameterType="java.lang.String">
+ 	    delete from tbl_tools_archive_flow where archiveId=#{0}
+ 	</delete>
+  	<update id="updateIsRead" parameterType="Map">
+ 		update tbl_tools_archive_base set isRead =#{isRead} where id=#{id}
+ 	</update>
+ 	<select id="selectArchiveFlowPage" parameterType="ArchiveFlowDto" resultType="ArchiveFlowDto">
+ 		select id,archiveId,message,createTime,updateTime,status,
+ 		DATE_FORMAT(createTime,'%Y-%m-%d %H:%i') as createTimeStr,
+ 		DATE_FORMAT(updateTime,'%Y-%m-%d %H:%i') as updateTimeStr
+ 		from tbl_tools_archive_flow where archiveId=#{archiveId}
+ 		and message is not null and message!=''
+ 		order by createTime desc
+ 		limit #{start},#{pagesize}
+ 	</select>
+</mapper>

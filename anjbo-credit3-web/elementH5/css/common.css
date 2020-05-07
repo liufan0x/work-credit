@@ -1,0 +1,1685 @@
+body {
+	font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", STHeiti, "Microsoft Yahei", Tahoma, Simsun, sans-serif;
+}
+.fl {
+	float: left;
+}
+
+.fr {
+	float: right;
+}
+
+.clear {
+	clear: both;
+}
+.rel{position: relative;}
+.color_555 {
+	color: #555;
+}
+
+.color_999 {
+	color: #999;
+}
+
+.color_0cbbd3 {
+	color: #0cbbd3;
+}
+
+.color_fff {
+	color: #fff;
+}
+
+.color_wait{
+	color:#ef8d0e;
+}
+
+.color_succ{
+	color: #5ed2b6;
+}
+
+.color_fail{
+	color: #f26e5a;
+}
+
+.bg_color_e5fcff {
+	background: #e5fcff;
+}
+
+.bg_color_0cbbd3 {
+	background: #0cbbd3;
+}
+
+.bg_color_fff {
+	background: #fff;
+}
+
+.text_center {
+	text-align: center;
+}
+
+.font_size_055 {
+	font-size: .55rem;
+}
+
+.font_size_045 {
+	font-size: .55rem;
+}
+
+.font_bold {
+	font-weight: bold;
+}
+
+
+.font_bold font.noReturn{
+	float:right;
+	color:red;
+	font-weight:normal;
+}
+
+
+
+.no_img{
+	font-size: .5rem;
+    font-weight: bold;
+    color: #fff;
+    position: relative;
+    top: .15rem;
+}
+
+.img_bg_color_0{
+	background : #3396fb;
+	text-align : center;
+}
+
+.img_bg_color_1{
+	background : #FF7F50;
+	text-align : center;
+}
+
+.img_bg_color_2{
+	background : #3396fb;
+	text-align : center;
+}
+
+span.heafImgContainer {
+	display: block;
+	position: absolute;
+	left: .6rem;
+	top: .75rem;
+	width: 1.6rem;
+	height: 1.6rem;
+	border-radius: .8rem;
+}
+			
+.head_img_container_div{
+	position:relative;
+}
+
+.head_no_img_span{
+	top:0 !important;
+}
+button.active{
+	background: rgba(12, 187, 211,.8);
+}
+
+
+/*下拉加载样式*/
+div.loadingPart{
+	position: fixed;	
+	display: none;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 100;
+	background: rgba(0,0,0,.6);
+}
+			
+			
+div.loadingPart>div{
+	position: absolute;
+	width: 5rem;
+	height: 5rem;
+	bottom: 15rem;
+	left: 50%;
+	transform: translateX(-50%);
+	-webkit-transform: translateX(-50%);
+	text-align: center;
+	border-radius: 1rem;
+	background: #fff;
+	z-index: 101;
+}
+			
+div.loadingPart>div>img{
+	margin-top: 1rem;
+}
+/* 抄送人删除图标样式 */
+span.copyDel{
+	position:absolute;
+	top:0;
+	right:-.2rem;
+	width:.7rem;height:.7rem;
+	border-radius:.35rem;
+	background:rgba(0,0,0,.6);
+}
+span.copyDel>i{
+/* 	position:relative;
+	top:-.3rem;
+	font-weight:bold;
+	font-size:.2rem; */
+	top:-6px;
+	font-size:10px;
+	color:#fff;
+}
+/*借要件页面样式*/
+
+div#borrowDocController {
+	position: absolute;
+	background: #f1f1f1;
+	width: 100%;
+	min-height: 100%;
+}
+
+div#borrowDocController div.topBarPart {
+	position: fixed;
+	background: #fff;
+	padding: .6rem .75rem;
+	font-size: .8rem;
+	color: #545454;
+	width: 100%;
+	z-index: 1;
+}
+
+div#borrowDocController div.contentPart {
+	margin: 2.8rem .75rem .75rem .75rem;
+}
+
+div#borrowDocController div.cell {
+	position: relative;
+	margin-top: .5rem;
+	background: #fff;
+	padding: 1.25rem .6rem;
+	border-radius: .25rem;
+	box-shadow: 0px 3px 5px 0px rgba(208, 208, 208, 0.35);
+}
+
+div#borrowDocController div.cell>div:nth-child(1) {
+	position: relative;
+}
+
+div#borrowDocController div.cell>div:nth-child(1)>span:nth-child(1) {
+	position: absolute;
+	display: block;
+	left: 0;
+	top: 0;
+	width: .2rem;
+	height: 1rem;
+	background: #0CBBD3;
+}
+
+div#borrowDocController div.cell>div:nth-child(1) p {
+	line-height: 1rem;
+	padding-left: .8rem;
+}
+
+div#borrowDocController div.cell>div:nth-child(1) p>font:nth-child(1) {
+	font-size: .8rem;
+	color: #555;
+}
+
+div#borrowDocController div.cell>div:nth-child(1) p>font:nth-child(2),
+div#borrowDocController div.cell>div:nth-child(1) p>font:nth-child(3) {
+	font-size: .65rem;
+	color: #999;
+	padding-left: .25rem;
+}
+
+div#borrowDocController div.cell>div:nth-child(2) p,
+div#borrowDocController div.cell>div:nth-child(3) p {
+	padding-left: .8rem;
+	font-size: .65rem;
+	padding-top: .85rem;
+}
+
+div#borrowDocController div.cell>div:nth-child(3) p {
+	padding-top: .5rem;
+}
+
+div#borrowDocController div.cell>div:nth-child(2) p>font:nth-child(1),
+div#borrowDocController div.cell>div:nth-child(3) p>font:nth-child(1) {
+	color: #545454;
+}
+
+div#borrowDocController div.cell>div:nth-child(2) p>font:nth-child(2),
+div#borrowDocController div.cell>div:nth-child(3) p>font:nth-child(2) {
+	color: #999;
+}
+
+div#borrowDocController div.cell>div:nth-child(4) p {
+	padding: .85rem 0 0 .8rem;
+	font-size: .65rem;
+	color: #0cbbd3;
+}
+
+div#borrowDocController div.cell>div.btn-container {
+	margin-top: .6rem;
+	padding: .65rem .6rem 0 .65rem;
+	border-top: 1px solid #e6e6e6;
+}
+
+div#borrowDocController div.cell>div.btn-container button {
+	border: 0;
+	padding: .4rem 1.4rem;
+	color: #fff;
+	font-size: .7rem;
+	background: #0cbbd3;
+	border-radius: .2rem;
+}
+
+div#borrowDocController div.cell>div.doc-state {
+	position: absolute;
+	display: block;
+	top: 3.5rem;
+	right: .6rem;
+	font-size: .65rem;
+}
+
+div#borrowDocController div.cell>div.doc-state span.blue {
+	color: #0cbbd3;
+}
+
+div#borrowDocController div.cell>div.doc-state span.red {
+	color: #fa4040;
+}
+
+div#borrowDocController div.popPart {
+	display: none;
+	padding-top: 2.4rem;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	min-height: 100%;
+	background: rgba(0, 0, 0, .6);
+	z-index: 1;
+}
+
+div#borrowDocController div.popPart>div {
+	padding: .5rem .7rem;
+	border-bottom: 1px solid #e6e6e6;
+	background: #fff;
+	font-size: .75rem;
+	color: #555;
+}
+
+div#borrowDocController div.popPart>div:last-child {
+	border: 0;
+}
+
+
+/*借公章页面样式*/
+
+div#borrowSealController {
+	position: absolute;
+	background: #f1f1f1;
+	width: 100%;
+	min-height: 100%;
+}
+
+div#borrowSealController div.topBarPart {
+	position: fixed;
+	width: 100%;
+	background: #fff;
+	padding: .7rem .75rem;
+	font-size: .8rem;
+	color: #545454;
+	z-index: 1;
+}
+
+div#borrowSealController div.contentPart {
+	margin: 3rem .75rem .75rem .75rem;
+}
+
+div#borrowSealController div.cell {
+	position: relative;
+	margin-top: .5rem;
+	background: #fff;
+	padding: 1.25rem .6rem;
+	border-radius: .25rem;
+	box-shadow: 0px 3px 5px 0px rgba(208, 208, 208, 0.35);
+}
+
+div#borrowSealController div.cell>div:nth-child(1) {
+	position: relative;
+}
+
+div#borrowSealController div.cell>div:nth-child(1)>span:nth-child(1) {
+	position: absolute;
+	display: block;
+	left: 0;
+	top: 0;
+	width: .2rem;
+	height: 1rem;
+	background: #0CBBD3;
+}
+
+div#borrowSealController div.cell>div:nth-child(1) p {
+	line-height: 1rem;
+	padding-left: .8rem;
+}
+
+div#borrowSealController div.cell>div:nth-child(1) p>font:nth-child(1) {
+	font-size: .8rem;
+	color: #555;
+}
+
+div#borrowSealController div.cell>div:nth-child(1) p>font:nth-child(2),
+div#borrowSealController div.cell>div:nth-child(1) p>font:nth-child(3) {
+	font-size: .65rem;
+	color: #999;
+	padding-left: .25rem;
+}
+
+div#borrowSealController div.cell>div:nth-child(2) p,
+div#borrowSealController div.cell>div:nth-child(3) p {
+	padding-left: .8rem;
+	font-size: .65rem;
+	padding-top: .85rem;
+}
+
+div#borrowSealController div.cell>div:nth-child(3) p {
+	padding-top: .5rem;
+}
+
+div#borrowSealController div.cell>div:nth-child(2) p>font {
+	color: #545454;
+}
+
+div#borrowSealController div.cell>div:nth-child(3) p>font {
+	color: #999;
+}
+
+div#borrowSealController div.cell>div.btn-container {
+	margin-top: .6rem;
+	padding: .65rem .6rem 0 .65rem;
+	border-top: 1px solid #e6e6e6;
+}
+
+div#borrowSealController div.cell>div.btn-container button {
+	border: 0;
+	padding: .4rem 1.4rem;
+	color: #fff;
+	font-size: .7rem;
+	background: #0cbbd3;
+	border-radius: .2rem;
+}
+
+div#borrowSealController div.cell>div.doc-state {
+	position: absolute;
+	display: block;
+	top: 3.5rem;
+	right: .6rem;
+	font-size: .65rem;
+}
+
+div#borrowSealController div.cell>div.doc-state span.blue {
+	color: #0cbbd3;
+}
+
+div#borrowSealController div.cell>div.doc-state span.red {
+	color: #fa4040;
+}
+
+
+/*借公章详情*/
+
+div#sealDetailController {
+	position: absolute;
+	min-height: 100%;
+	width: 100%;
+	background: #f1f1f1;
+	font-size: .8rem;
+	color: #555;
+}
+
+div#sealDetailController div.headerPart {
+	margin: .5rem 0 0;
+	padding: .75rem;
+	background: #fff;
+}
+
+div#sealDetailController div.contentPart {
+	margin-top: .5rem;
+	background: #fff;
+}
+
+div#sealDetailController div.contentPart>div:nth-child(1) {
+	padding: .75rem;
+	border-bottom: 1px solid #e6e6e6;
+}
+
+div#sealDetailController div.cell {
+	color: #555;
+	position: relative;
+	padding: .75rem;
+	border-bottom: 1px solid #e6e6e6;
+}
+
+div#sealDetailController div.cell.dis p{
+	color:#DCDCDC;
+}
+
+div#sealDetailController div.cell.dis>span{
+	border: 0;
+	background: url(../img/unchoosable.png) no-repeat center center;
+	background-size: 100% auto;
+}
+
+div#docDetailController div.cell.dis p{
+	color:#DCDCDC;
+}
+div#docDetailController div.cell.dis p>span{
+	background:#DCDCDC;
+}
+div#docDetailController div.cell.dis>span{
+	border: 0;
+	background: url(../img/unchoosable.png) no-repeat center center;
+	background-size: 100% auto;
+}
+
+div#sealDetailController div.cell>span {
+	display: block;
+	position: absolute;
+	left: .75rem;
+	width: 1rem;
+	height: 1rem;
+	border: 1px solid #cbc9c9;
+	border-radius: .5rem;
+}
+
+div#sealDetailController div.cell>div {
+	margin-left: 1.75rem;
+	border-left: 2px solid #f0f0e5;
+}
+
+div#sealDetailController div.cell p {
+	padding: .5rem 0 .5rem 1rem;
+}
+
+div#sealDetailController div.cell p>font:nth-child(1) {
+	display: inline-block;
+	min-width: 3.75rem;
+}
+
+div#sealDetailController div.cell p span {
+	display: inline-block;
+	top: .2rem;
+	position: relative;
+	width: .2rem;
+	height: .8rem;
+	background: #0cbbd3;
+	margin-right: .5rem;
+}
+
+div#sealDetailController div.cell>span.active {
+	border: 0;
+	background: url(../img/choice.png) no-repeat center center;
+	background-size: 100% auto;
+}
+
+div#sealDetailController div.userInfo>div {
+	width: 100%;
+	height: 1.6rem;
+}
+
+div#sealDetailController div.userInfo>div>img {
+	width: 1.6rem;
+	height: 1.6rem;
+	border-radius: .8rem;
+}
+
+div#sealDetailController div.btnContainer {
+	margin: 3.15rem .75rem 2.5rem .75rem;
+}
+
+div#sealDetailController div.btnContainer button {
+	width: 100%;
+	height: 100%;
+	border: 0;
+	padding: .6rem 0;
+	font-size: .85rem;
+	border-radius: .2rem;
+}
+
+
+/*选择抄送人部分*/
+
+div#choiceApproController {
+	position: absolute;
+	width: 100%;
+	min-height: 100%;
+	background: #f1f1f1;
+}
+
+div#choiceApproController div.headerPart {
+	position: relative;
+	padding: .4rem 2.6rem .4rem .8rem;
+	background: #25425b;
+}
+
+div#choiceApproController div.headerPart>div {
+	background: #fff;
+	padding: .4rem .5rem;
+	border-radius: .2rem;
+}
+div#choiceApproController div.headerPart>div>span.deleteKeyword {
+	width:.8rem;
+	height:.8rem;
+	float:right;
+	right:3rem;
+	background:rgba(0,0,0,.6);
+	margin-top:.2rem;
+	border-radius:1.5rem;
+}
+div#choiceApproController div.headerPart>div>span.deleteKeyword>i {
+	font-size:.5rem;
+	top:-.25rem;
+	color:white;
+}
+
+div#choiceApproController div.headerPart>div span {
+	position: absolute;
+}
+
+div#choiceApproController div.headerPart>div input {
+	margin-left: 1.3rem;
+	min-height: .9rem !important;
+}
+
+div#choiceApproController div.contentPart {
+	margin-top: .4rem;
+	padding: 0 .75rem;
+	background: #fff;
+	font-size: .8rem;
+	color: #555;
+}
+
+div#choiceApproController div.contentPart>div {
+	padding: .6rem 0;
+	border-bottom: 1px solid #e6e6e6;
+}
+
+div#choiceApproController div.contentPart>div:last-child {
+	border: 0;
+}
+
+div#choiceApproController div.chioce {
+	width: 1rem;
+	height: 1rem;
+	border: 1px solid #cbc9c9;
+	border-radius: .5rem;
+}
+
+div#choiceApproController div.chioce.active {
+	border: 0;
+	background: url(../img/choice.png) no-repeat center center;
+	background-size: 100% auto;
+}
+
+
+/*选择抄送人部分*/
+
+div#choiceCopyController {
+	position: absolute;
+	width: 100%;
+	min-height: 100%;
+	background: #f1f1f1;
+}
+
+div#choiceCopyController div.headerPart {
+	position: relative;
+	padding: .4rem .8rem;
+	background: #25425b;
+}
+
+div#choiceCopyController div.headerPart>div {
+	background: #fff;
+	padding: .4rem .5rem;
+	border-radius: .2rem;
+}
+
+div#choiceCopyController div.headerPart>div span {
+	position: absolute;
+}
+
+div#choiceCopyController div.headerPart>div input {
+	margin-left: 1.3rem;
+	min-height: .9rem !important;
+}
+
+div#choiceCopyController div.contentPart {
+	margin-top: .4rem;
+	padding: 0 .75rem;
+	background: #fff;
+	font-size: .8rem;
+	color: #555;
+}
+
+div#choiceCopyController div.contentPart>div {
+	padding: .6rem 0;
+	border-bottom: 1px solid #e6e6e6;
+}
+
+div#choiceCopyController div.contentPart>div:last-child {
+	border: 0;
+}
+
+div#choiceCopyController div.chioce {
+	width: 1rem;
+	height: 1rem;
+	border: 1px solid #cbc9c9;
+	border-radius: .5rem;
+}
+
+div#choiceCopyController div.chioce.active {
+	border: 0;
+	background: url(../img/choice.png) no-repeat center center;
+	background-size: 100% auto;
+}
+
+
+/*借要件详情*/
+
+div#docDetailController {
+	position: absolute;
+	min-height: 100%;
+	width: 100%;
+	background: #f1f1f1;
+	font-size: .8rem;
+	color: #555;
+}
+
+div#docDetailController div.headerPart {
+	margin: .5rem 0 0;
+	padding: .75rem;
+	background: #fff;
+}
+
+div#docDetailController div.contentPart {
+	margin-top: .5rem;
+	background: #fff;
+}
+
+div#docDetailController div.contentPart>div:nth-child(1) {
+	padding: .75rem;
+	border-bottom: 1px solid #e6e6e6;
+}
+
+div#docDetailController div.cell {
+	color: #555;
+	position: relative;
+	padding: .75rem;
+	border-bottom: 1px solid #e6e6e6;
+}
+
+div#docDetailController div.cell>span {
+	display: block;
+	position: absolute;
+	left: .75rem;
+	width: 1rem;
+	height: 1rem;
+	border: 1px solid #cbc9c9;
+	border-radius: .5rem;
+}
+
+div#docDetailController div.cell>div {
+	margin-left: 1.75rem;
+	border-left: 2px solid #f0f0e5;
+}
+
+div#docDetailController div.cell p {
+	padding: .5rem 0 .5rem 1rem;
+}
+
+div#docDetailController div.cell p>font:nth-child(1) {
+	display: inline-block;
+	min-width: 3.75rem;
+}
+
+div#docDetailController div.cell p span {
+	display: inline-block;
+	top: .2rem;
+	position: relative;
+	width: .2rem;
+	height: .8rem;
+	background: #0cbbd3;
+	margin-right: .5rem;
+}
+
+div#docDetailController div.cell>span.active {
+	border: 0;
+	background: url(../img/choice.png) no-repeat center center;
+	background-size: 100% auto;
+}
+
+div#docDetailController div.userInfo>div {
+	width: 100%;
+	height: 1.6rem;
+}
+
+div#docDetailController div.userInfo>div>img {
+	width: 1.6rem;
+	height: 1.6rem;
+	border-radius: .8rem;
+}
+
+div#docDetailController div.btnContainer {
+	margin: 3.15rem .75rem 2.5rem .75rem;
+}
+
+div#docDetailController div.btnContainer button {
+	width: 100%;
+	height: 100%;
+	border: 0;
+	padding: .6rem 0;
+	font-size: .85rem;
+	border-radius: .2rem;
+}
+
+
+/*要件提交成功*/
+
+div#docSubmitController {
+	position: absolute;
+	min-height: 100%;
+	width: 100%;
+	background: #f1f1f1;
+	color: #555;
+	text-align: center;
+	padding: 0 .75rem;
+}
+
+div#docSubmitController>div:nth-child(1) {
+	margin-top: 3.35rem;
+	height: 4.05rem;
+	width: 100%;
+	background: url(../img/submit_succ.png) no-repeat center center;
+	background-size: auto 100%;
+}
+
+div#docSubmitController>div:nth-child(2) {
+	font-size: 1.15rem;
+	margin-top: .6rem;
+}
+
+div#docSubmitController>div:nth-child(3) {
+	font-size: .85rem;
+	margin: 1rem 0 2rem;
+}
+
+div#docSubmitController>div:nth-child(4)>button {
+	border: 0;
+	width: 100%;
+	padding: .75rem 0;
+	font-size: .85rem;
+}
+
+div#docSubmitController>div:nth-child(5)>button {
+	border: 1px solid #0cbbd3;
+	width: 100%;
+	padding: .75rem 0;
+	font-size: .85rem;
+	margin-top: 1.25rem;
+}
+
+
+/*公章审批提交成功*/
+
+div#sealSubmitController {
+	position: absolute;
+	min-height: 100%;
+	width: 100%;
+	background: #f1f1f1;
+	color: #555;
+	text-align: center;
+	padding: 0 .75rem;
+}
+
+div#sealSubmitController>div:nth-child(1) {
+	margin-top: 3.35rem;
+	height: 4.05rem;
+	width: 100%;
+	background: url(../img/submit_succ.png) no-repeat center center;
+	background-size: auto 100%;
+}
+
+div#sealSubmitController>div:nth-child(2) {
+	font-size: 1.15rem;
+	margin-top: .6rem;
+}
+
+div#sealSubmitController>div:nth-child(3) {
+	font-size: .85rem;
+	margin: 1rem 0 2rem;
+}
+
+div#sealSubmitController>div:nth-child(4)>button {
+	border: 0;
+	width: 100%;
+	padding: .75rem 0;
+	font-size: .85rem;
+}
+
+div#sealSubmitController>div:nth-child(5)>button {
+	border: 1px solid #0cbbd3;
+	width: 100%;
+	padding: .75rem 0;
+	font-size: .85rem;
+	margin-top: 1.25rem;
+}
+
+
+/*要件详情部分样式*/
+
+div#docDetailCtrl {
+	position: absolute;
+	width: 100%;
+	min-height: 100%;
+	background: #f1f1f1;
+	color: #555;
+	font-size: .8rem;
+}
+
+div#docDetailCtrl>div.headerPart {
+	margin-top: .4rem;
+	position: relative;
+	padding: .75rem;
+	background: #fff;
+}
+
+div#docDetailCtrl>div.headerPart span {
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: .25rem;
+	width: 100%;
+	background: url(../img/top_bg.png) no-repeat center top;
+	background-size: 100% auto;
+}
+
+div#docDetailCtrl>div.headerPart p {
+	display: block;
+	padding-top: .5rem;
+}
+
+div#docDetailCtrl>div.contentPart {
+	margin-top: .5rem;
+	padding: 0;
+	background: #fff;
+	font-size: .8rem;
+}
+
+div#docDetailCtrl>div.contentPart>div:nth-child(1) {
+	padding: .75rem;
+	border-bottom: 1px solid #e6e6e6;
+	font-size: .75rem;
+}
+
+div#docDetailCtrl>div.contentPart>div:nth-child(2) {
+	padding: 0 .75rem;
+}
+
+div#docDetailCtrl>div.contentPart>div:nth-child(2)>div {
+	border-bottom: 1px solid #e6e6e6;
+}
+
+div#docDetailCtrl>div.contentPart>div:nth-child(2)>div:last-child {
+	border: 0;
+}
+
+div#docDetailCtrl>div.contentPart>div:nth-child(2)>div p {
+	position: relative;
+	padding-top: .5rem;
+	padding-left: .75rem;
+}
+
+div#docDetailCtrl>div.contentPart>div:nth-child(2)>div p span {
+	position: absolute;
+	display: block;
+	width: .2rem;
+	height: .8rem;
+	top: .7rem;
+	left: 0;
+	background: #0cbbd3;
+}
+
+div#docDetailCtrl>div.contentPart>div:nth-child(2)>div p>font:nth-child(1) {
+	display: inline-block;
+	min-width: 4rem;
+}
+
+div#docDetailCtrl>div.contentPart>div:nth-child(2)>div p:last-child {
+	padding-bottom: .5rem;
+}
+
+
+/*公章详情样式*/
+
+div#sealDetailCtrl {
+	position: absolute;
+	width: 100%;
+	min-height: 100%;
+	background: #f1f1f1;
+	color: #555;
+	font-size: .8rem;
+}
+
+div#sealDetailCtrl>div.headerPart {
+	margin-top: .4rem;
+	position: relative;
+	padding: .75rem;
+	background: #fff;
+}
+
+div#sealDetailCtrl>div.headerPart span {
+	display: block;
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: .25rem;
+	width: 100%;
+	background: url(../img/top_bg.png) no-repeat center top;
+	background-size: 100% auto;
+}
+
+div#sealDetailCtrl>div.headerPart p {
+	display: block;
+	padding-top: .5rem;
+}
+
+div#sealDetailCtrl>div.contentPart {
+	margin-top: .5rem;
+	padding: 0;
+	background: #fff;
+	font-size: .8rem;
+}
+
+div#sealDetailCtrl>div.contentPart>div:nth-child(1) {
+	padding: .75rem;
+	border-bottom: 1px solid #e6e6e6;
+	font-size: .75rem;
+}
+
+div#sealDetailCtrl>div.contentPart>div:nth-child(2) {
+	padding: 0 .75rem;
+}
+
+div#sealDetailCtrl>div.contentPart>div:nth-child(2)>div {
+	border-bottom: 1px solid #e6e6e6;
+}
+
+div#sealDetailCtrl>div.contentPart>div:nth-child(2)>div:last-child {
+	border: 0;
+}
+
+div#sealDetailCtrl>div.contentPart>div:nth-child(2)>div p {
+	position: relative;
+	padding-top: .5rem;
+	padding-left: .75rem;
+}
+
+div#sealDetailCtrl>div.contentPart>div:nth-child(2)>div p span {
+	position: absolute;
+	display: block;
+	width: .2rem;
+	height: .8rem;
+	top: .7rem;
+	left: 0;
+	background: #0cbbd3;
+}
+
+div#sealDetailCtrl>div.contentPart>div:nth-child(2)>div p>font:nth-child(1) {
+	display: inline-block;
+	min-width: 4rem;
+}
+
+div#sealDetailCtrl>div.contentPart>div:nth-child(2)>div p:last-child {
+	padding-bottom: .5rem;
+}
+
+
+/*搜索页面*/
+
+div#searchController {
+	position: absolute;
+	top: 0;
+	width: 100%;
+	min-height: 100%;
+	background: rgba(0, 0, 0, .4);
+	font-size: .7rem;
+}
+
+div#searchController div.headerPart {
+	padding: .4rem .75rem;
+	background: #25425b;
+}
+
+div#searchController div.headerPart>div {
+	position: relative;
+	background: #fff;
+	border-radius: .2rem;
+	margin-right: 2.5rem;
+	height: 1.5rem;
+	padding-left: 1.6rem;
+}
+
+div#searchController div.headerPart>div span:nth-child(1) {
+	position: absolute;
+	display: block;
+	left: .5rem;
+	top: .2rem;
+}
+
+div#searchController div.headerPart>div input {
+	min-height: 1.5rem !important;
+}
+
+div#searchController div.headerPart>span {
+	display: block;
+	position: absolute;
+	right: .75rem;
+	top: .6rem;
+	color: #fff
+}
+
+div#searchController div.contentPart {
+	background: #fff;
+	padding: 0 .75rem;
+}
+
+div#searchController div.contentPart>div {
+	padding: .6rem 0;
+	border-bottom: 1px solid #e6e6e6;
+}
+
+div#searchController div.contentPart>div:last-child {
+	border: 0;
+}
+div#searchController div.headerPart>div>span.deleteKeyword {
+	position:absolute;
+	width:.8rem;
+	height:.8rem;
+	float:right;
+	right:.5rem;
+	background:rgba(0,0,0,.6);
+	margin-top:.35rem;
+	border-radius:1.5rem;
+}
+div#searchController div.headerPart>div>span.deleteKeyword>i {
+	font-size:.5rem;
+	top:-.1rem;
+	color:white;
+}
+/*搜索列表页面样式*/
+div#searchDocController {
+	position: absolute;
+	background: #f1f1f1;
+	width: 100%;
+	min-height: 100%;
+}
+
+div#searchDocController div.headerPart {
+	position:fixed;
+	width:100%;
+	padding: .4rem .75rem;
+	background: #25425b;
+	z-index:2;
+}
+
+div#searchDocController div.headerPart>div {
+	position: relative;
+	background: #fff;
+	border-radius: .2rem;
+	margin-right: 2.5rem;
+	height: 1.5rem;
+	padding-left: 1.6rem;
+}
+div#searchDocController div.headerPart>div>span.deleteKeyword {
+	position:absolute;
+	width:.8rem;
+	height:.8rem;
+	float:right;
+	right:.5rem;
+	background:rgba(0,0,0,.6);
+	margin-top:.35rem;
+	border-radius:1.5rem;
+}
+div#searchDocController div.headerPart>div>span.deleteKeyword>i {
+	font-size:.5rem;
+	top:-.2rem;
+	color:white;
+}
+div#searchDocController div.headerPart>div span:nth-child(1) {
+	position: absolute;
+	display: block;
+	left: .5rem;
+	top: .2rem;
+}
+
+div#searchDocController div.headerPart>div input {
+	min-height: 1.5rem !important;
+}
+
+div#searchDocController div.headerPart>span {
+	display: block;
+	position: absolute;
+	right: .75rem;
+	top: .6rem;
+	color: #fff
+}
+div#searchDocController div.contentPart {
+	margin: 3rem .75rem .75rem .75rem;
+}
+
+div#searchDocController div.cell {
+	position: relative;
+	margin-top: .5rem;
+	background: #fff;
+	padding: 1.25rem .6rem;
+	border-radius: .25rem;
+	box-shadow: 0px 3px 5px 0px rgba(208, 208, 208, 0.35);
+}
+
+div#searchDocController div.cell>div:nth-child(1) {
+	position: relative;
+}
+
+div#searchDocController div.cell>div:nth-child(1)>span:nth-child(1) {
+	position: absolute;
+	display: block;
+	left: 0;
+	top: 0;
+	width: .2rem;
+	height: 1rem;
+	background: #0CBBD3;
+}
+
+div#searchDocController div.cell>div:nth-child(1) p {
+	line-height: 1rem;
+	padding-left: .8rem;
+}
+
+div#searchDocController div.cell>div:nth-child(1) p>font:nth-child(1) {
+	font-size: .8rem;
+	color: #555;
+}
+
+div#searchDocController div.cell>div:nth-child(1) p>font:nth-child(2),
+div#searchDocController div.cell>div:nth-child(1) p>font:nth-child(3) {
+	font-size: .65rem;
+	color: #999;
+	padding-left: .25rem;
+}
+
+div#searchDocController div.cell>div:nth-child(2) p,
+div#searchDocController div.cell>div:nth-child(3) p {
+	padding-left: .8rem;
+	font-size: .65rem;
+	padding-top: .85rem;
+}
+
+div#searchDocController div.cell>div:nth-child(3) p {
+	padding-top: .5rem;
+}
+
+div#searchDocController div.cell>div:nth-child(2) p>font:nth-child(1),
+div#searchDocController div.cell>div:nth-child(3) p>font:nth-child(1) {
+	color: #545454;
+}
+
+div#searchDocController div.cell>div:nth-child(2) p>font:nth-child(2),
+div#searchDocController div.cell>div:nth-child(3) p>font:nth-child(2) {
+	color: #999;
+}
+
+div#searchDocController div.cell>div:nth-child(4) p {
+	padding: .85rem 0 0 .8rem;
+	font-size: .65rem;
+	color: #0cbbd3;
+}
+
+div#searchDocController div.cell>div.btn-container {
+	margin-top: .6rem;
+	padding: .65rem .6rem 0 .65rem;
+	border-top: 1px solid #e6e6e6;
+}
+
+div#searchDocController div.cell>div.btn-container button {
+	border: 0;
+	padding: .4rem 1.4rem;
+	color: #fff;
+	font-size: .7rem;
+	background: #0cbbd3;
+	border-radius: .2rem;
+}
+
+div#searchDocController div.cell>div.doc-state {
+	position: absolute;
+	display: block;
+	top: 3.5rem;
+	right: .6rem;
+	font-size: .65rem;
+}
+
+div#searchDocController div.cell>div.doc-state span.blue {
+	color: #0cbbd3;
+}
+
+div#searchDocController div.cell>div.doc-state span.red {
+	color: #fa4040;
+}
+
+div#searchDocController div.popPart>div:last-child {
+	border: 0;
+}
+/*公章搜索页面样式*/
+div#sealSearchController {
+	position: absolute;
+	background: #f1f1f1;
+	width: 100%;
+	min-height: 100%;
+}
+
+div#sealSearchController div.headerPart {
+	position:fixed;
+	width:100%;
+	z-index:2;
+	padding: .4rem .75rem;
+	background: #25425b;
+}
+
+div#sealSearchController div.headerPart>div {
+	position: relative;
+	background: #fff;
+	border-radius: .2rem;
+	margin-right: 2.5rem;
+	height: 1.5rem;
+	padding-left: 1.6rem;
+}
+div#sealSearchController div.headerPart>div>span.deleteKeyword {
+	position:absolute;
+	width:.8rem;
+	height:.8rem;
+	float:right;
+	right:.5rem;
+	background:rgba(0,0,0,.6);
+	margin-top:.35rem;
+	border-radius:1.5rem;
+}
+div#sealSearchController div.headerPart>div>span.deleteKeyword>i {
+	font-size:.5rem;
+	top:-.2rem;
+	color:white;
+}
+div#sealSearchController div.headerPart>div span:nth-child(1) {
+	position: absolute;
+	display: block;
+	left: .5rem;
+	top: .2rem;
+}
+
+div#sealSearchController div.headerPart>div input {
+	min-height: 1.5rem !important;
+}
+
+div#sealSearchController div.headerPart>span {
+	display: block;
+	position: absolute;
+	right: .75rem;
+	top: .6rem;
+	color: #fff
+}
+
+div#sealSearchController div.contentPart {
+	margin: 3rem .75rem .75rem .75rem;
+}
+
+div#sealSearchController div.cell {
+	position: relative;
+	margin-top: .5rem;
+	background: #fff;
+	padding: 1.25rem .6rem;
+	border-radius: .25rem;
+	box-shadow: 0px 3px 5px 0px rgba(208, 208, 208, 0.35);
+}
+
+div#sealSearchController div.cell>div:nth-child(1) {
+	position: relative;
+}
+
+div#sealSearchController div.cell>div:nth-child(1)>span:nth-child(1) {
+	position: absolute;
+	display: block;
+	left: 0;
+	top: 0;
+	width: .2rem;
+	height: 1rem;
+	background: #0CBBD3;
+}
+
+div#sealSearchController div.cell>div:nth-child(1) p {
+	line-height: 1rem;
+	padding-left: .8rem;
+}
+
+div#sealSearchController div.cell>div:nth-child(1) p>font:nth-child(1) {
+	font-size: .8rem;
+	color: #555;
+}
+
+div#sealSearchController div.cell>div:nth-child(1) p>font:nth-child(2),
+div#sealSearchController div.cell>div:nth-child(1) p>font:nth-child(3) {
+	font-size: .65rem;
+	color: #999;
+	padding-left: .25rem;
+}
+
+div#sealSearchController div.cell>div:nth-child(2) p,
+div#sealSearchController div.cell>div:nth-child(3) p {
+	padding-left: .8rem;
+	font-size: .65rem;
+	padding-top: .85rem;
+}
+
+div#sealSearchController div.cell>div:nth-child(3) p {
+	padding-top: .5rem;
+}
+
+div#sealSearchController div.cell>div:nth-child(2) p>font {
+	color: #545454;
+}
+
+div#sealSearchController div.cell>div:nth-child(3) p>font {
+	color: #999;
+}
+
+div#sealSearchController div.cell>div.btn-container {
+	margin-top: .6rem;
+	padding: .65rem .6rem 0 .65rem;
+	border-top: 1px solid #e6e6e6;
+}
+
+div#sealSearchController div.cell>div.btn-container button {
+	border: 0;
+	padding: .4rem 1.4rem;
+	color: #fff;
+	font-size: .7rem;
+	background: #0cbbd3;
+	border-radius: .2rem;
+}
+
+div#sealSearchController div.cell>div.doc-state {
+	position: absolute;
+	display: block;
+	top: 3.5rem;
+	right: .6rem;
+	font-size: .65rem;
+}
+
+div#sealSearchController div.cell>div.doc-state span.blue {
+	color: #0cbbd3;
+}
+
+div#sealSearchController div.cell>div.doc-state span.red {
+	color: #fa4040;
+}
+
+/* 简单提示框样式 */
+div.toast{
+	 position: fixed;
+    transform: translateX(-50%);
+    left: 50%;
+    -webkit-transform: translateX(-50%);
+    background: rgba(0,0,0,.6);
+    color: #fff;
+    padding: .3rem .5rem;
+    border-radius: .2rem;
+    top: 10rem;
+}
+/* 借公章审批详情页  */
+div#approSealDetailCtrl div.imgContainer{
+	width:33.33%;
+	float:left;
+	text-align:center;
+	padding:.2rem;
+}
+div#approSealDetailCtrl div.imgContainer>div{
+	height:100%;
+	width:100%;
+	border:1px solid #B8B8B8;
+	position:relative;
+}
+div#approSealDetailCtrl div.imgContainer>div>img{
+	height:100%;
+	width:100%;
+}
+div#approSealDetailCtrl {
+	position: absolute;
+	width: 100%;
+	min-height: 100%;
+	font-size: .8rem;
+	color: #555;
+	background: #f1f1f1;
+}
+
+div#approSealDetailCtrl div.headerPart {
+	position: relative;
+	margin-top: .5rem;
+	background: #fff;
+}
+
+div#approSealDetailCtrl div.headerPart>div:nth-child(1) {
+	position: relative;
+	padding: .75rem;
+	border-bottom: 1px solid #e6e6e6;
+}
+
+div#approSealDetailCtrl div.headerPart>div:nth-child(1) p {
+	padding-left: 2rem;
+}
+
+div#approSealDetailCtrl div.headerPart>div:nth-child(1) span {
+	position: absolute;
+	left: .75rem;
+	top: 1rem;
+	width: 1.5rem;
+	height: 1.5rem;
+}
+
+div#approSealDetailCtrl div.headerPart>div:nth-child(1) span img {
+	width: 100%;
+	height: auto;
+}
+
+div#approSealDetailCtrl div.headerPart>div:nth-child(2) {
+	padding: .5rem 0 .6rem;
+}
+
+div#approSealDetailCtrl div.headerPart>div:nth-child(2) p {
+	padding-left: 2.75rem;
+}
+
+div#approSealDetailCtrl div.headerPart>span {
+	position: absolute;
+	display: block;
+	width: 5rem;
+	height: 4.1rem;
+	top: .75rem;
+	right: 1rem;
+	top: .5rem;
+}
+
+div#approSealDetailCtrl div.headerPart>span.fail_icon {
+	background: url(../img/approval_fail.png)no-repeat center center;
+	background-size: 100% auto;
+}
+
+div#approSealDetailCtrl div.headerPart>span.succ_icon {
+	background: url(../img/approval_succ.png)no-repeat center center;
+	background-size: 100% auto;
+}
+
+div#approSealDetailCtrl>div.contentPart {
+	margin-top: .5rem;
+	padding: 0;
+	background: #fff;
+	font-size: .8rem;
+}
+
+div#approSealDetailCtrl>div.contentPart>div:nth-child(1) {
+	padding: .75rem;
+	border-bottom: 1px solid #e6e6e6;
+	font-size: .75rem;
+}
+
+div#approSealDetailCtrl>div.contentPart>div:nth-child(2) {
+	padding: 0 .75rem;
+}
+
+div#approSealDetailCtrl>div.contentPart>div:nth-child(2)>div {
+	border-bottom: 1px solid #e6e6e6;
+}
+
+div#approSealDetailCtrl>div.contentPart>div:nth-child(2)>div:last-child {
+	border: 0;
+}
+
+div#approSealDetailCtrl>div.contentPart>div:nth-child(2)>div p {
+	position: relative;
+	padding-top: .5rem;
+	padding-left: .75rem;
+}
+
+div#approSealDetailCtrl>div.contentPart>div:nth-child(2)>div p span {
+	position: absolute;
+	display: block;
+	width: .2rem;
+	height: .8rem;
+	top: .7rem;
+	left: 0;
+	background: #0cbbd3;
+}
+
+div#approSealDetailCtrl>div.contentPart>div:nth-child(2)>div p>font:nth-child(1) {
+	display: inline-block;
+	min-width: 4rem;
+}
+
+div#approSealDetailCtrl>div.contentPart>div:nth-child(2)>div p:last-child {
+	padding-bottom: .5rem;
+}
+
+div#approSealDetailCtrl div.cell {
+	color: #555;
+	position: relative;
+	padding: 0 .75rem;
+	border-bottom: 1px solid #e6e6e6;
+}
+
+div#approSealDetailCtrl div.cell>span {
+	display: block;
+	position: absolute;
+	left: .75rem;
+	width: 1rem;
+	height: 1rem;
+	border: 1px solid #cbc9c9;
+	border-radius: .5rem;
+}
+
+div#approSealDetailCtrl div.cell>div {
+	margin-left: 1.75rem;
+	border-left: 2px solid #f0f0e5;
+}
+
+div#approSealDetailCtrl div.cell p {
+	padding: .5rem 0 .5rem 1rem;
+}
+
+div#approSealDetailCtrl div.cell p>font:nth-child(1) {
+	display: inline-block;
+	min-width: 3.75rem;
+}
+
+div#approSealDetailCtrl div.cell p span {
+	display: inline-block;
+	top: .2rem;
+	position: relative;
+	width: .2rem;
+	height: .8rem;
+	background: #0cbbd3;
+	margin-right: .5rem;
+}
+
+div#approSealDetailCtrl div.userList {
+	font-size: .75rem;
+	padding-bottom: 2rem !important;
+}
+
+div#approSealDetailCtrl div.userList>div {
+	position: relative;
+	padding: .6rem 0rem .6rem 1.9rem;
+	border-bottom: 0 !important;
+}
+
+div#approSealDetailCtrl div.userList>div:nth-child(1) {
+	margin-top: .6rem;
+}
+
+div#approSealDetailCtrl div.userList>div>span {
+	position: absolute;
+	left: 0;
+	top: .4rem;
+}
+
+div#approSealDetailCtrl div.userList>div>span>img {
+	width: 1.5rem;
+	height: 1.5rem;
+}
+
+div#approSealDetailCtrl div.userList>div font {
+	margin-right: .6rem;
+}
+
+div#approSealDetailCtrl div.btn-group {
+	border-top: 1px solid #e6e6e6;
+}
+
+div#approSealDetailCtrl div.btn-group>span {
+	width: 33.3%;
+	float: left;
+	margin: .5rem 0;
+}
+
+div#approSealDetailCtrl div.btn-group>span:nth-child(2) {
+	border-left: 1px solid #e6e6e6;
+	border-right: 1px solid #e6e6e6;
+}
+
+div#approSealDetailCtrl div.userInfo>div {
+	width: 100%;
+	height: 1.6rem;
+}
+
+div#approSealDetailCtrl div.userInfo>div>img {
+	width: 1.6rem;
+	height: 1.6rem;
+	border-radius: .8rem;
+}
+
+div#approSealDetailCtrl>div.contentPart>div:nth-child(2)>div.dis>p>span {
+	background:#DCDCDC;
+}
+
+div#approSealDetailCtrl div.dis>p {
+	color:#DCDCDC;
+}

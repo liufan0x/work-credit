@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.DeptMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and ''!=id"> AND `id`=#{id}</if>
+		<if test="null!=name and ''!=name"> AND `name`=#{name}</if>
+		<if test="null!=agencyId and agencyId>0"> AND `agencyId`=#{agencyId}</if>
+		<if test="null!=pid and pid>0"> AND `pid`=#{pid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<if test="null!=remark and ''!=remark"> AND `remark`=#{remark}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="DeptDto" resultType="DeptDto">    
+	SELECT `id`, `name`, `agencyId`, `pid`, `createTime`, `updateTime`, `createUid`, `updateUid`, `remark` 
+	FROM tbl_user_dept 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="DeptDto" resultType="DeptDto">
+	SELECT `id`, `name`, `agencyId`, `pid`, `createTime`, `updateTime`, `createUid`, `updateUid`, `remark`
+	FROM tbl_user_dept 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="DeptDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_user_dept 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="DeptDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_user_dept(
+		<if test="null!=name">`name`,</if>
+		<if test="null!=agencyId">`agencyId`,</if>
+		<if test="null!=pid">`pid`,</if>
+		<if test="null!=createTime">`createTime`,</if>
+		<if test="null!=updateTime">`updateTime`,</if>
+		<if test="null!=createUid">`createUid`,</if>
+		<if test="null!=updateUid">`updateUid`,</if>
+		<if test="null!=remark">`remark`</if>
+	) VALUES(
+		<if test="null!=name">#{name},</if>
+		<if test="null!=agencyId">#{agencyId},</if>
+		<if test="null!=pid">#{pid},</if>
+		<if test="null!=createTime">#{createTime},</if>
+		<if test="null!=updateTime">#{updateTime},</if>
+		<if test="null!=createUid">#{createUid},</if>
+		<if test="null!=updateUid">#{updateUid},</if>
+		<if test="null!=remark">#{remark}</if>
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="DeptDto" >
+    DELETE FROM tbl_user_dept 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="DeptDto" >
+    UPDATE tbl_user_dept
+	<set>
+		<if test="null!=name">`name`=#{name},</if>
+		<if test="null!=agencyId">`agencyId`=#{agencyId},</if>
+		<if test="null!=pid">`pid`=#{pid},</if>
+		<if test="null!=createTime">`createTime`=#{createTime},</if>
+		<if test="null!=updateTime">`updateTime`=#{updateTime},</if>
+		<if test="null!=createUid">`createUid`=#{createUid},</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=remark">`remark`=#{remark}</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+
+    <!-- 批量增删改 -->
+  <insert id="batchInsert" parameterType="DeptDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_user_dept(
+		name,
+		agencyId,
+		pid,
+		createTime,
+		updateTime,
+		createUid,
+		updateUid,
+		remark
+	) VALUES
+	<foreach collection="list" index="index" item="item" separator="," >
+	(
+		#{item.name},
+		#{item.agencyId},
+		#{item.pid},
+		#{item.createTime},
+		#{item.updateTime},
+		#{item.createUid},
+		#{item.updateUid},
+		#{item.remark}
+	)
+	</foreach>
+  </insert>
+
+
+  <delete id="batchDelete" parameterType="DeptDto" >
+    <foreach collection="list" index="index" item="item" separator=";" >
+    DELETE FROM tbl_user_dept 
+	WHERE ID=#{item.id}
+	</foreach>
+  </delete>
+  
+  <update id="batchUpdate" parameterType="DeptDto" >
+    <foreach collection="list" index="index" item="item" separator=";" >
+    UPDATE tbl_user_dept
+	<set>
+		<if test="null!=item.name">`name`=#{item.name},</if>
+		<if test="null!=item.agencyId">`agencyId`=#{item.agencyId},</if>
+		<if test="null!=item.pid">`pid`=#{item.pid},</if>
+		<if test="null!=item.createTime">`createTime`=#{item.createTime},</if>
+		<if test="null!=item.updateTime">`updateTime`=#{item.updateTime},</if>
+		<if test="null!=item.createUid">`createUid`=#{item.createUid},</if>
+		<if test="null!=item.updateUid">`updateUid`=#{item.updateUid},</if>
+		<if test="null!=item.remark">`remark`=#{item.remark}</if>
+	</set>
+	WHERE ID=#{item.id}
+	</foreach>
+  </update>
+
+    
+</mapper>

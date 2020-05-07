@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.yntrust.YntrustRepaymentInfoMapper">
+
+    <sql id="Base_Column_List">
+        id, createUid, createTime, updateUid, updateTime, orderNo, repayDate, realityPayDate,
+        repayPrincipal, givePayPrincipal, repayProfit, givePayProfit, borrowingDays, lateDay, 
+        penaltyFee, latePenalty, lateFee, lateOtherCost, otherFee, overDueFee, amount,
+         repaymentType, repaymentTypeName, status, failMsg,statusName,transactionNo,
+        paymentMethod,paymentMethodName,occurTime,remark,pushStatus
+    </sql>
+    <select id="select" parameterType="YntrustRepaymentInfoDto" resultType="YntrustRepaymentInfoDto">
+        select
+        <include refid="Base_Column_List" />
+        from tbl_third_yntrust_repayment_info
+        where orderNo = #{orderNo}
+        <if test="pushStatus!=null">
+            AND pushStatus = #{pushStatus}
+        </if>
+        ORDER BY createTime DESC limit 1
+    </select>
+    <delete id="delete" parameterType="YntrustRepaymentInfoDto">
+        delete from tbl_third_yntrust_repayment_info
+        where orderNo = #{orderNo}
+    </delete>
+
+    <insert id="insert" parameterType="YntrustRepaymentInfoDto">
+        insert into tbl_third_yntrust_repayment_info
+        (
+            createUid,
+            createTime,
+            orderNo,
+            repayDate,
+            realityPayDate,
+            repayPrincipal,
+            givePayPrincipal,
+            repayProfit,
+            givePayProfit,
+            borrowingDays,
+            lateDay,
+            penaltyFee,
+            latePenalty,
+            lateFee,
+            lateOtherCost,
+            otherFee,
+            overDueFee,
+            amount,
+            repaymentType,
+            repaymentTypeName,
+            status,
+            failMsg,
+            statusName,
+            transactionNo,
+            paymentMethod,
+            paymentMethodName,
+            occurTime,
+            remark,
+            pushStatus
+        )
+        values
+        (
+            #{createUid},
+            now(),
+            #{orderNo},
+            #{repayDate},
+            #{realityPayDate},
+            #{repayPrincipal},
+            #{givePayPrincipal},
+            #{repayProfit},
+            #{givePayProfit},
+            #{borrowingDays},
+            #{lateDay},
+            #{penaltyFee},
+            #{latePenalty},
+            #{lateFee},
+            #{lateOtherCost},
+            #{otherFee},
+            #{overDueFee},
+            #{amount},
+            #{repaymentType},
+            #{repaymentTypeName},
+            #{status},
+            #{failMsg},
+            #{statusName},
+            #{transactionNo},
+            #{paymentMethod},
+            #{paymentMethodName},
+            #{occurTime},
+            #{remark},
+            #{pushStatus}
+        )
+    </insert>
+
+    <insert id="insertMap" parameterType="java.util.Map">
+        insert into tbl_third_yntrust_repayment_info
+        (
+            createUid,
+            createTime,
+            orderNo,
+            repayDate,
+            realityPayDate,
+            repayPrincipal,
+            givePayPrincipal,
+            repayProfit,
+            givePayProfit,
+            borrowingDays,
+            lateDay,
+            penaltyFee,
+            latePenalty,
+            lateFee,
+            lateOtherCost,
+            otherFee,
+            overDueFee,
+            amount,
+            repaymentType,
+            repaymentTypeName,
+            status,
+            failMsg,
+            statusName,
+            transactionNo,
+            paymentMethod,
+            paymentMethodName,
+            occurTime,
+            remark,
+            pushStatus
+        )
+        values
+        (
+            #{createUid},
+            now(),
+            #{orderNo},
+            #{repayDate},
+            #{realityPayDate},
+            #{repayPrincipal},
+            #{givePayPrincipal},
+            #{repayProfit},
+            #{givePayProfit},
+            #{borrowingDays},
+            #{lateDay},
+            #{penaltyFee},
+            #{latePenalty},
+            #{lateFee},
+            #{lateOtherCost},
+            #{otherFee},
+            #{overDueFee},
+            #{amount},
+            #{repaymentType},
+            #{repaymentTypeName},
+            #{status},
+            #{failMsg},
+            #{statusName},
+            #{transactionNo},
+            #{paymentMethod},
+            #{paymentMethodName},
+            #{occurTime},
+            #{remark},
+            #{pushStatus}
+        )
+    </insert>
+
+    <update id="update" parameterType="YntrustRepaymentInfoDto">
+        update tbl_third_yntrust_repayment_info
+        <set>
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+            <if test="updateTime!=null">
+                updateTime = #{updateTime},
+            </if>
+            <if test="repayDate != null">
+                repayDate = #{repayDate},
+            </if>
+            <if test="realityPayDate != null">
+                realityPayDate = #{realityPayDate},
+            </if>
+            <if test="repayPrincipal != null">
+                repayPrincipal = #{repayPrincipal},
+            </if>
+            <if test="givePayPrincipal != null">
+                givePayPrincipal = #{givePayPrincipal},
+            </if>
+            <if test="repayProfit != null">
+                repayProfit = #{repayProfit},
+            </if>
+            <if test="givePayProfit != null">
+                givePayProfit = #{givePayProfit},
+            </if>
+            <if test="borrowingDays != null">
+                borrowingDays = #{borrowingDays},
+            </if>
+            <if test="lateDay != null">
+                lateDay = #{lateDay},
+            </if>
+            <if test="penaltyFee != null">
+                penaltyFee = #{penaltyFee},
+            </if>
+            <if test="latePenalty != null">
+                latePenalty = #{latePenalty},
+            </if>
+            <if test="lateFee != null">
+                lateFee = #{lateFee},
+            </if>
+            <if test="lateOtherCost != null">
+                lateOtherCost = #{lateOtherCost},
+            </if>
+            <if test="otherFee != null">
+                otherFee = #{otherFee},
+            </if>
+            <if test="overDueFee != null">
+                overDueFee = #{overDueFee},
+            </if>
+            <if test="amount != null">
+                amount = #{amount},
+            </if>
+            <if test="repaymentType != null and repaymentType!=''">
+                repaymentType = #{repaymentType},
+            </if>
+            <if test="repaymentTypeName != null and repaymentTypeName!=''">
+                repaymentTypeName = #{repaymentTypeName},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="statusName != null and statusName!=''">
+                statusName = #{statusName},
+            </if>
+            <if test="failMsg != null and failMsg!=''">
+                failMsg = #{failMsg},
+            </if>
+            <if test="transactionNo!=null and transactionNo!=''">
+                transactionNo = #{transactionNo},
+            </if>
+            <if test="paymentMethod!=null">
+                paymentMethod = #{paymentMethod},
+            </if>
+            <if test="paymentMethodName!=null and paymentMethodName!=''">
+                paymentMethodName = #{paymentMethodName},
+            </if>
+            <if test="occurTime!=null">
+                occurTime = #{occurTime},
+            </if>
+            <if test="remark!=null and remark!=''">
+                remark = #{remark},
+            </if>
+            <if test="pushStatus!=null">
+                pushStatus = #{pushStatus}
+            </if>
+        </set>
+        where orderNo = #{orderNo}
+    </update>
+
+    <update id="updateMap" parameterType="java.util.Map">
+        update tbl_third_yntrust_repayment_info
+        <set>
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+
+            <if test="repayDate != null">
+                repayDate = #{repayDate},
+            </if>
+            <if test="realityPayDate != null">
+                realityPayDate = #{realityPayDate},
+            </if>
+            <if test="repayPrincipal != null">
+                repayPrincipal = #{repayPrincipal},
+            </if>
+            <if test="givePayPrincipal != null">
+                givePayPrincipal = #{givePayPrincipal},
+            </if>
+            <if test="repayProfit != null">
+                repayProfit = #{repayProfit},
+            </if>
+            <if test="givePayProfit != null">
+                givePayProfit = #{givePayProfit},
+            </if>
+            <if test="borrowingDays != null">
+                borrowingDays = #{borrowingDays},
+            </if>
+            <if test="lateDay != null">
+                lateDay = #{lateDay},
+            </if>
+            <if test="penaltyFee != null">
+                penaltyFee = #{penaltyFee},
+            </if>
+            <if test="latePenalty != null">
+                latePenalty = #{latePenalty},
+            </if>
+            <if test="lateFee != null">
+                lateFee = #{lateFee},
+            </if>
+            <if test="lateOtherCost != null">
+                lateOtherCost = #{lateOtherCost},
+            </if>
+            <if test="otherFee != null">
+                otherFee = #{otherFee},
+            </if>
+            <if test="overDueFee != null">
+                overDueFee = #{overDueFee},
+            </if>
+            <if test="amount != null">
+                amount = #{amount},
+            </if>
+            <if test="repaymentType != null and repaymentType!=''">
+                repaymentType = #{repaymentType},
+            </if>
+            <if test="repaymentTypeName != null and repaymentTypeName!=''">
+                repaymentTypeName = #{repaymentTypeName},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="statusName != null and statusName!=''">
+                statusName = #{statusName},
+            </if>
+            <if test="failMsg != null and failMsg!=''">
+                failMsg = #{failMsg},
+            </if>
+            <if test="transactionNo!=null and transactionNo!=''">
+                transactionNo = #{transactionNo},
+            </if>
+            <if test="paymentMethod!=null">
+                paymentMethod = #{paymentMethod},
+            </if>
+            <if test="paymentMethodName!=null and paymentMethodName!=''">
+                paymentMethodName = #{paymentMethodName},
+            </if>
+            <if test="occurTime!=null">
+                occurTime = #{occurTime},
+            </if>
+            <if test="remark!=null and remark!=''">
+                remark = #{remark},
+            </if>
+        </set>
+        where orderNo = #{orderNo}
+    </update>
+
+    <delete id="deleteRepaymentDetail" parameterType="java.util.Map">
+        DELETE FROM tbl_third_yntrust_repayment_detail WHERE transactionNo = #{transactionNo}
+    </delete>
+
+    <insert id="bacthInsertRepaymentDetail" parameterType="java.util.List">
+        INSERT INTO tbl_third_yntrust_repayment_detail
+        (
+          createUid,
+          createTime,
+          orderNo,
+          uniqueid,
+          contractNo,
+          repayScheduleNo,
+          partnerScheduleNo,
+          detailsAmount,
+          checkStatus,
+          recoverStatus,
+          remark,
+          transactionNo,
+          checkStatusName,
+          recoverStatusName
+        ) VALUES
+        <foreach collection="list" separator="," item="obj" open="" close="">
+            (
+                #{obj.createUid),
+                now(),
+                #{obj.orderNo},
+                #{obj.uniqueid},
+                #{obj.contractNo},
+                #{obj.repayScheduleNo},
+                #{obj.partnerScheduleNo},
+                #{obj.detailsAmount},
+                #{obj.checkStatus},
+                #{obj.recoverStatus},
+                #{obj.remark},
+                #{obj.transactionNo},
+                #{obj.checkStatusName},
+                #{obj.recoverStatusName}
+            )
+        </foreach>
+    </insert>
+    <insert id="insertRepaymentDetail" parameterType="java.util.Map">
+        INSERT INTO tbl_third_yntrust_repayment_detail
+        (
+          createUid,
+          createTime,
+          orderNo,
+          uniqueid,
+          contractNo,
+          repayScheduleNo,
+          partnerScheduleNo,
+          detailsAmount,
+          checkStatus,
+          recoverStatus,
+          remark,
+          transactionNo,
+          checkStatusName,
+          recoverStatusName
+        )
+         VALUES
+        (
+          #{createUid},
+          now(),
+          #{orderNo},
+          #{uniqueid},
+          #{contractNo},
+          #{repayScheduleNo},
+          #{partnerScheduleNo},
+          #{detailsAmount},
+          #{checkStatus},
+          #{recoverStatus},
+          #{remark},
+          #{transactionNo},
+          #{checkStatusName},
+          #{recoverStatusName}
+        )
+    </insert>
+</mapper>

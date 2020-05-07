@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.MonitorArchiveMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<if test="null!=type and type>0"> AND `type`=#{type}</if>
+		<if test="null!=agencyId and agencyId>0"> AND `agencyId`=#{agencyId}</if>
+		<if test="null!=estateType and estateType>0"> AND `estateType`=#{estateType}</if>
+		<if test="null!=yearNo and ''!=yearNo"> AND `yearNo`=#{yearNo}</if>
+		<if test="null!=estateNo and ''!=estateNo"> AND `estateNo`=#{estateNo}</if>
+		<if test="null!=identityNo and ''!=identityNo"> AND `identityNo`=#{identityNo}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(startTimeBegin)"> AND startTime >= #{startTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(startTimeEnd)"> AND startTime &lt;= #{startTimeEnd}</if>
+		-->
+		<!--
+		<if test="@Ognl@isNotEmpty(endTimeBegin)"> AND endTime >= #{endTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(endTimeEnd)"> AND endTime &lt;= #{endTimeEnd}</if>
+		-->
+		<if test="null!=queryFrequency and queryFrequency>0"> AND `queryFrequency`=#{queryFrequency}</if>
+		<if test="null!=queryUsage and ''!=queryUsage"> AND `queryUsage`=#{queryUsage}</if>
+		<if test="null!=phone and ''!=phone"> AND `phone`=#{phone}</if>
+		<if test="null!=archiveId and ''!=archiveId"> AND `archiveId`=#{archiveId}</if>
+		<if test="null!=message and ''!=message"> AND `message`=#{message}</if>
+		<if test="null!=propertyStatus and ''!=propertyStatus"> AND `propertyStatus`=#{propertyStatus}</if>
+		<if test="null!=changeRecord and ''!=changeRecord"> AND `changeRecord`=#{changeRecord}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="MonitorArchiveDto" resultType="MonitorArchiveDto">    
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `type`, `agencyId`, `estateType`, `yearNo`, `estateNo`, `identityNo`, `startTime`, `endTime`, `queryFrequency`, `queryUsage`, `phone`, `archiveId`, `message`, `propertyStatus`, `changeRecord` 
+	FROM tbl_risk_monitor_archive 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="MonitorArchiveDto" resultType="MonitorArchiveDto">
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `type`, `agencyId`, `estateType`, `yearNo`, `estateNo`, `identityNo`, `startTime`, `endTime`, `queryFrequency`, `queryUsage`, `phone`, `archiveId`, `message`, `propertyStatus`, `changeRecord`
+	FROM tbl_risk_monitor_archive 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="MonitorArchiveDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_risk_monitor_archive 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="MonitorArchiveDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_risk_monitor_archive(
+		`createUid`,
+		`createTime`,
+		`updateUid`,
+		`updateTime`,
+		`orderNo`,
+		`type`,
+		`agencyId`,
+		`estateType`,
+		`yearNo`,
+		`estateNo`,
+		`identityNo`,
+		`startTime`,
+		`endTime`,
+		`queryFrequency`,
+		`queryUsage`,
+		`phone`,
+		`archiveId`,
+		`message`,
+		`propertyStatus`,
+		`changeRecord`
+	) VALUES(
+		#{createUid},
+		now(),
+		#{createUid},
+		now(),
+		#{orderNo},
+		#{type},
+		#{agencyId},
+		#{estateType},
+		#{yearNo},
+		#{estateNo},
+		#{identityNo},
+		#{startTime},
+		#{endTime},
+		#{queryFrequency},
+		#{queryUsage},
+		#{phone},
+		#{archiveId},
+		#{message},
+		#{propertyStatus},
+		#{changeRecord}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="MonitorArchiveDto" >
+    DELETE FROM tbl_risk_monitor_archive 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="MonitorArchiveDto" >
+    UPDATE tbl_risk_monitor_archive
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=type">`type`=#{type},</if>
+		<if test="null!=agencyId">`agencyId`=#{agencyId},</if>
+		<if test="null!=estateType">`estateType`=#{estateType},</if>
+		<if test="null!=yearNo">`yearNo`=#{yearNo},</if>
+		<if test="null!=estateNo">`estateNo`=#{estateNo},</if>
+		<if test="null!=identityNo">`identityNo`=#{identityNo},</if>
+		<if test="null!=startTime">`startTime`=#{startTime},</if>
+		<if test="null!=endTime">`endTime`=#{endTime},</if>
+		<if test="null!=queryFrequency">`queryFrequency`=#{queryFrequency},</if>
+		<if test="null!=queryUsage">`queryUsage`=#{queryUsage},</if>
+		<if test="null!=phone">`phone`=#{phone},</if>
+		<if test="null!=archiveId">`archiveId`=#{archiveId},</if>
+		<if test="null!=message">`message`=#{message},</if>
+		<if test="null!=propertyStatus">`propertyStatus`=#{propertyStatus},</if>
+		<if test="null!=changeRecord">`changeRecord`=#{changeRecord},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

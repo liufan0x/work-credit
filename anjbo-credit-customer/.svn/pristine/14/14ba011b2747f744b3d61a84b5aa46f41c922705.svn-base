@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.FundCostDiscountMapper">
+    <resultMap id="BaseResultMap" type="FundCostDiscountDto">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="fundCostId" jdbcType="INTEGER" property="fundCostId" />
+        <result column="money" jdbcType="DECIMAL" property="money" />
+        <result column="rate" jdbcType="DECIMAL" property="rate" />
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="createUid" jdbcType="INTEGER" property="createUid" />
+        <result column="updateUid" jdbcType="INTEGER" property="updateUid" />
+        <result column="remark" jdbcType="VARCHAR" property="remark" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, fundCostId, money, rate, createTime, updateTime, createUid, updateUid, remark
+    </sql>
+    
+    <select id="detail" parameterType="java.lang.Integer" resultType="FundCostDiscountDto">
+        select 
+       	 <include refid="Base_Column_List" />
+        from tbl_customer_fund_cost_discount
+        where id = #{id}
+    </select>
+   
+    <select id="selectByFundCostId" parameterType="java.lang.Integer" resultType="FundCostDiscountDto">
+    	SELECT 
+    		<include refid="Base_Column_List"/>
+    	FROM tbl_customer_fund_cost_discount WHERE fundCostId = #{fundCostId} ORDER BY createTime DESC LIMIT 1;
+    </select>
+    
+    <select id="list" resultType="FundCostDiscountDto">
+    	SELECT 
+    		<include refid="Base_Column_List"/>
+    	FROM tbl_customer_fund_cost_discount
+    </select>
+   
+    <insert id="insert" parameterType="FundCostDiscountDto">
+        insert into tbl_customer_fund_cost_discount 
+        (
+        	id,
+        	fundCostId,
+        	money, 
+            rate,
+            createTime,
+            createUid,
+            updateUid,
+            remark
+        )
+        values 
+        (
+        	#{id},
+        	#{fundCostId},
+        	#{money}, 
+            #{rate},
+            #{createTime},
+            #{createUid},
+            #{updateUi},
+            #{remark}
+         )
+    </insert>
+    
+    <update id="update" parameterType="FundCostDiscountDto">
+        
+        update tbl_customer_fund_cost_discount
+        <set>
+            <if test="fundCostId != null">
+                fundCostId = #{fundCostId},
+            </if>
+            <if test="money != null">
+                money = #{money},
+            </if>
+            <if test="rate != null">
+                rate = #{rate},
+            </if>
+            <if test="createUid != null">
+                createUid = #{createUid},
+            </if>
+            <if test="updateUid != null">
+                updateUid = #{updateUid},
+            </if>
+            <if test="remark != null and remark!=''">
+                remark = #{remark},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

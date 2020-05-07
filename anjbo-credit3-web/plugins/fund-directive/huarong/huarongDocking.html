@@ -1,0 +1,110 @@
+<div class="lhw-alert-bg2 huarong-view-windon" style="z-index: 1;">
+	<div class="lhw-alert-box" style="width:1158px;">
+		<div class="lhw-alert-tit relative">以下信息推送给资金方
+			<span ng-bind="huarongCode" />
+			<div class="lhw-x" ng-click="huarongClose()"></div>
+		</div>
+		<div class="row">
+			<div class="col-md-12" style="padding:20px 0 5px 0">
+				<ul class="nav nav-tabs" style="border:0">
+					<li ng-class="{'active':HRTitle=='ZLTS'}">
+						<a href="javascript:void(0);" ng-init="HRTitle='ZLTS'" ng-click="HRTitle='ZLTS';">资料推送</a>
+					</li>
+					<li ng-class="{'active':HRTitle=='YHKXX'}" ng-show="dealStatus=='审批通过'">
+						<a href="javascript:void(0);" ng-click="HRTitle='YHKXX'">应还款信息</a>
+					</li>
+					<li ng-class="{'active':HRTitle=='HKXX'}" ng-show="HTStaus=='待推送回款计划'||HTStaus=='推送完成'">
+						<a href="javascript:void(0);" ng-click="HRTitle='HKXX'">回款信息</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div ng-show="HRTitle=='ZLTS'">
+			<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;资方审批结果</div>
+			<div style="margin-left:7px">资方审批结果：{{dealStatus?dealStatus:''}}
+				<a href="javascript:void(0)" ng-click="huarongRefresh(true)">刷新</a>
+			</div>
+			<div class="row">
+				<div class="col-md-12" style="padding-top:10px;">
+					<ul class="nav nav-tabs">
+						<li ng-class="{'active':huarongTitle=='huarongOrderShow'}" ng-init="huarongTitle='huarongOrderShow'">
+							<a href="javascript:void(0);" ng-click="huarongTitle='huarongOrderShow'">申请信息</a>
+						</li>
+						<li ng-class="{'active':huarongTitle=='huarongKgAppointShow'}">
+							<a href="javascript:void(0);" ng-click="huarongTitle='huarongKgAppointShow'">业务信息</a>
+						</li>
+						<li ng-class="{'active':huarongTitle=='huarongKgIndivShow'}">
+							<a href="javascript:void(0);" ng-click="huarongTitle='huarongKgIndivShow'">借款人信息</a>
+						</li>
+						<li ng-class="{'active':huarongTitle=='huarongKgHouseShow'}">
+							<a href="javascript:void(0);" ng-click="huarongTitle='huarongKgHouseShow'">房产信息</a>
+						</li>
+						<li ng-class="{'active':huarongTitle=='huarongKgApprovalShow'}">
+							<a href="javascript:void(0);" ng-click="huarongTitle='huarongKgApprovalShow'">审批信息</a>
+						</li>
+						<li ng-class="{'active':huarongTitle=='huarongImageShow'}">
+							<a href="javascript:void(0);" ng-click="huarongTitle='huarongImageShow'">影像资料</a>
+						</li>
+						<li ng-class="{'active':huarongTitle=='huarongLoanShow'}">
+							<a href="javascript:void(0);" ng-click="huarongTitle='huarongLoanShow'">放款数据</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div ng-show="huarongTitle=='huarongOrderShow'" style="width:100%;height:490px; overflow-y:scroll;">
+				<form name="huarongAppointForm">
+					<div ng-include="'/plugins/fund-directive/huarong/allocationFundHuarongOrder.html'"></div>
+				</form>
+			</div>
+			<div ng-show="huarongTitle=='huarongKgAppointShow'" style="width:100%;height:490px; overflow-y:scroll;">
+				<form name="huarongKgAppointForm" novalidate>
+					<div ng-include="'/plugins/fund-directive/huarong/allocationFundHuarongAppoint.html'"></div>
+				</form>
+			</div>
+			<div ng-show="huarongTitle=='huarongKgIndivShow'" style="width:100%;height:490px; overflow-y:scroll;">
+				<form name="huarongKgIndivForm">
+					<div ng-include="'/plugins/fund-directive/huarong/allocationFundHuarongIndiv.html'"></div>
+				</form>
+			</div>
+			<div ng-show="huarongTitle=='huarongKgHouseShow'" style="width:100%;height:490px; overflow-y:scroll;">
+				<form name="huarongKgHouseForm">
+					<div ng-include="'/plugins/fund-directive/huarong/allocationFundHuarongHouse.html'"></div>
+				</form>
+			</div>
+			<div ng-show="huarongTitle=='huarongKgApprovalShow'" style="width:100%;height:490px; overflow-y:scroll;">
+				<form name="huarongKgApprovalForm">
+					<div ng-include="'/plugins/fund-directive/huarong/allocationFundHuarongApproval.html'"></div>
+				</form>
+			</div>
+			<div ng-show="huarongTitle=='huarongImageShow'" style="width:100%;height:490px; overflow-y:scroll;">
+				<div ng-include="'/plugins/fund-directive/huarong/allocationFundHuarongBusinfo.html'"></div>
+			</div>
+			<div ng-show="huarongTitle=='huarongLoanShow'" style="width:100%;height:490px; overflow-y:scroll;">
+				<form name="huarongKgLoanForm">
+					<div ng-include="'/plugins/fund-directive/huarong/allocationFundHuarongLoan.html'"></div>
+				</form>
+			</div>
+			<div class="lhw-alert-but">
+				<button type="button" class="btn btn-primary" ng-show="!(dealStatus=='审批通过'||dealStatus=='待审批')" ng-click="huarongSave(5)" style="margin-right:80px;">确认并提交</button>
+			</div>
+		</div>
+		<div ng-show="HRTitle=='YHKXX'">
+			<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;资方勾兑结果</div>
+			<div style="margin-left:7px">资方勾兑结果：{{grantStatus}}
+				<a href="javascript:void(0)" ng-click="huarongRefresh(true)">刷新</a>
+			</div>
+			<div ng-include="'/plugins/fund-directive/huarong/allocationFundHuarongRepaySchedule.html'"></div>
+			<div class="lhw-alert-but">
+				<button type="button" class="btn btn-primary" ng-disabled="HTStaus=='待推送回款计划'||HTStaus=='推送完成'" ng-click="huarongRepayment()" style="margin-right:80px;">推送应还款信息</button>
+			</div>
+		</div>
+		<div ng-show="HRTitle=='HKXX'">
+			<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;回款信息</div>
+			<div ng-include="'/plugins/fund-directive/huarong/allocationFundHuarongRepayment.html'"></div>
+			<div class="lhw-alert-but">
+				<button type="button" class="btn btn-primary lhw-alert-ok" ng-disabled="HTStaus == '推送完成'" ng-click="huarongRepaymentInfo()" style="margin-right:80px;">提交并发送回款计划</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!--推送end-->

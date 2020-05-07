@@ -1,0 +1,50 @@
+<style>
+.w180 label{width:180px;}
+</style>
+<form class="form-inline w180" name="editForm" id="editForm">
+	<div class="row detail-row" style="margin-left:30px;">
+		<div class="col-md-6 col-lg-12"><label>流程编码：</label>
+			<input type="text" class="form-control" name="code" style="width:50%;" ng-model="record.code" required readonly="readonly"/>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="editForm.code.$error.required">必填</error>
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-12"><label>流程名称：</label>
+			<input type="text" class="form-control" name="name" style="width:50%;" ng-model="record.name" required/>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="editForm.name.$error.required">必填</error>
+			</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-12"><label>表单编码：</label>
+			<input type="text" class="form-control" name="processCode" style="width:50%;" ng-model="record.processCode" required/>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="editForm.processCode.$error.required">必填</error>
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-12"><label>审批人：</label>
+			<select class="form-control" name="approvers" style="width:50%;" data="{{userListApproversValue}}" select-multiple ng-model="record.approvers" required>
+				<option ng-repeat="u in userList" value="{{u.dingtalkUid}}">{{u.name}}</option>
+	        </select>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="editForm.approvers.$error.required">必填</error>
+			</span>
+		</div>		
+		<div class="col-md-6 col-lg-12"><label>抄送人：</label>
+			<select class="form-control" style="width:50%;" data="{{userListCcValue}}" select-multiple ng-model="record.ccList">
+				<option ng-repeat="u in userList" value="{{u.dingtalkUid}}">{{u.name}}</option>
+	       </select>
+		</div>
+		
+		<div class="col-md-6 col-lg-12"><label>表单参数：</label>
+			<input type="text" class="form-control" name="formComponent" style="width:50%;" ng-model="record.formComponent" required/>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="editForm.formComponent.$error.required">必填</error>
+			</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-12">
+		<button type="button" ng-click="save()" class="btn btn-info detail-right-save">保存</button>
+		</div>
+	</div>
+</form>

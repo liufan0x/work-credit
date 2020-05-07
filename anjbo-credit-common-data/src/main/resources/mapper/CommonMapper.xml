@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.CommonMapper">
+	
+	<select id="selectBankList" resultType="BankDto" parameterType="java.util.Map">
+	     select * from tbl_common_bank order by sort
+	</select>
+	<select id="findByBankList" resultType="BankDto" parameterType="java.util.Map">
+		select `id`,`name`,sort from tbl_common_bank 
+		where 1=1
+	   <if test="name!=null and name!=''">
+	   	and name like '%${name}%'
+	   </if>
+	   order by sort
+	   limit #{start},#{pageSize}
+	</select>
+	<select id="findByBankListCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from tbl_common_bank 
+		where 1=1
+	   <if test="name!=null and name!=''">
+	   	and name like '%${name}%'
+	   </if>
+	</select>
+	<insert id="addBank" parameterType="java.util.Map">
+	   INSERT INTO `anjbo-server-common`.`tbl_common_bank` ( `name`, `sort`, `createTime`) VALUES (#{name}, #{sort}, now());
+	</insert>	
+	<update id="updBank" parameterType="java.util.Map">
+	   UPDATE `anjbo-server-common`.`tbl_common_bank` SET `name`=#{name}, `sort`=#{sort} WHERE (`id`=#{id});
+	</update>
+	
+	<select id="selectSubBankList" resultType="SubBankDto">
+		select `id`,`name`,`pid` from tbl_common_bank_sub order by sort
+	</select>
+	<select id="findByBankSubList" resultType="SubBankDto" parameterType="java.util.Map">
+		select s.*,b.`name` as bankName  from tbl_common_bank_sub s LEFT JOIN tbl_common_bank b on b.id=s.pid
+		where 1=1
+	   <if test="name!=null and name!=''">
+	   	and s.name like '%${name}%'
+	   </if>
+	   <if test="bankName!=null and bankName!=''">
+	     and b.`name` like '%${bankName}%'
+	   </if>
+	   order by b.`name`,s.sort
+	   limit #{start},#{pageSize}
+	</select>
+	<select id="findByBankSubListCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+		select count(1) from tbl_common_bank_sub s LEFT JOIN tbl_common_bank b on b.id=s.pid
+		where 1=1
+	   <if test="name!=null and name!=''">
+	   	and s.name like '%${name}%'
+	   </if>
+	   <if test="bankName!=null and bankName!=''">
+	     and b.`name` like '%${bankName}%'
+	   </if>
+	</select>
+	<insert id="addBankSub" parameterType="java.util.Map">
+	   INSERT INTO `anjbo-server-common`.`tbl_common_bank_sub` ( `name`,`pid`, `sort`, `createTime`) VALUES (#{name}, #{pid},#{sort}, now());
+	</insert>	
+	<update id="updBankSub" parameterType="java.util.Map">
+	   UPDATE `anjbo-server-common`.`tbl_common_bank_sub` SET `name`=#{name},`pid`=#{pid} ,`sort`=#{sort} WHERE `id`=#{id};
+	</update>
+
+
+	<select id="selectDictList" resultType="DictDto">
+		select `id`,`code`,`pcode`,`name`,`type` from tbl_common_dict order by type,sort
+	</select>	
+	
+	<select id="findByDictList" parameterType="java.util.Map" resultType="DictDto">
+	   select `id`,`code`,`pcode`,`name`,`type`,`sort` from tbl_common_dict 
+	   where 1=1
+	   <if test="name!=null and name!=''">
+	   	and name like '%${name}%'
+	   </if>
+	   <if test="type!=null and type!=''">
+	   	and type like '%${type}%'
+	   </if>
+	   order by type,sort
+	   limit #{start},#{pageSize}
+	</select>
+	<select id="findByDictListCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+	   select count(1) from tbl_common_dict 
+	   where 1=1
+	   <if test="name!=null and name!=''">
+	   	and name like '%${name}%'
+	   </if>
+	   <if test="type!=null and type!=''">
+	   	and type like '%${type}%'
+	   </if>
+	</select>
+	<select id="findbyDict" parameterType="java.lang.Integer" resultType="BankDto">
+	  	select * from tbl_common_dict where id=#{0}
+	</select>
+	<insert id="addDict" parameterType="java.util.Map">
+		INSERT INTO `anjbo-server-common`.`tbl_common_dict` (`code`, `pcode`, `name`, `type`, `sort`) VALUES (#{code}, #{pcode}, #{name}, #{type},#{sort});
+	</insert>
+	<update id="updDict" parameterType="java.util.Map">
+	    UPDATE `anjbo-server-common`.`tbl_common_dict` SET `code`=#{code}, `pcode`=#{pcode}, `name`=#{name}, `type`=#{type}, `sort`=#{sort}
+	    WHERE `id`=#{id};
+	</update>
+	<select id="findByYnBankAll" resultType="Map">
+	   select * from tbl_common_yunnan_bank
+	</select>
+
+	<select id="selectAdministrationDivide" resultType="Map">
+		select * from tbl_common_administration_divide 
+	</select>
+	<select id="selectAdministrationDivideByName" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT * FROM tbl_common_administration_divide WHERE `name`=#{name} LIMIT 1;
+	</select>
+</mapper>

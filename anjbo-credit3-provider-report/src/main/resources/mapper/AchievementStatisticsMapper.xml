@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.AchievementStatisticsMapper">
+	<select id="selectLendingOrders" parameterType="java.util.Map" resultType="Map"> 
+		SELECT
+			cityCode,
+			cityName,
+			${groupBy} AS lendingTimeStr,
+			sum(lendingAmount) AS lendingAmount,
+			count(1) AS orderCount,
+			sum(interest) AS interest,
+			sum(fine) AS fine,
+			sum(serviceCharge) AS serviceCharge,
+			sum(rebateMoney) AS rebateMoney,
+			sum(customsPoundage) AS customsPoundage,
+			sum(otherPoundage) AS otherPoundage,
+			sum(income) AS income
+		FROM
+			tbl_order_lending_statistics
+		WHERE
+		1=1 
+		<if test="startTime != null and startTime != ''">
+			and <![CDATA[ lendingTime >= #{startTime} ]]>
+		</if>
+		<if test="endTime != null and endTime != ''">
+			and <![CDATA[ lendingTime <= #{endTime} ]]>
+		</if>
+		<if test="cityName != null and cityName != ''">
+			and cityName like CONCAT('%',#{cityName},'%')
+		</if>
+		<if test="productCode != null and productCode != ''">
+			and productCode = #{productCode}
+		</if>
+		group by ${groupBy}
+		ORDER BY ${orderBy} 
+		${limit}
+	</select>
+	
+	<!-- 查询所有订单不分组 -->
+	<select id="selectOrdersByTime" parameterType="java.util.Map" resultType="OrderLendingStatistics"> 
+		SELECT
+			id,
+		    orderNo,
+		    customerName,
+			cityCode,
+			cityName,
+			borrowingAmount,
+			interest,
+			borrowingDay,
+			lendingTime,
+			date_format(lendingTime, '%Y-%m-%d') as lendingTimeStr,
+			rate,
+			overdueRate
+		FROM
+			tbl_order_lending_statistics
+		WHERE
+		1=1 
+		<if test="startTime != null and startTime != ''">
+			and <![CDATA[ lendingTime >= #{startTime} ]]>
+		</if>
+		<if test="endTime != null and endTime != ''">
+			and <![CDATA[ lendingTime <= #{endTime} ]]>
+		</if>
+		<if test="cityName != null and cityName != ''">
+			and cityName like CONCAT('%',#{cityName},'%')
+		</if>
+		<if test="productCode != null and productCode != ''">
+			and productCode = #{productCode}
+		</if>
+	</select>
+	
+	<!-- 详情订单列表 -->
+	<select id="selectOrderDetailList" parameterType="OrderLendingStatistics" resultType="OrderLendingStatistics"> 
+		select ols.*,olb.state,olb.currentHandler from (
+			SELECT
+				id,createTime,orderNo,customerName,borrowingAmount,borrowingDay,cityCode,cityName
+				,branchCompany,channelManagerUid,channelManagerName,productCode,productName,lendingTime
+				,lendingAmount,interest,fine,serviceCharge,income,rebateMoney,customsPoundage,otherPoundage,rate,overdueRate
+				,source,cooperativeAgencyId,cooperativeAgencyName,acceptMemberUid,acceptMemberName,customerType,business
+				,planPaymentTime,payMentAmountDate,datediff,interestTime,payTime,rebateTime,oldLoanBankAndSub,newLoanBankAndSub
+			FROM
+				tbl_order_lending_statistics
+			WHERE
+			1=1 
+			<if test="startTime !=null and startTime !='' and searchTimeType!=null and searchTimeType == 1">
+				and  <![CDATA[ lendingTime >= #{startTime} ]]>
+			</if>
+			<if test="endTime !=null and endTime !='' and searchTimeType!=null and searchTimeType == 1">
+				and  <![CDATA[ lendingTime <= #{endTime} ]]>
+			</if>
+			<if test="startTime !=null and startTime !='' and searchTimeType!=null and searchTimeType == 2">
+				and <![CDATA[ planPaymentTime >= #{startTime} ]]>
+			</if>
+			<if test="endTime !=null and endTime !='' and searchTimeType!=null and searchTimeType == 2">
+				and <![CDATA[ planPaymentTime <= #{endTime} ]]>
+			</if>
+			<if test="startTime !=null and startTime !='' and searchTimeType!=null and searchTimeType == 3">
+				and <![CDATA[ payMentAmountDate >= #{startTime} ]]>
+			</if>
+			<if test="endTime !=null and endTime !='' and searchTimeType!=null and searchTimeType == 3">
+				and <![CDATA[ payMentAmountDate <= #{endTime} ]]>
+			</if>
+			<if test="startTime !=null and startTime !='' and searchTimeType!=null and searchTimeType == 4">
+				and <![CDATA[ payTime >= #{startTime} ]]>
+			</if>
+			<if test="endTime !=null and endTime !='' and searchTimeType!=null and searchTimeType == 4">
+				and <![CDATA[ payTime <= #{endTime} ]]>
+			</if>
+			<if test="customerName !=null and customerName != ''">
+				and customerName like CONCAT('%',#{customerName},'%')
+			</if>
+			<if test="cityCode != null and cityCode != ''">
+				and cityCode = #{cityCode} 
+			</if>
+			<if test="cityName != null and cityName != ''">
+				and cityName = #{cityName} 
+			</if>
+			<if test="branchCompany != null and branchCompany != ''">
+				and branchCompany = #{branchCompany}
+			</if>
+			<if test="productCode != null and productCode != ''">
+				and productCode = #{productCode}
+			</if>
+			<if test="cooperativeAgencyId !=null and cooperativeAgencyId !=''">
+				and cooperativeAgencyId = #{cooperativeAgencyId} 
+			</if>
+			<if test="customerType !=null and customerType !=''">
+				and customerType = #{customerType} 
+			</if>
+			<if test="business !=null and business !=''">
+				and business = #{business} 
+			</if>
+			<if test="source !=null and source !=''">
+				and source = #{source} 
+			</if>
+			<if test="channelManagerUid !=null and channelManagerUid !=''">
+				and channelManagerUid = #{channelManagerUid} 
+			</if>
+			<if test="acceptMemberUid !=null and acceptMemberUid !=''">
+				and acceptMemberUid = #{acceptMemberUid} 
+			</if>
+			<if test="searchBorrowingAmountType !=null and searchBorrowingAmountType !='' and searchBorrowingAmountType==1 ">
+				and <![CDATA[ borrowingAmount<200  ]]>
+			</if>
+			<if test="searchBorrowingAmountType !=null and searchBorrowingAmountType !='' and searchBorrowingAmountType==2 ">
+				and <![CDATA[ borrowingAmount>=200  ]]> and <![CDATA[ borrowingAmount<500  ]]>
+			</if>
+			<if test="searchBorrowingAmountType !=null and searchBorrowingAmountType !='' and searchBorrowingAmountType==3 ">
+				and <![CDATA[ borrowingAmount>=500  ]]> and <![CDATA[ borrowingAmount<1000  ]]>
+			</if>
+			<if test="searchBorrowingAmountType !=null and searchBorrowingAmountType !='' and searchBorrowingAmountType==4 ">
+				and <![CDATA[ borrowingAmount>1000  ]]>
+			</if>
+		) as ols left join tbl_order_list_base as olb on olb.orderNo = ols.orderNo 
+			<if test="state !=null and state !=''">
+				where olb.state = #{state}  and olb.state != '已关闭'
+			</if>
+		
+		limit #{start},#{pageSize} 	
+	</select>
+	
+	<select id="selectOrderDetailCount" parameterType="OrderLendingStatistics" resultType="int"> 
+		select count(1) from (
+			SELECT
+				id,createTime,orderNo,customerName,borrowingAmount,borrowingDay,cityCode,cityName
+				,branchCompany,channelManagerUid,channelManagerName,productCode,productName,lendingTime
+				,lendingAmount,interest,fine,serviceCharge,income,rebateMoney,customsPoundage,otherPoundage,rate,overdueRate
+				,source,cooperativeAgencyId,cooperativeAgencyName,acceptMemberUid,acceptMemberName,customerType,business
+				,planPaymentTime,payMentAmountDate,datediff,interestTime,payTime,rebateTime,oldLoanBankAndSub,newLoanBankAndSub
+			FROM
+				tbl_order_lending_statistics
+			WHERE
+			1=1 
+			<if test="startTime !=null and startTime !='' and searchTimeType!=null and searchTimeType == 1">
+				and  <![CDATA[ lendingTime >= #{startTime} ]]>
+			</if>
+			<if test="endTime !=null and endTime !='' and searchTimeType!=null and searchTimeType == 1">
+				and  <![CDATA[ lendingTime <= #{endTime} ]]>
+			</if>
+			<if test="startTime !=null and startTime !='' and searchTimeType!=null and searchTimeType == 2">
+				and <![CDATA[ planPaymentTime >= #{startTime} ]]>
+			</if>
+			<if test="endTime !=null and endTime !='' and searchTimeType!=null and searchTimeType == 2">
+				and <![CDATA[ planPaymentTime <= #{endTime} ]]>
+			</if>
+			<if test="startTime !=null and startTime !='' and searchTimeType!=null and searchTimeType == 3">
+				and <![CDATA[ payMentAmountDate >= #{startTime} ]]>
+			</if>
+			<if test="endTime !=null and endTime !='' and searchTimeType!=null and searchTimeType == 3">
+				and <![CDATA[ payMentAmountDate <= #{endTime} ]]>
+			</if>
+			<if test="startTime !=null and startTime !='' and searchTimeType!=null and searchTimeType == 4">
+				and <![CDATA[ payTime >= #{startTime} ]]>
+			</if>
+			<if test="endTime !=null and endTime !='' and searchTimeType!=null and searchTimeType == 4">
+				and <![CDATA[ payTime <= #{endTime} ]]>
+			</if>
+			<if test="customerName !=null and customerName != ''">
+				and customerName like CONCAT('%',#{customerName},'%')
+			</if>
+			<if test="cityCode != null and cityCode != ''">
+				and cityCode = #{cityCode} 
+			</if>
+			<if test="branchCompany != null and branchCompany != ''">
+				and branchCompany = #{branchCompany}
+			</if>
+			<if test="productCode != null and productCode != ''">
+				and productCode = #{productCode}
+			</if>
+			<if test="cooperativeAgencyId !=null and cooperativeAgencyId !=''">
+				and cooperativeAgencyId = #{cooperativeAgencyId} 
+			</if>
+			<if test="customerType !=null and customerType !=''">
+				and customerType = #{customerType} 
+			</if>
+			<if test="business !=null and business !=''">
+				and business = #{business} 
+			</if>
+			<if test="source !=null and source !=''">
+				and source = #{source} 
+			</if>
+			<if test="channelManagerUid !=null and channelManagerUid !=''">
+				and channelManagerUid = #{channelManagerUid} 
+			</if>
+			<if test="acceptMemberUid !=null and acceptMemberUid !=''">
+				and acceptMemberUid = #{acceptMemberUid} 
+			</if>
+			<if test="borrowingAmountType !=null and borrowingAmountType !=''">
+				and ${borrowingAmountType}
+			</if>
+		) as ols left join tbl_order_list_base as olb on (olb.orderNo = ols.orderNo 
+			<if test="state !=null and state !=''">
+				and olb.state = #{state} and olb.state != '已关闭'
+			</if>
+		)
+	</select>
+	
+	<select id="selectLendingOrdersSum" parameterType="java.util.Map" resultType="Map"> 
+		SELECT
+			sum(lendingAmount) AS lendingAmount,
+			count(1) AS orderCount,
+			sum(interest) AS interest,
+			sum(fine) AS fine,
+			sum(serviceCharge) AS serviceCharge,
+			sum(rebateMoney) AS rebateMoney,
+			sum(customsPoundage) AS customsPoundage,
+			sum(otherPoundage) AS otherPoundage,
+			sum(income) AS income
+		FROM
+			tbl_order_lending_statistics
+		WHERE
+		1=1 
+		<if test="startTime != null and startTime != ''">
+			and <![CDATA[ lendingTime >= #{startTime} ]]>
+		</if>
+		<if test="endTime != null and endTime != ''">
+			and <![CDATA[ lendingTime <= #{endTime} ]]>
+		</if>
+		<if test="cityName != null and cityName != ''">
+			and cityName like CONCAT('%',#{cityName},'%')
+		</if>
+		<if test="productCode != null and productCode != ''">
+			and productCode = #{productCode}
+		</if>
+	</select>
+	
+	<select id="selectlendingCount" parameterType="java.util.Map" resultType="int">
+		SELECT
+			count(1) AS total
+		FROM
+			(
+				SELECT
+					count(1) AS orderCount
+				FROM
+					tbl_order_lending_statistics
+				WHERE
+				1=1 
+				<if test="startTime != null and startTime != ''">
+					and <![CDATA[ lendingTime >= #{startTime} ]]>
+				</if>
+				<if test="endTime != null and endTime != ''">
+					and <![CDATA[ lendingTime <= #{endTime} ]]>
+				</if>
+				<if test="cityName != null and cityName != ''">
+					and cityName like CONCAT('%',#{cityName},'%')
+				</if>
+				<if test="productCode != null and productCode != ''">
+					and productCode = #{productCode}
+				</if>
+				group by ${groupBy}
+			) AS a
+	</select>
+	
+	<!-- 获取城市目标放款量和创收 -->
+	<select id="selectPersonalAim" parameterType="java.util.Map" resultType="Map" >
+		select cityCode,cityName,month,sum(loanAim) as loanAim,sum(incomeAim) as incomeAim,sum(orderAim) as orderAim from tbl_order_report_personal_aim
+		where effective =1
+		<if test="month != null and month != ''">
+			and month=${month}
+		</if>
+		<if test="year != null and year != ''">
+			and year=${year}
+		</if>
+		<if test="cityName != null and cityName != ''">
+			and cityName like CONCAT('%',#{cityName},'%')
+		</if>
+		group by cityName
+	</select>
+	
+	<!-- 查询订单统计单条数据 -->
+	<select id="selectLendingStatisticsByOrderNo" parameterType="OrderLendingStatistics" resultType="OrderLendingStatistics"> 
+		select * from tbl_order_lending_statistics where orderNo = #{orderNo} limit 1
+	</select>
+	
+	<!-- 更新罚息和创收 -->
+	<update id="updateLendingStatisticsByOrderNo" parameterType="OrderLendingStatistics">
+		update tbl_order_lending_statistics 
+	    <set>
+	  		<if test="fine != null and fine != ''">
+	  			fine = #{fine},
+	  		</if>
+	  		<if test="income != null and income != ''">
+	  			income = #{income},
+	  		</if>
+	  		updateTime = now()
+	  	</set>
+	  	WHERE orderNo = #{orderNo}
+	</update>
+	
+</mapper>

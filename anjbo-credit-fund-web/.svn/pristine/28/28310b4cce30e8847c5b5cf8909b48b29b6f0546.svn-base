@@ -1,0 +1,47 @@
+<div class="container-fluid element-return-scope">
+
+    <place-order-detail></place-order-detail>
+    <div id="viewRow">
+    </div>
+    <div class="row">
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;要件退还信息</div>
+        </div>
+    <div class="row " >
+        <div class="col-md-6 col-lg-4 form-inline">
+            <label>要件退回时间：</label> <input type="text" ng-model="obj.returnTime" class="form-control  form_date"/>
+        </div>
+
+        <div class="col-md-6 col-lg-8 form-inline">
+            <label>退回操作人：</label><input type="text" ng-model="obj.returnHandleName" class="form-control"/>
+            <a href="javascript:void(0)" data-fancybox="iframe" data-src="/plugins/uploadify/upload_image.html?returnFun=elementReturnUpdaload" data-type="iframe">点此上传截屏证明(可不传)</a>
+            &nbsp;&nbsp;
+            <span class="elementRturnUpdloadImg gallerys" style="display: none;">
+                <a href="javascript:void(0);" class="element-img-view">查看退还图片</a>
+            </span>
+        </div>
+
+        </div>
+
+    <div class="clear" style="height:20px;"></div>
+
+    <div class="row" >
+
+        <div class="col-md-12">
+        <div class="form-group">
+            <textarea class="form-control" rows="5" ng-model="obj.remark" placeholder="如有特殊说明,请在此处备注(非必填)"/>
+        </div>
+        </div>
+
+        <div class="col-md-12">
+            <button type="button" class="btn btn-primary" ng-click="submitElementReturn();">提交</button>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $(".element-img-view").click(function(){
+            $.openPhotoGallery($(this).next("img"),"deleteElementImg");
+        });
+    })
+</script>
+

@@ -1,0 +1,26 @@
+<div class="row yunnan-update-file">
+    <div class="col-md-12">
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>资料名称</th>
+                <th>说明</th>
+                <th>文档数</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody >
+                <tr ng-repeat="(key,value) in kgYunnanImg">
+                    <td ng-bind="value.name"></td>
+                    <td ng-bind="value.name"></td>
+                    <td ng-bing="value.img.length">{{value.img.length}}</td>
+                    <td>
+                        <span class="caozuo chakan-img gallerys" ng-show="value.img.length>0">
+                            <img  title="查看图片"  ng-repeat="imgMap in value.img" src="{{imgMap.url}}" class="gallery-pic"  alt="查看图片" ng-show="$index==0" height="30" width="30">
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

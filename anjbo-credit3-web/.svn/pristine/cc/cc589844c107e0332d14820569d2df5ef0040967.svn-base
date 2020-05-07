@@ -1,0 +1,45 @@
+<div class="container-fluid">
+  <place-order-detail></place-order-detail>
+  <div id="viewRow"></div>
+  <form name="myForm">
+	<div class="row">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;抵押品入库</div>
+	</div>
+	<div class="row detail-row form-inline" >
+		<div class="col-md-6 col-lg-4">
+			<label>产权证类型：</label>
+			<select class="form-control" choice-dict="housePropertyTypeName" ng-disabled="isdisable"  pcode="{{obj.code}}" ng-model="obj.housePropertyType">
+				<option value="">请选择产权证类型</option>
+			</select>
+        </div>
+        <div class="col-md-6 col-lg-4">
+			<label>产权证号：</label>
+			<input ng-model="obj.housePropertyNumber" ng-disabled="isdisable" size="16" type="text" class="form-control">
+        </div>
+		
+        <div class="col-md-6 col-lg-4">
+			<label>所在区域：</label>
+			<select class="form-control" choice-dict-name="bookingSzAreaOid"  pcode="4403" ng-model="obj.region">
+				<option value="">请选择所在区域</option>
+			</select>
+        </div>
+        <div class="col-md-6 col-lg-4">
+			<label>房产名称：</label>
+			<input ng-model="obj.houseName" size="16" type="text"  ng-disabled="isdisable"  class="form-control">
+        </div>
+        <div class="col-md-6 col-lg-4">
+			<label>入库时间：</label>
+			<input ng-model="obj.collateralTime" size="16" type="text" readonly ng-disabled="isdisable"  class="form-control form_date">
+        </div>
+    </div>
+	<div class="row">
+		<div class="form-group">
+			<textarea ng-model="obj.remark" class="form-control" rows="5" placeholder="如有特殊说明，请在此处备注（非必填）"/>
+		</div>
+		<div class="col-md-12">
+			<button type="button" class="btn btn-primary" ng-click="submit()">提交</button>
+<!-- 			<button type="button" class="btn btn-warning" ng-show="!orderIsBack" ng-click="backToSubmit()">退回</button> -->
+		</div>
+	</div>
+	</form>
+</div>

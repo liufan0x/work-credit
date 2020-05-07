@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.FundDockingMapper">
+   		<select id="fund" parameterType="java.lang.String" resultType="DataAuditDto">
+   		  select * from tbl_risk_audit_funddocking where orderNo=#{0}
+   		</select>
+   		<insert id="add" parameterType="DataAuditDto">
+   		   INSERT INTO `anjbo-server-risk`.`tbl_risk_audit_funddocking` 
+   		   (`createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `auditTime`,remark)
+   		    VALUES ( #{createUid}, now(), #{updateUid}, now(), #{orderNo}, now(),#{remark});
+   		</insert>
+   		
+   		<delete id="delete" parameterType="java.lang.String">
+   		    delete  from tbl_risk_audit_funddocking where orderNo=#{0}
+   		</delete>
+   		
+   		<insert id="addOrdinary" parameterType="java.util.Map" >
+   		    INSERT INTO `anjbo-server-risk`.`tbl_risk_audit_funddocking_ordinary` (
+   		       `createUid`, `createTime`, `updateUid`, `orderNo`, `fundId`, `borrowerName`, `phoneNumber`, `isOldLoanBank`, `oldLoanBankName`, 
+   		       `oldLoanBankSubName`, `oldLoanBankNameId`, `oldLoanBankSubNameId`, `isLoanBank`,
+   		       `loanBankName`, `loanSubBankName`, `loanBankNameId`, `loanSubBankNameId`, `borrowingDays`, `loanAmount`, `isOnePay`, `receivableForTime`, `remark`
+   		    ) VALUES (
+   		       #{createUid}, now(), #{updateUid}, #{orderNo}, #{fundId}, #{borrowerName}, #{phoneNumber}, #{isOldLoanBank}, #{oldLoanBankName},
+   		       #{oldLoanBankSubName}, #{oldLoanBankNameId},#{oldLoanBankSubNameId}, #{isLoanBank},
+   		       #{loanBankName}, #{loanSubBankName}, #{loanBankNameId}, #{loanSubBankNameId}, #{borrowingDays}, #{loanAmount}, #{isOnePay}, #{receivableForTime}, #{remark}
+   		    );
+   		</insert>
+   		<delete id="deleteOrdinary" parameterType="java.lang.String">
+   		   delete from tbl_risk_audit_funddocking_ordinary where orderNo=#{0}
+   		</delete>
+   		<select id="findByOrdinary" parameterType="java.lang.String" resultType="OrderBaseBorrowDto">
+   		   select * from tbl_risk_audit_funddocking_ordinary where orderNo=#{0}  limit 1
+   		</select>
+   		<select id="findByOrdinaryAudit" parameterType="java.lang.String" resultType="FirstAuditDto">
+   		    select *,finalRemark as spareField1,officerRemark as spareField2 from tbl_risk_audit_funddocking_ordinary_audit where orderNo=#{0}  limit 1
+   		</select>
+   		
+   		<insert id="addOrdinaryAudit" parameterType="java.util.Map" >
+   		INSERT INTO `anjbo-server-risk`.`tbl_risk_audit_funddocking_ordinary_audit` (
+   		  `createUid`, `createTime`, `updateUid`, `orderNo`, `fundId`, `remark`, `productName`, `loanAmount`, `debtRatio`, `loanPoportion`,
+   		  `productLoanPoportion`, `propertyOwner`, `propertyName`, `area`, `assessment`, `mortgageSituation`, `addressOld`, `amountOld`, 
+   		  `addressNew`, `amountNew`, `monthNum`, `yearNum`, `business`, `sunMoney`, `loanName`, `loanAccount`, `loanBankId`, `loanBankName`, 
+   		  `loanBankSubId`, `loanBankSubName`, `paymentName`, `paymentAccount`, `paymentBankId`, `paymentBankName`, `paymentBankSubId`, `paymentBankSubName`, `rate`, `overdueRate`, `other`,`finalRemark`,`officerRemark`
+   		) VALUES (
+   		  #{createUid}, now(), #{updateUid},#{orderNo},#{fundId}, #{remark}, #{productName}, #{loanAmount}, #{debtRatio}, #{loanPoportion}, 
+   		  #{productLoanPoportion}, #{propertyOwner}, #{propertyName}, #{area}, #{assessment}, #{mortgageSituation}, #{addressOld}, #{amountOld},
+   		  #{addressNew}, #{amountNew}, #{monthNum}, #{yearNum}, #{business}, #{sunMoney}, #{loanName}, #{loanAccount}, #{loanBankId}, #{loanBankName},
+   		  #{loanBankSubId}, #{loanBankSubName}, #{paymentName}, #{paymentAccount}, #{paymentBankId}, #{paymentBankName}, #{paymentBankSubId}, #{paymentBankSubName}, #{rate}, #{overdueRate}, #{other},#{finalRemark},#{officerRemark}
+   		);
+   		</insert>
+   		<delete id="deleteOrdinaryAudit" parameterType="java.lang.String">
+   		    delete from tbl_risk_audit_funddocking_ordinary_audit where orderNo=#{0}
+   		</delete>
+</mapper>

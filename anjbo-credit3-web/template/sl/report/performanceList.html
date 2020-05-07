@@ -1,0 +1,221 @@
+<div class="container-fluid" >
+  <div class="row">
+    <button ng-click="test()" ng-show=0>
+      测试
+    </button>
+
+    <div class="col-md-12">
+      <ul class="breadcrumb">
+        <li>
+          报表管理
+        </li>
+        <li>
+          统计报表
+        </li>
+        <li>
+          业绩报表
+        </li>
+      </ul>
+    </div>
+  </div>
+  <!--row-->
+  <div style="margin-left:30px; ">
+    <div class="form-group">
+      <button type="button" class="btn" ng-click="reportType='0'" ng-class="{true: 'btn-primary', false: 'btn-default'}[reportType=='0']">业绩概览</button>
+      <button type="button" class="btn" ng-click="reportType='1'" ng-class="{true: 'btn-primary', false: 'btn-default'}[reportType=='1']">个人创收概览</button>
+      <button type="button" class="btn" ng-click="reportType='2'" ng-class="{true: 'btn-primary', false: 'btn-default'}[reportType=='2']">订单概览</button>
+    </div>
+  </div>
+  <!-- 业绩概览 -->
+  <div ng-show="reportType == 0">
+    <div class="row">
+      <div class="col-md-12">
+        <form class="form-inline search" style="margin-bottom:20px;margin-left:30px; ">
+
+          <br></br>
+          <div class="form-group">
+            <label>城市</label>
+            <select class="form-control selectcity0" ng-model="page0.cityName">
+              <option ng-repeat="city in orderCitys" ng-value='city.name'>{{city.name}}</option>
+            </select>
+          </div>
+          <br></br>
+          <div class="form-group">
+            <label id="timeShow">放款时间：</label>
+            <button type="button" class="btn" ng-click="page0.lendingTime='上周';query1('clear')" ng-class="{true: 'btn-primary', false: 'btn-default'}[page0.lendingTime=='上周']">上周</button>
+            <button type="button" class="btn" ng-click="page0.lendingTime='上月';query1('clear')" ng-class="{true: 'btn-primary', false: 'btn-default'}[page0.lendingTime=='上月']">上月</button>
+            <button type="button" class="btn" ng-click="page0.lendingTime='本月';query1('clear')" ng-class="{true: 'btn-primary', false: 'btn-default'}[page0.lendingTime=='本月']">本月</button>
+            <button type="button" class="btn" ng-click="page0.lendingTime='去年';query1('clear')" ng-class="{true: 'btn-primary', false: 'btn-default'}[page0.lendingTime=='去年']">去年</button>
+            <button type="button" class="btn" ng-click="page0.lendingTime='本年';query1('clear')" ng-class="{true: 'btn-primary', false: 'btn-default'}[page0.lendingTime=='本年']">本年</button>
+          </div>
+          <div class="form-group">
+            <label>自定义
+              <span id="zdyShow">放款</span>时间：</label>
+            <input size="16" type="text" readonly class="form-control form_date_two" ng-model="page0.startTime">
+            <span class="clear-date" ng-click="clearDate($event,'start',0)">X</span>
+            &nbsp;&nbsp;至
+            <input size="16" type="text" readonly class="form-control form_date_two" ng-model="page0.endTime">
+            <span class="clear-date" ng-click="clearDate($event,'end',0)">X</span>
+          </div>
+          <button type="submit" class="btn btn-default" ng-click="query1()" style="margin-bottom:10px; margin-right:10px;">查询</button>
+          <br></br>
+          <div class="form-group">
+            <label>产品:</label>
+            <button type="button" class="btn" ng-repeat="item in productList" ng-click="page0.productCode=item.productCode" ng-class="{true: 'btn-primary', false: 'btn-default'}[page0.productCode==item.productCode]">{{item.productName}}</button>
+          </div>
+          <br></br>
+          <div class="form-group">
+            <label>数据:</label>
+            <button type="button" class="btn" ng-click="page0.data='放款量'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page0.data=='放款量']">放款量</button>
+            <button type="button" class="btn" ng-click="page0.data='单量'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page0.data=='单量']">单量</button>
+            <button type="button" class="btn" ng-click="page0.data='创收'" ng-class="{true: 'btn-primary', false: 'btn-default'}[page0.data=='创收']">创收</button>
+          </div>
+          <div class="form-group">
+        </form>
+        </div>
+      </div>
+      <!--row-->
+      <div class="row" style="margin-bottom:70px">
+        <div style="margin-left:30px">
+          <span style="width: 4px;
+    display: inline-block;
+    height: 11px;
+    margin-right: 5px;
+    background-color: #333;"></span>趋势图</div>
+        <div class="col-md-12">
+          <div id="echartsContainer0" style="width:'500px';height:400px"></div>
+        </div>
+      </div>
+      <!--row-->
+      <!--row-->
+      <div class="row" id="achievement" style="margin-bottom:70px">
+        <div class="col-md-12">
+          <table bs-table-control="achievement" id="achievementTable" data-show-export="true" style="min-width:1000px;"></table>
+        </div>
+      </div>
+    </div>
+    <div class="row" ng-show="page0.cityName == '全国'" style="margin-bottom:70px">
+      <div class="col-md-12">
+        <div id="echartsContainer1" style="width:'500px';height:400px"></div>
+      </div>
+    </div>
+    <div class="row" id="cityachievement" style="margin-bottom:70px">
+      <div class="col-md-12 cityTable">
+        <table bs-table-control="cityachievement" id="cityachievementTable" data-show-export="true" style="min-width:1000px;"></table>
+      </div>
+    </div>
+    <div class="row" id="achievementStatistics" style="margin-bottom:70px" ng-if="page0.lendingTime!='上周'&&page0.lendingTime!='本年'">
+      <div style="margin-left:30px">
+        <span style="width: 4px;
+      display: inline-block;
+      height: 11px;
+      margin-right: 5px;
+      background-color: #333;"></span>目标完成率统计</div>
+      <div class="col-md-12 cityTable">
+        <table bs-table-control="achievementStatistics" id="achievementStatisticsTable" data-show-export="true" style="min-width:1000px;"></table>
+      </div>
+    </div>
+  </div>
+  <!--container-fluid-->
+  <!-- 个人创收 -->
+  <div ng-show="reportType == 1">
+    <div class="row">
+      <div class="col-md-12">
+        <form class="form-inline search" style="margin-bottom:20px;margin-left:30px; ">
+
+          <br></br>
+          <div class="form-group">
+            <label>城市</label>
+            <select class="form-control selectcity1" ng-model="page1.cityCode">
+              <option ng-repeat="city in orderCitys" ng-value='city.code'>{{city.name}}</option>
+            </select>
+          </div>
+          <br></br>
+          <div class="form-group">
+            <label id="timeShow">放款时间：</label>
+
+            <button type="button" class="btn" ng-click="page1.timeWhere='lastYear';query2('clear')" ng-class="{true: 'btn-primary', false: 'btn-default'}[page1.timeWhere=='lastYear']">去年</button>
+            <button type="button" class="btn" ng-click="page1.timeWhere='lastMonth';query2('clear')" ng-class="{true: 'btn-primary', false: 'btn-default'}[page1.timeWhere=='lastMonth']">上月</button>
+            <button type="button" class="btn" ng-click="page1.timeWhere='thisMonth';query2('clear')" ng-class="{true: 'btn-primary', false: 'btn-default'}[page1.timeWhere=='thisMonth']">本月</button>
+          </div>
+          <div class="form-group">
+            <label>自定义放款时间：</label>
+            <input size="16" type="text" readonly class="form-control form_date_year clearDateSel" ng-model="page1.selTime">
+            <span class="clear-date" ng-click="clearDateSel()">X</span>
+          </div>
+          <button type="submit" class="btn btn-default" ng-click="query2()" style="margin-bottom:10px; margin-right:10px;">查询</button>
+          <br></br>
+          <div class="form-group">
+            <label>产品:</label>
+            <button type="button" class="btn" ng-repeat="item in productList" ng-click="page1.productCode=item.productCode" ng-class="{true: 'btn-primary', false: 'btn-default'}[page1.productCode==item.productCode]">{{item.productName}}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!--row-->
+    <div class="row">
+      <div style="margin-left:30px">
+        <span style="width: 4px;
+        display: inline-block;
+        height: 11px;
+        margin-right: 5px;
+        background-color: #333;"></span>渠道经理创收统计排名详情</div>
+      <div class="col-md-12">
+        <table bs-table-control="personalView" id="personalViewTable" data-show-export="true" style="min-width:1000px;"></table>
+      </div>
+    </div>
+  </div>
+  <!-- 订单概览 -->
+  <div ng-show="reportType == 2">
+    <div class="row">
+      <div class="col-md-12">
+        <form class="form-inline search" style="margin-bottom:20px;margin-left:30px; ">
+
+          <br></br>
+          <div class="form-group">
+            <label>城市</label>
+            <select class="form-control selectcity2" ng-model="page2.cityCode">
+              <option ng-repeat="city in orderCitys" ng-value='city.code'>{{city.name}}</option>
+            </select>
+          </div>
+          <br></br>
+
+          <div class="form-group">
+            <label>产品:</label>
+            <button type="button" class="btn" ng-repeat="item in productList" ng-click="page2.productCode=item.productCode" ng-class="{true: 'btn-primary', false: 'btn-default'}[page2.productCode==item.productCode]">{{item.productName}}</button>
+          </div>
+          <br></br>
+          <div class="form-group">
+            注：该报表默认统计当前时间的各个订单状态的数据统计.
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!--row-->
+    <div class="row">
+      <div style="margin-left:30px">
+        <span style="width: 4px;
+        display: inline-block;
+        height: 11px;
+        margin-right: 5px;
+        background-color: #333;"></span>订单总览表
+      </div>
+      <div class="col-md-12 cityTable">
+        <table bs-table-control="receivable" id="receivableTable" data-show-export="true" style="min-width:1000px;"></table>
+      </div>
+    </div>
+    <div class="row">
+      <div style="margin-left:30px">
+        <span style="width: 4px;
+        display: inline-block;
+        height: 11px;
+        margin-right: 5px;
+        background-color: #333;"></span>逾期订单总览表
+      </div>
+      <div class="col-md-12 cityTable">
+        <table bs-table-control="overDate" id="overDateTable" data-show-export="true" style="min-width:1000px;"></table>
+      </div>
+    </div>
+  </div>

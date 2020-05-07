@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>国土局驻点</title>
+<link rel="stylesheet" href="./css/mui.min.css">
+<link href="./css/mui.indexedlist.css" rel="stylesheet" />
+<style>
+html,body {
+  height: 100%;
+  overflow: hidden;
+}
+.mui-bar {
+  -webkit-box-shadow: none;
+  box-shadow: none;
+}
+#done.mui-disabled{
+  color: gray;
+}
+</style>
+</head>
+<body>
+
+<header class="mui-bar mui-bar-nav">
+<!-- 	<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a> -->
+	<h1 class="mui-title">选择国土局驻点</h1>
+	<a id='done' class="mui-btn mui-btn-link mui-pull-right mui-btn-blue mui-disabled">完成</a>
+</header>
+
+<div class="mui-content">
+	<div id='list' class="mui-indexed-list">
+
+		 <div class="mui-indexed-list-search mui-input-row mui-search">
+			<input type="search" class="mui-input-clear mui-indexed-list-search-input" placeholder="搜索国土局驻点">
+		 </div>
+
+		 <div class="mui-indexed-list-bar">
+			<a>A</a><a>B</a><a>C</a><a>D</a><a>E</a><a>F</a><a>G</a><a>H</a><a>I</a><a>J</a><a>K</a><a>L</a><a>M</a><a>N</a><a>O</a><a>P</a><a>Q</a><a>R</a><a>S</a><a>T</a><a>U</a><a>V</a><a>W</a><a>X</a><a>Y</a><a>Z</a>
+		</div>
+
+		<div class="mui-indexed-list-alert"></div>
+		<div class="mui-indexed-list-inner">
+			<div class="mui-indexed-list-empty-alert">没有数据</div>
+			<ul class="mui-table-view">
+				<li data-group="A" class="mui-table-view-divider mui-indexed-list-group" id="A">A</li>
+				<li data-group="B" class="mui-table-view-divider mui-indexed-list-group" id="B">B</li>
+				<li data-group="C" class="mui-table-view-divider mui-indexed-list-group" id="C">C</li>
+				<li data-group="D" class="mui-table-view-divider mui-indexed-list-group" id="D">D</li>
+				<li data-group="E" class="mui-table-view-divider mui-indexed-list-group" id="E">E</li>
+				<li data-group="F" class="mui-table-view-divider mui-indexed-list-group" id="F">F</li>
+				<li data-group="G" class="mui-table-view-divider mui-indexed-list-group" id="G">G</li>
+				<li data-group="H" class="mui-table-view-divider mui-indexed-list-group" id="H">H</li>
+				<li data-group="I" class="mui-table-view-divider mui-indexed-list-group" id="I">I</li>
+				<li data-group="J" class="mui-table-view-divider mui-indexed-list-group" id="J">J</li>
+				<li data-group="K" class="mui-table-view-divider mui-indexed-list-group" id="K">K</li>
+				<li data-group="L" class="mui-table-view-divider mui-indexed-list-group" id="L">L</li>
+				<li data-group="M" class="mui-table-view-divider mui-indexed-list-group" id="M">M</li>
+				<li data-group="N" class="mui-table-view-divider mui-indexed-list-group" id="N">N</li>
+				<li data-group="O" class="mui-table-view-divider mui-indexed-list-group" id="O">O</li>
+				<li data-group="P" class="mui-table-view-divider mui-indexed-list-group" id="P">P</li>
+				<li data-group="Q" class="mui-table-view-divider mui-indexed-list-group" id="Q">Q</li>
+				<li data-group="R" class="mui-table-view-divider mui-indexed-list-group" id="R">R</li>
+				<li data-group="S" class="mui-table-view-divider mui-indexed-list-group" id="S">S</li>
+				<li data-group="T" class="mui-table-view-divider mui-indexed-list-group" id="T">T</li>
+				<li data-group="U" class="mui-table-view-divider mui-indexed-list-group" id="U">U</li>
+				<li data-group="V" class="mui-table-view-divider mui-indexed-list-group" id="V">V</li>
+				<li data-group="W" class="mui-table-view-divider mui-indexed-list-group" id="W">W</li>
+				<li data-group="X" class="mui-table-view-divider mui-indexed-list-group" id="X">X</li>
+				<li data-group="Y" class="mui-table-view-divider mui-indexed-list-group" id="Y">Y</li>
+				<li data-group="Z" class="mui-table-view-divider mui-indexed-list-group" id="Z">Z</li> 
+			</ul>
+		</div>
+	</div>
+</div>
+
+<script src="./js/mui.min.js"></script>
+<script src="./js/mui.indexedlist.js"></script>
+<script src="./js/jquery.min.js"></script>
+<script src="./js/jquery.charfirst.pinyin.js"></script>
+<script src="./js/process.js"></script>
+<script type="text/javascript" charset="utf-8">
+
+var type = GetQueryString("type");
+var cityCode = GetQueryString("cityCode");
+var productCode = GetQueryString("productCode");
+mui.init();
+mui.ready(function() {
+
+/*初始化数据*/
+var arrJson=[];
+
+//选择人员
+//type  选人是根据权限，还是根据角色 默认：权限
+//cityCode 城市  默认查询所有
+//agencgId 机构  默认所有快鸽
+//choicePersonnel 查询权限 或者 角色 的名称  如 查询 “渠道经理” 则 传  渠道经理对应的字段需要在后台判断
+$.ajax({ 
+	 url:'/credit/user/base/v/choicePersonnel',
+	 data:JSON.stringify({"choicePersonnel":type,"productCode":productCode,"cityCode":cityCode}),
+     type: 'post' ,
+	 async: false,
+     dataType: 'json',  
+     contentType:'application/json;charset=utf-8',
+	 success: function(data){
+		 arrJson= data.data;
+    }
+});
+/*初始化数据end*/
+
+
+var city=[] ;
+city=arrJson;
+function asc_sort(a, b) {
+	return makePy(b.name.charAt(0))[0].toUpperCase() < makePy(a.name.charAt(0))[0].toUpperCase() ? 1 : -1;
+}
+city.sort(asc_sort);//按首字母排序
+
+	 
+for (var i =0;i<city.length;i++) {//for 循环 插入到对应的首字母后面
+	var letter=makePy(city[i]["name"].charAt(0))[0].toUpperCase();
+	var val=city[i]['uid'];
+	var text=city[i]['name'];
+	var sss="<li class='mui-table-view-cell mui-indexed-list-item mui-radio mui-left'><input type='radio' name='a' value='"+val+"'/>"+text+"</li>"
+	switch(letter){
+		case "A":
+			$('#A').after(sss);
+			break;
+		case "B":
+			$('#B').after(sss);
+			break;
+		case "C":
+			$('#C').after(sss);
+			break;
+		case "D":
+			$('#D').after(sss);
+			break;
+		case "E":
+			$('#E').after(sss);
+			break;
+		case "F":
+			$('#F').after(sss);
+			break;
+		case "G":
+			$('#G').after(sss);
+			break;
+		case "H":
+			$('#H').after(sss);
+			break;
+		case "I":
+			$('#I').after(sss);
+			break;
+		case "J":
+			$('#J').after(sss);
+			break;
+		case "K":
+			$('#K').after(sss);
+			break;
+		case "L":
+			$('#L').after(sss);
+			break;
+		case "M":
+			$('#M').after(sss);
+			break;
+		case "N":
+			$('#N').after(sss);
+			break;
+		case "O":
+			$('#O').after(sss);
+			break;
+		case "P":
+			$('#P').after(sss);
+			break;
+		case "Q":
+			$('#Q').after(sss);
+			break;
+		case "R":
+			$('#R').after(sss);
+			break;
+		case "S":
+			$('#S').after(sss);
+			break;
+		case "T":
+			$('#T').after(sss);
+			break;
+		case "U":
+			$('#U').after(sss);
+			break;
+		case "V":
+			$('#V').after(sss);
+			break;
+		case "W":
+			$('#W').after(sss);
+			break;
+		case "X":
+			$('#X').after(sss);
+			break;
+		case "Y":
+			$('#Y').after(sss);
+			break;
+		case "Z":
+			$('#Z').after(sss);
+			break;
+		default:
+			$('#default').after(sss);
+			break;
+	}
+};// for 循环 插入到对应的首字母后面 end
+$(".mui-table-view-divider").each(function(index){
+    if($(this).next().hasClass("mui-table-view-cell")){ }
+	else{
+	   $(this).hide();
+	}
+	 
+   
+})
+var header = document.querySelector('header.mui-bar');
+var list = document.getElementById('list');
+var done = document.getElementById('done');
+				 
+list.style.height = (document.body.offsetHeight - header.offsetHeight) + 'px';
+//create
+window.indexedList = new mui.IndexedList(list);
+
+
+//完成
+mui('.mui-indexed-list-inner').on('change', 'input', function() {
+	var count = list.querySelectorAll('input[type="radio"]:checked').length;
+	var value = count ? "完成" : "完成";
+	done.innerHTML = value;
+	if (count) {
+		if (done.classList.contains("mui-disabled")) {
+			done.classList.remove("mui-disabled");
+		}
+	} else {
+		if (!done.classList.contains("mui-disabled")) {
+			done.classList.add("mui-disabled");
+		}
+	}
+});
+//点击完成
+done.addEventListener('tap', function() {
+	var notarizationAddressCode=$("input[type='radio']:checked").val();
+	var notarizationAddress=$("input[type='radio']:checked").parent().text();
+	
+	if (notarizationAddressCode) {
+		//返回数据
+		parent.returnDataUrl(notarizationAddressCode,notarizationAddress);
+	    
+  
+		
+	} else {
+		mui.alert('你没选择');
+	}
+}, false);
+
+
+          
+        
+
+});
+ 
+</script>
+</body>
+</html>

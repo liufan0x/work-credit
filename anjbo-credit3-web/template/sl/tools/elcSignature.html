@@ -1,0 +1,176 @@
+<div>
+    <button ng-click="test()" style="position: fixed;top:300px;left:50px;z-index: 11111100;" ng-show=0>测试</button>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12" style="position: relative">
+                <ul class="breadcrumb">
+                    <li>
+                        工具
+                    </li>
+                    <li>
+                        电子签章
+                    </li>
+                </ul>
+                <!-- <button class="btn btn-info" ng-click="showTd = false" style="position: absolute;top: 15px;right:0">返回上一步</button> -->
+            </div>
+        </div>
+    </div>
+    
+     <div class="row col-md-12 detail-row form-inline w138" style="padding:0 40px">
+   <div class="col-md-12 detail-right-tit"> &nbsp;&nbsp;电子签章</div>
+   <div class="col-md-12" style="padding:0 40px;margin-top:10px;">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>资料名称</th>
+                    <th>文档数</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <label>借款合同</label>
+                    </td>
+                    <td>
+                        <label id="count">0</label>
+                    </td>
+                    <td>
+                        <span class="caozuo">
+                            <a data-fancybox="iframe" ng-click="setType(sType.id)" data-src="/plugins/uploadify/upload_image.html?returnFun=returnDataHuarong"
+                                data-type="iframe" href="javascript:;">上传</a>
+                        </span> &nbsp;&nbsp;&nbsp;
+                        <span class="caozuo red-word">
+                            <a href="javascript:void(0)" onclick="huarongDelImg()" id="dzDel" style="display: none;">删除</a>
+                        </span>&nbsp;&nbsp;&nbsp;
+                        <span class="caozuo red-word">
+                            <a id="hrSel" href="javascript:void(0);" style="display: none;">查看</a>
+                        </span>&nbsp;&nbsp;&nbsp;
+                        <!-- <span class="caozuo red-word">
+                            <a ng-click="toAddSignature()">生成电子签章</a>
+                        </span> -->&nbsp;&nbsp;&nbsp;
+                        <input type="hidden" id="huarongImg">
+                    </td>
+                </tr>   
+            </tbody>
+        </table>
+    </div>
+   </div>
+    
+     <div class="row col-md-12 detail-row form-inline w138" style="padding:0 40px">
+        <div class="col-md-12 detail-right-tit"> &nbsp;&nbsp;关联订单信息</div>
+            <div class="audit-line" style="border-bottom:1px solid #ddd"> </div>
+            <div >
+            
+                <div class="col-md-6 col-lg-6" >
+                            <form class="form-inline ng-pristine ng-invalid ng-invalid-required ng-valid-min" name="orderForm">
+                                <div class="form-group">
+                                    <label>客户姓名:</label>
+                                    <input type="text" ng-model="newContractName" class="form-control" style="width: 300px;">
+                                    <br>
+                                    <label>关联订单:</label>
+                                    <select class="form-control cleanOrders" ng-model='RelationOrderNo' style="width: 300px;">
+                                        <option value="">无</option>
+                                        <option ng-repeat="order in RelationOrder" ng-value="order.orderNo">{{order.name}}</option>
+                                    </select>
+                                </div>
+                            </form>
+                       </div>
+                
+                </div>
+            </div>
+          
+    
+    <div class="row col-md-12 detail-row form-inline w138" style="padding:0 40px">
+        <div class="col-md-12 detail-right-tit"> &nbsp;&nbsp;电子签章信息
+            <span class="audit-add-but btn btn-info" style="height:30px;float:right" ng-click="huarongAdd($event)">+借款人信息</span>
+        </div>
+        <div ng-repeat="hr in huarList">
+            <div class="col-md-12" style="color:#4a77ac"> &nbsp;&nbsp;借款人信息({{$index+1}}) &nbsp;&nbsp;&nbsp;
+                <span class="detail-trash" style="color:red" ng-if="!$first" ng-click=huarongDel($index)>
+                    删除</span>
+            </div>
+            <div class="audit-line" style="border-bottom:1px solid #ddd"> </div>
+            <div >
+                <div class="col-md-6  col-lg-6">
+                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label ng-if="hr.customerType==1">借款人姓名：</label>
+                    <label ng-if="hr.customerType==2">公司名称：</label>
+                    <input  type="text" ng-model="hr.customerName" name="customerName" class="form-control" required>
+                </div>
+                <div class="col-md-6 col-lg-6" >
+                    <label>借款人类型：</label>
+                    <select  class="form-control" name="customerType" style="width:178px;" ng-model="hr.customerType" required>
+                        <option value="" >请选择</option>
+                        <option value="1" >个人</option>
+                        <option value="2">小微企业</option>
+                    </select>
+                </div>
+                <div class="col-md-6 col-lg-6">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label ng-if="hr.customerType==1">身份证号码：</label>
+                    <label ng-if="hr.customerType==2">证件号码：</label>
+                    <input  type="text" ng-model="hr.customerCardNumber" name="customerCardNumber" class="form-control" required>
+                     <span class="inputError" ng-show="isAudit">
+                        <error class="text-danger" ng-show="auditForm.debtRatio.$error.required">必填</error>
+                    </span>
+                    <span class="inputError" ng-show="auditForm.debtRatio.$error.pattern">
+                        <error class="text-danger">错误</error>
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-6" ng-if="hr.customerType==2">
+                <label>证件类型：</label>
+                <select class="form-control" name="customerCardType" style="width:178px;" ng-model="hr.customerCardType" required>
+                    <option value="" >请选择</option>
+                    <option value="1">企业工商注册码</option>
+                    <option value="2">组织机构代码</option>
+                    <option value="3">社会信用代码</option>
+                </select>
+            </div>
+        </div>
+    </div>
+   
+   
+    <button ng-click ="toAddSignature()" id="hisShow"  class="t btn btn-info" style="background-color: #1E90FF; border-color: #1E90FF; outline-style: none; margin-left: 80px; margin-top: 50px; display: none;">生成电子签章</button>
+   <button ng-click ="reset()"  class="t btn btn-info" style="background-color: #f0ad4e; border-color: #f0ad4e; outline-style: none; margin-left: 80px; margin-top: 50px;">重置</button>
+  
+</div>
+<script type="text/javascript">
+	function returnDataHuarong(url, smallUrl, name) {
+		var count = $("#count").text();
+		if (count == '0' || count == 0) {
+			$("#dzDel").show();
+			$("#hrSel").show();
+			$("#hisShow").show();
+			if (url != '') {
+				url = url.substring(0, url.length - 1);
+				var  urls =  new  Array();
+				var urls = url.split(",");
+				$("#hrSel").attr("href", urls[0]);
+				$("#hrSel").attr("target", "_blank");
+				$("#count").text("1");
+				$("#huarongImg").val(urls[0]);
+			}
+		} else {
+			alert("您已上传过借款合同了!");
+		}
+	}
+
+	function huarongDelImg() {
+		var count = $("#count").text();
+		if (count == '0' || count == 0) {
+			alert("您还未上传过借款合同!");
+		} else {
+			if (confirm("确认删除借款合同吗")) {
+				$("#dzDel").hide();
+				$("#hrSel").hide();
+				$("#count").text("0");
+				$("#huarongImg").val("");
+				$("#hrSel").removeAttr("href");
+				$("#hrSel").removeAttr("target");
+				alert("删除成功");
+			}
+			$("#hisShow").hide();
+		}
+	}
+	
+</script>

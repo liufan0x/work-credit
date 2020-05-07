@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.order.BaseHousePropertyMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<if test="null!=province and ''!=province"> AND `province`=#{province}</if>
+		<if test="null!=city and ''!=city"> AND `city`=#{city}</if>
+		<if test="null!=houseRegion and ''!=houseRegion"> AND `houseRegion`=#{houseRegion}</if>
+		<if test="null!=housePropertyType and ''!=housePropertyType"> AND `housePropertyType`=#{housePropertyType}</if>
+		<if test="null!=houseName and ''!=houseName"> AND `houseName`=#{houseName}</if>
+		<if test="null!=housePropertyNumber and ''!=housePropertyNumber"> AND `housePropertyNumber`=#{housePropertyNumber}</if>
+		<if test="null!=houseRecordPrice and houseRecordPrice>0"> AND `houseRecordPrice`=#{houseRecordPrice}</if>
+		<if test="null!=houseArchitectureSize and houseArchitectureSize>0"> AND `houseArchitectureSize`=#{houseArchitectureSize}</if>
+		<if test="null!=sort and sort>0"> AND `sort`=#{sort}</if>
+		<if test="null!=isFinish and isFinish>0"> AND `isFinish`=#{isFinish}</if>
+		<if test="null!=smallCategory and smallCategory>0"> AND `smallCategory`=#{smallCategory}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="BaseHousePropertyDto" resultType="BaseHousePropertyDto">    
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `province`, `city`, `houseRegion`, `housePropertyType`, `houseName`, `housePropertyNumber`, `houseRecordPrice`, `houseArchitectureSize`, `sort`, `isFinish`,smallCategory 
+	FROM tbl_order_base_house_property 
+	<include refid="sqlwhereSearch"/>
+  </select>
+  
+  <select id="findAll" parameterType="BaseHousePropertyDto" resultType="java.util.Map">    
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `province`, `city`, `houseRegion`, `housePropertyType`, `houseName`, `housePropertyNumber`, `houseRecordPrice`, `houseArchitectureSize`, `sort`, `isFinish` ,smallCategory
+	FROM tbl_order_base_house_property 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="BaseHousePropertyDto" resultType="BaseHousePropertyDto">
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `province`, `city`, `houseRegion`, `housePropertyType`, `houseName`, `housePropertyNumber`, `houseRecordPrice`, `houseArchitectureSize`, `sort`, `isFinish`,smallCategory
+	FROM tbl_order_base_house_property 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="BaseHousePropertyDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_order_base_house_property 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="BaseHousePropertyDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_order_base_house_property(
+		`createUid`,
+		`createTime`,
+		`updateUid`,
+		`updateTime`,
+		`orderNo`,
+		`province`,
+		`city`,
+		`houseRegion`,
+		`housePropertyType`,
+		`houseName`,
+		`housePropertyNumber`,
+		`houseRecordPrice`,
+		`houseArchitectureSize`,
+		`sort`,
+		`isFinish`
+	) VALUES(
+		#{createUid},
+		now(),
+		#{createUid},
+		now(),
+		#{orderNo},
+		#{province},
+		#{city},
+		#{houseRegion},
+		#{housePropertyType},
+		#{houseName},
+		#{housePropertyNumber},
+		#{houseRecordPrice},
+		#{houseArchitectureSize},
+		#{sort},
+		#{isFinish}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="BaseHousePropertyDto" >
+    DELETE FROM tbl_order_base_house_property 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="BaseHousePropertyDto" >
+    UPDATE tbl_order_base_house_property
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=province">`province`=#{province},</if>
+		<if test="null!=city">`city`=#{city},</if>
+		<if test="null!=houseRegion">`houseRegion`=#{houseRegion},</if>
+		<if test="null!=housePropertyType">`housePropertyType`=#{housePropertyType},</if>
+		<if test="null!=houseName">`houseName`=#{houseName},</if>
+		<if test="null!=housePropertyNumber">`housePropertyNumber`=#{housePropertyNumber},</if>
+		<if test="null!=houseRecordPrice">`houseRecordPrice`=#{houseRecordPrice},</if>
+		<if test="null!=houseArchitectureSize">`houseArchitectureSize`=#{houseArchitectureSize},</if>
+		<if test="null!=sort">`sort`=#{sort},</if>
+		<if test="null!=isFinish">`isFinish`=#{isFinish},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

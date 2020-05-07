@@ -1,0 +1,194 @@
+<div>
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;快鸽提单信息--业务信息
+	 <button type="button" ng-click="saveA(2)" class="btn btn-info detail-right-save"  >保存</button>
+	</div>
+	<div class="row form-inline detail-row" style="padding:0 10px;">
+		<div class="col-md-6 col-lg-4">
+			<label>业务类型: </label> <span ng-bind="huaRongDto.kgAppoint.businessType"></span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>申请人姓名:</label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" name="kgAppointCustName" ng-model="huaRongDto.kgAppoint.custName" class="form-control" required/>
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgAppointForm.kgAppointCustName.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>借款金额:</label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" string-to-number name="kgAppointLoanAmount" ng-model="huaRongDto.kgAppoint.loanAmount" class="form-control" required/>&nbsp;万元
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgAppointForm.kgAppointLoanAmount.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>期限:</label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" string-to-number name="kgAppointTerm" ng-model="huaRongDto.kgAppoint.term" class="form-control" required/>天
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgAppointForm.kgAppointTerm.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>费率:</label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" string-to-number name="kgAppointRate" ng-model="huaRongDto.kgAppoint.rate" class="form-control" required/>%/天
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgAppointForm.kgAppointRate.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>逾期费率:</label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" string-to-number name="kgAppointOverdueTate" ng-model="huaRongDto.kgAppoint.overdueTate" class="form-control" required/>%/天
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgAppointForm.kgAppointOverdueTate.$error.required">必填</error>
+		    </span>
+		</div>
+	</div>
+</div>
+<div>
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;原贷款信息</div>
+	<div class="row form-inline detail-row w112" style="padding:0 10px;">
+		<div class="col-md-6 col-lg-4">
+			<label>原房贷金额:</label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" string-to-number name="kgAppointYoriLenAmount" ng-model="huaRongDto.kgAppoint.yOriLenAmount" class="form-control" required/>&nbsp;万元
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgAppointForm.kgAppointYoriLenAmount.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>贷款余额:</label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" string-to-number name="kgAppointYloanBalance" ng-model="huaRongDto.kgAppoint.yLoanBalance" class="form-control" required/>&nbsp;万元
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgAppointForm.kgAppointYloanBalance.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>原贷款是否银行:</label>
+			<select ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" class="form-control" name="kgAppointYisBank" ng-model="huaRongDto.kgAppoint.yIsBank" required style="width:150px;">
+				<option value="">请选择</option>
+				<option value="是">是</option>
+				<option value="否">否</option>
+			</select>
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgAppointForm.kgAppointYisBank.$error.required">必填</error>
+		    </span>
+		</div>
+		<div ng-show="!(dealStatus=='审批通过'||dealStatus=='待审批')" class="col-md-12 col-lg-12" ng-if="huaRongDto.kgAppoint.yIsBank=='是'">
+			<label style="width:120px">原贷款银行-支行: </label>
+			<bank-sub-bank bank-id="huaRongDto.kgAppoint.oldLoanBankNameId" bank-name="huaRongDto.kgAppoint.oldLoanBankName" sub-bank-id="huaRongDto.kgAppoint.oldLoanBankSubNameId" sub-bank-name="huaRongDto.kgAppoint.oldLoanBankSubName"></bank-sub-bank>
+			<span class="text-danger" ng-show="kgAppointIsBankAudit">必选</span>
+		</div>
+		<div ng-show="!(dealStatus=='审批通过'||dealStatus=='待审批')" class="col-md-12 col-lg-12" ng-if="huaRongDto.kgAppoint.yIsBank=='否'">
+			<label style="width:120px">原贷款地点: </label>
+			<input type="text" name="huaRongDto.kgAppoint.yOriBank" ng-model="huaRongDto.kgAppoint.yOriBank" class="form-control" required/>
+			<span class="text-danger" ng-show="kgAppointIsBankAudit">必选</span>
+		</div>
+		<div class="col-md-12 col-lg-12" ng-show="dealStatus=='审批通过'||dealStatus=='待审批'">
+			<label style="width:120px">原贷款银行-支行: </label>
+			<span>{{huaRongDto.kgAppoint.yOriBank}}</span>
+		</div>
+		<!-- <div class="col-md-6 col-lg-4" ng-if="huaRongDto.kgAppoint.yIsBank=='否'">
+            <label>贷款地址: </label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" name="kgAppointOldAddress" ng-model="huaRongDto.kgAppoint.oldAddress"  class="form-control" required/>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgAppointForm.kgAppointOldAddress.$error.required">必填</error>
+		    </span>
+        </div> -->
+	</div>
+</div>
+<div>
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;新贷款信息</div>
+	<div class="row form-inline detail-row" style="padding:0 10px;">
+		<div class="col-md-6 col-lg-4">
+			<label>贷款金额:</label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" string-to-number name="kgAppointXLoanAmount" ng-model="huaRongDto.kgAppoint.xLoanAmount" class="form-control" required/>&nbsp;万元
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgAppointForm.kgAppointXLoanAmount.$error.required">必填</error>
+		    </span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>是否银行:</label>
+			<select ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" class="form-control" name="kgAppointXisBank" ng-model="huaRongDto.kgAppoint.xIsBank" required style="width:150px;">
+				<option value="">请选择</option>
+				<option value="是">是</option>
+				<option value="否">否</option>
+			</select>
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgAppointForm.kgAppointXisBank.$error.required">必填</error>
+		    </span>
+		</div>
+		<div ng-show="!(dealStatus=='审批通过'||dealStatus=='待审批')" class="col-md-12 col-lg-12" ng-if="huaRongDto.kgAppoint.xIsBank=='是'">
+			<label>贷款银行-支行: </label>
+			<bank-sub-bank bank-id="huaRongDto.kgAppoint.loanBankNameId" bank-name="huaRongDto.kgAppoint.loanBankName" sub-bank-id="huaRongDto.kgAppoint.loanSubBankNameId"  sub-bank-name="huaRongDto.kgAppoint.loanSubBankName" ></bank-sub-bank>
+			<span class="text-danger" ng-show="kgAppointIsBankAudit">必选</span>
+		</div>
+		<div ng-show="!(dealStatus=='审批通过'||dealStatus=='待审批')" class="col-md-12 col-lg-12" ng-if="huaRongDto.kgAppoint.xIsBank=='否'">
+			<label>贷款地点: </label>
+			<input type="text" name="huaRongDto.kgAppoint.xLoanBank" ng-model="huaRongDto.kgAppoint.xLoanBank" class="form-control" required/>
+			<span class="text-danger" ng-show="kgAppointIsBankAudit">必选</span>
+		</div>
+		<div class="col-md-12 col-lg-12" ng-show="dealStatus=='审批通过'||dealStatus=='待审批'">
+			<label style="width:120px">原贷款银行-支行: </label>
+			<span>{{huaRongDto.kgAppoint.xLoanBank}}</span>
+		</div>
+		<!-- <div class="col-md-6 col-lg-4" ng-if="huaRongDto.kgAppoint.xIsBank=='否'">
+                <label>贷款地址: </label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" name="kgAppointAddress" ng-model="huaRongDto.kgAppoint.address"  class="form-control" required/>
+                <span class="inputError" ng-show="isAudit">
+                        <error class="text-danger" ng-show="huarongKgAppointForm.kgAppointAddress.$error.required">必填</error>
+                </span>
+            </div> -->
+	</div>
+</div>
+<div>
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;放款卡信息</div>
+	<div class="row form-inline detail-row" style="padding:0 10px;">
+		<div class="col-md-6 col-lg-4">
+			<label>账户类型:</label>
+			<select ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" class="form-control" name="kgAppointFaccountType" ng-model="huaRongDto.kgAppoint.fAccountType" style="width:179px;">
+				<option value="">请选择</option>
+				<!--                 <option value="个人">个人</option> -->
+				<option value="产权人">产权人</option>
+				<option value="债务人">债务人</option>
+				<option value="公司">公司</option>
+			</select>
+		</div>
+		<div class="col-md-6 col-lg-8" ng-show="!(dealStatus=='审批通过'||dealStatus=='待审批')">
+			<label>开户行: </label>
+			<bank-sub-bank bank-id="huaRongDto.kgAppoint.bankNameId" bank-name="huaRongDto.kgAppoint.bankName" sub-bank-id="huaRongDto.kgAppoint.bankSubNameId" sub-bank-name="huaRongDto.kgAppoint.bankSubName"></bank-sub-bank>
+		</div>
+		<div class="col-md-12 col-lg-12" ng-show="dealStatus=='审批通过'||dealStatus=='待审批'">
+			<label style="width:120px">开户行: </label>
+			<span>{{huaRongDto.kgAppoint.fOpenBank }}</span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>户名: </label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" name="kgAppointFopenName" ng-model="huaRongDto.kgAppoint.fOpenName" class="form-control" />
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>账号: </label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" name="kgAppointFaccountNum" ng-model="huaRongDto.kgAppoint.fAccountNum" class="form-control" />
+		</div>
+		<div class="col-md-6 col-lg-4" ng-if="huaRongDto.kgAppoint.fAccountType=='产权人' || huaRongDto.kgAppoint.fAccountType=='债务人'">
+			<label>证件号: </label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" name="kgAppointFcaacNo" ng-model="huaRongDto.kgAppoint.fCaacNo" class="form-control" />
+		</div>
+	</div>
+</div>
+
+<div>
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;回款卡信息</div>
+	<div class="row form-inline detail-row" style="padding:0 10px;">
+		<div class="col-md-6 col-lg-4">
+			<label>账户类型: </label>
+			<select ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" class="form-control" name="kgAppointHaccountType" ng-model="huaRongDto.kgAppoint.hAccountType" style="width:179px;">
+				<!--                 <option value="个人">个人</option> -->
+				<option value="产权人">产权人</option>
+				<option value="债务人">债务人</option>
+				<option value="公司">公司</option>
+			</select>
+		</div>
+		<div class="col-md-6 col-lg-8" ng-show="!(dealStatus=='审批通过'||dealStatus=='待审批')">
+			<label>开户行: </label>
+			<bank-sub-bank bank-id="huaRongDto.kgAppoint.paymentBankNameId" bank-name="huaRongDto.kgAppoint.paymentBankName" sub-bank-id="huaRongDto.kgAppoint.paymentBankSubNameId" sub-bank-name="huaRongDto.kgAppoint.paymentBankSubName"></bank-sub-bank>
+		</div>
+		<div class="col-md-12 col-lg-12" ng-show="dealStatus=='审批通过'||dealStatus=='待审批'">
+			<label style="width:120px">开户行: </label>
+			<span>{{huaRongDto.kgAppoint.hOpenBank }}</span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>户名: </label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" name="kgAppointHopenName" ng-model="huaRongDto.kgAppoint.hOpenName" class="form-control" />
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>账号: </label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" name="kgAppointHaccountNume" ng-model="huaRongDto.kgAppoint.hAccountNum" class="form-control" />
+		</div>
+		<div class="col-md-6 col-lg-4" ng-if="huaRongDto.kgAppoint.hAccountType=='产权人' || huaRongDto.kgAppoint.hAccountType=='债务人'">
+			<label>证件号: </label> <input ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" name="kgAppointHcaacNo" ng-model="huaRongDto.kgAppoint.hCaacNo" class="form-control" />
+		</div>
+	</div>
+</div>

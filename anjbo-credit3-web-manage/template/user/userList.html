@@ -1,0 +1,72 @@
+<div class="detail-left">
+	<div class="detail-left-nav">
+		<!--左边导航 start-->
+		<dept-list ng-repeat="class0 in deptList"  >
+		<div class="nav-box-top" ng-if="class0.pid == '0'" ng-click="query(class0)"><span class="nav-box-icon icon5"></span><span style="width: 192px;height: 50px;display: block;overflow: hidden;">{{class0.name}}({{class0.userCount}})</span></div></a>
+		<ul class="nav-box" ng-if="class0.pid == '0'">
+			<!--class1-->
+			<li ng-repeat="class1 in deptList" ng-if="class0.id == class1.pid">
+				<a ng-click="query(class1)"><span class="left-arrow" ng-click="refresh($event)"></span><span>{{class1.name}}({{class1.userCount}})</span></a>
+				<ul class="nav-box2">
+					<!--class2-->
+					<li ng-repeat="class2 in deptList" ng-if="class1.id == class2.pid">
+						<a ng-click="query(class2)"><span class="left-arrow"  ng-click="refresh($event)"></span><span>{{class2.name}}({{class2.userCount}})</span></a>
+						<ul class="nav-box2">
+							<!--class3-->
+							<li ng-repeat="class3 in deptList" ng-if="class2.id == class3.pid">
+								<a ng-click="query(class3)"><span class="left-arrow" ng-click="refresh($event)"></span>{{class3.name}}({{class3.userCount}})</a>
+								<ul class="nav-box2">
+									<!--class3-->
+									<li ng-repeat="class4 in deptList" ng-if="class3.id == class4.pid">
+										<a ng-click="query(class4)"><span class="left-arrow-end"></span>{{class4.name}}({{class4.userCount}})</a>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</li>
+		</ul>
+		</dept-list>
+		<!--左边导航 end-->
+	</div>
+</div>
+
+<div class="detail-right">
+	<div class="container-fluid">
+		<div class="clear" style="height:20px;"></div>
+		<div class="row">
+			<div class="col-md-12">
+				<form class="form-inline search" style=" margin-left:30px; ">
+					<div class="form-group">
+						<label>部门</label>
+						<select class="form-control" select2 style="width: 200px;" ng-model="page.deptId" >
+							<option value="">全部</option>
+							<option ng-repeat="d in deptList" value="{{d.id}}">{{d.name}}</option>
+						</select>
+					</div>
+
+					<div class="form-group">
+						<label>角色</label>
+						<select class="form-control" select2 style="width: 200px;" ng-model="page.roleId">
+							<option value="">全部</option>
+							<option ng-repeat="r in roleList" value="{{r.id}}">{{r.name}}</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="exampleInputEmail1">姓名</label>
+						<input type="text" class="form-control" ng-model="page.name">
+					</div>
+					<button type="submit" class="btn btn-primary" ng-click="query()" style="margin-bottom:10px; margin-right:10px;">查询</button>
+					<button type="button" ng-if="meunAuth.indexOf('auth7auth')>=0" class="btn btn-primary fr" ui-sref="userEdit({'uid':'-1'})" style="margin-bottom:10px; margin-right:10px;">添加用户</button>
+				</form>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<table bs-table-control="userList" id="table"></table>
+			</div>
+		</div>
+	</div>
+</div>

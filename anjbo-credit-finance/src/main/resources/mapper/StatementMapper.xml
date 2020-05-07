@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.StatementMapper" >
+    
+  <select id="selectStatement" parameterType="java.lang.String" resultType="StatementDto">
+      select * from tbl_finance_statement where orderNo=#{orderNo} order by createTime desc limit 1
+  </select>
+  
+  <delete id="deleteStatement" parameterType="java.lang.String">
+      delete  from tbl_finance_statement where  orderNo=#{0} 
+  </delete>	
+  
+  <insert id="addStatement" parameterType="StatementDto">
+      INSERT INTO `tbl_finance_statement`(
+     `createTime`, `createUid`, `updateUid`,  `orderNo`, `remark`
+      )VALUES (
+        NOW(), #{createUid}, #{updateUid}, #{orderNo},#{remark}
+      );
+  </insert>
+  	
+</mapper>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.yntrust.YntrustImageMapper">
+
+    <sql id="base_colum">
+        id,createUid,createTime,updateTime,orderNo,typeId,url,`type`,isDelete,updateUid
+    </sql>
+    <select id="list" resultType="java.util.Map" parameterType="java.util.Map">
+        SELECT
+        id,createUid,orderNo,typeId,url,`type`,isDelete,updateUid
+        FROM tbl_third_yntrust_businfo
+        WHERE orderNo = #{orderNo}
+        <if test="isDelete!=null">
+            AND (isDelete = #{isDelete} OR ISNULL(isDelete))
+        </if>
+        ORDER BY createTime
+    </select>
+
+    <insert id="insert" parameterType="java.util.Map">
+        INSERT INTO tbl_third_yntrust_businfo
+        (
+          createUid,createTime,orderNo,typeId,url,`type`,isDelete
+        )
+        VALUES
+        (
+          #{createUid},now(),#{orderNo},#{typeId},#{url},#{type},2
+        )
+    </insert>
+    
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO tbl_third_yntrust_businfo
+        (
+          createUid,createTime,orderNo,typeId,url,`type`,isDelete
+        )
+        VALUES
+        <foreach collection="list" separator="," item="obj" close="" open="">
+            (
+            #{obj.createUid},now(),#{obj.orderNo},#{obj.typeId},#{obj.url},#{obj.type},2
+            )
+        </foreach>
+    </insert>
+
+    <delete id="delete" parameterType="java.util.Map">
+        DELETE FROM tbl_third_yntrust_businfo WHERE  id = #{id}
+    </delete>
+
+    <delete id="batchDelete" parameterType="java.util.Map">
+         DELETE FROM tbl_third_yntrust_businfo WHERE  id in (${ids})
+    </delete>
+
+    <update id="update" parameterType="java.util.Map">
+        UPDATE
+          tbl_third_yntrust_businfo
+        SET isDelete=#{isDelete},
+        updateUid = #{updateUid}
+        WHERE id IN (${ids});
+    </update>
+</mapper>

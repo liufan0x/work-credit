@@ -1,0 +1,138 @@
+<div class="container-fluid">
+
+	<place-order-detail></place-order-detail>
+
+	<div id="viewRow">
+		
+	</div>
+
+		
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;发放款指令信息</div>
+	<div class="row detail-row form-inline detail-lhw" >
+		<div class="col-md-6 col-lg-4">
+			<label>客户姓名：</label>
+			<span ng-bind="order.borrowerName"></span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>放款资金方：</label>
+			<span ng-bind="fundCode"></span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>借款期限：</label>
+			<input type="text"  ng-model="order.borrowingDays" class="form-control" maxlength="9" onkeyup="value=value.replace(/[^\d]/g,'')"> 天
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>借款金额：</label>
+			<input type="text" ng-model="order.loanAmount" class="form-control" maxlength="9" onkeyup="value=value.replace(/[^\d.]/g,'')"> 万
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>风控等级：</label>
+			<select class="form-control" name="riskGradeId" style="width:178px;" ng-model="order.riskGradeId" ng-change="isStandardCharge()" ng-options="list.riskGradeId as list.riskGradeName for list in riskGradeList" required>
+				<option value="">请选择</option>
+			</select>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>费率：</label>
+			<span ng-if="order.riskGradeId=='0'">
+			  <input type="text"  ng-model="order.rate" class="form-control" maxlength="9" onkeyup="value=value.replace(/[^\d.]/g,'')"> 
+			  <span class="a-span" ng-if="modeid==1 && order.riskGradeId!='0'"> &nbsp;%</span>
+			  <span class="a-span" ng-if="modeid!=1 || order.riskGradeId=='0'"> &nbsp;%/天</span>  
+			</span>
+			<span ng-if="order.riskGradeId!='0'">
+			   <span ng-model="order.rate"  ng-bind="order.rate" onkeyup="value=value.replace(/[^\d.]/g,'')"></span> 
+			   <span class="a-span" ng-if="modeid==1 && order.riskGradeId!='0'"> &nbsp;%</span>
+			   <span class="a-span" ng-if="modeid!=1 || order.riskGradeId=='0'"> &nbsp;%/天</span>  
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>逾期费率：</label>
+			<span ng-if="order.riskGradeId=='0'">
+			    <input type="text"  ng-model="order.overdueRate" class="form-control" maxlength="9" onkeyup="value=value.replace(/[^\d.]/g,'')">
+			    <span class="a-span" ng-if="modeid==1 && order.riskGradeId!='0'"> &nbsp;%</span>
+			    <span class="a-span" ng-if="modeid!=1 || order.riskGradeId=='0'"> &nbsp;%/天</span>  
+			</span>
+			<span ng-if="order.riskGradeId!='0'">
+			   <span ng-model="order.overdueRate"  ng-bind="order.overdueRate" onkeyup="value=value.replace(/[^\d.]/g,'')"></span> 
+			   <span class="a-span" ng-if="modeid==1 && order.riskGradeId!='0'"> &nbsp;%</span>
+			   <span class="a-span" ng-if="modeid!=1 || order.riskGradeId=='0'"> &nbsp;%/天</span>  
+			</span>
+		</div>
+	 	<div class="col-md-6 col-lg-8">
+			<label>收费金额：</label>
+			<span ng-if="order.riskGradeId=='0'"><input type="text"  ng-model="order.chargeMoney"  class="form-control" maxlength="9" onkeyup="value=value.replace(/[^\d.]/g,'')"> 元(其中包含:固定服务费+<span ng-if="isChangLoan!=1">关外手续费+</span>其他费用)</span>
+			<span ng-if="order.riskGradeId!='0'"><span ng-model="order.chargeMoney" ng-bind="order.chargeMoney"  onkeyup="value=value.replace(/[^\d.]/g,'')"></span>  元 (其中包含:固定服务费+<span ng-if="isChangLoan!=1">关外手续费+</span>其他费用)</span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>银行卡户名：</label>
+			<input type="text"  ng-model="order.bankName" class="form-control">
+		</div>
+		
+		<div class="col-md-6 col-lg-6">
+			<label>放款银行-支行：</label>
+			<bank-sub-bank bank-id="order.lendingBankId" sub-bank-id="order.openingBankId" ></bank-sub-bank>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>银行卡账号：</label>
+			<input type="text"  ng-model="order.bankAccount" class="form-control" onkeyup="value=value.replace(/[^\d]/g,'')" id="bankAccount">
+		</div>
+		<div class="col-md-6 col-lg-6">
+			<label>已收取费用：</label>
+			<a href="#"><span data-fancybox="iframe" data-src="/plugins/uploadify/upload_image.html?returnFun=returnDatafinance" data-type="iframe" >点此上传截屏照片（必传）</span></a>
+			<input type="hidden" id="img" >
+			  <span class="gallerys processuUpdImg" style="display:none">
+			       <a href="#" class="processuView-pic">查看图片</a>
+			       <img ng-repeat="img in obj.imgs" ng-src="{{img}}"  class='gallery-pic' style='display:none;'>
+			  </span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="form-group">
+			<textarea class="form-control" ng-model="order.remark" rows="5" placeholder="如有特殊说明，请在此处备注（非必填）"/>
+		</div>
+		
+		<div class="col-md-12">
+			<button type="button" class="btn btn-primary" ng-click="submit()">提交</button>
+		</div>
+	</div>
+</div>
+
+<script>
+$(".processuView-pic").click(function(){
+    $.openPhotoGallery($(this).next("img"),"delZijinPic");
+})
+function delZijinPic(a){ 
+  $(".processuUpdImg").find("img").each(function(){ 
+      if($(this).attr("src")==a){
+       $(this).remove();
+    }
+   })
+   var returnPic="";
+   $(".processuUpdImg").find("img").each(function(){
+        returnPic+=returnPic+$(this).attr("src")+",";
+   })
+   $("#img").val(returnPic.substring(0,returnPic.length-1)); 
+   var img=$("#img").val();
+   if(img==''){
+	   $(".processuUpdImg").hide() 
+   }
+}
+function returnDatafinance(url,smallUrl,name){
+	var img=$("#img").val();
+	if(url!=''){
+		 url=url.substring(0,url.length-1);
+		 var urls= new Array();
+		 var urls=url.split(",");	
+		 var h="";
+		 for (var i=0;i<urls.length ;i++ )  { 
+			 h+="<img src='"+urls[i]+"' class='gallery-pic' style='display:none;'>";
+		 }   
+		 $(".processuUpdImg").append(h);
+		 if(img!=''){
+			 url=img+","+url;
+		 }
+		 $("#img").val(url); 
+		 $(".processuUpdImg").show();
+	}
+}
+	
+</script>

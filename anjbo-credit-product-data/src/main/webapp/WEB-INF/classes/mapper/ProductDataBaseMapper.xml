@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.ProductDataBaseMapper">
+	
+	<!-- 新增产品数据表 -->
+	<insert id="insertProductDataBase" parameterType="com.anjbo.bean.product.data.ProductDataDto">
+		insert into ${tblDataName} 
+		(createUid,createTime,updateUid,tblName,orderNo,data,showText)
+		values
+		(#{createUid},now(),#{createUid},#{tblName},#{orderNo},#{dataStr},#{showText})
+	</insert>
+	
+	<update id="updateProductDataBase" parameterType="com.anjbo.bean.product.data.ProductDataDto">
+		update ${tblDataName} 
+		<set>
+			<if test="updateUid != null and updateUid != ''">
+				updateUid = #{updateUid},
+			</if>
+			<if test="showText !=null and showText !=''">
+			  showText = #{showText},
+			</if>
+			<if test="dataStr != null and dataStr != ''">
+				data = #{dataStr},
+			</if>
+			updateTime = now()
+		</set>
+		where
+			tblName = #{tblName} and orderNo = #{orderNo}
+	</update>
+	
+	<select id="selectProductDataBase" parameterType="com.anjbo.bean.product.data.ProductDataDto" resultType="java.util.Map">
+		select id,createUid,createTime,updateUid,updateTime,tblName,orderNo,data,showText from ${tblDataName} where tblName = #{tblName} and orderNo = #{orderNo} order by createTime desc limit 1
+	</select>
+	
+	<select id="selectProductDataBaseList" parameterType="com.anjbo.bean.product.data.ProductDataDto" resultType="java.util.Map">
+		select id,createUid,createTime,updateUid,updateTime,tblName,orderNo,data,showText from ${tblDataName} where tblName = #{tblName} and orderNo = #{orderNo} order by createTime desc
+	</select>
+
+	<select id="selectProductDataBaseDto" parameterType="com.anjbo.bean.product.data.ProductDataDto" resultType="com.anjbo.bean.product.data.ProductDataDto">
+		select id,createUid,createTime,updateUid,updateTime,tblName,orderNo,data as dataStr,showText from ${tblDataName} where tblName = #{tblName} and orderNo = #{orderNo} order by createTime desc limit 1
+	</select>
+
+	<select id="selectAllProductDataBaseList" parameterType="com.anjbo.bean.product.data.ProductDataDto" resultType="com.anjbo.bean.product.data.ProductDataDto">
+		SELECT id,createUid,createTime,updateUid,updateTime,tblName,orderNo,data as dataStr,showText FROM  ${tblDataName} WHERE orderNo=#{orderNo}
+	</select>
+
+	<delete id="delete" parameterType="java.util.Map">
+		DELETE FROM ${tblDataName} WHERE 1=1
+		<if test="tblName!=null and tblName!=''">
+			AND tblName=#{tblName}
+		</if>
+		AND orderNo=#{orderNo}
+	</delete>
+</mapper>

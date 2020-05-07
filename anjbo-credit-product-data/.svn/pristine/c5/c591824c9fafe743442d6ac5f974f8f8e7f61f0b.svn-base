@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.ProductListBaseMapper">
+	
+	<!-- 新增产品列表表 -->
+	<insert id="insertProductListBase" parameterType="java.util.Map">
+		insert into ${tblDataName} 
+		(createUid,createTime,productCode,cityCode,previousHandlerUid,currentHandlerUid,previousHandler,currentHandler,source,orderNo,branchCompany,createPeopleName,appShowValue1,appShowValue2,appShowValue3)
+		values
+		(#{createUid},now(),#{productCode},#{cityCode},#{previousHandlerUid},#{currentHandlerUid},#{previousHandler},#{currentHandler},#{source},#{orderNo},#{branchCompany},#{previousHandler},#{appShowValue1},#{appShowValue2},#{appShowValue3})
+	</insert>
+	
+	<insert id="insertProductListBaseByKey" parameterType="com.anjbo.bean.product.data.ProductDataDto">
+		insert into ${tblDataName} 
+		(createUid,createTime,previousHandleTime,productCode,cityCode,previousHandlerUid,currentHandlerUid,previousHandler,currentHandler,source,orderNo,${key})
+		values
+		(#{createUid},now(),now(),#{productCode},#{cityCode},#{previousHandlerUid},#{currentHandlerUid},#{previousHandler},#{currentHandler},#{source},#{orderNo},${value})
+	</insert>
+	
+	<update id="updateProductListBaseByKey" parameterType="com.anjbo.bean.product.data.ProductDataDto">
+		update ${tblDataName} 
+		<set>
+			${keyValue},
+			updateTime = now()
+		</set>
+		where
+			orderNo = #{orderNo}
+	</update>
+	
+	<update id="updateProductListBase" parameterType="java.util.Map">
+		update ${tblDataName} 
+		<set>
+			<if test="updateUid != null and updateUid != ''">
+				updateUid = #{updateUid},
+			</if>
+			<if test="processId != null and processId != ''">
+				processId = #{processId},
+			</if>
+			<if test="state != null and state != ''">
+				state = #{state},
+			</if>
+			<if test="previousHandleTime != null and previousHandleTime != ''">
+				previousHandleTime = #{previousHandleTime},
+			</if>
+			<if test="previousHandlerUid != null and previousHandlerUid != ''">
+				previousHandlerUid = #{previousHandlerUid},
+			</if>
+			<if test="currentHandlerUid != null and currentHandlerUid != ''">
+				currentHandlerUid = #{currentHandlerUid},
+			</if>
+			<if test="previousHandler != null and previousHandler != ''">
+				previousHandler = #{previousHandler},
+			</if>
+			<if test="currentHandler != null and currentHandler != ''">
+				currentHandler = #{currentHandler},
+			</if>
+			<if test="channelManagerUid != null and channelManagerUid != ''">
+				channelManagerUid = #{channelManagerUid},
+			</if>
+			<if test="channelManagerName != null and channelManagerName != ''">
+				channelManagerName = #{channelManagerName},
+			</if>
+			<if test="appShowValue1 != null and appShowValue1 != ''">
+				appShowValue1 = #{appShowValue1},
+			</if>
+			<if test="appShowValue2 != null and appShowValue2 != ''">
+				appShowValue2 = #{appShowValue2},
+			</if>
+			<if test="appShowValue3 != null and appShowValue3 != ''">
+				appShowValue3 = #{appShowValue3},
+			</if>
+			<if test="agencyId>0">
+				agencyId = #{agencyId},
+			</if>
+			<if test="accountUid!=null and accountUid!=''">
+				accountUid = #{accountUid},
+			</if>
+			<if test="expandChiefUid!=null and expandChiefUid!=''">
+				expandChiefUid = #{expandChiefUid},
+			</if>
+			updateTime = now()
+		</set>
+		where
+			orderNo = #{orderNo}
+	</update>
+	
+	<!-- 可更新空 -->
+	<update id="updateProductListBaseNull" parameterType="java.util.Map">
+		update ${tblDataName} 
+		<set>
+			processId = #{processId},
+			state = #{state},
+			previousHandleTime = #{previousHandleTime},
+			currentHandlerUid = #{currentHandlerUid},
+			currentHandler = #{currentHandler},
+			channelManagerUid = #{channelManagerUid},
+			channelManagerName = #{channelManagerName},
+			updateTime = now()
+		</set>
+		where
+			orderNo = #{orderNo}
+	</update>
+	
+	<select id="selectProductListBaseByOrderNo" parameterType="com.anjbo.bean.product.data.ProductDataDto" resultType="java.util.Map">
+		select * from ${tblDataName} 
+		where orderNo = #{orderNo} limit 1
+	</select>
+	
+	<select id="selectProductListBase" parameterType="java.util.Map" resultType="java.util.Map">
+		select * from ${tblDataName} ${whereOrderBy}
+		limit #{start},#{pageSize}
+	</select>
+	
+	<select id="selectProductListBaseCount" parameterType="java.util.Map" resultType="int">
+		select count(1) from  ${tblDataName} ${whereOrderBy}
+	</select>
+	
+	<update id="updateProcessId" parameterType="java.util.Map">
+	    update tbl_cm_list
+	     set
+	     processId =#{processId},state=#{state},updateUid=#{updateUid},
+	     currentHandlerUid=#{currentHandlerUid},
+	     <if test="pgType==1">
+	     totalPrice=#{totalPrice},
+	     netPrice = #{netPrice},
+	     appShowValue3 = #{totalPrice},
+	     </if>
+	     <if test="pgType==2">
+	     borrowingAmount=#{borrowingAmount},
+	     </if>
+	     <if test="appShowValue1!=null and appShowValue1 != ''">
+	     	appShowValue1=#{appShowValue1},
+	     </if>
+	     <if test="appShowValue2 !=null and appShowValue2 != ''">
+	     	appShowValue2=#{appShowValue2},
+	     </if>
+	     <if test="appShowValue3 !=null and appShowValue3 != ''">
+	     	appShowValue3=#{appShowValue3},
+	     </if>
+	     currentHandler=#{currentHandler},
+	     previousHandleTime=now()
+	     where orderNo = #{orderNo}
+	</update>
+	<select id="findTask" resultType="java.util.Map">
+	    select l.*,d.`data` from tbl_cm_list l
+		LEFT JOIN tbl_cm_data d on d.orderNo=l.orderNo
+		where l.processId in ('managerAudit','storesReserve','audit','loan','transfer') and d.tblName='tbl_cm_customer'
+	</select>
+	
+	<update id="updataLoanAmount" parameterType="java.util.Map">
+		update tbl_cm_list set  borrowingAmount=#{borrowingAmount} where orderNo = #{orderNo}
+	</update>
+	
+	<select id="selectOrderList" resultType="java.util.Map">
+	    select * from tbl_cm_list where orderNo = #{orderNo}
+	</select>
+
+	<select id="selectSmList" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT
+		*
+		FROM  tbl_sm_list
+		WHERE 1=1
+		<if test="agencyCode!=null and agencyCode!=''">
+			AND  agencyCode=#{agencyCode}
+		</if>
+		<if test="agencyId>0">
+			AND agencyId=#{agencyId}
+		</if>
+		ORDER BY  createTime DESC  limit 1;
+	</select>
+
+	<delete id="delete" parameterType="java.util.Map">
+		DELETE FROM ${tblDataName} WHERE orderNo=#{orderNo}
+	</delete>
+
+	<select id="selectProductListCustomWhereCondition" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT * FROM ${tblDataName} WHERE ${whereCondition}
+	</select>
+	<update id="updatePrice" parameterType="java.util.Map">
+	   update tbl_cm_list set totalPrice=#{totalPrice}, netPrice = #{netPrice},appShowValue3 = #{appShowValue3},updateUid=#{updateUid} where orderNo= #{orderNo}
+	</update>
+	<select id="selectAllOrder" resultType="java.util.Map" parameterType="java.util.Map">
+		select * from tbl_cm_list
+	</select>
+</mapper>

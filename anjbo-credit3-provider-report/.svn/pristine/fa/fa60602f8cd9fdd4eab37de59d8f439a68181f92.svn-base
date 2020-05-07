@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.ReceivableReportMapper">
+    <select id="findByAll" parameterType="java.util.Map" resultType="OrderReceivablleReportVo">
+        SELECT productCode,productName,cityCode,cityName,
+		SUM(IFNULL(receivableCount,0)) as receivableCount,SUM(IFNULL(receivableAmount,0)) as receivableAmount,SUM(IFNULL(overdueCount,0)) as overdueCount,SUM(IFNULL(overdueAmount,0)) as overdueAmount,
+		SUM(IFNULL(lendingCount,0)) as lendingCount,SUM(IFNULL(lendingAmount,0)) as lendingAmount,SUM(IFNULL(notLendingAmount,0)) as notLendingAmount,SUM(IFNULL(notLendingCount,0)) as notLendingCount,
+		SUM(IFNULL(notLendingAmount,0)) as notLendingAmount,SUM(IFNULL(notLendingCount,0)) as notLendingCount,SUM(IFNULL(notReceivableAmount,0)) as notReceivableAmount,SUM(IFNULL(notReceivableCount,0))as notReceivableCount,
+		SUM(IFNULL(notOverdueCount,0))as notOverdueCount,SUM(IFNULL(notOverdueAmount,0))as notOverdueAmount,SUM(IFNULL(notReceivableSum,0)) as notReceivableSum,SUM(IFNULL(notReceivableAmountSum,0))as notReceivableAmountSum,
+		SUM(IFNULL(overdueAmountRatio,0))as overdueAmountRatio,SUM(IFNULL(overdueAmountRatioByCount,0))as overdueAmountRatioByCount,SUM(IFNULL(overdueAmountRatioBySum,0))as overdueAmountRatioBySum,SUM(IFNULL(overdueNumber,0)) as overdueNumber,
+		SUM(IFNULL(overdueDay,0)) as overdueDay,SUM(IFNULL(overdueBigDay,0)) as overdueBigDay,SUM(IFNULL(overDayCount,0)) as overDayCount
+		from tbl_order_receivable_report where  productCode != "04"
+       <if test="cityCode != null and cityCode != '' ">and cityCode =#{cityCode}</if>
+       <if test="productCode != null and productCode != '' "> and productCode = #{productCode} </if>
+        GROUP BY cityCode
+       ORDER BY createTime asc
+    </select>
+
+</mapper>

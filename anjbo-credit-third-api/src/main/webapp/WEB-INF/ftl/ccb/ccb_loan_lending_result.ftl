@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ROOT>
+	<HEADER>
+	</HEADER>
+	<BODY>
+		<LOANINFO>
+			<APPNO>${appNo!}</APPNO>
+			<LOAN_FLG>${isLending!}</LOAN_FLG>
+			<FP_FUND_ACCT>${lendingAccount!}</FP_FUND_ACCT>
+			<CUST_NAME>${custName!}</CUST_NAME>
+			<CERT_TYP>${certificateType!}</CERT_TYP>
+			<CERT_ID>${certificateNo!}</CERT_ID>
+			<RT_ACCT_NUM>${loanAccount!}</RT_ACCT_NUM>
+			<LOANAMT>${lendingAmount!}</LOANAMT>
+			<RATE>${rate!}</RATE>
+			<FADAT>${lendingDate!}</FADAT>
+			<MIS_RT_TERM_INCR>${loanLimit!}</MIS_RT_TERM_INCR>
+			<EXPIRE>${maturityDate!}</EXPIRE>
+			<RFN_STY>${repaymentWay!}</RFN_STY>
+			<REASON>${reason!}</REASON>
+		</LOANINFO>
+	</BODY>
+</ROOT>

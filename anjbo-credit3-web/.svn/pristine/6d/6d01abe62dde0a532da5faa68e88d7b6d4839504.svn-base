@@ -1,0 +1,28 @@
+<div class="container-fluid">
+
+	<place-order-detail></place-order-detail>
+
+	<div id="viewRow">
+		
+	</div>
+<!-- 	<audit-first-detail></audit-first-detail> -->
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;风控终审意见</div>
+	<div class="row">
+	    <div class="col-md-12 col-lg-12" ng-if="productCode=='04'">
+				<label>放款条件：</label> 
+				<select ng-disabled="all"class="form-control fl count-type" name="paymentType" style="width:178px;" choice-dict-name="repaymentMethodType" ng-model="obj.paymentType" required>
+					<option value="">请选择</option>
+				</select>
+		</div>
+		<div class="col-md-12 col-lg-12" ><label>&nbsp;</label> </div>
+		<div class="form-group">
+			<textarea class="form-control" ng-model="obj.remark" rows="5" placeholder="请在此处输入审批意见，退回请在此处填写退回意见（必填）"/>
+		</div>
+		<div class="col-md-12">
+			<button type="button" class="btn btn-primary" ng-click="showFinalSubmit();" ng-show="auditFinalShow">审批通过</button>
+			<button type="button" class="btn btn-primary" ng-click="showReviewSubmit();">复核审批</button>
+			<button type="button" class="btn btn-primary" ng-click="reportOfficerShow();">上报首席风险官</button>
+			<button type="button" class="btn btn-warning" ng-show="!orderIsBack" ng-click="showFinalBack();">不通过（退回）</button>
+		</div>
+	</div>
+</div>

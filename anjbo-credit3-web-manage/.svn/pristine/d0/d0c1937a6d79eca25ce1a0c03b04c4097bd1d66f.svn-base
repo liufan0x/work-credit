@@ -1,0 +1,44 @@
+<style>
+ 	span.tit{width:120px;text-align:right;display:inline-block;}
+</style>
+<div class="form-inline" style="text-align:left;">
+	<form name="accountForm" >
+		<div class="form-group col-md-12">
+			<span class="tit">状态 &nbsp;</span>
+			<input type="radio" name="isOpen" value="1" ng-model="account.isOpen" required/>开启&nbsp;&nbsp;
+			<input type="radio" name="isOpen" value="2" ng-model="account.isOpen" required/>不开启
+			<span class="inputError" ng-show="isAudit&&accountForm.isOpen.$error.required">
+				<font color="red">必填</font>
+			</span>
+		</div>
+		<div class="form-group col-md-12">
+			<span class="tit"><span class="text-danger">*</span>联系人姓名&nbsp;</span>
+			<input type="text" class="form-control" name="name" ng-model="account.name" ng-disabled="true" required style="width:226px;"/>
+			<span class="inputError" ng-show="isAudit&&accountForm.name.$error.required">
+				<font color="red">必填</font>
+			</span>
+		</div>
+		<div class="form-group col-md-12">
+			<span class="tit"><span class="text-danger">*</span>联系人电话&nbsp;</span>
+			<input type="text" class="form-control" name="mobile" ng-model="account.mobile" ng-disabled="true" required style="width:226px;"/>
+			<span class="inputError" ng-show="isAudit&&accountForm.mobile.$error.required">
+				<font color="red">必填</font>
+			</span>
+		</div>
+		<div class="form-group col-md-12">
+			<span class="tit"><span class="text-danger">*</span>有效期限&nbsp;</span>
+			<input type="text" class="form-control form_date" name="indateStart" ng-disabled="account.isOpen==2" ng-model="account.indateStart" required style="width:108px;"/>-
+			<input type="text" class="form-control form_date" name="indateEnd" ng-disabled="account.isOpen==2" ng-model="account.indateEnd" required style="width:108px;"/>
+			<span class="inputError" ng-show="isAudit&&(accountForm.indateStart.$error.required||accountForm.indateEnd.$error.required)&&account.isOpen==1">
+				<font color="red">必填</font>
+			</span>
+		</div>
+		<div class="form-group col-md-12" style="margin-bottom:1px;">
+				<span><span class="tit">&nbsp;</span><font style="color: grey">注：我们会把测试账号和密码发送至联系人手机号.</font></span>
+			</div>
+		<div class=" form-group col-md-12">
+			<span><span class="tit">&nbsp;</span><font style="color: grey">请确保手机能正常接收短信!</font></span>
+		</div>
+		<div style="width:100%;height:1px; clear:both;"></div>
+	</form>
+</div>

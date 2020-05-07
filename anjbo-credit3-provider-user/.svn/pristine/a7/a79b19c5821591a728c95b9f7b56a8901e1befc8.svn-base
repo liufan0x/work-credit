@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.FundCostDiscountMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=fundCostId and fundCostId>0"> AND `fundCostId`=#{fundCostId}</if>
+		<if test="null!=money and money>0"> AND `money`=#{money}</if>
+		<if test="null!=rate and rate>0"> AND `rate`=#{rate}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<if test="null!=remark and ''!=remark"> AND `remark`=#{remark}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="FundCostDiscountDto" resultType="FundCostDiscountDto">    
+	SELECT `id`, `fundCostId`, `money`, `rate`, `createTime`, `updateTime`, `createUid`, `updateUid`, `remark` 
+	FROM tbl_customer_fund_cost_discount 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="FundCostDiscountDto" resultType="FundCostDiscountDto">
+	SELECT `id`, `fundCostId`, `money`, `rate`, `createTime`, `updateTime`, `createUid`, `updateUid`, `remark`
+	FROM tbl_customer_fund_cost_discount 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="FundCostDiscountDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_customer_fund_cost_discount 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="FundCostDiscountDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_customer_fund_cost_discount(
+		`fundCostId`,
+		`money`,
+		`rate`,
+		`createTime`,
+		`updateTime`,
+		`createUid`,
+		`updateUid`,
+		`remark`
+	) VALUES(
+		#{fundCostId},
+		#{money},
+		#{rate},
+		now(),
+		now(),
+		#{createUid},
+		#{createUid},
+		#{remark}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="FundCostDiscountDto" >
+    DELETE FROM tbl_customer_fund_cost_discount 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="FundCostDiscountDto" >
+    UPDATE tbl_customer_fund_cost_discount
+	<set>
+		<if test="null!=fundCostId">`fundCostId`=#{fundCostId},</if>
+		<if test="null!=money">`money`=#{money},</if>
+		<if test="null!=rate">`rate`=#{rate},</if>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=remark">`remark`=#{remark},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

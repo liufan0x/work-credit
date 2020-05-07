@@ -1,0 +1,21 @@
+eureka:
+  instance:
+    hostname: localhost
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 10
+  server:
+    enable-self-preservation: false
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+server:
+  port: 60100
+
+logging:  
+  path: /data/logs/anjbo-credit3
+  file: anjbo-credit3-server-eureka.log
+  level: 
+    root: INFO
+    com.anjbo: INFO

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.FundMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=fundName and ''!=fundName"> AND `fundName`  LIKE CONCAT('%', #{fundName}, '%')</if>
+		<if test="null!=fundDesc and ''!=fundDesc"> AND `fundDesc`=#{fundDesc}</if>
+		<if test="null!=status and status>0"> AND `status`=#{status}</if>
+		<if test="null!=fundCode and ''!=fundCode"> AND `fundCode`=#{fundCode}</if>
+		<if test="null!=contactMan and ''!=contactMan"> AND `contactMan`=#{contactMan}</if>
+		<if test="null!=contactTel and ''!=contactTel"> AND `contactTel`=#{contactTel}</if>
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<if test="null!=remark and ''!=remark"> AND `remark`=#{remark}</if>
+		<if test="null!=managerUid and ''!=managerUid"> AND `managerUid`=#{managerUid}</if>
+		<if test="null!=managerStatus and managerStatus>0"> AND `managerStatus`=#{managerStatus}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="FundDto" resultType="FundDto">    
+	SELECT `id`, `fundName`, `fundDesc`, `status`, `fundCode`, `contactMan`, `contactTel`, `createTime`, `updateTime`, `createUid`, `updateUid`, `remark`, `managerUid`, `managerStatus` 
+	FROM tbl_customer_fund 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="FundDto" resultType="FundDto">
+	SELECT `id`, `fundName`, `fundDesc`, `status`, `fundCode`, `contactMan`, `contactTel`, `createTime`, `updateTime`, `createUid`, `updateUid`, `remark`, `managerUid`, `managerStatus`
+	FROM tbl_customer_fund 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="FundDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_customer_fund 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+  <!-- 根据ID查询合作资金方 -->	
+	<select id="selectCustomerFundById" parameterType="int" resultType="FundDto">
+		SELECT cf.*,cfa.auths from tbl_customer_fund cf 
+		LEFT JOIN tbl_customer_fund_auth cfa ON cfa.id=cf.id
+		WHERE cf.id=#{0}
+	</select>
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="FundDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_customer_fund(
+		`fundName`,
+		`fundDesc`,
+		`status`,
+		`fundCode`,
+		`contactMan`,
+		`contactTel`,
+		`createTime`,
+		`updateTime`,
+		`createUid`,
+		`updateUid`,
+		`remark`,
+		`managerUid`,
+		`managerStatus`
+	) VALUES(
+		#{fundName},
+		#{fundDesc},
+		#{status},
+		#{fundCode},
+		#{contactMan},
+		#{contactTel},
+		now(),
+		now(),
+		#{createUid},
+		#{createUid},
+		#{remark},
+		#{managerUid},
+		#{managerStatus}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="FundDto" >
+    DELETE FROM tbl_customer_fund 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="FundDto" >
+    UPDATE tbl_customer_fund
+	<set>
+		<if test="null!=fundName">`fundName`=#{fundName},</if>
+		<if test="null!=fundDesc">`fundDesc`=#{fundDesc},</if>
+		<if test="null!=status">`status`=#{status},</if>
+		<if test="null!=fundCode">`fundCode`=#{fundCode},</if>
+		<if test="null!=contactMan">`contactMan`=#{contactMan},</if>
+		<if test="null!=contactTel">`contactTel`=#{contactTel},</if>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=remark">`remark`=#{remark},</if>
+		<if test="null!=managerUid">`managerUid`=#{managerUid},</if>
+		<if test="null!=managerStatus">`managerStatus`=#{managerStatus},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+    <!--status=100 为临时数值效果为查全部-->
+   <select id="selectFundListByStatus" parameterType="FundDto" resultType="FundDto">
+   	SELECT 
+	f.*
+	FROM tbl_customer_fund f
+	LEFT JOIN tbl_customer_fund_cost fc ON f.id = fc.fundId
+	WHERE 1=1
+   	<if test="status!=null and status!=100">
+   		AND status = #{status}
+   	</if>
+   	GROUP BY f.fundCode ORDER BY fc.dayRate 
+   </select>
+</mapper>

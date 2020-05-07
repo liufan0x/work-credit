@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.ProcessMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and ''!=id"> AND id=#{id}</if>
+		<if test="null!=productId and ''!=productId"> AND productId=#{productId}</if>
+		<if test="null!=processId and ''!=processId"> AND processId=#{processId}</if>
+		<if test="null!=processName and ''!=processName"> AND processName=#{processName}</if>
+		<if test="null!=processModular and ''!=processModular"> AND processModular=#{processModular}</if>
+		<if test="null!=processDescribe and ''!=processDescribe"> AND processDescribe=#{processDescribe}</if>
+		<if test="null!=pcUrl and ''!=pcUrl"> AND pcUrl=#{pcUrl}</if>
+		<if test="null!=appUrl and ''!=appUrl"> AND appUrl=#{appUrl}</if>
+		<if test="null!=sort and sort>0"> AND sort=#{sort}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=createUid and ''!=createUid"> AND createUid=#{createUid}</if>
+		<if test="null!=updateUid and ''!=updateUid"> AND updateUid=#{updateUid}</if>
+		<if test="null!=remark and ''!=remark"> AND remark=#{remark}</if>
+		<if test="null!=showAgency and showAgency>0"> AND showAgency=#{showAgency}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="ProcessDto" resultType="ProcessDto">    
+	SELECT id, productId, processId, processName, processModular, processDescribe, pcUrl, appUrl, sort, createTime, updateTime, createUid, updateUid, remark, showAgency 
+	FROM tbl_product_process 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="ProcessDto" resultType="ProcessDto">
+	SELECT id, productId, processId, processName, processModular, processDescribe, pcUrl, appUrl, sort, createTime, updateTime, createUid, updateUid, remark, showAgency
+	FROM tbl_product_process 
+	<include refid="sqlwhereSearch"/>
+	order by `sort`
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="ProcessDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_product_process 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="ProcessDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_product_process(
+		<if test="null!=productId">productId,</if>
+		<if test="null!=processId">processId,</if>
+		<if test="null!=processName">processName,</if>
+		<if test="null!=processModular">processModular,</if>
+		<if test="null!=processDescribe">processDescribe,</if>
+		<if test="null!=pcUrl">pcUrl,</if>
+		<if test="null!=appUrl">appUrl,</if>
+		<if test="null!=sort">sort,</if>
+		<if test="null!=createTime">createTime,</if>
+		<if test="null!=updateTime">updateTime,</if>
+		<if test="null!=createUid">createUid,</if>
+		<if test="null!=updateUid">updateUid,</if>
+		<if test="null!=remark">remark,</if>
+		<if test="null!=showAgency">showAgency</if>
+	) VALUES(
+		<if test="null!=productId">#{productId},</if>
+		<if test="null!=processId">#{processId},</if>
+		<if test="null!=processName">#{processName},</if>
+		<if test="null!=processModular">#{processModular},</if>
+		<if test="null!=processDescribe">#{processDescribe},</if>
+		<if test="null!=pcUrl">#{pcUrl},</if>
+		<if test="null!=appUrl">#{appUrl},</if>
+		<if test="null!=sort">#{sort},</if>
+		<if test="null!=createTime">#{createTime},</if>
+		<if test="null!=updateTime">#{updateTime},</if>
+		<if test="null!=createUid">#{createUid},</if>
+		<if test="null!=updateUid">#{updateUid},</if>
+		<if test="null!=remark">#{remark},</if>
+		<if test="null!=showAgency">#{showAgency}</if>
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="ProcessDto" >
+    DELETE FROM tbl_product_process 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="ProcessDto" >
+    UPDATE tbl_product_process
+	<set>
+		<if test="null!=productId">productId=#{productId},</if>
+		<if test="null!=processId">processId=#{processId},</if>
+		<if test="null!=processName">processName=#{processName},</if>
+		<if test="null!=processModular">processModular=#{processModular},</if>
+		<if test="null!=processDescribe">processDescribe=#{processDescribe},</if>
+		<if test="null!=pcUrl">pcUrl=#{pcUrl},</if>
+		<if test="null!=appUrl">appUrl=#{appUrl},</if>
+		<if test="null!=sort">sort=#{sort},</if>
+		<if test="null!=createTime">createTime=#{createTime},</if>
+		<if test="null!=updateTime">updateTime=#{updateTime},</if>
+		<if test="null!=createUid">createUid=#{createUid},</if>
+		<if test="null!=updateUid">updateUid=#{updateUid},</if>
+		<if test="null!=remark">remark=#{remark},</if>
+		<if test="null!=showAgency">showAgency=#{showAgency}</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+
+    <!-- 批量增删改 -->
+  <insert id="batchInsert" parameterType="ProcessDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_product_process(
+		productId,
+		processId,
+		processName,
+		processModular,
+		processDescribe,
+		pcUrl,
+		appUrl,
+		sort,
+		createTime,
+		updateTime,
+		createUid,
+		updateUid,
+		remark,
+		showAgency
+	) VALUES
+	<foreach collection="list" index="index" item="item" separator="," >
+	(
+		#{item.productId},
+		#{item.processId},
+		#{item.processName},
+		#{item.processModular},
+		#{item.processDescribe},
+		#{item.pcUrl},
+		#{item.appUrl},
+		#{item.sort},
+		#{item.createTime},
+		#{item.updateTime},
+		#{item.createUid},
+		#{item.updateUid},
+		#{item.remark},
+		#{item.showAgency}
+	)
+	</foreach>
+  </insert>
+
+
+  <delete id="batchDelete" parameterType="ProcessDto" >
+    <foreach collection="list" index="index" item="item" separator=";" >
+    DELETE FROM tbl_product_process 
+	WHERE ID=#{item.id}
+	</foreach>
+  </delete>
+  
+  <update id="batchUpdate" parameterType="ProcessDto" >
+    <foreach collection="list" index="index" item="item" separator=";" >
+    UPDATE tbl_product_process
+	<set>
+		<if test="null!=item.productId">productId=#{item.productId},</if>
+		<if test="null!=item.processId">processId=#{item.processId},</if>
+		<if test="null!=item.processName">processName=#{item.processName},</if>
+		<if test="null!=item.processModular">processModular=#{item.processModular},</if>
+		<if test="null!=item.processDescribe">processDescribe=#{item.processDescribe},</if>
+		<if test="null!=item.pcUrl">pcUrl=#{item.pcUrl},</if>
+		<if test="null!=item.appUrl">appUrl=#{item.appUrl},</if>
+		<if test="null!=item.sort">sort=#{item.sort},</if>
+		<if test="null!=item.createTime">createTime=#{item.createTime},</if>
+		<if test="null!=item.updateTime">updateTime=#{item.updateTime},</if>
+		<if test="null!=item.createUid">createUid=#{item.createUid},</if>
+		<if test="null!=item.updateUid">updateUid=#{item.updateUid},</if>
+		<if test="null!=item.remark">remark=#{item.remark},</if>
+		<if test="null!=item.showAgency">showAgency=#{item.showAgency}</if>
+	</set>
+	WHERE ID=#{item.id}
+	</foreach>
+  </update>
+
+    
+</mapper>

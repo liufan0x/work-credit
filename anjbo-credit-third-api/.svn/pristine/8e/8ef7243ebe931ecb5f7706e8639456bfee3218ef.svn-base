@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.ccb.BusInfoTaskMapper">
+
+	<insert id="insert" parameterType="BusInfoTask">
+		<selectKey resultType="int" order="AFTER" keyProperty="id">
+			SELECT LAST_INSERT_ID() AS ID
+		</selectKey>
+		insert into tbl_third_cm_businfo_task(id,orderNo,name,code,status,result,updatetime,remark)
+		value(#{id},#{orderNo},#{name},#{code},#{status},#{result},#{updatetime},#{remark})
+	</insert>
+	
+	<select id="getByOrderNo" resultType="BusInfoTask">
+		select * from tbl_third_cm_businfo_task where orderNo = #{orderNo}
+	</select>
+	
+	<select id="getByOrderNoAndCode" resultType="BusInfoTask">
+		select * from tbl_third_cm_businfo_task where orderNo = #{orderNo} and code=#{code}
+	</select>
+
+	<select id="listN" resultType="BusInfoTask">
+		select * from tbl_third_cm_businfo_task where
+			orderNo=#{orderNo}
+			AND
+			result='N'
+			OR
+			result='n'
+	</select>
+
+	<update id="updateStatus" >
+		update tbl_third_cm_businfo_task set status=#{status}
+		<if test="result!=null and result!=''">
+		 ,result=#{result} 
+		</if>
+		where id=#{id}
+	</update>
+	
+	<update id="update" parameterType="BusInfoTask">
+		update tbl_third_cm_businfo_task set 
+		<if test="orderNo!=null and orderNo!=''">  
+			    orderNo=#{orderNo}, 
+		</if> 
+		<if test="name!=null and name!=''">  
+			    name=#{name},
+		</if>
+		<if test="code!=null and code!=''">  
+			    code=#{code},
+		</if> 
+		<if test="result!=null and result!=''">  
+			    result=#{result},
+		</if> 
+		<if test="remark!=null and remark!=''">  
+			    remark=#{remark},
+		</if> 
+		updatetime=now() 
+		where id=#{id}
+	</update>
+	
+	<select id="hasN" resultType="Integer">
+	SELECT
+		EXISTS(
+			SELECT
+			tbl_third_cm_businfo_task.result
+			FROM
+			tbl_third_cm_businfo_task
+			WHERE
+			orderNo=#{orderNo}
+			<if test="code!=null and code!=''">  
+			AND
+			code=#{code},
+			</if>
+			AND
+			status='FAILE'
+			AND (result = 'N' OR result = 'n')
+		)
+	as hasN
+	</select>
+	
+</mapper>

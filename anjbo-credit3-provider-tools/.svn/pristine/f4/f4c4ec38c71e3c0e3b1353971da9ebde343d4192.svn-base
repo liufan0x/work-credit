@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.TblOrderBaseHouseLendingMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<if test="null!=lendingBankId and lendingBankId>0"> AND `lendingBankId`=#{lendingBankId}</if>
+		<if test="null!=lendingBankBranchId and lendingBankBranchId>0"> AND `lendingBankBranchId`=#{lendingBankBranchId}</if>
+		<if test="null!=lendingImgs and ''!=lendingImgs"> AND `lendingImgs`=#{lendingImgs}</if>
+		<if test="null!=bankAccount and ''!=bankAccount"> AND `bankAccount`=#{bankAccount}</if>
+		<if test="null!=bankUserName and ''!=bankUserName"> AND `bankUserName`=#{bankUserName}</if>
+		<if test="null!=remark and ''!=remark"> AND `remark`=#{remark}</if>
+		<if test="null!=isFinish and isFinish>0"> AND `isFinish`=#{isFinish}</if>
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=lendingBankName and ''!=lendingBankName"> AND `lendingBankName`=#{lendingBankName}</if>
+		<if test="null!=lendingBankBranchName and ''!=lendingBankBranchName"> AND `lendingBankBranchName`=#{lendingBankBranchName}</if>
+		<if test="null!=lendingPhoneNumber and ''!=lendingPhoneNumber"> AND `lendingPhoneNumber`=#{lendingPhoneNumber}</if>
+		<if test="null!=paymentBankId and paymentBankId>0"> AND `paymentBankId`=#{paymentBankId}</if>
+		<if test="null!=paymentBankBranchId and paymentBankBranchId>0"> AND `paymentBankBranchId`=#{paymentBankBranchId}</if>
+		<if test="null!=paymentBankName and ''!=paymentBankName"> AND `paymentBankName`=#{paymentBankName}</if>
+		<if test="null!=paymentBankBranchName and ''!=paymentBankBranchName"> AND `paymentBankBranchName`=#{paymentBankBranchName}</if>
+		<if test="null!=paymentImgs and ''!=paymentImgs"> AND `paymentImgs`=#{paymentImgs}</if>
+		<if test="null!=paymentBankAccount and ''!=paymentBankAccount"> AND `paymentBankAccount`=#{paymentBankAccount}</if>
+		<if test="null!=paymentBankUserName and ''!=paymentBankUserName"> AND `paymentBankUserName`=#{paymentBankUserName}</if>
+		<if test="null!=paymentPhoneNumber and ''!=paymentPhoneNumber"> AND `paymentPhoneNumber`=#{paymentPhoneNumber}</if>
+		<if test="null!=paymentRemark and ''!=paymentRemark"> AND `paymentRemark`=#{paymentRemark}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="TblOrderBaseHouseLendingDto" resultType="TblOrderBaseHouseLendingDto">    
+	SELECT `id`, `orderNo`, `lendingBankId`, `lendingBankBranchId`, `lendingImgs`, `bankAccount`, `bankUserName`, `remark`, `isFinish`, `createUid`, `createTime`, `updateUid`, `updateTime`, `lendingBankName`, `lendingBankBranchName`, `lendingPhoneNumber`, `paymentBankId`, `paymentBankBranchId`, `paymentBankName`, `paymentBankBranchName`, `paymentImgs`, `paymentBankAccount`, `paymentBankUserName`, `paymentPhoneNumber`, `paymentRemark` 
+	FROM tbl_order_base_house_lending 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="TblOrderBaseHouseLendingDto" resultType="TblOrderBaseHouseLendingDto">
+	SELECT `id`, `orderNo`, `lendingBankId`, `lendingBankBranchId`, `lendingImgs`, `bankAccount`, `bankUserName`, `remark`,
+	 `isFinish`, `createUid`, `createTime`, `updateUid`, `updateTime`, 
+	 `lendingBankName`, `lendingBankBranchName`, `lendingPhoneNumber`, 
+	 `paymentBankId`, `paymentBankBranchId`, `paymentBankName`, `paymentBankBranchName`, 
+	 `paymentImgs`, `paymentBankAccount`, `paymentBankUserName`, `paymentPhoneNumber`, `paymentRemark`
+	 
+	 <if test="repaymentType == 1 ">
+	 ,(select SUM(repayPrincipal)-SUM(givePayPrincipal) from tbl_finance_afterloan_first_interest t where t.orderNo=#{orderNo} and t.`status` in (1,2)) receivedPrincipalTotal,
+     (select SUM(repayInterest)-SUM(givePayInterest) from tbl_finance_afterloan_first_interest t where t.orderNo=#{orderNo} and t.`status` in (1,2))receivedInterestTotal,
+     (select SUM(repayOverdue)-SUM(givePayOverdue) from tbl_finance_afterloan_first_interest t where t.orderNo=#{orderNo} and t.`status` in (1,2)) receivedDefaultInterestTotal
+ 
+       </if>
+	  <if test="repaymentType == 2 ">
+	 ,(select SUM(repayPrincipal)-SUM(givePayPrincipal) from tbl_finance_afterloan_equal_interest t where t.orderNo=#{orderNo} and t.`status` in (1,2))receivedPrincipalTotal,
+     (select SUM(repayInterest)-SUM(givePayInterest) from tbl_finance_afterloan_equal_interest t where t.orderNo=#{orderNo} and t.`status` in (1,2)) receivedInterestTotal,
+     (select SUM(repayOverdue)-SUM(givePayOverdue) from tbl_finance_afterloan_equal_interest t where t.orderNo=#{orderNo} and t.`status` in (1,2)) receivedDefaultInterestTotal
+ 
+       </if>
+	 
+	 
+	 
+	FROM tbl_order_base_house_lending 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="TblOrderBaseHouseLendingDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_order_base_house_lending 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="TblOrderBaseHouseLendingDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_order_base_house_lending(
+		`orderNo`,
+		`lendingBankId`,
+		`lendingBankBranchId`,
+		`lendingImgs`,
+		`bankAccount`,
+		`bankUserName`,
+		`remark`,
+		`isFinish`,
+		`createUid`,
+		`createTime`,
+		`updateUid`,
+		`updateTime`,
+		`lendingBankName`,
+		`lendingBankBranchName`,
+		`lendingPhoneNumber`,
+		`paymentBankId`,
+		`paymentBankBranchId`,
+		`paymentBankName`,
+		`paymentBankBranchName`,
+		`paymentImgs`,
+		`paymentBankAccount`,
+		`paymentBankUserName`,
+		`paymentPhoneNumber`,
+		`paymentRemark`
+	) VALUES(
+		#{orderNo},
+		#{lendingBankId},
+		#{lendingBankBranchId},
+		#{lendingImgs},
+		#{bankAccount},
+		#{bankUserName},
+		#{remark},
+		#{isFinish},
+		#{createUid},
+		now(),
+		#{createUid},
+		now(),
+		#{lendingBankName},
+		#{lendingBankBranchName},
+		#{lendingPhoneNumber},
+		#{paymentBankId},
+		#{paymentBankBranchId},
+		#{paymentBankName},
+		#{paymentBankBranchName},
+		#{paymentImgs},
+		#{paymentBankAccount},
+		#{paymentBankUserName},
+		#{paymentPhoneNumber},
+		#{paymentRemark}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="TblOrderBaseHouseLendingDto" >
+    DELETE FROM tbl_order_base_house_lending 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="TblOrderBaseHouseLendingDto" >
+    UPDATE tbl_order_base_house_lending
+	<set>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=lendingBankId">`lendingBankId`=#{lendingBankId},</if>
+		<if test="null!=lendingBankBranchId">`lendingBankBranchId`=#{lendingBankBranchId},</if>
+		<if test="null!=lendingImgs">`lendingImgs`=#{lendingImgs},</if>
+		<if test="null!=bankAccount">`bankAccount`=#{bankAccount},</if>
+		<if test="null!=bankUserName">`bankUserName`=#{bankUserName},</if>
+		<if test="null!=remark">`remark`=#{remark},</if>
+		<if test="null!=isFinish">`isFinish`=#{isFinish},</if>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=lendingBankName">`lendingBankName`=#{lendingBankName},</if>
+		<if test="null!=lendingBankBranchName">`lendingBankBranchName`=#{lendingBankBranchName},</if>
+		<if test="null!=lendingPhoneNumber">`lendingPhoneNumber`=#{lendingPhoneNumber},</if>
+		<if test="null!=paymentBankId">`paymentBankId`=#{paymentBankId},</if>
+		<if test="null!=paymentBankBranchId">`paymentBankBranchId`=#{paymentBankBranchId},</if>
+		<if test="null!=paymentBankName">`paymentBankName`=#{paymentBankName},</if>
+		<if test="null!=paymentBankBranchName">`paymentBankBranchName`=#{paymentBankBranchName},</if>
+		<if test="null!=paymentImgs">`paymentImgs`=#{paymentImgs},</if>
+		<if test="null!=paymentBankAccount">`paymentBankAccount`=#{paymentBankAccount},</if>
+		<if test="null!=paymentBankUserName">`paymentBankUserName`=#{paymentBankUserName},</if>
+		<if test="null!=paymentPhoneNumber">`paymentPhoneNumber`=#{paymentPhoneNumber},</if>
+		<if test="null!=paymentRemark">`paymentRemark`=#{paymentRemark},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

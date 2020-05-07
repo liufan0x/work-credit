@@ -1,0 +1,153 @@
+<style>
+	.inp-boxx {
+		padding-left: 20px;
+		position: relative;
+		float: left;
+		line-height: 30px;
+	}
+	
+	input.inp-boxx {
+		margin-left: 20px;
+	}
+	
+	.inp-boxx {
+		padding-left: 20px;
+		position: relative;
+		float: left;
+		line-height: 30px;
+	}
+	
+	input.inp-boxx {
+		margin-left: 20px;
+	}
+	
+	input.three-inp {
+		width: 70px !important;
+	}
+	
+	input.two-inp {
+		width: 100px !important;
+	}
+</style>
+<div class="container-fluid contractFieldShowCtrl">
+	<div class="row">
+		<div class="col-md-12">
+			<ul class="breadcrumb">
+				<li>工具管理 <span class="divider"></span></li>
+				<li class="active">套打合同</li>
+				<li class="go-back">
+					<a onclick="history.go(-1);">返回上一步</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="row col-md-12 detail-row form-inline w138">
+		<div class="col-md-12 detail-right-tit"> &nbsp;&nbsp;合同信息</div>
+		<div class="col-md-12" style="padding:0 40px;margin-top:10px;">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>所属分组</th>
+						<th>合同名称</th>
+						<th>普通模板</th>
+						<th>无文本模板</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<div class="form-group">
+								<select select2 class="form-control" ng-model="contract.groupId" style="width: 280px;">
+									<option value="">请选择</option>
+									<option value="{{group.id}}" ng-repeat="group in contractGroupList">{{group.name}}</option>
+								</select>
+							</div>
+						</td>
+						<td>
+							<div class="form-group">
+								<input type="text" class="form-control" ng-model="contract.name" style="width: 280px;" />
+							</div>
+						</td>
+						<td>
+							<span class="caozuo" ng-if="!contract.path">
+                            	<a data-fancybox="iframe" data-src="/plugins/uploadify/upload_image.html?returnFun=returnPath" data-type="iframe" href="javascript:;">上传</a>
+                        	</span>
+							<span class="caozuo red-word" ng-if="contract.path">
+                            	<a href="javascript:void(0)" ng-click="setPath('')">删除</a>
+                        	</span>
+							<span class="caozuo red-word" ng-if="contract.path">
+                            	<a href="{{contract.path}}" target="_blank" >查看</a>
+                       		</span>
+						</td>
+						<td>
+							<span class="caozuo" ng-if="!contract.noTextPath">
+                            	<a data-fancybox="iframe" data-src="/plugins/uploadify/upload_image.html?returnFun=returnNoTextPath" data-type="iframe" href="javascript:;">上传</a>
+                        	</span>
+							<span class="caozuo red-word" ng-if="contract.noTextPath">
+                            	<a href="javascript:void(0)" ng-click="setNoTextPath('')">删除</a>
+                        	</span>
+							<span class="caozuo red-word" ng-if="contract.noTextPath">
+                            	<a href="{{contract.noTextPath}}" target="_blank" >查看</a>
+                       		</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="row" ng-repeat="group in groupList">
+		<form name="fieldForm" role="form" class="form-inline">
+			<div class="col-md-12">
+				<ul class="breadcrumb">
+					<li style="color:#337AB7" ng-bind="group.name"></li>
+				</ul>
+			</div>
+			<div ng-class="{'col-md-12':field.inputs.length > 6,'col-md-6':field.inputs.length <= 6}" ng-repeat="field in group.fileList">
+				<div class="form-group">
+					<div class="jigou-span" style="width: 190px;"><input type="checkbox" ng-true-value="'{{field.id}}'" ng-false-value="" ng-model="field.gou">&nbsp;{{field.name}}：</div>
+					<temp ng-repeat="input in field.inputs">
+						<div class="inp-boxx" ng-if="!input.type && ((field.type == '1' && $index%2==0) || (field.type == '2' && $index%2!=0))">
+							<input type="text" disabled="true" class="form-control" ng-class="{'two-inp':field.inputs.length==3||field.inputs.length==4,'three-inp':field.inputs.length > 4}" ng-model="input.value" />
+						</div>
+						<div class="inp-boxx" ng-if="!input.type && ((field.type == '2' && $index%2==0 )|| (field.type == '1' && $index%2!=0)) ">
+							<span ng-bind="input.value"></span>
+						</div>
+					</temp>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="row">
+		<div class="col-md-12 form-inline">
+			<button type="button" ng-click="save()" class="btn btn-primary lhw-alert-ok" style="margin-left:50px;">保存</button>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+	function returnPath(url, smallUrl, name) {
+		url = url.substring(0, url.length - 1);
+		if(url.split(',').length > 1) {
+			alert("只允许上传一个文件！");
+			return false;
+		}
+		var scope = angular.element('.contractFieldShowCtrl').scope();
+		scope.setPath(url);
+	}
+
+	function returnNoTextPath(url, smallUrl, name) {
+		url = url.substring(0, url.length - 1);
+		if(url.split(',').length > 1) {
+			alert("只允许上传一个文件！");
+			return false;
+		}
+		if(url.indexOf("doc") == -1){
+			alert("只允许上传doc文件！");
+			return false;
+		}
+		var scope = angular.element('.contractFieldShowCtrl').scope();
+		scope.setNoTextPath(url);
+	}
+</script>

@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>结清原贷款</title>
+<!--标准mui.css-->
+<link rel="stylesheet" href="./css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="./css/order.css" />
+<link href="./css/mui.picker.min.css" rel="stylesheet" />
+</head>
+<body>
+<div class="form-box">
+<div class="detail-box">
+     <iframe src="detail.html" frameborder="0" id="detail-if" style="width:100%;height:307px;"></iframe>
+</div> 
+<p class="toggle-p"><span>展开查看订单信息</span></p>
+</div>
+<div class="form-box">
+     <div class="inp-div">
+           <span class="inp-span mi">结清原贷款日期</span><span class="inp-r icon-d"> &nbsp;</span>
+           <input type="text" value="" readonly class="inp-box date" data-options='{"type":"date"}'  id="foreclosureTime" placeholder="请选择">
+     </div>
+     <div class="inp-div">
+           <span class="inp-span mi">借款金额</span><span class="inp-r"> 万元 </span>
+           <input type="number" value="" disabled class="inp-box"  id="loanAmount" onkeyup="value=value.replace(/[^\d.]/g,'')">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">是否在银行结清</span><span class="inp-r icon-d"> &nbsp;</span>
+           <input type="text" value="是"  readonly class="inp-box sel"  id="isBan">
+           <input type="hidden" id="isBankEnd">
+     </div>
+     
+	 <div class="inp-div settleBank">
+           <span class="inp-span mi">结清原贷款银行</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#" id="selbank"><input type="text" value="" readonly class="inp-box" id="foreclosureBankName" placeholder="请选择"></a>
+		   <input type="hidden"  id="foreclosureBankNameId">
+     </div>
+	 <div class="inp-div settleBank">
+           <span class="inp-span mi">结清原贷款支行</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#" id="selsubbank"><input type="text" value="" readonly class="inp-box" id="foreclosureBankSubName" placeholder="请选择"></a>
+		   <input type="hidden"  id="foreclosureBankSubNameId">
+     </div>
+      <div class="inp-div settleAddress" style="dispaly:none">
+           <span class="inp-span mi">结清原贷款地址</span><span class="inp-r">&nbsp;</span>
+           <input type="text" value=""  class="inp-box" id="foreclosureAddress" placeholder="请输入">
+     </div>
+     
+	 <div class="inp-div">
+           <span class="inp-span mi">银行卡户名</span><span class="inp-r">&nbsp;</span>
+           <input type="text" value=""  class="inp-box" id="bankCardMaster" placeholder="请输入">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">银行卡账号</span><span class="inp-r">&nbsp;</span>
+           <input type="text" value=""  class="inp-box" id="bankNo" placeholder="请输入" onkeyup="value=value.replace(/[^\d]/g,'')">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">添加扣款凭证照片</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" readonly class="inp-box file-upload" name="pic"   ></a>
+            <input type="hidden" id="voucherImg" value="">
+     </div>
+	 <div class="inp-div no-border" >
+           <span class="inp-span mi">添加结清证明照片</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" readonly class="inp-box file-upload2" name="pic2" ></a>
+            <input type="hidden" id="foreclosureImg" value="">
+     </div>
+     <div class="clear"></div>
+</div>
+
+<div class="form-box">
+     <div class="inp-div">
+           <span class="inp-span mi">取证员</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#" id="nUrl"><input type="text" value="" readonly class="inp-box" id="licenseRever" placeholder="请选择"></a>
+           <input type="hidden" id="licenseReverUid">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">预计取证时间</span><span class="inp-r icon-d"> &nbsp;</span>
+           <input type="text" value="" readonly class="inp-box date" data-options='{"type":"date"}'  id="licenseRevTime" placeholder="请选择">
+     </div>
+     
+     <div class="inp-div">
+           <span class="inp-span mi">取证银行</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#" id="qzselbank"><input type="text" value="" readonly class="inp-box" id="licenseRevBankName" placeholder="请选择"></a>
+		   <input type="hidden"  id="licenseRevBank">
+     </div>
+	 <div class="inp-div no-border">
+           <span class="inp-span mi">取证支行</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#" id="qzselsubbank"><input type="text" value="" readonly class="inp-box" id="licenseRevBankSubName" placeholder="请选择"></a>
+		   <input type="hidden"  id="licenseRevBankSub">
+     </div>
+	 <div class="clear"></div>
+</div>
+
+
+<div class="form-box">
+    <div class="clear"> </div>
+	<div class="inp-div no-border">
+           <span class="inp-span">备注</span>
+     </div>
+     <textarea id="remark" rows="5" placeholder="如有特殊说明，请在此备注（非必填）。" class="textarea-box"></textarea>
+	 <div class="clear"></div>
+ 
+     <div class="sub-but">确认</div>
+     <br>
+</div>
+
+<!--结清原贷款 银行/支行-->
+<div class="mui-iframe-wrapper iframe-box selbank-if">
+<iframe id="ifranmes" src="selectBank_list.html?type=1"></iframe>
+</div>
+
+ <!--取证员-->
+<div class="mui-iframe-wrapper iframe-box landBureauUid">
+<iframe id="ifranmesUid" src="lincenseRever_list.html"></iframe>
+</div>
+
+<!-- 取证 银行/支行 -->
+<div class="mui-iframe-wrapper iframe-box qzselbank-if">
+<iframe id="qzifranmes" src="selectBank_list.html?type=2"></iframe>
+</div>
+
+<!--上传图片-->
+<div class="file-box file-box1">
+     <div class="file-but">立即上传</div>
+	 <div class="img-box">
+	    <div class="file-add"><input type="file" class="file-inp file" name="file" ></div>
+	 </div>
+</div>
+<div class="file-box file-box2">
+     <div class="file-but">立即上传</div>
+	 <div class="img-box">
+	    <div class="file-add"><input type="file" class="file-inp file" name="file"  ></div>
+	 </div>
+</div>
+<!--上传图片end-->
+
+<script src="./js/mui.min.js"></script>
+<script src="./js/mui.picker.min.js"></script>
+<script src="./js/jquery.min.js"></script>
+<script src="./js/process.js"></script>
+<script>
+var orderNo = GetQueryString("orderNo");
+var productCode=GetQueryString("productCode");
+var cityCode = GetQueryString("cityCode");
+$("#detail-if").attr("src","detail.html?orderNo="+orderNo);
+$(".ifranmesUid").attr("src","lincenseRever_list.html?cityCode="+cityCode+"&productCode="+productCode);
+//详情点击效果
+$(".toggle-p span").on("click",function(){
+  if($(this).html()=="点击收起订单信息"){ 
+	  $(this).html("展开查看订单信息"); 
+   }
+  else{  $(this).html("点击收起订单信息"); }
+  $(this).parent().prev(".detail-box").toggle();
+}) 
+
+var bankId="";
+//银行返回数据//支行返回数据
+function returnData(id,name,sub,type){
+	 
+	if(type==1){  //结清原贷款
+		  if(id){ 
+			   $(".selbank-if").css({"opacity":"0","z-index":"-11"});
+			   if(sub=="no"){
+				     $("#foreclosureBankNameId").val(id);
+				     $("#foreclosureBankName").val(name);
+					 $("#foreclosureBankSubNameId").val("");
+				     $("#foreclosureBankSubName").val("");
+				     bankId=id;
+			   }else{
+				     $("#foreclosureBankSubNameId").val(id);
+				     $("#foreclosureBankSubName").val(name);
+			   }
+		  }
+	}else if(type==2){ //取证
+		if(id){ 
+			   $(".qzselbank-if").css({"opacity":"0","z-index":"-11"});
+			   if(sub=="no"){
+			     $("#licenseRevBank").val(id);
+			     $("#licenseRevBankName").val(name);
+				 $("#licenseRevBankSub").val("");
+			     $("#licenseRevBankSubName").val("");
+			     bankId=id;
+			   }else{
+			     $("#licenseRevBankSub").val(id);
+			     $("#licenseRevBankSubName").val(name);
+			   }
+		  }
+	}
+}
+
+//取证
+$("#nUrl").on("click",function(){ 
+	    $(".landBureauUid").css({"opacity":"1","z-index":"111"});
+})
+//取证员返回数据
+function returnDataUrl(code,name){
+	  if(code){
+		   $(".landBureauUid").css({"opacity":"0","z-index":"-11"});
+		   $("#licenseReverUid").val(code);
+		   $("#licenseRever").val(name);
+	  }
+	 
+}
+
+
+ $(function(){
+	 //图片上传
+	 var fileOpen="";
+	$(".file-upload").on("click",function(){
+	    $(".file-box1").show();
+		fileOpen="one";
+	})
+	$(".file-upload2").on("click",function(){
+	    $(".file-box2").show();
+		fileOpen="two";
+	})
+	$(".file-but").on("click",function(){
+		var _this=$(this);
+		var picAll='';
+        $(this).parent().find(".img").each(function(){
+		   picAll+=$(this).attr("src")+',';
+		}) 
+	    $(this).parent(".file-box").hide();
+		 
+		if(picAll==""){
+			if(fileOpen=="one"){
+		        $(".file-upload").val("请上传图片");
+			}else{
+			    $(".file-upload2").val("请上传图片");
+			}
+		}else{
+			picAll=picAll.substring(0,picAll.length-1);
+			//alert(picAll);
+		   if(fileOpen=="one"){
+		      $("#voucherImg").val(picAll);
+		      $(".file-upload").val("已上传");
+		   }else{
+		      $("#foreclosureImg").val(picAll);
+		      $(".file-upload2").val("已上传");
+		   }
+		}
+	})
+	
+	$(".file-inp").change(function(){
+		var _this=$(this);
+        var formData = new FormData();
+        formData.append("file",$(this)[0].files[0]);
+        $.ajax({ 
+		type:'post',
+	    url: "http://fs.anjbo.com/fs/img/upload", 
+		processData : false,
+		contentType: false,
+		async:false,
+		data: formData, 
+		success: function(data){
+			var picUrl=data.url;
+			var ss='<div class="file-img"><img src="'+picUrl+'" class="img"><div class="mui-icon mui-icon-minus file-del"></div></div>';
+     
+			_this.parent().parent(".img-box").append(ss);
+			$(".file-del").on("click",function(){
+	            $(this).parent(".file-img").remove();
+	        })
+         },
+		 error:function(xhr,type,errorThrown){
+					console.log(type);
+		}
+	  });	 
+	})
+	//图片上传end
+
+	 var orderNo = GetQueryString("orderNo");
+     $("#detail-if").attr("src","detail.html?orderNo="+orderNo);
+
+	 $("#selbank").on("click",function(){
+		 bankId==""
+		 $("#ifranmes").attr("src","selectBank_list.html?type=1");
+	     $(".selbank-if").css({"opacity":"1","z-index":"111"});
+	 })
+	 $("#selsubbank").on("click",function(){
+		    if(bankId==""){
+			   mui.alert("请选择银行");
+			}else{
+				 $("#ifranmes").attr("src","selectBank_list.html?type=1&bankId="+bankId);
+			     $(".selbank-if").css({"opacity":"1","z-index":"111"});
+			}
+	 })
+	
+	 $("#qzselbank").on("click",function(){
+		 bankId==""
+		 $("#qzifranmes").attr("src","selectBank_list.html?type=2");
+	     $(".qzselbank-if").css({"opacity":"1","z-index":"111"});
+	 })
+	 $("#qzselsubbank").on("click",function(){
+		    if(bankId==""){
+			   mui.alert("请选择银行");
+			}else{
+				 $("#qzifranmes").attr("src","selectBank_list.html?type=2&bankId="+bankId);
+			     $(".qzselbank-if").css({"opacity":"1","z-index":"111"});
+			}
+	 })
+	 
+	 $.ajax({ 
+		 url:'/credit/process/foreclosure/v/detail',
+		 data:JSON.stringify({"orderNo":orderNo}), 
+         type: 'post' ,
+         dataType: 'json',  
+		 async:false,
+         contentType:'application/json;charset=utf-8',
+		 success: function(data){
+			 var arrImg=[];var arrImg2=[];
+			var obj= data.data;
+		    var img = obj.transferImg;
+		    if(img!=null && img!=''){
+		    	 $("#nImg").val("已上传");
+		    }
+		    $("#loanAmount").val(obj.loanAmount);
+		    $("#foreclosureTime").val(obj.foreclosureTimeStr);
+		    var isBankEnd = obj.isBankEnd;
+		    $("#isBankEnd").val(isBankEnd);
+		    if(isBankEnd == 0){ //是
+		    	$("#isBan").val("是");
+				$("#foreclosureBankNameId").val(obj.foreclosureBankNameId);
+			    $("#foreclosureBankName").val(obj.foreclosureBankName);
+			    $("#foreclosureBankSubNameId").val(obj.foreclosureBankSubNameId);
+			    $("#foreclosureBankSubName").val(obj.foreclosureBankSubName);
+			    $(".settleBank").show();
+				$(".settleAddress").hide();
+			}else{
+				$("#isBan").val("否");
+				$("#foreclosureAddress").val(obj.foreclosureAddress);
+				$(".settleAddress").show();
+				$(".settleBank").hide();
+			}
+		    
+		    $("#bankNo").val(obj.bankNo);
+		    $("#bankCardMaster").val(obj.bankCardMaster);
+ 		    $("#voucherImg").val(obj.voucherImg);
+			if(obj.voucherImg){	
+				$(".file-upload").val("已上传");
+			    arrImg=obj.voucherImg.split(",");
+				for(var i=0; i<arrImg.length;i++){
+				   var ss='<div class="file-img"><img src="'+arrImg[i]+'" class="img"><div class="mui-icon mui-icon-minus file-del"></div></div>';
+				  $(".file-box1").find(".img-box").append(ss);
+				}
+			}else{
+			  $(".file-upload").val("请上传图片");
+			}
+		    $("#foreclosureImg").val(obj.foreclosureImg);
+            if(obj.foreclosureImg){
+				$(".file-upload2").val("已上传");
+			    arrImg2=obj.foreclosureImg.split(",");
+				for(var i=0; i<arrImg2.length;i++){
+				   var ss='<div class="file-img"><img src="'+arrImg2[i]+'" class="img"><div class="mui-icon mui-icon-minus file-del"></div></div>';
+				  $(".file-box2").find(".img-box").append(ss);
+				}
+			}else{
+			  $(".file-upload2").val("请上传图片");
+			}
+ 			$("#licenseRevTime").val(obj.licenseRevTimeStr);
+		    $("#licenseRever").val(obj.licenseRever);
+		    $("#licenseReverUid").val(obj.licenseReverUid);
+		    $("#licenseRevBank").val(obj.licenseRevBank);
+		    $("#licenseRevBankName").val(obj.licenseRevBankName);
+		    $("#licenseRevBankSub").val(obj.licenseRevBankSub);
+		    $("#licenseRevBankSubName").val(obj.licenseRevBankSubName);
+		    $("#remark").val(obj.remark);
+         }
+	   });
+ })
+
+$(".sub-but").click(function(){  
+	var remark =$("#remark").val();
+	var isBankEnd = $("#isBankEnd").val();
+	var foreclosureBankNameId =$("#foreclosureBankNameId").val();
+	var foreclosureBankName =$("#foreclosureBankName").val();
+	var foreclosureBankSubNameId= $("#foreclosureBankSubNameId").val();
+	var foreclosureBankSubName = $("#foreclosureBankSubName").val();
+	var foreclosureAddress = $("#foreclosureAddress").val();
+	var foreclosureTime = $("#foreclosureTime").val();
+	if(foreclosureTime==null || foreclosureTime=='' ){
+		alert("结清原贷款日期不能为空");
+		return false;
+	}
+	if(isBankEnd==0){
+		if(foreclosureBankName==null || foreclosureBankName=='' || foreclosureBankSubName==null || foreclosureBankSubName==''){
+			alert("结清原贷款银行或支行不能为空");
+			return false;
+		}
+	}else if(isBankEnd == 1){
+		if(foreclosureAddress==null || foreclosureAddress=='' ){
+			alert("结清原贷款地址不能为空");
+			return false;
+		}
+	}
+	var bankNo = $("#bankNo").val();
+	if(bankNo==null || bankNo=='' ){
+		alert("*银行卡卡号不能为空");
+		return false;
+	}
+	var bankCardMaster = $("#bankCardMaster").val();
+	if(bankCardMaster==null || bankCardMaster=='' ){
+		alert("银行卡账号不能为空");
+		return false;
+	}
+	var voucherImg=  $("#voucherImg").val();
+ 	if(voucherImg==null || voucherImg=='' ){
+		alert("扣款凭证照片不能为空");
+ 		return false;
+ 	}
+	var foreclosureImg=  $("#foreclosureImg").val();
+ 	if(foreclosureImg==null || foreclosureImg=='' ){
+ 		alert("结清证明照片不能为空");
+ 		return false;
+ 	}
+	var licenseRever=  $("#licenseRever").val();
+	var licenseReverUid=  $("#licenseReverUid").val();
+	if(licenseRever==null || licenseRever=='' ){
+		alert("取证员不能为空");
+		return false;
+	}
+	var licenseRevTime=  $("#licenseRevTime").val();
+	if(licenseRevTime==null || licenseRevTime=='' ){
+		alert("取证时间不能为空");
+		return false;
+	}
+	var licenseRevBank=  $("#licenseRevBank").val();
+	var licenseRevBankName=  $("#licenseRevBankName").val();
+	var licenseRevBankSub=  $("#licenseRevBankSub").val();
+	var licenseRevBankSubName=  $("#licenseRevBankSubName").val();
+	if(licenseRevBankName==null || licenseRevBankName=='' || licenseRevBankSubName==null || licenseRevBankSubName==''){
+		alert("取证银行或支行不能为空");
+		return false;
+	}
+    var content={"orderNo":orderNo,"foreclosureTime":foreclosureTime,"isBankEnd":isBankEnd,"foreclosureBankNameId":foreclosureBankNameId,
+    		 	"foreclosureBankName":foreclosureBankName,"foreclosureBankSubNameId":foreclosureBankSubNameId,"foreclosureBankSubName":foreclosureBankSubName,
+    		 	"foreclosureAddress":foreclosureAddress,"bankNo":bankNo,"bankCardMaster":bankCardMaster,"voucherImg":voucherImg,"foreclosureImg":foreclosureImg,
+    		 	"licenseRever":licenseRever,"remark":remark,"licenseReverUid":licenseReverUid,"licenseRevTime":licenseRevTime,
+    		 	"licenseRevBank":licenseRevBank,"licenseRevBankName":licenseRevBankName,"licenseRevBankSub":licenseRevBankSub,"licenseRevBankSubName":licenseRevBankSubName
+    		 	,"uid":GetQueryString("uid"),"deviceId":GetQueryString("deviceId")};
+	 $.ajax({ 
+		url:'/credit/process/foreclosure/v/add',
+		data:JSON.stringify(content), 
+        type: 'post' ,
+        dataType: 'json',  
+        contentType:'application/json;charset=utf-8',
+		 success: function(data){
+			alert(data.msg);
+        }
+	   });
+ })
+ 
+ 
+mui.init();
+mui.ready(function() {
+
+  $(".sel").click(function(){
+	  var userPicker = new mui.PopPicker();
+	  userPicker.setData([{
+		value: '0',
+		text: '是'
+	  }, {
+		value: '1',
+		text: '否'
+	  }]);
+	  var _this=$(this);
+	  userPicker.show(function(items) {
+			_this.val((items[0].text));
+			$("#isBankEnd").val(items[0].value);
+			if(items[0].value == 0){ //是
+				$(".settleBank").show();
+				$(".settleAddress").hide();
+			}else{
+				$(".settleAddress").show();
+				$(".settleBank").hide();
+			}
+			//返回 false 可以阻止选择框的关闭 
+			//return false;
+		});
+  });
+   
+  $(".date").on("click",function(){
+	  var _this=$(this);
+	  var optionsJson = _this.attr('data-options') || '{}';
+	  var options = JSON.parse(optionsJson);
+	  var  picker = new mui.DtPicker(options);
+	  picker.show(function(rs) {
+		  _this.val(rs.text);
+		   picker.dispose();
+		});
+     });
+  
+});
+</script>
+</body>
+</html>

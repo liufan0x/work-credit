@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.FinancialMapper">
+	<select id="financialList" parameterType="java.util.Map"
+		resultType="java.util.Map">
+		SELECT
+		c.fundId,
+		a.customerName,
+		a.borrowingAmount,
+		a.borrowingDay,
+		a.productName,
+		a.lendingTime,
+		a.planPaymentTime,
+		d.payMentAmountDate,
+		b.rate,
+		h.receivableInterestMoney,
+		h.interestTime,
+		b.overdueRate,
+		g.datediff,
+		f.penaltyPayable,
+		f.payTime,
+		b.serviceCharge,
+		e.rebateMoney,
+		e.rebateTime,
+		a.cityName,
+		b.branchCompany,
+		a.cooperativeAgencyName,
+		a.channelManagerName,
+		a.acceptMemberName
+		FROM
+		tbl_order_list_base a,
+		tbl_order_base_borrow b
+		LEFT JOIN tbl_risk_allocation_fund c ON ( b.orderNo = c.orderNo )
+		LEFT JOIN tbl_finance_receivable_for d ON ( b.orderNo = d.orderNo )
+		LEFT JOIN tbl_finance_rebate e ON ( b.orderNo = e.orderNo )
+		LEFT JOIN tbl_finance_receivable_pay f ON ( b.orderNo = f.orderNo )
+		LEFT JOIN tbl_finance_receivable_has g ON ( b.orderNo = g.orderNo and
+		g.type = '2')
+		LEFT JOIN tbl_finance_lending_harvest h ON ( b.orderNo = h.orderNo)
+		WHERE 1 = 1
+		<if test="cityCode!=null and cityCode!=''">
+			and a.cityName =#{cityCode}
+		</if>
+		<if test="branchCompany!=null and branchCompany!=''">
+			and b.branchCompany = #{branchCompany}
+		</if>
+		<if test="channelManagerName!=null and channelManagerName!=''">
+			and a.channelManagerName like CONCAT('%',#{channelManagerName},'%')
+		</if>
+		<if test="customerName!=null and customerName!=''">
+			and a.customerName like CONCAT('%',#{customerName},'%')
+		</if>
+		<if test="startLendingTime!=null and startLendingTime!=''">
+         <![CDATA[ AND DATE_FORMAT(a.lendingTime,'%Y-%m-%d') >= DATE_FORMAT(#{startLendingTime},'%Y-%m-%d') ]]>
+		</if>
+		<if test="endLendingTime!=null and endLendingTime!=''">
+         <![CDATA[ AND DATE_FORMAT(a.lendingTime,'%Y-%m-%d') <= DATE_FORMAT(#{endLendingTime},'%Y-%m-%d') ]]>
+		</if>
+		<if test="startPlanPaymentTime!=null and startPlanPaymentTime!=''">
+         <![CDATA[ AND DATE_FORMAT(a.planPaymentTime,'%Y-%m-%d') >= DATE_FORMAT(#{startPlanPaymentTime},'%Y-%m-%d') ]]>
+		</if>
+		<if test="endPlanPaymentTime!=null and endPlanPaymentTime!=''">
+         <![CDATA[ AND DATE_FORMAT(a.planPaymentTime,'%Y-%m-%d') <= DATE_FORMAT(#{endPlanPaymentTime},'%Y-%m-%d') ]]>
+		</if>
+		<if
+			test="startPayMentAmountDate!=null and startPayMentAmountDate!=''">
+         <![CDATA[ AND DATE_FORMAT(d.payMentAmountDate,'%Y-%m-%d') >= DATE_FORMAT(#{startPayMentAmountDate},'%Y-%m-%d') ]]>
+		</if>
+		<if test="endPayMentAmountDate!=null and endPayMentAmountDate!=''">
+         <![CDATA[ AND DATE_FORMAT(d.payMentAmountDate,'%Y-%m-%d') <= DATE_FORMAT(#{endPayMentAmountDate},'%Y-%m-%d') ]]>
+		</if>
+		<if test="startPayTime!=null and startPayTime!=''">
+         <![CDATA[ AND DATE_FORMAT(f.payTime,'%Y-%m-%d') >= DATE_FORMAT(#{startPayTime},'%Y-%m-%d') ]]>
+		</if>
+		<if test="endPayTime!=null and endPayTime!=''">
+         <![CDATA[ AND DATE_FORMAT(f.payTime,'%Y-%m-%d') <= DATE_FORMAT(#{endPayTime},'%Y-%m-%d') ]]>
+		</if>
+		and a.orderNo = b.orderNo
+		and a.state != '已关闭'
+		ORDER BY a.createtime desc
+		limit #{start},#{pageSize}
+	</select>
+
+	<select id="financialCount" parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		select
+		count(1)
+		from
+		tbl_order_list_base a,
+		tbl_order_base_borrow b 
+		LEFT JOIN tbl_risk_allocation_fund c ON ( b.orderNo = c.orderNo )
+		LEFT JOIN tbl_finance_receivable_for d ON ( b.orderNo = d.orderNo )
+		LEFT JOIN tbl_finance_rebate e ON ( b.orderNo = e.orderNo )
+		LEFT JOIN tbl_finance_receivable_pay f ON ( b.orderNo = f.orderNo )
+		LEFT JOIN tbl_finance_receivable_has g ON ( b.orderNo = g.orderNo and
+		g.type = '2')
+		LEFT JOIN tbl_finance_lending_harvest h ON ( b.orderNo = h.orderNo)
+		where 1 = 1
+		<if test="cityCode!=null and cityCode!=''">
+			and a.cityName =#{cityCode}
+		</if>
+		<if test="branchCompany!=null and branchCompany!=''">
+			and b.branchCompany = #{branchCompany}
+		</if>
+		<if test="channelManagerName!=null and channelManagerName!=''">
+			and a.channelManagerName like CONCAT('%',#{channelManagerName},'%')
+		</if>
+		<if test="customerName!=null and customerName!=''">
+			and a.customerName like CONCAT('%',#{customerName},'%')
+		</if>
+		<if test="startLendingTime!=null and startLendingTime!=''">
+         <![CDATA[ AND DATE_FORMAT(a.lendingTime,'%Y-%m-%d') >= DATE_FORMAT(#{startLendingTime},'%Y-%m-%d') ]]>
+		</if>
+		<if test="endLendingTime!=null and endLendingTime!=''">
+         <![CDATA[ AND DATE_FORMAT(a.lendingTime,'%Y-%m-%d') <= DATE_FORMAT(#{endLendingTime},'%Y-%m-%d') ]]>
+		</if>
+		<if test="startPlanPaymentTime!=null and startPlanPaymentTime!=''">
+         <![CDATA[ AND DATE_FORMAT(a.planPaymentTime,'%Y-%m-%d') >= DATE_FORMAT(#{startPlanPaymentTime},'%Y-%m-%d') ]]>
+		</if>
+		<if test="endPlanPaymentTime!=null and endPlanPaymentTime!=''">
+         <![CDATA[ AND DATE_FORMAT(a.planPaymentTime,'%Y-%m-%d') <= DATE_FORMAT(#{endPlanPaymentTime},'%Y-%m-%d') ]]>
+		</if>
+		<if test="startPayMentAmountDate!=null and startPayMentAmountDate!=''">
+         <![CDATA[ AND DATE_FORMAT(d.payMentAmountDate,'%Y-%m-%d') >= DATE_FORMAT(#{startPayMentAmountDate},'%Y-%m-%d') ]]>
+		</if>
+		<if test="endPayMentAmountDate!=null and endPayMentAmountDate!=''">
+         <![CDATA[ AND DATE_FORMAT(d.payMentAmountDate,'%Y-%m-%d') <= DATE_FORMAT(#{endPayMentAmountDate},'%Y-%m-%d') ]]>
+		</if>
+		<if test="startPayTime!=null and startPayTime!=''">
+         <![CDATA[ AND DATE_FORMAT(f.payTime,'%Y-%m-%d') >= DATE_FORMAT(#{startPayTime},'%Y-%m-%d') ]]>
+		</if>
+		<if test="endPayTime!=null and endPayTime!=''">
+         <![CDATA[ AND DATE_FORMAT(f.payTime,'%Y-%m-%d') <= DATE_FORMAT(#{endPayTime},'%Y-%m-%d') ]]>
+		</if>
+		and a.orderNo = b.orderNo
+		and a.state != '已关闭'
+	</select>
+</mapper>

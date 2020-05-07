@@ -1,0 +1,58 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.anjbo.dao.tools.CrawlerMapper">
+
+	<!-- 抓取物业信息 -->
+	<insert id="addCrawlerProperty" parameterType="java.util.Map">
+		INSERT INTO `tbl_tools_crawler_property`
+		(cityName,type,propertyId,propertyName)
+		VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{cityName},#{type},
+	        <if test="item.id!=null">#{item.id}</if>
+		    <if test="item.id==null">#{item.constructionId}</if> 
+		    ,
+	        <if test="item.name!=null">#{item.name}</if>
+		    <if test="item.name==null">#{item.constructionName}</if>  
+		    )
+	    </foreach>  
+	</insert>
+	<!-- 抓取楼栋 -->
+	<insert id="addCrawlerBuilding" parameterType="java.util.Map">
+		INSERT INTO `tbl_tools_crawler_building`
+		(propertyId,buildingId,buildingName)
+		VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{propertyId},
+	        <if test="item.id!=null">#{item.id}</if>
+		    <if test="item.id==null">#{item.buildingId}</if> 
+		    ,
+	        <if test="item.name!=null">#{item.name}</if>
+		    <if test="item.name==null">#{item.buildingName}</if>   
+		    )
+	    </foreach>  
+	</insert>
+	<!-- 抓取房号信息 -->
+	<insert id="addCrawlerRoom" parameterType="java.util.Map">
+		INSERT INTO `tbl_tools_crawler_room`
+		(buildingId,roomId,roomName,currentFloor,area)
+		VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{buildingId},
+	        <if test="item.id!=null">#{item.id}</if>
+		    <if test="item.id==null">#{item.houseId}</if> 
+		    ,
+	        <if test="item.name!=null">#{item.name}</if>
+		    <if test="item.name==null">#{item.houseName}</if>   
+		    ,#{item.currentFloor},
+	        <if test="item.area!=null">#{item.area}</if>
+		    <if test="item.area==null and item.BuildArea!=null">#{item.BuildArea}</if>   
+		    <if test="item.area==null and item.BuildArea==null">#{item.buildArea}</if>  
+		    )
+	    </foreach>  
+	</insert>
+	<!-- 更新房号信息 -->
+	<update id="updateCrawlerRoomInfo" parameterType="java.util.Map">
+		update tbl_tools_crawler_room set currentFloor=#{currentFloor},area=#{BuildArea} where roomId=#{roomId}
+	</update>
+</mapper>

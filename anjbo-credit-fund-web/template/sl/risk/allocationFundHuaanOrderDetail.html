@@ -1,0 +1,173 @@
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;客户信息</div>
+    <div class="row form-inline detail-row" style="padding:0 10px;">
+        <div class="col-md-6 col-lg-4">
+            <label>客户姓名: </label>
+            <span ng-bind="huaan.customerName"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>手机号码: </label>
+            <span ng-bind="huaan.phoneNumber"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>身份证号码: </label>
+            <span ng-bind="huaan.idCardNo"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>配偶姓名:</label>
+            <span ng-bind="huaan.customerWifeName"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>婚姻状况: </label>
+            <span ng-bind="huaan.customerMarriageState"></span>
+        </div>
+    </div>
+</div>
+
+
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;贷款信息</div>
+    <div class="row form-inline detail-row" style="padding:0 10px;">
+        <div class="col-md-6 col-lg-4">
+            <label>业务类型:</label>
+            <span ng-bind="huaan.productName"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>借款金额:</label>
+            <span ng-bind="huaan.loanAmount"></span> 万元
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>原房贷余额:</label>
+            <span ng-bind="huaan.oldHouseLoanBalance"></span> 万元
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>回款开户银行: </label>
+            <span ng-bind="huaan.paymentBankName"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label style="width:115px;">回款银行卡户名:</label>
+            <span ng-bind="huaan.paymentBankCardName"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label style="width:115px;">回款银行卡账号: </label>
+            <span ng-bind="huaan.paymentBankNumber"></span>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;房产信息</div>
+    <div class="row form-inline detail-row" style="padding:0 10px;">
+        <div class="col-md-6 col-lg-4">
+            <label>房产名称: </label>
+            <span ng-bind="huaan.houseName"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>产权人姓名:</label>
+            <span ng-bind="huaan.propertyName"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>证件号码: </label>
+            <span ng-bind="huaan.propertyCardNumber"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>产权证号:</label>
+            <span ng-bind="huaan.housePropertyNumber"></span>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;买家贷款信息</div>
+    <div class="row form-inline detail-row" style="padding:0 10px;">
+        <div class="col-md-6 col-lg-4">
+            <label>贷款是否银行: </label>
+            <span ng-if="huaan.isOldLoanBank==1">是</span>
+            <span ng-if="huaan.isOldLoanBank==2">否</span>
+        </div>
+        <div class="col-md-6 col-lg-4" ng-if="huaan.isOldLoanBank==1">
+            <label>贷款银行-支行: </label>
+            <span ng-bind="huaan.houseLoanBankName"></span>- <span ng-bind="huaan.houseLoanSubBankName"></span>
+        </div>
+        <div class="col-md-6 col-lg-4" ng-if="huaan.isOldLoanBank==2">
+            <label>贷款地址: </label>
+            <span ng-bind="huaan.houseLoanAddress"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>资金监管金额:  </label>
+            <span ng-bind="huaan.houseSuperviseAmount"></span> 万元
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>贷款金额:  </label>
+            <span ng-bind="huaan.houseLoanAmount"></span> 万元
+        </div>
+    </div>
+</div>
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;卖家信息</div>
+    <div class="row form-inline detail-row" style="padding:0 10px;">
+        <div class="col-md-6 col-lg-4">
+            <label>客户姓名:  </label>
+            <span ng-bind="huaan.cusName"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>客户证件号码:  </label>
+            <span ng-bind="huaan.certCode"></span>
+        </div>
+    </div>
+</div>
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;买家信息</div>
+    <div class="row form-inline detail-row" style="padding:0 10px;">
+        <div class="col-md-6 col-lg-4">
+            <label>买房人姓名:</label>
+            <span ng-bind="huaan.buyName"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>证件号码: </label>
+            <span ng-bind="huaan.buyCardNumber"></span>
+        </div>
+    </div>
+</div>
+
+<div ng-if="huaan.guaranteeCardNumber!=null||huaan.guaranteeName!=null||huaan.guaranteeRelationship!=null">
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;保证人信息</div>
+    <div class="row form-inline detail-row" style="padding:0 10px;">
+        <div class="col-md-6 col-lg-4">
+            <label>证件号码: </label>
+            <span ng-bind="huaan.guaranteeCardNumber"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>姓名:</label>
+            <span ng-bind="huaan.guaranteeName"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>与借款人关系:</label>
+            <span ng-bind="huaan.guaranteeRelationship"></span>
+        </div>
+    </div>
+</div>
+
+
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;特殊推送信息</div>
+    <div class="row form-inline detail-row" style="padding:0 10px;">
+        <div class="col-md-6 col-lg-4">
+            <label>费率:</label>
+            <span ng-bind="huaan.rate"></span>%/天
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>执行费率:</label>
+            <span ng-bind="huaan.implementRate"></span>%/天
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>期限类型:</label>
+            <span ng-if="huaan.periodType==1">天</span>
+            <span ng-if="huaan.periodType==2">月</span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>申请期限:</label>
+            <span ng-bind="huaan.applicationPeriod"></span>
+        </div>
+    </div>
+</div>

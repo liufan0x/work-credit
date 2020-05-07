@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.app.estateprice.CFJMapper">
+
+
+    <insert id="insertShenZhenCFJDtoBatch" parameterType="java.util.List">
+        insert into `tbl_app_task_cfj_shenzhen_data`
+        (`area`, `areaChild`, `propertyName`, `avgPrice`, `date`)
+        values
+        <foreach collection="list" item="dto" index="index" separator=",">
+            (
+            #{dto.area}, #{dto.areaChild},
+            #{dto.propertyName},
+            #{dto.avgPrice},
+            #{dto.date,jdbcType=TIMESTAMP}
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectShenZhenCFJDtoByPropertyNameCurrentDay" parameterType="string" resultType="com.anjbo.bean.estateprice.SZCFJDto">
+        SELECT * FROM `tbl_app_task_cfj_shenzhen_data` where propertyName=#{0} and `date` like CONCAT(#{1},'%') LIMIT 0,1
+    </select>
+
+    <select id="selectShenZhenCFJDtoAllCurrentDay" resultType="com.anjbo.bean.estateprice.SZCFJDto">
+        SELECT * FROM `tbl_app_task_cfj_shenzhen_data` where `date` like CONCAT(#{0},'%')
+    </select>
+    <select id="selectTZCPropertyDtoCount" resultType="java.lang.Integer" parameterType="com.anjbo.bean.estateprice.TZCPropertyDto">
+        SELECT count(1) FROM `tbl_app_task_property_avg` where propertyName=#{propertyName} and city=#{city} and area=#{areaRange}
+    </select>
+
+    <insert id="insertTZCPropertyDtoBatch" parameterType="java.util.List">
+        INSERT INTO `anjbo-app`.`tbl_app_task_property_avg`
+        (`propertyName`, `buildingName`, `city`, `area`,`estatePrice`, `date`)
+        VALUES
+        <foreach collection="list" item="dto" index="index" separator=",">
+            (
+            #{dto.propertyName}, #{dto.buildingName},
+            #{dto.city},
+            #{dto.areaRange},
+            #{dto.estatePrice},
+            #{dto.date,jdbcType=TIMESTAMP}
+            )
+        </foreach>
+    </insert>
+    <insert id="insertTZCPropertyDtoBatch2">
+        INSERT INTO `anjbo-app`.`tbl_app_task_property_avg_all`
+        (`propertyName`, `buildingName`, `city`,`area`, `estatePrice`, `date`)
+        VALUES
+        <foreach collection="list" item="dto" index="index" separator=",">
+            (
+            #{dto.propertyName}, #{dto.buildingName},
+            #{dto.city},
+            #{dto.areaRange},
+            #{dto.estatePrice},
+            #{dto.date,jdbcType=TIMESTAMP}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteTZCPropertyDtoByDate" parameterType="string">
+        delete from tbl_app_task_property_avg_all where `date` like CONCAT(#{0},'%')
+    </delete>
+
+    <delete id="deleteShenZhenCFJDtoAll" >
+          delete from tbl_app_task_cfj_shenzhen_data
+    </delete>
+
+    <delete id="deleteTZCPropertyDtoAll">
+        delete from tbl_app_task_property_avg
+    </delete>
+    <delete id="deleteTZCPropertyDtoByDateAndArea">
+        delete from tbl_app_task_property_avg_all where `date` like CONCAT(#{0},'%') and `area`=#{1}
+    </delete>
+</mapper>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.yntrust.YntrustMappingMapper">
+
+    <sql id="Base_Column_List">
+        id, createUid, createTime, updateUid, updateTime, orderNo, uniqueId, status,statusName,ynProductCode,ynProductName
+    </sql>
+    <sql id="selectWhere">
+        <if test="status!=null">
+            AND status = #{status}
+        </if>
+        <if test="orderNo!=null and orderNo!=''">
+            AND orderNo = #{orderNo}
+        </if>
+        <if test="uniqueId!=null and uniqueId!=''">
+            AND uniqueId = #{uniqueId}
+        </if>
+    </sql>
+    <select id="select" parameterType="YntrustMappingDto" resultType="YntrustMappingDto">
+        select
+        <include refid="Base_Column_List" />
+        from tbl_third_yntrust_mapping
+        where status!=-1
+        <include refid="selectWhere"/>
+    </select>
+    <delete id="delete" parameterType="YntrustMappingDto">
+        delete from tbl_third_yntrust_mapping
+        where id = #{id}
+    </delete>
+    <insert id="insert" parameterType="YntrustMappingDto">
+        insert into tbl_third_yntrust_mapping
+        (
+            createUid,
+            createTime,
+            orderNo,
+            uniqueId,
+            status,
+            statusName,
+            ynProductCode,
+            ynProductName
+        )
+        values
+        (
+            #{createUid},
+            now(),
+            #{orderNo},
+            #{uniqueId},
+            #{status},
+            #{statusName},
+            #{ynProductCode},
+            #{ynProductName}
+        )
+    </insert>
+
+    <update id="update" parameterType="YntrustMappingDto">
+        update tbl_third_yntrust_mapping
+        <set>
+
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+            <if test="uniqueId != null and uniqueId!=''">
+                uniqueId = #{uniqueId},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="statusName != null and statusName!=''">
+                statusName = #{statusName},
+            </if>
+        </set>
+        where orderNo = #{orderNo}
+        <if test="status==null">
+            AND status!=-1
+        </if>
+        <if test="uniqueId!=null and uniqueId!=''">
+            and uniqueId = #{uniqueId}
+        </if>
+    </update>
+</mapper>

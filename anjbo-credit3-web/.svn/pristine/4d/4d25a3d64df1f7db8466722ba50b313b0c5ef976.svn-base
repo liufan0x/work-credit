@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>详情</title>
+<!--标准mui.css-->
+<link rel="stylesheet" href="./css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="./css/order.css" />
+ </head>
+ <body style="background:#fff;">
+ <div class="detail-box" style="display:block;border:none;">
+     <p><span class="tit-span">城市</span><span id="cityName">-</span></p>
+	 <p><span class="tit-span">业务类型</span><span id="productName">-</span></p>
+	 <p><span class="tit-span">客户姓名</span><span id="borrowerName">-</span></p>
+	 <a href="#"><p><span class="tit-span">借款金额</span><span id="loanAmount">-</span>万<span class="inp-r arrow">&nbsp;</span></p></a>
+	 <p><span class="tit-span">借款期限</span><span id="borrowingDays">-</span>天</p>
+	 <p><span class="tit-span">合作机构</span><span id="agencyName">-</span></p>
+	 <p><span class="tit-span">渠道经理</span><span id="channelManagerName">-</span></p>
+	 <p><span class="tit-span">结清原贷款时间</span><span id="foreclosureTimeStr">-</span></p>
+	 <p><span class="tit-span">新贷款地址</span><span id="loanBankName">-</span></p>
+ </div>
+ <script src="./js/jquery.min.js"></script>
+ <script src="./js/process.js"></script>
+ <script type="text/javascript">
+ $.ajax({ 
+	 url:'/credit/process/foreclosure/v/commentDetail',
+	 data:JSON.stringify({"orderNo":GetQueryString("orderNo")}), 
+     type: 'post' ,
+     dataType: 'json',  
+     contentType:'application/json;charset=utf-8',
+	 success: function(data){
+	  if(data.data.baseBorrowDto!=null){
+			var baseBorrowDto =data.data.baseBorrowDto;
+			var cityName = baseBorrowDto.cityName;
+			$("#cityName").html(cityName);
+			var productName = baseBorrowDto.productName;
+			$("#productName").html(productName);
+			var borrowerName = baseBorrowDto.borrowerName;
+			$("#borrowerName").html(borrowerName);
+			var loanAmount = baseBorrowDto.loanAmount;
+			$("#loanAmount").html(loanAmount);
+			var borrowingDays = baseBorrowDto.borrowingDays;
+			$("#borrowingDays").html(borrowingDays);
+			var agencyName = baseBorrowDto.agencyName;  //合作机构
+			$("#agencyName").html(agencyName);
+			var channelManagerName = baseBorrowDto.channelManagerName;
+			$("#channelManagerName").html(channelManagerName);
+			var foreclosureTimeStr= data.data.foreclosureTimeStr;
+			if(foreclosureTimeStr!=null && foreclosureTimeStr!=''){
+				$("#foreclosureTimeStr").html(foreclosureTimeStr);
+			}else{
+				$("#foreclosureTimeStr").html("-");
+			}
+			var loanBankName = baseBorrowDto.loanBankName
+			$("#loanBankName").html(loanBankName);
+	   }
+	 }
+ });
+ </script>
+ </body>
+</html>

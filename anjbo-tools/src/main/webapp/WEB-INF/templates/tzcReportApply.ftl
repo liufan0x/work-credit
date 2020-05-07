@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="GBK"?>
+<conditions>
+	<condition queryType="10102">
+		<item>
+			<name>unitName</name>
+			<value>${unitName!''}</value>
+		</item>
+		<item>
+			<name>organUnitName</name>
+			<value>${organUnitName!''}</value>
+		</item>
+		<item>
+			<name>bankName</name>
+			<value>${bankName!''}</value>
+		</item>
+		<item>
+			<name>pgsqId</name>			
+			<value>${serialId!''}</value>
+		</item>
+		<item>
+			<name>enquiryAssessId</name>			
+			<value>${enquiryAssessId!''}</value>
+		</item>
+		<item>
+			<name>bankManager</name>			
+			<value>${clientManager!''}</value>
+		</item>
+		<item>
+			<name>managerPhone</name>			
+			<value>${clientManagerTel!''}</value>
+		</item>
+		<item>
+			<name>sueryContact</name>			
+			<value>${photographPerson!''}</value>
+		</item>
+		<item>
+			<name>contactPhone</name>
+			<value>${photographPersonTel!''}</value>
+		</item>
+		<item>
+			<name>expressAddr</name>
+			<value>${expressAddr!''}</value>
+		</item>
+		<item>
+			<name>bookFile</name>
+			<value>${bookFile!''}</value>
+		</item>
+	</condition>
+</conditions>

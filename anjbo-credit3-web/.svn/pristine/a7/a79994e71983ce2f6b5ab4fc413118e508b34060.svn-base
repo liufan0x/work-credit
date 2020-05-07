@@ -1,0 +1,79 @@
+<style>
+.hw-label{
+  display:block;
+  line-height:30px;
+  padding-left:100px;
+}
+.hw-yuan{
+  border:1px solid #333;
+  border-radius:50%;
+  width:18px;
+  height:18px; 
+  margin-right:5px;
+  font-size:12px;
+  text-align:center;
+  line-height:18px;
+  display:inline-block;
+}
+</style>
+<div class="container-fluid">
+	<!--标题-->
+	<div class="row">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;核实后置费用信息
+			<a ng-show="!isEdit" style="display:inline-block;float:right;padding-right: 10px;" ui-sref="orderList" >返回上一步</a>
+			<span ng-show="isEdit" class="detail-trash2 text-danger" ng-click="deleteDetail('back-expenses-detail')" >隐藏</span>
+			<div style="position:absolute;right:400px;top:0px;">
+			  <span id="elementFlag" ng-bind="elementFlag">是否已收到要件：是</span>
+			  <span><a id="elementInfo" ng-bind="elementInfo" ng-click="showDetail('elementEntrance');">要件详情</a></span>
+			</div>
+		</div>
+	</div>
+	<!--标题 end-->
+	<div class="row detail-row detail-lhw" >
+		<div class="col-md-6 col-lg-4"><label>收费类型：</label><span ng-bind="obj.riskGrade"></span></div>
+		<div class="col-md-6 col-lg-4"><label>期限：</label><span ng-bind="obj.borrowingDays"></span> 天</div>
+		<div class="col-md-6 col-lg-4"><label>费率：</label><span ng-bind="obj.rate"></span> <span ng-if="modeid==1 && harvest.riskGradeId!='0'"> &nbsp;%</span><span ng-if="modeid!=1 || harvest.riskGradeId=='0'"> &nbsp;%/天</span></div>
+		<div class="col-md-6 col-lg-4"><label>逾期费率：</label><span ng-bind="obj.overdueRate"></span><span ng-if="modeid==1 && harvest.riskGradeId!='0'"> &nbsp;%</span><span ng-if="modeid!=1 || harvest.riskGradeId=='0'"> &nbsp;%/天</span></div>
+		<div class="col-md-6 col-lg-4"><label>服务费：</label><span ng-bind="obj.serviceCharge"></span> 元</div>
+		<div class="col-md-6 col-lg-4" ng-if="isProductCode!=03"><label>关外手续费：</label><span ng-bind="obj.customsPoundage"></span> 元</div>
+		<div class="col-md-6 col-lg-4"><label>应收利息：</label><span ng-bind="obj.receivableInterestMoney"></span> 元</div>
+		<div class="col-md-6 col-lg-4"><label>其他费用：</label><span ng-bind="obj.otherPoundage"></span> 元</div>
+		<div class="col-md-6 col-lg-4"><label>应收金额：</label><span ng-bind="obj.chargeMoney"></span> 元</div>
+		<div class="col-md-6 col-lg-4"><label>扣回后置时间：</label>
+		   <span ng-bind="obj.createTime| date:'yyyy-MM-dd' "></span>
+		   <!--图片 放大插件-->
+			 <span class=" gallerys" ng-if="obj.interestImg!='' && obj.interestImg!=null">
+			    <a class="view-pic" onclick="laa(this)">查看图片</a>
+				<img ng-repeat="img in obj.imgs" src="{{img}}"   class="detail-img gallery-pic" style="display:none">
+			</span>
+			<!--图片end--> 
+<!-- 		   <span ng-if="obj.interestImg!='' && obj.interestImg!=null"><a ng-repeat="img in obj.imgs" href="{{img}}" target="收利息图片" >图片.jpg &nbsp;</a></span> -->
+		</div>
+		<div class="col-md-6 col-lg-4"><label>返佣金额：</label><span ng-bind="obj.returnMoney"></span> 元</div>
+		<div class="col-md-6 col-lg-4"><label>扣回后置总费用：</label><span ng-bind="obj.backExpensesMoney"></span> 元</div>
+		<div class="col-md-6 col-lg-4" ng-if="obj.rateimgs!='' && obj.rateimgs!=null"><label>费率审批凭证：</label>
+		   <!--图片 放大插件-->
+			 <span class=" gallerys" >
+			    <a class="view-pic" onclick="laa(this)">查看凭证</a>
+				<img ng-repeat="img in obj.rateimgs" src="{{img}}"   class="detail-img gallery-pic" style="display:none">
+			</span>
+			<!--图片end--> 
+<!-- 		   <span ng-if="obj.interestImg!='' && obj.interestImg!=null"><a ng-repeat="img in obj.imgs" href="{{img}}" target="收利息图片" >图片.jpg &nbsp;</a></span> -->
+		</div>
+	</div>
+	<div class="row relative " ng-if="logList!=null && logList.length >0">
+		   <label style="width:140px;line-height:45px; text-align:right;">修改日志：</label>
+		   <label ng-repeat="log in logList" class="hw-label"><span class="hw-yuan">&nbsp;{{$index+1}}</span>:将{{log.colName}} 从 "{{log.startVal}}" 改成 "{{log.endVal}}" &nbsp;</br></label>  
+	</div>
+	<!--备注-->
+	<div class="row relative" ng-if="obj.remark!='' && obj.remark!=null">
+		<span class="remark-span remark-lhw">备注：</span>
+		<textarea class="remark-p remark-lhw-p textarea-lhw" ng-bind="obj.remark" readonly="readonly"> </textarea>
+	</div>
+	<!--备注end-->
+</div>
+<script> 
+ function laa(a){  
+	$.openPhotoGallery($(a).next("img"));
+}
+</script>

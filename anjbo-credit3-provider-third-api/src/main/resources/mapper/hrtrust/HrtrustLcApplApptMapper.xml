@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.hrtrust.HrtrustLcApplApptMapper" >
+<select id="getLcApplAppt" parameterType="String" resultType="map">  
+         select * from  tbl_third_hrtrust_lc_appl_appt  where  orderNo=#{orderNo} order by id DESC limit 0,1
+    </select>
+    
+    <update id="updateMap" parameterType="java.util.Map">
+        update tbl_third_hrtrust_lc_appl_appt
+        <set>
+            <if test="applSeq != null and applSeq!=''">
+                applSeq = #{applSeq},
+            </if>
+
+            <if test="idNo != null and idNo!=''">
+                idNo = #{idNo},
+            </if>
+            <if test="idType != null and idType!=''">
+                idType = #{idType},
+            </if>
+            <if test="custName != null and custName!=''">
+                custName = #{custName},
+            </if>
+            <if test="respStatus !=null and respStatus!=''">
+                respStatus = #{respStatus},
+            </if>
+        </set>
+        where orderNo = #{orderNo}
+    </update>
+    
+	<!-- 添加订单共同担保人信息 -->
+	<insert id="saveLcApplAppt" parameterType="Map">
+		INSERT INTO tbl_third_hrtrust_lc_appl_appt  (
+			applSeq,
+			orderNo,
+			idNo,
+			idType,
+			custName	
+		)
+		VALUES
+		(
+			#{applSeq},
+			#{orderNo},
+			#{idNo},
+			#{idType},
+			#{custName}		
+		)
+	</insert>
+	
+</mapper>

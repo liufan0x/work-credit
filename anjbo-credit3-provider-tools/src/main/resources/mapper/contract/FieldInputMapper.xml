@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.contract.FieldInputMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=fieldId and fieldId>0"> AND `fieldId`=#{fieldId}</if>
+		<if test="null!=value and ''!=value"> AND `value`=#{value}</if>
+		<if test="null!=source and ''!=source"> AND `source`=#{source}</if>
+		<if test="null!=pSource and ''!=pSource"> AND `pSource`=#{pSource}</if>
+		<if test="null!=groupId and ''!=groupId"> AND `groupId`=#{groupId}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="FieldInputDto" resultType="FieldInputDto">    
+	SELECT `id`, `fieldId`, `value` ,`source` ,`pSource`,`groupId`
+	FROM tbl_common_field_input 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="FieldInputDto" resultType="FieldInputDto">
+	SELECT `id`, `fieldId`, `value`,`source` ,`pSource`,`groupId`
+	FROM tbl_common_field_input 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="FieldInputDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_common_field_input 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="FieldInputDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_common_field_input(
+		`fieldId`,
+		`value`,
+		`source`,
+		`pSource`,
+		`groupId`
+	) VALUES(
+		#{fieldId},
+		#{value},
+		#{source},
+		#{pSource},
+		#{groupId}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="FieldInputDto" >
+    DELETE FROM tbl_common_field_input 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="FieldInputDto" >
+    UPDATE tbl_common_field_input
+	<set>
+		<if test="null!=fieldId">`fieldId`=#{fieldId},</if>
+		<if test="null!=value">`value`=#{value},</if>
+		<if test="null!=source">`source`=#{source},</if>
+		<if test="null!=pSource">`pSource`=#{pSource},</if>
+		<if test="null!=groupId">`groupId`=#{groupId},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

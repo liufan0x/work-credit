@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="robots" content="index, follow" />
+<meta name="googlebot" content="index, follow" />
+
+<meta name="renderer" content="webkit">
+<meta http-equiv="X-UA-Compatible" content="IE=8,IE=9,IE=10" />
+
+<meta http-equiv="expires" content="0">
+<meta http-equiv="pragma" content="no-cache">
+<meta http-equiv="cache-control" content="no-cache">
+<meta http-equiv="cache-control" content="no-store">
+
+<!-- uc强制竖屏 -->
+<meta name="screen-orientation" content="portrait">
+<!-- QQ强制竖屏 -->
+<meta name="x5-orientation" content="portrait">
+<title>借公章</title>
+<link rel="stylesheet" href="../other/aui/css/aui.2.0.css" />
+<link rel="stylesheet" href="../css/common.css" />
+<link rel="stylesheet" href="../css/lCalendar.css" />
+<style>
+div#sealDetailController div.cell p{
+	padding-left:.8rem;
+}
+.aui-icon-right{position: absolute; top: .8rem; right:.2rem;}
+#uploadImg{
+	display: inline-block;
+	float:right;
+	position: relative;
+	color:#424242;
+	min-height: 2.2rem;
+}
+input::-webkit-input-placeholder,.plac {
+  color:#aaa; 
+}
+.color_999 {
+    color:#424242 !important;
+}
+.right-word{
+	color:#424242;
+	font-size: .7rem !important;
+}
+.right-inp{
+	width:8rem !important;
+	float:right;
+	text-align:right;
+	min-height:1rem !important;
+}
+.in-cont{
+	padding:.8rem 1.2rem;border-bottom:1px solid #e6e6e6;font-size:.7rem;
+	position: relative;
+}
+.start{
+	color:red;position:absolute;left:.6rem;
+}
+b.status{ 
+	display: inline-block !important; 
+	position:absolute !important; 
+	right:10px !important; 
+	color:#0cbbd3;
+	font-size:0.7rem;
+	font-weight:normal;
+}
+b.status b{color:red;font-weight:normal;}
+div#sealDetailController div.cell.dis>span{
+	width:1rem;
+	height: 1rem;
+	border-radius:50%;
+	border:.05rem solid #DCDCDC;
+	background:transparent;
+}
+div#sealDetailController div.cell.dis>span:before{
+	position: absolute;
+	width:.6rem;
+	height:.6rem;
+	content:'';
+	background:#DCDCDC;
+	border-radius: 50%;
+	top:.15rem;
+	left:.15rem;
+}
+
+</style>
+</head>
+<body>
+		<div id="sealDetailController">
+			<!--头部-->
+			<div class="headerPart">
+				<font class="fl">公章所属部门</font>
+				<font class="fr" id="sealDepartment"></font>
+				<div class="clear" style="border-bottom:1px solid #e6e6e6;margin-bottom: .75rem;padding-top: .75rem;"></div>
+				<font class="fl">申请人</font>
+				<font class="fr" id="applierName"></font>
+				<div class="clear"></div>
+			</div>
+
+			<!--内容部分  1-->
+			<div class="contentPart" id="seals">
+				<div>请选择需要借用的公章</div>
+
+				<!-- 公章列表 -->
+				
+			</div>
+
+			<!--4-->
+			<div class="contentPart">
+				
+				<div>借用公章原因</div>
+				
+				<div>
+				   <div class="in-cont">
+				     <span><font class="start">*</font>用印文件名称</span>
+				     <input id="fileToSeal"  type="text" class="fr right-word right-inp" placeholder="请填写用印文件名称" />
+				   </div>
+				   
+				   
+				   <div class="in-cont">
+				     <span>	文件份数(份)</span>
+				     <input id="sealFileCount" type="number" class="fr right-word right-inp" placeholder="请填写文件份数" oninput="base.sealCount(this)" />
+				   
+					 </div>
+				   
+				   
+				   <div class="in-cont">
+				     <span><font class="start">*</font>	文件类别</span>
+				     <select id="fileType" dir="rtl" class="right-word right-inp">
+				       <option >请选择</option>
+				       <option >公告类</option>
+				       <option >规章制度类</option>
+				       <option >合同类</option>
+				       <option >其他类型</option>
+				     </select>
+             <i class="aui-iconfont aui-icon-right"></i>
+				      
+					 </div>
+				</div>
+				
+				<div class="cell">
+					<div style="border: 0;margin: 0;">
+					    <p style="padding-left:.4rem;color:#555;">补充说明</p>
+						<textarea class="right-word" style="overflow:auto;min-height:6rem;padding:0 .4rem;" id="reason" placeholder="您可在该处填写补充说明信息"></textarea>
+					</div>
+				</div>
+				
+				
+					<div class="in-cont">
+					 <span><font class="start">*</font>	文件图片</span>
+					 <span id="uploadImg">请上传</span>
+					 <i class="aui-iconfont aui-icon-right"></i>
+				 </div>
+				
+			
+			</div>
+			<!--2-->
+			<div class="contentPart">
+				<div> 请选择借用公章的时间</div>
+
+				<div class="in-cont">
+					  <span><font class="start">*</font>	开始时间</span>
+						<input id="startTime" type="text" placeholder="请选择开始时间" class="right-word right-inp"/>
+						<i class="aui-iconfont aui-icon-right"></i>
+				</div>
+
+				<div class="in-cont">
+					    <span><font class="start">*</font>	结束时间</span>
+							<input id="endTime" type="text" placeholder="请选择结束时间" class="right-word right-inp"/>
+							<i class="aui-iconfont aui-icon-right"></i>
+				</div>
+
+				<div class="in-cont">
+							<span>借用时长</span>
+							<span class="fr plac" id="day">根据选择的借用时间自动计算</span>
+				</div>
+			</div>
+
+			<!--5-->
+			<div class="contentPart">
+				<div>审批人</div>
+
+				<div class="cell text_center">
+					<div style="border: 0;margin: 0;">
+						<div class="aui-row" id="auditors">
+							<!-- 审批人列表 -->
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!--6-->
+			<div class="contentPart">
+				<div>抄送人</div>
+
+				<div class="cell text_center">
+					<div style="border: 0;margin: 0;">
+						<div class="aui-row" id="copyUsers">
+							<!-- 抄送人列表 -->
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="btnContainer">
+				<button class="color_fff">提交审批</button>
+			</div>
+		</div>
+		<div class="loadingPart" id="loadingPart"><div style="background:none"><img src="../img/loading-1.gif" alt="" /></div></div>
+		<img src="../img/choice.png" style="display:none;">
+	</body>
+	<script src="../other/js/jquery.min.js"></script>
+	<script src="../js/lCalendar.min.js"></script>
+	<script src="../js/common.js?1.0"></script>
+	<script src="../js/borrow_seal_detail.js?1.0"></script>
+</html>

@@ -1,0 +1,44 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<ul class="breadcrumb">
+				<li>
+					<a>产品管理 </a> <span class="divider"></span>
+				</li>
+				<li class="active">
+					产品列表
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<!--row-->
+	<div class="row">
+		<div class="col-md-12"> 
+		    <form class="form-inline" style="margin-left:30px;">
+			    <div class="form-group">
+			        <label>城市：</label>
+			        <select select2 ng-model="page.cityCode" style="width:180px;">
+						<option ng-repeat="x in dictList" value="{{x.code}}">{{x.name}}</option>
+					</select>
+		        </div>
+			    <div class="form-group">
+			        <label>产品名称：</label>
+			        <input type="text" class="form-control" ng-model="page.productName" />
+			    </div>
+		    	<button type="submit" class="btn btn-default" ng-click="query()" style="margin-right:10px; margin-bottom: 10px;">查询</button>
+			</form>
+		</div>
+	</div>
+	<!--row-->
+
+	<div class="row">
+		<div class="col-md-12">
+			<!--table-->
+			<table bs-table-control="productList" id="table"></table>
+			<!--table end-->
+	    </div>
+	</div>
+</div>
+
+ 

@@ -1,0 +1,279 @@
+<!--
+	作者：lic@anjbo.com
+	时间：2017-08-31
+	描述：左边流水
+-->
+<common-flow></common-flow>
+
+<style>
+	.form-inline.w165 label {width: 170px;}
+	.detail-row{line-height:55px;}
+</style>
+<div class="detail-right">
+	
+	<div class="container-fluid page-config" >
+		<!--
+	    	作者：lic@anjbo.com
+	    	时间：2017-08-18
+	    	描述：面包屑
+	    -->
+		<div class="row">
+			<div class="col-md-12">
+				<ul class="breadcrumb">
+					<li><a ng-click="goBack()" ng-bind="pageConfigDto.backButName"> </a></li>
+					<li><span ng-bind="pageConfigDto.title"></span></li>
+					<li ng-if="pageConfigDto.pageTabConfigDtos>0">
+						<span ng-repeat="pageTabConfig in pageConfigDto.pageTabConfigDtos track by $index" ng-show="showView==pageTabConfig.title" ng-bind-html="pageTabConfig.title"></span>
+					</li>
+				</ul>
+				<span class="detail-trash3" ng-bind-html="pageTabConfigDto.remarks"></span>
+			</div>
+		</div>
+	
+		<!--
+	    	作者：lic@anjbo.com
+	    	时间：2017-08-25
+	    	描述：详情
+	    -->
+		<div ng-repeat="detail in detailList">
+			<common-detail process-id="{{detail}}" delete-detail="deleteDetail(detail)"></common-detail>
+		</div>
+	
+		<!--
+	    	作者：lic@anjbo.com
+	    	时间：2017-08-18
+	    	描述：标签
+	    -->
+		<div class="row" ng-if="pageConfigDto.type == 1" >
+			<div class="col-md-12">
+				<ul class="nav nav-tabs">
+					<li ng-repeat="pageTabConfig in pageConfigDto.pageTabConfigDtos track by $index" ng-class="{'active':showView==pageTabConfig.title}" >
+						<a ng-click="changeView(pageTabConfig)" ng-bind="pageTabConfig.title"></a>
+					</li>
+					<li class="pull-right">
+						<button ng-if="pageTabConfigDto.saveButName" type="button" ng-click="confirm()" class="btn btn-info detail-right-save" ng-bind="pageTabConfigDto.saveButName"></button>
+						<button type="button" class="btn btn-primary" ng-click="checkSubmit()" ng-bind="pageConfigDto.submitButName"></button>
+					</li>
+				</ul>
+			</div>
+		</div>
+		
+		<!--
+	    	作者：lic@anjbo.com
+	    	时间：2017-08-18
+	    	描述：表单页
+	    -->
+		<form method="post" class="form-inline w165 detail-row all-form-scope">
+			<span ng-show="pageTabConfigDto.isShow" ng-bind-html="pageTabConfigDto.showText"></span>
+			<div ng-repeat="pageTabRegionConfig in pageTabConfigDto.pageTabRegionConfigDtos" ng-show="!pageTabConfigDto.isShow" >
+				<div class="col-md-12 detail-right-tit ">
+					&nbsp;&nbsp;<span ng-bind="pageTabRegionConfig.title"></span>
+					<!-- &nbsp;&nbsp;<button ng-if="$index==0 && pageTabConfigDto.saveButName" type="button" ng-click="save()" class="btn btn-info detail-right-save" ng-bind="pageTabConfigDto.saveButName"></button> -->
+					<button ng-if="pageTabRegionConfig.type == 2" type="button" class="btn btn-info detail-right-save fr" ng-click="addList(pageTabRegionConfig.valueList,pageTabRegionConfig.regionClass)" ng-bind="'+ '+pageTabRegionConfig.title"></button>
+				</div>
+				<div ng-repeat="formList in pageTabRegionConfig.valueList">
+					<div class="col-md-12 danbao-tit" ng-if="pageTabRegionConfig.type==2">
+						&nbsp;&nbsp; {{pageTabRegionConfig.title}}（<span class="num-box" ng-bind="$index+1"></span>）
+						<span style="line-height:24px;" class="detail-trash text-danger" ng-if="$index > 0 || pageTabRegionConfig.firstIsDelete==2" ng-click="deleteList(pageTabRegionConfig.valueList,$index,pageTabRegionConfig.deleteUrl)">删除</span>
+					</div>
+					<form-list ng-repeat="m in formList">
+						<div ng-if="m.type < 100" ng-class="{'col-md-12 col-lg-12':m.col==3 , 'col-md-6 col-lg-8':m.col==2,'col-md-6 col-lg-4':m.col==1 }">
+							<!-- 表单标题: -->
+							<label ng-if="!m.isHide&&pageTabRegionConfig.formClasses=='waitInvestigation'&&m.type!=23">
+								<span class="text-danger" ng-if="m.isNeed==2">*</span>
+								<span ng-if="m.key=='remarks'&&m.value!=''&&!m.isBr" ng-bind="m.title + '：'"></span>
+								<span ng-if="m.key!='remarks'&&!m.isBr" ng-bind="m.title + '：'"></span>
+								<span ng-if="m.isBr&&m.key=='remarks'&&m.value!=''">
+									<span ng-bind-html="m.brValue" style="line-height: 30px;display: inline-block"></span>
+								</span>
+								<span ng-if="m.isBr&&m.key!='remarks'">
+									<span ng-bind-html="m.brValue" style="line-height: 30px;display: inline-block"></span>
+								</span>
+							</label>
+							<label ng-if="!m.isHide&&pageTabRegionConfig.formClasses!='waitInvestigation'&&m.type!=23">
+								<span class="text-danger" ng-if="m.isNeed==2">*</span>
+								<span ng-if="pageTabConfigDto.tabClass=='addAgency'&& m.key!='channelManagerName'&&m.key!='investigationManagerName' &&m.key!='applyDate'&&!m.isBr" ng-bind="m.title + '：'"></span>
+								<span ng-if="pageTabConfigDto.tabClass=='waitDistribution'&& m.key!='channelManagerName'&&m.key!='investigationManagerName'&&!m.isBr" ng-bind="m.title + '：'"></span>
+								<span ng-if="(pageTabConfigDto.tabClass=='addAgency'||pageTabConfigDto.tabClass=='waitDistribution') &&m.formClass=='addExpandManager'&& m.key=='channelManagerName'&&!m.isBr" ng-bind="m.title + '：'"></span>
+								<span ng-if="pageTabConfigDto.tabClass!='addAgency'&&pageTabConfigDto.tabClass!='waitDistribution'&&!m.isBr" ng-bind="m.title + '：'"></span>
+								<span ng-if="m.isBr">
+									<span ng-bind-html="m.brValue" style="line-height: 30px;display: inline-block"></span>
+								</span>
+							</label>
+							
+							<!-- 详情框 -->
+							<type1 ng-if="m.type==0 && !m.isHide">
+								<span ng-bind="m.value"></span>
+							</type1>
+							
+							<!-- 输入框 -->
+							<type1 ng-if="m.type==1 && !m.isHide">
+								<input type="text"  ng-if="(pageTabConfigDto.tabClass=='addAgency'||pageTabConfigDto.tabClass=='waitDistribution')&& m.key!='channelManagerName'&&m.key!='investigationManagerName'" class="form-control" name="{{m.key}}"  ng-model="m.value" ng-disabled="m.isDisable || m.isReadOnly==2||(isDistribution&&m.key=='contactsPhone')" placeholder="{{m.placeholder}}" />
+								<input type="text"  ng-if="pageTabConfigDto.tabClass!='addAgency'&&pageTabConfigDto.tabClass!='waitDistribution'" class="form-control" name="{{m.key}}"  ng-model="m.value" ng-disabled="m.isDisable || m.isReadOnly==2 " placeholder="{{m.placeholder}}" />
+							</type1>
+						
+							<!-- 自带数据下拉框 -->
+							<type2 ng-if="m.type==2 && !m.isHide && pageTabRegionConfig.formClasses!='addExpandManager'">
+								<select class="form-control" style="width:178px;" select2 ng-model="m.specialValue" name="{{m.key}}" ng-disabled="m.isDisable || m.isReadOnly==2" placeholder="{{m.placeholder}}" ng-change="setSelect(m,m.dataList)">
+									<option value="">请选择</option>
+									<option value="{{list.id}}" ng-repeat="list in m.dataList">{{list.name}}</option>
+								</select>
+							</type2>
+							<type2 ng-if="m.type==2 && !m.isHide && pageTabRegionConfig.formClasses=='addExpandManager'">
+								<select class="form-control" style="width:178px;" select2 ng-model="m.specialValue" name="{{m.key}}" ng-disabled="m.isDisable || m.isReadOnly==2" placeholder="{{m.placeholder}}" ng-change="setSelect(m,m.dataList)">
+									<option value="">请选择</option>
+									<option value="{{list.id}}" ng-repeat="list in m.dataList">{{list.name}}</option>
+								</select>
+							</type2>
+
+						
+							<!-- 请求接口url -->
+							<type3 ng-if="m.type==3 && !m.isHide">
+								<select class="form-control" style="width:178px;" select2 ng-model="m.specialValue" name="{{m.key}}" ng-disabled="m.isDisable || m.isReadOnly==2" placeholder="{{m.placeholder}}" ng-change="setSelect(m,m.dataList)" >
+									<option value="">请选择</option>
+									<option value="{{list.id}}" ng-repeat="list in m.dataList">{{list.name}}</option>
+								</select>
+							</type3>
+						
+							<!-- 时间控件 -->
+							<type4 ng-if="m.type==4 && !m.isHide &&(pageTabConfigDto.tabClass=='addAgency'&&m.key!='applyDate'||pageTabConfigDto.tabClass!='addAgency')">
+								<input ng-if="m.typeDepend == 'form_date'" type="text" name="{{m.key}}" ng-disabled="m.isReadOnly==2||isDistribution" ng-readonly="true" ng-model="m.value" class="form-control form_date"  />
+								<input ng-if="m.typeDepend == 'form_datetime'" type="text" name="{{m.key}}"  ng-disabled="m.isReadOnly==2||isDistribution" ng-readonly="true" ng-model="m.value" class="form-control form_datetime"  />
+							</type4>
+						
+							<!-- 上传图片 -->
+							<type5 ng-if="m.type==5 && !m.isHide">
+								<a data-fancybox="iframe" ng-click="showUploadImg(m)" data-src="/plugins/uploadify/upload_image.html" data-type="iframe" href="javascript:;" ng-bind="'上传' + m.title"></a>
+								&nbsp;&nbsp;
+								<span class="chakan-img gallerys">
+									<list ng-repeat="imgMap in m.dataList">
+										<span class="gallery-pic-img" title="{{imgMap}}" ng-show="$index==0"></span>
+									</list>
+									<span ng-if="m.dataList.length>0">({{m.dataList.length}})</span>
+								</span>
+								&nbsp;&nbsp;
+								<span class="text-danger" ng-if="m.dataList.length>0" ng-click="showDelImg(m)">删除</span>
+							</type5>
+						
+							<!-- 备注框 -->
+							<type6 ng-if="m.type==6 && !m.isHide">
+								<textarea class="form-control" name='{{m.key}}' ng-if="pageTabRegionConfig.formClasses=='waitInvestigation'&&m.key=='remarks'&&m.value!=''" ng-disabled="pageTabRegionConfig.formClasses=='waitInvestigation'&&m.key=='remarks'" ng-model="m.value" style="width:1000px;height:100px;margin-bottom:20px;" placeholder="{{m.placeholder}}" />
+								<textarea class="form-control" name='{{m.key}}' ng-if="pageTabRegionConfig.formClasses=='waitInvestigation'&&m.key!='remarks'"  ng-model="m.value" style="width:1000px;height:100px;margin-bottom:20px;" placeholder="{{m.placeholder}}" />
+								<textarea class="form-control" name='{{m.key}}' ng-if="pageTabRegionConfig.formClasses!='waitInvestigation'"  ng-model="m.value" style="width:1000px;height:100px;margin-bottom:20px;" placeholder="{{m.placeholder}}" />
+							</type6>
+
+							<!-- 多选框 -->
+							<type1 ng-if="m.type==20 && !m.isHide">
+								<span ng-repeat="c in m.dataList">
+									<input type="checkbox" style="position:relative;top:2px;margin-left:5px;" ng-click="applyProductCheck(m,c)" ng-checked="c.check" name="{{m.key}}" ng-disabled="m.isReadOnly==2||isDistribution"/>{{c.name}}
+								</span>
+							</type1>
+							<!-- 两个时间并列 -->
+							<type4 ng-if="m.type==21 && !m.isHide &&m.typeDepend == 'form_date'">
+								<input type="text" name="{{m.key}}" ng-disabled="m.isReadOnly==2" ng-readonly="true" ng-model="m.value" placeholder="开始时间" class="form-control form_date"  />~
+								<input type="text" name="{{m.specialKey}}" ng-disabled="m.isReadOnly==2" ng-readonly="true" ng-model="m.specialValue" placeholder="结束时间" class="form-control form_date"  />
+							</type4>
+							<!-- 两个时间并列 -->
+							<type4 ng-if="m.type==21 && !m.isHide &&m.typeDepend == 'form_datetime'">
+								<input type="text" name="{{m.key}}" ng-disabled="m.isReadOnly==2" ng-readonly="true" ng-model="m.value" placeholder="开始时间" class="form-control form_datetime"/>~
+								<input type="text" name="{{m.specialKey}}" ng-disabled="m.isReadOnly==2" ng-readonly="true" ng-model="m.specialValue" placeholder="结束时间" class="form-control form_datetime"/>
+							</type4>
+							<!-- 单选框 -->
+							<type1 ng-if="m.type==22 && !m.isHide">
+								<input type="radio"  name="{{m.key}}" ng-disabled="m.isReadOnly==2" ng-checked="m.specialValue==1" ng-click="radioCheck(m,m.placeholder.split(',')[1],m.placeholder.split(',')[0])" ng-disabled="m.isDisable || m.isReadOnly==2"/><span ng-bind="m.placeholder.split(',')[0]"></span>
+								<input type="radio"  name="{{m.key}}" ng-disabled="m.isReadOnly==2" ng-checked="m.specialValue==2" ng-click="radioCheck(m,m.placeholder.split(',')[3],m.placeholder.split(',')[2])" ng-disabled="m.isDisable || m.isReadOnly==2"/><span ng-bind="m.placeholder.split(',')[2]"></span>
+							</type1>
+							<type1 ng-if="m.type==23 && !m.isHide">
+								<common-file></common-file>
+								<common-upload-download></common-upload-download>
+							</type1>
+							<!--单选按钮-->
+							<div class="btn-group"  ng-if="m.type==25 && !m.isHide">
+								 <button type="button" ng-click="setButton(m,list)" ng-repeat="list in m.dataList" class="btn"  ng-model="m.specialValue" name="{{m.key}}" ng-disabled="m.isDisable || m.isReadOnly==2" ng-class="{'btn-primary': m.specialValue==list.id, 'btn-default': m.specialValue!=list.id}">{{list.name}}</button>
+							</div>
+							<!--多选按钮-->
+							<div class="btn-group"  ng-if="m.type==26 && !m.isHide">
+								<button type="button" ng-click="setButtons(m,list,formList)" ng-repeat="list in m.dataList" class="btn"  ng-model="m.specialValue" name="{{m.key}}" ng-disabled="m.isDisable || m.isReadOnly==2" ng-class="{'btn-primary': list.checked, 'btn-default ': !list.checked}">{{list.name}}</button>
+							</div>
+							<!-- 单位 -->
+							<span class="a-span" ng-if="!m.isHide" ng-bind="m.single"></span>
+							
+							<!-- 展示错误信息 -->
+							<span class="inputError" ng-if="!m.isHide&&m.type!=23">
+								<error class="text-danger" ng-bind="m.errorInfo"></error>
+							</span>
+						</div>
+
+						<!--
+							作者：lic@anjbo.com
+							时间：2017-09-04
+							描述：影像资料
+						-->
+						<special-type1000 ng-if="m.type==1000 && !m.isHide" class="img-detail">
+
+						</special-type1000>
+							
+						</special-type>
+						
+					</form-list>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>
+
+
+<!--
+	作者：lic@anjbo.com
+	时间：2017-08-17
+	描述：类型为5删除图片
+-->
+<div class="lhw-alert-bg" ng-show="isShowDelImg">
+	<div class="lhw-alert-box" style="width:480px;">
+		<div class="lhw-alert-tit">请选择要删除的资料</div>
+		<div style="padding:10px;height:300px;overflow-y:auto;">
+			<div class="row form-inline detail-row" style="padding:0 10px;">
+				<div class="tan-pic">
+					<div class="tan-pic-box" ng-repeat="img in tempObject.dataList">
+						<div ng-show="img!='' && img !=null" style="width:120px;margin:10px ;float:left;position:relative;">
+							<img src="{{img}}" width="100%" height="120px;" >
+							<div style="position:absolute;top:0; left:0;line-height:15px;">
+								<input type="checkbox" name="ids" value="{{img}}" style="margin:5px;width:14px;height:14px"/>
+								<span></span>
+							</div>
+						</div>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+		</div>
+		<div class="lhw-alert-but">
+			<button type="button" class="btn btn-primary lhw-alert-ok" ng-click="delImg();" style="margin-right:80px;">确定</button>
+			<button type="button" class="btn btn-danger lhw-alert-cancel" ng-click="isShowDelImg=false">取消</button>
+		</div>
+	</div>
+</div>
+
+<!--
+	作者：lic@anjbo.com
+	时间：2017-08-19
+	描述：图片上传返回路径
+-->
+<script type="text/javascript">
+	function returnData(url,simg,name,imgarr){
+		var scope=angular.element('.page-config').scope();
+		if(!scope||!scope.pageTabConfigDto||scope.pageTabConfigDto.title == '机构影像资料'){
+			scope=angular.element('special-type1000').scope();
+		}
+		if(url.length>0){
+			url = url.substring(0,url.length-1);	
+		}
+		if(simg.length>0){
+			simg = simg.substring(0,simg.length-1);	
+		}
+		if(name.length>0){
+			name = name.substring(0,name.length-1);
+		}
+		scope.upload(url,simg,name,imgarr);
+	}
+</script>

@@ -1,0 +1,136 @@
+<div class="container-fluid">
+	<place-order-detail></place-order-detail>
+	<div id="viewRow"></div>
+		
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;核实收费信息</div>
+	<div class="row detail-row form-inline" >
+		<div class="col-md-6 col-lg-6">
+			<label>费率：</label>
+			<span>
+			  <input type="number"  ng-model="harvest.rate" class="form-control" maxlength="9" > 
+			  <span class="a-span" ng-if="modeid==1 && harvest.riskGradeId!='0'"> &nbsp;%</span>
+			  <span class="a-span" ng-if="modeid!=1 || harvest.riskGradeId=='0'"> &nbsp;%/天</span>  
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-6">
+			<label>逾期费率：</label>
+			<span>
+			    <input type="number"  ng-model="harvest.overdueRate" class="form-control" maxlength="9" >
+			    <span class="a-span" ng-if="modeid==1 && harvest.riskGradeId!='0'"> &nbsp;%</span>
+			    <span class="a-span" ng-if="modeid!=1 || harvest.riskGradeId=='0'"> &nbsp;%/天</span>  
+			</span>
+		</div>
+<!-- 		<div class="col-md-6 col-lg-6"> -->
+<!-- 			<label>服务费：</label> -->
+<!-- 			<span><input type="text"  ng-model="harvest.serviceCharge"  class="form-control" maxlength="9"  > 元</span> -->
+<!-- 		</div> -->
+		<div class="col-md-6 col-lg-6">
+			<label>返佣金额：</label>
+			<input type="text" ng-model="harvest.returnMoney" id="returnMoney"  class="form-control" maxlength="9"   > 元
+		</div>
+		<div class="col-md-6 col-lg-6">
+			<label>实收手续费：</label>
+			<input type="text"  ng-disabled="harvest.collectInterestMoney && harvest.collectInterestMoney>0" ng-model="harvest.collectInterestMoney" id="collectInterestMoney" class="form-control" maxlength="9"  > 元
+		</div>
+		<div class="col-md-12 col-lg-6" >
+			<label>收费金额：</label>
+			<span><span ng-bind="harvest.chargeMoney" ></span> 元(其中包含:手续费*借款金额+下户费+其他费用)</span>
+		</div>
+		<div class="col-md-6 col-lg-6">
+			<label>收手续费时间：</label>
+			<input  size="16" type="text" readonly ng-model="harvest.interestTime" ng-disabled="harvest.interestTime && harvest.interestTime!=''" class="form-control form_dateu">
+<!-- 			<a href="#"><span data-fancybox="iframe" data-src="/plugins/uploadify/upload_image.html?returnFun=returnDatafinance" data-type="iframe" >点此上传截屏照片（可不传）</span></a> -->
+			<input type="hidden" id="img" >
+			  <span class="gallerys processuUpdImg" ng-if="harvest.imgs!=null && harvest.imgs!='' && harvest.imgs.length>0 " >
+			        
+			       <a href="#" onclick="picView(this)">查看图片</a>
+			       <img ng-repeat="img in harvest.imgs" ng-src="{{img}}"  class='gallery-pic' style='display:none;'>
+			  </span>
+		</div>
+		
+		<div class="col-md-6 col-lg-6">
+			<label style="color:red">&nbsp;*</label>如费率有修改，请在此上传修改费率审批凭证：<a href="#"><span data-fancybox="iframe" data-src="/plugins/uploadify/upload_image.html?returnFun=returnDatarate" data-type="iframe" >点击上传</span></a>
+			<input type="hidden" id="rateImg" >
+			  <span class="gallerys processuUpdRateImg" style="display:none">
+			       <a href="#" class="processuView-ratePic">查看图片</a>
+			       <img ng-repeat="img in harvest.rateImg" ng-src="{{img}}"  class='gallery-pic' style='display:none;'>
+			  </span>
+		</div>
+	</div>
+	<div class="row">
+		<div class="form-group">
+			<textarea class="form-control" ng-model="harvest.remark" rows="5" placeholder="如有特殊说明，请在此处备注（非必填）"/>
+		</div>
+		<div class="col-md-12">
+		    <button type="button" class="btn btn-primary" ng-click="showSubmit()">提交</button>
+			<button type="button" class="btn btn-warning" ng-show="!orderIsBack" ng-click="showBack()">退回</button>
+		</div>
+	</div>
+</div>
+<script>
+ function picView(e){
+	 $.openPhotoGallery($(e).next("img"));
+ }
+  
+
+// $(".processuView-pic").click(function(){alert();
+//     $.openPhotoGallery($(this).next("img"),"delZijinPic");
+// })
+function delZijinPic(a){ 
+  $(".processuUpdImg").find("img").each(function(){ 
+      if($(this).attr("src")==a){
+       $(this).remove();
+    }
+   })
+   var returnPic="";
+   $(".processuUpdImg").find("img").each(function(){
+        returnPic+=returnPic+$(this).attr("src")+",";
+   })
+   $("#img").val(returnPic.substring(0,returnPic.length-1)); 
+   var img=$("#img").val();
+   if(img==''){
+	   $(".processuUpdImg").hide() 
+   }
+}
+
+$(".processuView-ratePic").click(function(){
+    $.openPhotoGallery($(this).next("img"),"delRateImg");
+})
+
+function delRateImg(a){ 
+	  $(".processuUpdRateImg").find("img").each(function(){ 
+	      if($(this).attr("src")==a){
+	       $(this).remove();
+	    }
+	   })
+	   var returnPic="";
+	   $(".processuUpdRateImg").find("img").each(function(){
+	        returnPic+=returnPic+$(this).attr("src")+",";
+	   })
+	   $("#rateImg").val(returnPic.substring(0,returnPic.length-1)); 
+	   var img=$("#rateImg").val();
+	   if(img==''){
+		   $(".processuUpdRateImg").hide() 
+	   }
+	}
+
+function returnDatarate(url,smallUrl,name){
+	var img=$("#rateImg").val();
+	if(url!=''){
+		 url=url.substring(0,url.length-1);
+		 var urls= new Array();
+		 var urls=url.split(",");	
+		 var h="";
+		 for (var i=0;i<urls.length ;i++ )  { 
+			 h+="<img src='"+urls[i]+"' class='gallery-pic' style='display:none;'>";
+		 }   
+		 $(".processuUpdRateImg").append(h);
+		 if(img!=''){
+			 url=img+","+url;
+		 }
+		 $("#rateImg").val(url); 
+		 $(".processuUpdRateImg").show();
+	}
+}
+	
+</script>

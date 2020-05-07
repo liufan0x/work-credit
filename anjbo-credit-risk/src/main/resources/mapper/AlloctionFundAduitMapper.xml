@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.AlloctionFundAduitMapper">
+
+   <select id="selectFundAudit" parameterType="java.lang.String" resultType="AllocationFundAduitDto">
+       select *,DATE_FORMAT(startTime,'%Y-%m-%d') as startTimeStr,DATE_FORMAT(endTime,'%Y-%m-%d') as endTimeStr,DATE_FORMAT(lendingTime,'%Y-%m-%d') as lendingTimeStr from tbl_risk_allocation_fund_audit where orderNo=#{0}  ORDER BY createTime desc limit 1
+   </select>
+   <insert id="addFundAuidt" parameterType="AllocationFundAduitDto">
+	   INSERT INTO tbl_risk_allocation_fund_audit(
+	    `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, 
+	    `startTime`, `endTime`, `queryFrequency`, `phone`, `remark`,dealStatus,grantStatus
+	    )VALUES (
+	     #{createUid}, now(), #{updateUid}, now(),#{orderNo},
+	     #{startTime}, #{endTime}, #{queryFrequency}, #{phone}, #{remark},#{dealStatus},#{grantStatus}
+	    );
+   </insert>
+   <update id="updateFundAuidt" parameterType="AllocationFundAduitDto">
+       update tbl_risk_allocation_fund_audit 
+       set updateUid=#{updateUid},updateTime=now(),startTime=#{startTime},endTime=#{endTime},queryFrequency=#{queryFrequency},phone=#{phone},remark=#{remark}
+       where orderNo=#{orderNo}
+   </update>
+   <update id="updataStatus" parameterType="AllocationFundAduitDto">
+       update tbl_risk_allocation_fund_audit  set dealStatus = #{dealStatus},grantStatus =#{grantStatus},lendingTime=#{lendingTime},dealOpinion=#{dealOpinion} where orderNo=#{orderNo}
+   </update>
+   
+   <select id="selectAll" resultType="AllocationFundAduitDto">
+      	select *,DATE_FORMAT(startTime,'%Y-%m-%d') as startTimeStr,DATE_FORMAT(endTime,'%Y-%m-%d') as endTimeStr,DATE_FORMAT(lendingTime,'%Y-%m-%d') as lendingTimeStr from tbl_risk_allocation_fund_audit
+      	where grantStatus != 997 and grantStatus !=998 and dealStatus !=998 and dealStatus !=992
+   </select>
+   
+   <delete id="deleteByOrderNo" parameterType="java.lang.String">
+     delete  from tbl_risk_allocation_fund_audit where orderNo=#{0}
+   </delete>
+</mapper>

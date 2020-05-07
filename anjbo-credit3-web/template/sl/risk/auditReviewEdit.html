@@ -1,0 +1,36 @@
+<div class="container-fluid">
+	<place-order-detail></place-order-detail>
+	<div id="viewRow"></div>
+<!-- 	<audit-first-detail></audit-first-detail> -->
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;复核审批意见</div>
+	<div class="row detail-row form-inline w138" >
+	    <div class="col-md-6  col-lg-6">
+			<label>借款金额：</label><span ng-bind="obj.loanAmont"></span>万
+		</div>
+		<div class="col-md-6 col-lg-6">
+			<label>借款期限：</label><span ng-bind="obj.borrowingDays"></span> 天
+		</div>
+		<div class="col-md-6 col-lg-6">
+			<label><span style="padding-left:45px;">&nbsp;</span>建议费率：</label>
+			<input type="text" ng-model="obj.rate" name="rate"  class="form-control" ng-pattern="/^([1-9]\d{0,13}|0)([.]?|(\.\d{1,4})?)$/"  >  %/天
+		</div>
+		<div class="col-md-6 col-lg-6">
+			<label>建议逾期费率：</label>
+			<input type="text" ng-model="obj.overdueRate" name="overdueRate" class="form-control"  ng-pattern="/^([1-9]\d{0,13}|0)([.]?|(\.\d{1,4})?)$/"  >  %/天
+		</div>
+		<div class="row detail-row form-inline w138" style="padding-top:30px;">
+		     <div class="col-md-12 col-lg-12">
+		           <label>&nbsp;</label>
+					<div class="form-group">
+							<textarea class="form-control" rows="5" ng-model="obj.remark"  name="remark" placeholder="请在此处输入审批意见" style="width:1000px;"/>
+					</div>
+			</div>
+	    </div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+				<button type="button" class="btn btn-primary" ng-click="showReviewSubmit();">审批通过</button>
+				<button type="button" class="btn btn-warning" ng-show="!orderIsBack" ng-click="showReviewBack();">不通过（退回）</button>
+		</div>
+	</div>
+</div>

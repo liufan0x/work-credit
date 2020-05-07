@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.huarong.BorrowLendMapper" >
+
+ <select id="getBorrowLend" parameterType="String" resultType="map">  
+         select * from  tbl_third_hr_borrow_lend  where  orderNo=#{orderNo} order by id DESC limit 0,1
+    </select>  
+    
+	<!-- 快鸽提单信息,业务信息 -->
+	<insert id="saveBorrowLend" parameterType="Map">
+		INSERT INTO tbl_third_hr_borrow_lend    (
+		    orderNo,
+			borrowId,
+			batchNo,
+			applSeq,
+			bchCde,
+			bchName,
+			custName,
+			idType,
+			idNo,
+			applyAmt,
+			apprvAmt,
+			applyTnrUnit,
+			applyTnr,
+			mtdCde,
+			apr,
+			odIntRate,
+			sysbPct,
+			sysbAmt,
+			hrdPct,
+			hrdAmt,
+			ifCeOut,
+			repaymentTime,
+			respStatus
+			
+		)
+		VALUES
+		(
+		   #{orderNo},
+		    #{borrowId},			
+			#{batchNo},
+			#{applSeq},
+			#{bchCde},
+			#{bchName},
+			#{custName},
+			#{idType},
+			#{idNo},
+			#{applyAmt},
+			#{apprvAmt},
+			#{applyTnrUnit},
+			#{applyTnr},
+			#{mtdCde},
+			#{apr},
+			#{odIntRate},
+			#{sysbPct},
+			#{sysbAmt},
+			#{hrdPct},
+			#{hrdAmt},
+			#{ifCeOut},
+			#{repaymentTime},
+			#{respStatus}
+						
+		)
+	</insert>
+	
+</mapper>

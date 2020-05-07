@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="robots" content="index, follow" />
+		<meta name="googlebot" content="index, follow" />
+
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=8,IE=9,IE=10" />
+
+		<meta http-equiv="expires" content="0">
+		<meta http-equiv="pragma" content="no-cache">
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="cache-control" content="no-store">
+
+		<!-- uc强制竖屏 -->
+		<meta name="screen-orientation" content="portrait">
+		<!-- QQ强制竖屏 -->
+		<meta name="x5-orientation" content="portrait">
+		<title>审批意见</title>
+		<link rel="stylesheet" href="../other/aui/css/aui.2.0.css" />
+		<link rel="stylesheet" href="../css/common.css" />
+		<style>
+			div#approvalOptionCtrl {
+				display: -webkit-flex;
+				display:flex;
+				flex-direction:column;
+				min-height:100vh;
+				width: 100%;
+				background: #f1f1f1;
+			}
+			
+			div#approvalOptionCtrl div.container {
+				margin-top: .5rem;
+				background: #fff;
+				min-height: 5rem;
+				padding: .75rem;
+				font-size: .7rem;
+			}
+			
+			div#approvalOptionCtrl div.btnContainer {
+				position: absolute;
+				width: 100%;
+				bottom: 0.5rem;
+				padding: .75rem;
+			}
+			
+			div#approvalOptionCtrl div.btnContainer button {
+				border: 0;
+				border-radius: .2rem;
+				width: 100%;
+				font-size: .85rem;
+				padding: .6rem 0;
+			}
+			#remark{overflow:auto;}
+		</style>
+	</head>
+
+	<body>
+		<div id="approvalOptionCtrl">
+			<div class="container">
+				<textarea id="remark" name="" rows="10" cols="" placeholder="请输入审批意见" oninput="base.textCount(this)"></textarea>
+			</div>
+
+			<div class="btnContainer">
+				<button class="bg_color_0cbbd3 color_fff" id="auditBtn">确认同意</button>
+			</div>
+		</div>
+		<div class="loadingPart" id="loadingPart"><div style="background:none"><img src="../img/loading-1.gif" alt="" /></div></div>
+	</body>
+	<script src="../js/zepto.min.js"></script>
+	<script src="../js/common.js?1.0"></script>
+	<script src="../js/approval_option.js"></script>
+	<script type="text/javascript">
+		$(".btnContainer").css("top",$(".btnContainer").position().top);
+	</script>
+</html>

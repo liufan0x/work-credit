@@ -1,0 +1,932 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.OrderBaseMapper">
+	
+	<insert id="insertOrderList" parameterType="OrderListDto">
+		insert into tbl_order_list_base 
+		(
+			createUid,
+			createTime,
+			updateUid,
+			<if test="agencyId != null and  agencyId > 0 ">
+			agencyId,
+			</if>
+			orderNo,
+			cityCode,
+			cityName,
+			branchCompany,
+			productCode,
+			productName,
+			customerName,
+			borrowingAmount,
+			borrowingDay,
+			cooperativeAgencyId,
+			cooperativeAgencyName,
+			channelManagerUid,
+			channelManagerName,
+			acceptMemberUid,
+			acceptMemberName,
+			state,
+			currentHandlerUid,
+			currentHandler,
+			processId,
+			source,
+			notarialUid,
+			facesignUid,
+			relationOrderNo,
+			previousHandleTime,
+			receptionManagerUid
+			<if test="isFace>0">
+				,isFace
+			</if>
+			,customerType,
+			auditSort,
+			distributionOrderUid
+		)
+		values
+		(
+			#{createUid},
+			now(),
+			#{createUid},
+			<if test="agencyId != null and  agencyId > 0 ">
+			#{agencyId},
+			</if>
+			#{orderNo},
+			#{cityCode},
+			#{cityName},
+			#{branchCompany},
+			#{productCode},
+			#{productName},
+			#{customerName},
+			#{borrowingAmount},
+			#{borrowingDay},
+			#{cooperativeAgencyId},
+			#{cooperativeAgencyName},
+			#{channelManagerUid},
+			#{channelManagerName},
+			#{acceptMemberUid},
+			#{acceptMemberName},
+			#{state},
+			#{currentHandlerUid},
+			#{currentHandler},
+			#{processId},
+			#{source},
+			#{notarialUid},
+			#{facesignUid},
+			#{relationOrderNo},
+			now(),
+			#{receptionManagerUid}
+			<if test="isFace>0">
+				,#{isFace}
+			</if>
+			,#{customerType},
+			#{auditSort},
+			#{distributionOrderUid}
+		)
+	</insert>
+	
+	<update id="updateOrderList" parameterType="OrderListDto">
+		UPDATE `tbl_order_list_base`
+		SET
+		<if test="contractNo != null and  contractNo != '' ">
+			`contractNo` = #{contractNo},
+		</if>
+		<if test="customerName != null and  customerName != '' ">
+			`customerName` = #{customerName},
+		</if>
+		<if test="borrowingAmount != null and  borrowingAmount != '' ">
+			`borrowingAmount` = #{borrowingAmount},
+		</if>
+		<if test="borrowingDay != null and  borrowingDay != '' ">
+			`borrowingDay` = #{borrowingDay},
+		</if>
+		<if test="cooperativeAgencyId != null and  cooperativeAgencyId != '' and cooperativeAgencyId>0">
+			`cooperativeAgencyId` = #{cooperativeAgencyId},
+			`cooperativeAgencyName` = #{cooperativeAgencyName},
+		</if>
+		<if test="channelManagerUid != null and  channelManagerUid != '' ">
+			`channelManagerUid` = #{channelManagerUid},
+			`channelManagerName` = #{channelManagerName},
+		</if>
+		<if test="acceptMemberUid != null and  acceptMemberUid != '' ">
+			`acceptMemberUid` = #{acceptMemberUid},
+			`acceptMemberName` = #{acceptMemberName},
+		</if>
+		<if test="planPaymentTime != null and  planPaymentTime != '' ">
+			`planPaymentTime` = #{planPaymentTime},
+		</if>
+		<if test="previousHandlerUid != null and  previousHandlerUid != '' ">
+			`previousHandlerUid` = #{previousHandlerUid},
+			`previousHandler` = #{previousHandler},
+			`previousHandleTime` = now(),
+		</if>
+		<if test="currentHandlerUid != null and  currentHandlerUid != '' ">
+			`currentHandlerUid` = #{currentHandlerUid},
+			`currentHandler` = #{currentHandler},
+		</if>
+		<if test="branchCompany != null and  branchCompany != '' ">
+			`branchCompany` = #{branchCompany},
+		</if>
+		<if test="lendingTime != null and  lendingTime != '' ">
+			`lendingTime` = #{lendingTime},
+		</if>
+		<if test="processId != null and  processId != '' ">
+			`processId` = #{processId},
+		</if>
+		<if test="state != null and  state != '' ">
+			`state` = #{state},
+		</if>
+		<if test="notarialUid != null and  notarialUid != '' ">
+			`notarialUid` = #{notarialUid},
+		</if>
+		<if test="facesignUid != null and  facesignUid != '' ">
+			`facesignUid` = #{facesignUid},
+		</if>
+		<if test="appShowValue1 != null and  appShowValue1 != '' ">
+			`appShowValue1` = #{appShowValue1},
+		</if>
+		<if test="appShowValue2 != null and  appShowValue2 != '' ">
+			`appShowValue2` = #{appShowValue2},
+		</if>
+		<if test="relationOrderNo != null and  relationOrderNo != '' ">
+			`relationOrderNo` = #{relationOrderNo},
+		</if>
+		<if test="isFace>0">
+			isFace = #{isFace},
+		</if>
+		<if test="receptionManagerUid != null and receptionManagerUid !=''">
+		    receptionManagerUid = #{receptionManagerUid},
+		</if>
+		<if test=" distributionOrderUid != null and distributionOrderUid != ''">
+			distributionOrderUid = #{distributionOrderUid},
+		</if>
+		<if test="customerType > 0">customerType = #{customerType},</if>
+		<if test=" financeOutLoanTimeStr != null and financeOutLoanTimeStr != ''">
+			financeOutLoanTime = #{financeOutLoanTimeStr},
+		</if>
+		
+		`updateUid` = #{updateUid} 
+		 WHERE 
+		orderNo = #{orderNo} 
+	</update>
+	
+	<!-- 提交审核更新 -->
+	<update id="submitAuditUpdateOrderList" parameterType="OrderListDto">
+		UPDATE `tbl_order_list_base` SET updateTime=NOW() <if test="receptionManagerUid !=null and receptionManagerUid !=''"> ,receptionManagerUid=#{receptionManagerUid}</if>
+		<if test=" distributionOrderUid != null and distributionOrderUid != ''">
+			,distributionOrderUid = #{distributionOrderUid}
+		</if>
+		 WHERE 
+		orderNo = #{orderNo} 
+	</update>
+
+	<!-- 查询订单列表 -->
+	<select id="selectOrderList" parameterType="OrderListDto" resultType="OrderListDto">
+		<choose>
+			<when test="null!=loginUid and ''!=loginUid">
+				SELECT ou.orderNo AS isUp, olb.* FROM (
+					select * from tbl_order_list_base where 
+					<include refid="selectOrderWhere"/>
+				) AS olb
+				LEFT JOIN tbl_order_up ou ON (ou.orderNo=olb.orderNo AND ou.createUid=#{loginUid})
+				ORDER BY ou.createTime DESC
+				<if test="sortName !=null and sortName !=''">,${sortName} ${sortOrder}</if>
+				<if test="(sortName ==null or sortName =='') and (type == 0 or type ==3) ">,(case when currentHandlerUid =#{updateUid} then 1 when notarialUid =#{updateUid} then 2 when facesignUid =#{updateUid} then 3 ELSE 4 END),previousHandleTime desc </if>
+			</when><otherwise>
+				select * from tbl_order_list_base where 
+				<include refid="selectOrderWhere"/>
+				<if test="sortName !=null and sortName !=''">
+					ORDER BY ${sortName} ${sortOrder} 
+				</if>
+				<if test="(sortName ==null or sortName =='') and (type == 0 or type ==3) ">
+					ORDER BY(case when currentHandlerUid =#{updateUid} then 1 when notarialUid =#{updateUid} then 2 when facesignUid =#{updateUid} then 3 ELSE 4 END),previousHandleTime desc 
+				</if>
+			</otherwise>
+		</choose>
+		
+		limit #{start},#{pageSize} 	
+	</select>
+	<select id="selectOrderCount" parameterType="OrderListDto"	resultType="int">
+		select count(1) from tbl_order_list_base where 
+		<include refid="selectOrderWhere"/>
+	</select>
+	<sql id="selectOrderWhere">
+		<if test="type == -1">
+			1 = 1 
+		</if>
+		<if test="type == 0">
+			<if test="currentHandlerUid != null and currentHandlerUid != '' ">
+				(currentHandlerUid in (${currentHandlerUid}) or previousHandlerUid = #{updateUid} or notarialUid in (${currentHandlerUid}) or facesignUid in (${currentHandlerUid})
+				 
+				 or acceptMemberUid in  (${currentHandlerUid}) 
+				 
+				 or channelManagerUid in (${currentHandlerUid}) 
+				 
+				<if test="orderNo != '' and orderNo != null">
+				 or orderNo in (${orderNo})
+				</if>
+				  )
+			</if>
+			<if test="currentHandlerUid == null or currentHandlerUid == ''">
+				1=1 
+			</if>
+		</if>
+		<if test="type == 1">
+			 orderNo in (${orderNo}) 
+		</if>
+		<if test="type == 2">
+			 (currentHandlerUid = #{currentHandlerUid} or notarialUid = #{currentHandlerUid} or facesignUid = #{currentHandlerUid})
+		</if>
+		<if test="type == 3">
+			<if test="currentHandlerUid != null and currentHandlerUid != '' ">
+				(currentHandlerUid in (${currentHandlerUid}) or previousHandlerUid = #{updateUid} or notarialUid in (${currentHandlerUid}) or facesignUid in (${currentHandlerUid})
+				
+				 or acceptMemberUid in  (${currentHandlerUid}) 
+				 
+				 or channelManagerUid in (${currentHandlerUid}) 
+				 
+				<if test="orderNo != '' and orderNo != null">
+				 or orderNo in (${orderNo})
+				</if>
+				  )
+			</if>
+			<if test="currentHandlerUid == null or currentHandlerUid == ''">
+				1=1 
+			</if>
+		</if>
+		<if test="customerName !=null and customerName != ''">
+			and customerName like CONCAT('%',#{customerName},'%')
+		</if>
+		<if test="cityCode !=null and cityCode!=''">
+			and cityCode = #{cityCode} 
+		</if>
+		<if test="branchCompany !=null and branchCompany!=''">
+			and branchCompany = #{branchCompany} 
+		</if>
+		<if test="productCode != null and  productCode != '' ">
+			and productCode = #{productCode} 
+		</if>
+		<if test="state !=null and state != '' ">
+			<if test="state == '待提单' or state =='待公证' or state == '待面签' ">
+				and `state` like CONCAT('%',#{state},'%')   
+			</if>
+			<if test="state != '待提单' and state !='待公证' and state != '待面签' ">
+				and `state` = #{state} 
+			</if>
+		</if>
+		<if test="agencyId !=null and agencyId !=''">
+			and agencyId = #{agencyId} 
+		</if>
+		<if test="cooperativeAgencyId !=null and cooperativeAgencyId !=''">
+			and cooperativeAgencyId = #{cooperativeAgencyId} 
+		</if>
+		<if test="channelManagerUid !=null and channelManagerUid !=''">
+			and channelManagerUid = #{channelManagerUid} 
+		</if>
+		<if test="acceptMemberUid !=null and acceptMemberUid !=''">
+			and acceptMemberUid = #{acceptMemberUid} 
+		</if>
+		<if test="createTimeStart !=null and createTimeStart !=''">
+			and  <![CDATA[ createTime >= #{createTimeStart} ]]>
+		</if>
+		<if test="createTimeEnd !=null and createTimeEnd !=''">
+			and  <![CDATA[ createTime <= #{createTimeEnd} ]]>
+		</if>
+		<if test="lendingTimeStart !=null and lendingTimeStart !=''">
+			and  <![CDATA[ lendingTime >= #{lendingTimeStart} ]]>
+		</if>
+		<if test="lendingTimeEnd !=null and lendingTimeEnd !=''">
+			and  <![CDATA[ lendingTime <= #{lendingTimeEnd} ]]>
+		</if>
+		<if test="null != planPaymentTimeOrders and planPaymentTimeOrders != ''">
+			and orderNo IN(${planPaymentTimeOrders})
+		</if>
+		<if test="branchCompany !=null and branchCompany !=''">
+			and  branchCompany = #{branchCompany} 
+		</if>
+		<if test="searchName !=null and searchName !=''">
+			and  (channelManagerName like CONCAT('%',#{searchName},'%') or  customerName like CONCAT('%',#{searchName},'%') or acceptMemberName like CONCAT('%',#{searchName},'%'))  
+		</if> 
+		<if test="customerType!=null and customerType!=0"> and customerType=#{customerType}</if>
+		 /*and state != '已关闭' */
+	</sql>
+	
+	<!-- 查询订单列表 -->
+	<select id="selectOrderListApp" parameterType="OrderListDto"
+		resultType="OrderListDto">
+		SELECT ou.orderNo AS isUp, olb.* FROM (
+		select 
+			id,
+			createUid,
+			createTime,
+			updateUid,
+			updateTime,
+			cityCode,
+			productCode,
+			orderNo,
+			customerName,
+			borrowingAmount,
+			borrowingDay,
+			cooperativeAgencyId,
+			cooperativeAgencyName,
+			channelManagerUid,
+			channelManagerName,
+			previousHandler,
+			previousHandlerUid,
+			previousHandleTime,
+			currentHandlerUid,
+			currentHandler,
+			state,
+			processId,
+			source,
+			acceptMemberName,
+			appShowValue1,
+			appShowValue2,
+			NULL AS appShowValue3,
+			NULL AS estateType,
+			NULL AS estateTypeCode,
+			NULL AS estateNo,
+			NULL AS totalPrice,
+			NULL AS netPrice,
+			NULL AS bankId,
+			NULL AS bankName,
+			NULL AS subBankId,
+			NULL AS subBankName,
+			NULL AS custManagerName,
+			NULL AS custManagerNameCode,
+			NULL AS operate,
+			agencyId,
+			cityName,
+			branchCompany,
+			productName,
+			contractNo,
+			acceptMemberUid,
+			planPaymentTime,
+			lendingTime,
+			notarialUid,
+			facesignUid,
+			relationOrderNo,
+			foreclosureTimeStr,
+			isFace,
+			isRelationOrder
+		 from `anjbo-server-order`.`tbl_order_list_base` where 
+		<if test="type == -1">
+			1 = 1 
+		</if>
+		<if test="type == 0">
+			<if test="currentHandlerUid != null and currentHandlerUid != '' ">
+				(currentHandlerUid in (${currentHandlerUid}) or previousHandlerUid = #{updateUid} or notarialUid in (${currentHandlerUid}) or facesignUid in (${currentHandlerUid})
+				 
+				 or acceptMemberUid in  (${currentHandlerUid}) 
+				 
+				 or channelManagerUid in (${currentHandlerUid})
+				 
+				 or createUid in (${updateUid}) 
+				 
+				<if test="orderNo != '' and orderNo != null">
+				 or orderNo in (${orderNo})
+				</if>
+				  )
+			</if>
+			<if test="currentHandlerUid == null or currentHandlerUid == ''">
+				1=1 
+			</if>
+			 <if test="agencyId !=null and agencyId > 1">
+					and agencyId = #{agencyId}
+			 </if>
+		</if>
+		<if test="type == 1">
+			 <if test="orderNo != '' and orderNo != null">
+			 orderNo in (${orderNo}) 
+			 </if>
+			  <if test="agencyId !=null and agencyId > 1">
+					and agencyId = #{agencyId}
+			 </if>
+		</if>
+		<if test="type == 2">
+			 (currentHandlerUid = #{currentHandlerUid} or notarialUid = #{currentHandlerUid} or facesignUid = #{currentHandlerUid})
+			 <if test="agencyId !=null and agencyId > 1">
+					and agencyId = #{agencyId}
+			 </if>
+		</if>
+		<if test="type == 3">
+			<if test="currentHandlerUid != null and currentHandlerUid != '' ">
+				(currentHandlerUid in (${currentHandlerUid}) or previousHandlerUid = #{updateUid} or notarialUid in (${currentHandlerUid}) or facesignUid in (${currentHandlerUid})
+				
+				 or acceptMemberUid in  (${currentHandlerUid}) 
+				 
+				 or channelManagerUid in (${currentHandlerUid}) 
+				 
+				 or createUid in (${updateUid}) 
+				 
+				<if test="orderNo != '' and orderNo != null">
+				 or orderNo in (${orderNo})
+				</if>
+				<if test="agencyId !=null and agencyId > 1">
+					or agencyId = #{agencyId}
+				</if>
+				<if test="cooperativeAgencyId !=null and cooperativeAgencyId > 1">
+					or cooperativeAgencyId = #{cooperativeAgencyId}
+				</if>
+				  )
+			</if>
+			<if test="currentHandlerUid == null or currentHandlerUid == ''">
+				1=1 
+			</if>
+		</if>
+		<if test="customerName !=null and customerName != ''">
+			and customerName like CONCAT('%',#{customerName},'%')
+		</if>
+		<if test="cityCode !=null and cityCode!=''">
+			and cityCode = #{cityCode} 
+		</if>
+		<if test="productCode != null and  productCode != '' ">
+			and productCode = #{productCode} 
+		</if>
+		<if test="state !=null and state != '' ">
+			<if test="state == '待提单' or state =='待公证' or state == '待面签' ">
+				and `state` like CONCAT('%',#{state},'%')   
+			</if>
+			<if test="state != '待提单' and state !='待公证' and state != '待面签' ">
+				and `state` = #{state} 
+			</if>
+		</if>
+		<!-- 机构用户需要看合作机构选择是自己机构和快鸽的 -->
+		<!-- <if test="cooperativeAgencyId !=null and cooperativeAgencyId !=''">
+			and cooperativeAgencyId = #{cooperativeAgencyId} 
+		</if> -->
+		<if test="channelManagerUid !=null and channelManagerUid !=''">
+			and channelManagerUid = #{channelManagerUid} 
+		</if>
+		<if test="acceptMemberUid !=null and acceptMemberUid !=''">
+			and acceptMemberUid = #{acceptMemberUid} 
+		</if>
+		<if test="createTimeStart !=null and createTimeStart !=''">
+			and  <![CDATA[ createTime >= #{createTimeStart} ]]>
+		</if>
+		<if test="createTimeEnd !=null and createTimeEnd !=''">
+			and  <![CDATA[ createTime <= #{createTimeEnd} ]]>
+		</if>
+		<if test="lendingTimeStart !=null and lendingTimeStart !=''">
+			and  <![CDATA[ lendingTime >= #{lendingTimeStart} ]]>
+		</if>
+		<if test="lendingTimeEnd !=null and lendingTimeEnd !=''">
+			and  <![CDATA[ lendingTime <= #{lendingTimeEnd} ]]>
+		</if>
+		<if test="branchCompany !=null and branchCompany !=''">
+			and  branchCompany = #{branchCompany} 
+		</if>
+		<if test="searchName !=null and searchName !=''">
+			and  (channelManagerName like CONCAT('%',#{searchName},'%') or  customerName like CONCAT('%',#{searchName},'%') or acceptMemberName like CONCAT('%',#{searchName},'%'))  
+		</if> 
+		 /*and state != '已关闭' */
+			UNION ALL
+		(
+			SELECT
+				id,
+				createUid,
+				createTime,
+				updateUid,
+				updateTime,
+				cityCode,
+				productCode,
+				orderNo,
+				NAME AS customerName,
+				borrowingAmount,
+				loanLimit,
+				cooperativeAgencyId,
+				cooperativeAgencyName,
+				channelManagerUid,
+				channelManagerName,
+				previousHandler,
+				previousHandlerUid,
+				previousHandleTime,
+				currentHandlerUid,
+				currentHandler,
+				state,
+				processId,
+				source,
+				createPeopleName,
+				appShowValue1,
+				appShowValue2,
+				appShowValue3,
+				estateType,
+				estateTypeCode,
+				estateNo,
+				totalPrice,
+				netPrice,
+				bankId,
+				bankName,
+				subBankId,
+				subBankName,
+				custManagerName,
+				custManagerNameCode,
+				operate,
+				NULL,
+				NULL,
+				NULL,
+				NULL,
+				NULL,
+				NULL,
+				NULL,
+				NULL,
+				NULL,
+				NULL,
+				NULL,
+				NULL,
+				NULL,
+				NULL
+			FROM
+				`anjbo-server-product-data`.`tbl_cm_list` where
+			<if test="type == -1">
+			1 = 1 
+			</if>
+			<if test="type == 0">
+				<if test="currentHandlerUid != null and currentHandlerUid != '' ">
+					(currentHandlerUid in (${currentHandlerUid}) or previousHandlerUid = #{updateUid}
+					 
+					 or channelManagerUid in (${currentHandlerUid})
+					 
+					 or createUid in (${updateUid}) 
+					 
+					<if test="orderNo != '' and orderNo != null">
+					 or orderNo in (${orderNo})
+					</if>
+					  )
+				</if>
+				<if test="currentHandlerUid == null or currentHandlerUid == ''">
+					1=1 
+				</if>
+			</if>
+			<if test="type == 1">
+			 	 <if test="orderNo != '' and orderNo != null">
+				 orderNo in (${orderNo}) 
+				 </if>
+			</if>
+			<if test="type == 2">
+				 (currentHandlerUid = #{currentHandlerUid})
+			</if>
+			<if test="type == 3">
+				<if test="currentHandlerUid != null and currentHandlerUid != '' ">
+					(currentHandlerUid in (${currentHandlerUid}) or previousHandlerUid = #{updateUid}
+					
+					 or channelManagerUid in (${currentHandlerUid})
+					 
+					 or createUid in (${updateUid}) 
+					 
+					<if test="orderNo != '' and orderNo != null">
+					 or orderNo in (${orderNo})
+					</if>
+					<if test="agencyId !=null and agencyId > 1">
+						or agencyId = #{agencyId}
+					</if>
+					  )
+				</if>
+				<if test="currentHandlerUid == null or currentHandlerUid == ''">
+					1=1 
+				</if>
+			</if>
+			<if test="customerName !=null and customerName != ''">
+				and `name` like CONCAT('%',#{customerName},'%')
+			</if>
+			<if test="cityCode !=null and cityCode!=''">
+				and cityCode = #{cityCode} 
+			</if>
+			<if test="productCode != null and  productCode != '' ">
+				and productCode = #{productCode} 
+			</if>
+			<if test="state !=null and state != '' ">
+				and `state` = #{state} 
+			</if>
+			<if test="cooperativeAgencyId !=null and cooperativeAgencyId !=''">
+				and cooperativeAgencyId = #{cooperativeAgencyId} 
+			</if>
+			<if test="channelManagerUid !=null and channelManagerUid !=''">
+				and channelManagerUid = #{channelManagerUid} 
+			</if>
+			<if test="createTimeStart !=null and createTimeStart !=''">
+				and  <![CDATA[ createTime >= #{createTimeStart} ]]>
+			</if>
+			<if test="createTimeEnd !=null and createTimeEnd !=''">
+				and  <![CDATA[ createTime <= #{createTimeEnd} ]]>
+			</if>
+			<if test="lendingTimeStart !=null and lendingTimeStart !=''">
+				and  <![CDATA[ lendingTime >= #{lendingTimeStart} ]]>
+			</if>
+			<if test="lendingTimeEnd !=null and lendingTimeEnd !=''">
+				and  <![CDATA[ lendingTime <= #{lendingTimeEnd} ]]>
+			</if>
+			<if test="branchCompany !=null and branchCompany !=''">
+				and  branchCompany = #{branchCompany} 
+			</if>
+			<if test="searchName !=null and searchName !=''">
+				and  (channelManagerName like CONCAT('%',#{searchName},'%') or  `name` like CONCAT('%',#{searchName},'%') or `appShowValue1` like CONCAT('%',#{searchName},'%'))  
+			</if> 
+		)
+		)AS olb
+		LEFT JOIN tbl_order_up ou ON (ou.orderNo=olb.orderNo AND ou.createUid=#{updateUid})
+		ORDER BY ou.createTime DESC
+		<if test="sortName !=null and sortName !=''">
+			,${sortName} ${sortOrder} 
+		</if>
+		<if test="(sortName ==null or sortName =='') and (type == 0 or type ==3) ">
+			<!-- ORDER BY(case when currentHandlerUid =#{updateUid} then 1 when notarialUid =#{updateUid} then 2 when facesignUid =#{updateUid} then 3 ELSE 4 END),previousHandleTime desc  -->
+			,(case when currentHandlerUid =#{updateUid} then 1 ELSE 2 END),previousHandleTime desc
+		</if>
+		limit #{start},#{pageSize} 
+	</select>
+
+	<select id="selectlendingCount" parameterType="OrderListDto" resultType="int">
+		select count(1) from tbl_order_list_base where 
+		 productCode = #{productCode} and  cityCode = #{cityCode} and  lendingTime is not null  and date_format(lendingTime,'%Y-%m') = date_format(#{lendingTime},'%Y-%m') 
+	</select>
+	<!-- 删除指定relationOrderNo的订单列表信息-->
+   <delete id="deleteOrderList" parameterType="string">
+  	 DELETE FROM tbl_order_list_base WHERE orderNo=#{orderNo}
+   </delete>
+   
+   <select id="selectDetail" parameterType="string" resultType="OrderListDto">
+		select id,createUid,updateUid,agencyId,orderNo,cityCode,cityName,branchCompany,productCode,productName,contractNo,
+		customerName,borrowingAmount,borrowingDay,cooperativeAgencyId,cooperativeAgencyName,channelManagerUid,channelManagerName
+		,acceptMemberUid,acceptMemberName,planPaymentTime,lendingTime,previousHandler,previousHandlerUid,previousHandleTime,state,currentHandlerUid,currentHandler
+		,processId,source,notarialUid,facesignUid,appShowValue1,appShowValue2,relationOrderNo,receptionManagerUid,customerType,auditSort,distributionOrderUid
+		 from tbl_order_list_base where 
+		 orderNo = #{orderNo} limit 1
+	</select>
+	
+	<select id="selectOrderAll" parameterType="OrderListDto" resultType="OrderListDto">
+	    select * from tbl_order_list_base where   orderNo in (${orderNo})
+	    <if test="state!=null and state!=''">
+			AND state = #{state}
+		</if>
+	</select>
+	
+	<!-- 更新受理员 -->
+	<update id="updateAcceptMember" parameterType="OrderListDto">
+	UPDATE tbl_order_list_base
+	<set>
+		<if test="agencyId != null and agencyId > 0">
+			agencyId = #{agencyId},
+		</if>
+		<if test="acceptMemberUid!=null and acceptMemberUid!=''">
+			acceptMemberUid = #{acceptMemberUid},
+		</if>
+		<if test="state!=null and state!=''">
+			state = #{state},
+		</if>
+		<if test="currentHandlerUid!=null and currentHandlerUid!=''">
+			currentHandlerUid = #{currentHandlerUid},
+		</if>
+		<if test="currentHandler!=null and currentHandler!=''">
+			currentHandler = #{currentHandler},
+		</if>
+		<if test="processId!=null and processId!=''">
+			processId = #{processId},
+		</if>
+		<if test="acceptMemberName!=null and acceptMemberName!=''">
+			acceptMemberName = #{acceptMemberName}
+		</if>
+	</set>
+	WHERE orderNo = #{orderNo}
+	</update>
+
+	<select id="selectIsFace" parameterType="java.lang.String" resultType="java.lang.Integer">
+		SELECT isFace FROM tbl_order_list_base WHERE orderNo=#{orderNo} ORDER BY createTime DESC limit 1
+	</select>
+
+	<update id="updateIsFace" parameterType="java.util.Map">
+		UPDATE tbl_order_list_base SET isFace=#{isFace} WHERE orderNo=#{orderNo}
+	</update>
+	<update id="updateCustomerName">
+		UPDATE tbl_order_list_base SET customerName=#{customerName} WHERE orderNo=#{orderNo};
+		UPDATE tbl_order_base_borrow SET borrowerName=#{customerName} WHERE orderNo=#{orderNo};
+		UPDATE tbl_order_base_customer SET customerName=#{customerName} WHERE orderNo=#{orderNo};
+	</update>
+	
+	<!-- 放款报表查询 -->
+	<select id="search4reportLendingChart" parameterType="OrderListDto" resultType="OrderReportLendingVo">
+      <include refid="sqlSearch4reportLending"/>
+	  GROUP BY lendingTimeFmt ORDER BY lendingTime ASC
+  </select>
+  <select id="search4reportLending" parameterType="OrderListDto" resultType="OrderReportLendingVo">
+      <include refid="sqlSearch4reportLending"/>
+	  GROUP BY lendingTimeFmt,productCode ORDER BY lendingTime DESC
+  </select>
+  <sql id="sqlSearch4reportLending">
+      SELECT DATE_FORMAT(lendingTime,'%Y年%m月') lendingTimeFmt, productCode, SUM(borrowingAmount) reportSum, COUNT(1) reportCount
+	  FROM tbl_order_list_base WHERE lendingTime IS NOt NULL
+	  <if test="agencyId>0"> AND agencyId=#{agencyId}</if>
+	  <if test="null!=orderNo and ''!=orderNo"> AND orderNo IN(${orderNo})</if>
+	  <if test="null!=lendingTimeStart and ''!=lendingTimeStart"> AND lendingTime&gt;=#{lendingTimeStart}</if>
+	  <if test="null!=lendingTimeEnd   and ''!=lendingTimeEnd"> AND lendingTime&lt;=#{lendingTimeEnd}</if>
+  </sql>
+  
+	<!-- App机构放款月统计数据查询 -->
+	<select id="findLoanStatisticMonth" parameterType="java.lang.String" resultType="java.util.Map">
+	 	SELECT
+	 		lendingTime time,
+			YEAR (lendingTime) year,
+			MONTH (lendingTime) month,
+			IFNULL(SUM(borrowingAmount),0) totalAmount,
+			COUNT(1) count
+		FROM
+			tbl_order_list_base
+		WHERE
+			lendingTime IS NOT NULL
+		<if test="uids != null and uids != '' "> AND createUid IN (${uids}) </if>
+		GROUP BY
+			DATE_FORMAT(lendingTime, '%Y%m')
+		ORDER BY
+			lendingTime DESC
+	</select>
+	
+	<!-- App机构放款统计总数据查询 -->
+	<select id="findLoanStatisticTotal" parameterType="java.lang.String" resultType="java.util.Map">
+	 	SELECT
+			IFNULL(SUM(borrowingAmount),0) totalAmount,
+			COUNT(1) count
+		FROM
+			tbl_order_list_base
+		WHERE
+			lendingTime IS NOT NULL
+		<if test="uids != null and uids != '' "> AND createUid IN (${uids}) </if>
+	</select>
+	
+	<!-- App机构放款月统计详情数据查询 -->
+	<select id="findLoanStatisticDetail" resultType="java.util.Map">
+	 	SELECT
+	 		orderNo,
+			DAY (lendingTime) day,
+			DATE_FORMAT(lendingTime, '%H:%i') time,
+			borrowingAmount,
+			customerName name,
+			productCode,
+			borrowingDay
+		FROM
+			tbl_order_list_base
+		WHERE
+			lendingTime IS NOT NULL
+		<if test="uids != null and uids != '' "> AND createUid IN (${uids}) </if>
+		AND 
+			YEAR (lendingTime) = #{year}
+		AND 
+			MONTH (lendingTime) = #{month}
+		ORDER BY
+			lendingTime DESC
+	</select>
+  
+  	<!-- App机构完成订单月统计数据查询 -->
+	<select id="findFinishStatisticMonth" parameterType="java.lang.String" resultType="java.util.Map">
+	 	SELECT
+	 		b.createTime time,
+			YEAR (b.createTime) year,
+			MONTH (b.createTime) month,
+			COUNT(1) count
+		FROM
+			tbl_order_list_base a,
+			tbl_order_flow b
+		WHERE
+			a.processId = 'wanjie'
+		AND b.currentProcessId = 'wanjie'
+		AND a.orderNo = b.orderNo
+		<if test="uids != null and uids != '' "> AND a.createUid IN (${uids}) </if>
+		GROUP BY
+			DATE_FORMAT(b.createTime, '%Y%m')
+		ORDER BY
+			b.createTime DESC
+	</select>
+	
+	<!-- App机构完成订单计总数据查询 -->
+	<select id="findFinishStatisticTotal" parameterType="java.lang.String" resultType="java.util.Map">
+	 	SELECT
+			COUNT(1) count
+		FROM
+			tbl_order_list_base a,
+			tbl_order_flow b
+		WHERE
+			a.processId = 'wanjie'
+		AND b.currentProcessId = 'wanjie'
+		AND a.orderNo = b.orderNo
+		<if test="uids != null and uids != '' "> AND a.createUid IN (${uids}) </if>
+	</select>
+	
+	<!-- App机构完成订单统计详情数据查询 -->
+	<select id="findFinishStatisticDetail" resultType="java.util.Map">
+	 	SELECT
+	 		a.orderNo,
+			DAY (b.createTime) day,
+			DATE_FORMAT(b.createTime, '%H:%i') time,
+			a.customerName name,
+			a.productCode,
+			a.borrowingAmount,
+			a.borrowingDay,
+			date_format(a.lendingTime,'%Y/%m/%d') lendingTime
+		FROM
+			tbl_order_list_base a,
+			tbl_order_flow b
+		WHERE
+			a.processId = 'wanjie'
+		AND b.currentProcessId = 'wanjie'
+		AND a.orderNo = b.orderNo
+		<if test="uids != null and uids != '' "> AND a.createUid IN (${uids}) </if>
+		AND 
+			YEAR (b.createTime) = #{year}
+		AND 
+			MONTH (b.createTime) = #{month}
+		ORDER BY
+			b.createTime DESC
+	</select>
+	
+	<!-- 根据订单查询App机构放款统计数据 -->
+	<select id="findLoanByOrderNos" parameterType="java.lang.String" resultType="java.util.Map">
+	 	SELECT
+	 		a.orderNo,
+			a.customerName name,
+			a.borrowingAmount,
+			a.borrowingDay,
+			a.productCode
+		FROM
+			tbl_order_list_base a
+		WHERE
+			a.orderNo IN (${orderNos})
+	</select>
+	
+	<!-- 通过用户uids查询并返回订单号OrderNos-->
+	<select id="findOrderNosByUids" parameterType="java.lang.String" resultType="java.lang.String">
+	 	SELECT
+	 		orderNo 
+		FROM
+			tbl_order_list_base
+		WHERE
+			createUid IN (${uids})
+	</select>
+	
+	<!-- App当月放款数据 -->
+	<select id="findLoanStatisticByMonthAndUids" parameterType="java.lang.String" resultType="java.util.Map">
+	 	SELECT
+			IFNULL(SUM(borrowingAmount),0) loanTotalAmount,
+			COUNT(1) loanCount
+		FROM
+			tbl_order_list_base
+		WHERE
+			lendingTime IS NOT NULL
+		AND 
+			createUid IN (${uids})
+		AND
+			YEAR(lendingTime) = #{year}
+		AND 
+			MONTH(lendingTime) = #{month}	
+	</select>
+	
+	<select id="selectAllOrder" parameterType="java.util.Map" resultType="java.util.Map" >
+		select * from tbl_order_list_base
+	</select>
+	
+	<select id="selectAllOrderList" parameterType="java.util.Map" resultType="com.anjbo.bean.order.OrderListDto" >
+		select * from tbl_order_list_base where state !="已完结" and state !="返佣"
+	</select>
+	
+	<!-- 查询可关联的订单 -->
+	<select id="selectAbleRelationOrder" parameterType="java.util.Map" resultType="java.util.Map" >
+		SELECT olb.cityCode, olb.productCode,olb.processId, olb.customerName,olb.orderNo,olb.borrowingAmount,olb.borrowingDay, olb.acceptMemberUid,olb.notarialUid,olb.facesignUid,obb.elementUid
+		FROM tbl_order_list_base olb
+		INNER JOIN tbl_order_base_borrow obb ON obb.orderNo=olb.orderNo
+		where (olb.productCode='01' OR olb.productCode='02') 
+		<if test="agencyId != null and agencyId >= 1"> AND olb.agencyId=#{agencyId}</if>
+		AND olb.cityCode=#{cityCode} AND olb.customerName=#{borrowerName}		
+	</select>
+
+	<select id="selectAgencyLoan" parameterType="java.util.Map" resultType="OrderListDto">
+	SELECT
+		l.createTime,
+		l.customerName,
+		l.cooperativeAgencyId,
+		l.cooperativeAgencyName,
+		l.state,
+		l.processId,
+		SUM(l.borrowingAmount) AS borrowingAmount
+	FROM
+		tbl_order_list_base l
+	WHERE
+		l.cooperativeAgencyId=#{cooperativeAgencyId}
+	<if test="whereProcess!=null and whereProcess!=''">
+		AND (${whereProcess})
+	</if>
+	GROUP BY l.cooperativeAgencyId;
+	</select>
+
+	<!-- 查询订单公证经办人 -->
+	<select id="selectNotarialUidByOrderNo" parameterType="java.util.Map" resultType="java.util.Map" >
+		select notarialUid from tbl_order_list_base where orderNo = #{orderNo} limit 1
+	</select>
+	
+	<!-- 查询用户某个节点待处理的订单数量 -->
+	<select id="selectUidOrderCount" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT count(1) as count,currentHandlerUid FROM tbl_order_list_base where state like CONCAT('%',#{state},'%') and state != '已关闭' GROUP BY currentHandlerUid,state
+	</select> 
+	
+	<select id="selectOrderListByContractNo" resultType="OrderListDto" parameterType="OrderListDto">
+		select * from tbl_order_list_base where contractNo like  CONCAT(#{contractNo},'%') order by contractNo desc limit 1
+	</select>
+	
+</mapper>

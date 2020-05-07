@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>借款信息</title>
+<!--标准mui.css-->
+<link rel="stylesheet" href="./css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="./css/order.css" />
+<link href="./css/mui.picker.min.css" rel="stylesheet" />
+</head>
+<body>
+<form aciton="" id="borrowForm">
+<div class="form-box">
+	<input type="hidden" value="" name="orderNo" id="orderNo">
+     <div class="inp-div">
+           <span class="inp-span mi">城市</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" id="cityName" readonly class="inp-box" name="cityName" placeholder="请选择"></a>
+           <input type="hidden" id="cityCode" name="cityCode">
+     </div>
+	 <div class="inp-div no-border">
+           <span class="inp-span mi">业务类型</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" id="productName" readonly class="inp-box" name="bank" placeholder="请选择"></a>
+     </div>
+	 <div class="clear"></div>
+</div>
+
+<div class="form-box">
+     <div class="inp-div">
+           <span class="inp-span mi">渠道经理</span><span class="inp-r arrow">&nbsp;</span>
+          <a href="#" id="nUrl"><input type="text" value="" readonly class="inp-box" id="channelManagerName" placeholder="请选择"></a>
+           <input type="hidden" id="channelManagerUid" name="channelManagerUid">
+     </div>
+	 <div class="inp-div no-border">
+           <span class="inp-span mi">合作机构</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" id="cooperativeAgencyName" readonly class="inp-box" name="cooperativeAgencyName" placeholder="请选择"></a>
+           <input type="hidden" id="cooperativeAgencyId" name="cooperativeAgencyId">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">受理员</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" id="acceptMemberName" readonly class="inp-box" name="acceptMemberName" placeholder="请选择"></a>
+           <input type="hidden" id="acceptMemberUid" name="acceptMemberUid">
+     </div>
+	 <div class="inp-div no-border">
+           <span class="inp-span mi">分公司（营业部）</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" id="branchCompany" readonly class="inp-box" name="branchCompany" placeholder="请选择"></a>
+     </div>
+	 <div class="clear"></div>
+</div>
+
+<div class="form-box">
+     <div class="inp-div">
+           <span class="inp-span mi">客户姓名</span><span class="inp-r ">&nbsp;</span>
+           <input type="text" value="" id="borrowerName"  class="inp-box" name="borrowerName" placeholder="请输入">
+     </div>
+	 <div class="inp-div no-border">
+           <span class="inp-span mi">手机号码</span><span class="inp-r ">&nbsp;</span>
+           <input type="tel" value="" id="phoneNumber"  class="inp-box" name="phoneNumber" placeholder="请输入">
+     </div>
+	 <div class="clear"></div>
+</div>
+
+<div class="form-box">
+     <div class="inp-div">
+           <span class="inp-span mi">原贷款是否银行</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" id="isOldLoanBank" readonly class="inp-box" name="isOldLoanBank" placeholder="请选择"></a>
+     </div>
+	 <div class="inp-div no-border">
+           <span class="inp-span mi">原贷款地址</span><span class="inp-r ">&nbsp;</span>
+           <input type="text" value=""  class="inp-box" id="oldLoanBankName" name="oldLoanBankName" placeholder="请输入">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">新贷款是否银行</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" id="isLoanBank"  readonly class="inp-box" name="isLoanBank" placeholder="请选择"></a>
+     </div>
+	 <div class="inp-div no-border">
+           <span class="inp-span mi">新贷款地址</span><span class="inp-r ">&nbsp;</span>
+           <input type="text" value="" id="loanBankName"  class="inp-box" name="loanBankName" placeholder="请输入">
+     </div>
+	 <div class="clear"></div>
+</div>
+
+<div class="form-box">
+     <div class="inp-div">
+           <span class="inp-span mi">借款金额</span><span class="inp-r ">万元</span>
+           <input type="number" value="" id="loanAmount" class="inp-box" name="loanAmount" placeholder="请输入">
+     </div>
+	 <div class="inp-div no-border">
+           <span class="inp-span mi">借款期限</span><span class="inp-r ">天</span>
+           <input type="tel" value="" id="borrowingDays" class="inp-box" name="borrowingDays" placeholder="请输入">
+     </div>
+	  <div class="inp-div">
+           <span class="inp-span mi">风控等级</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" id="riskGradeId" readonly class="inp-box" name="riskGradeId" placeholder="请选择"></a>
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">费率</span><span class="inp-r ">%/天</span>
+           <input type="number" value="" id="rate"  class="inp-box" name="rate" placeholder="请输入">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">逾期费率</span><span class="inp-r ">天</span>
+           <input type="number" value="" id="overdueRate"  class="inp-box" name="overdueRate" placeholder="请输入">
+     </div>
+	  <div class="inp-div">
+           <span class="inp-span mi">其他金额</span><span class="inp-r ">元</span>
+           <input type="number" value="" id="otherPoundage"  class="inp-box" name="otherPoundage" placeholder="请输入">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">关外手续费</span><span class="inp-r ">元</span>
+           <input type="number" value="" id="customsPoundage"  class="inp-box" name="customsPoundage" placeholder="请输入">
+     </div>
+	 <div class="inp-div no-border">
+           <span class="inp-span mi">收费金额</span><span class="inp-r ">元</span>
+           <input type="number" value="" id="chargeMoney"  class="inp-box" name="chargeMoney" placeholder="请输入">
+     </div>
+	 <div class="clear"></div>
+</div>
+
+<div class="form-box">
+     <div class="inp-div">
+           <span class="inp-span mi">是否有返佣</span><span class="inp-r icon-d"> &nbsp;</span>
+           <input type="text" value="是" id="isRebate" readonly class="inp-box sel" name="isRebate" >
+     </div>
+	 <div class="inp-div no-border">
+           <span class="inp-span mi">是否一次性回款</span><span class="inp-r icon-d"> &nbsp;</span>
+           <input type="text" value="是" id="isOnePay"  readonly class="inp-box sel" name="isOnePay" >
+     </div>
+	 
+	 <div class="clear"></div>
+</div>
+
+<div class="form-box">
+     <div class="inp-div" >
+           <span class="inp-span mi">受理员</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" id="acceptMemberUid" readonly class="inp-box" name="acceptMemberUid" placeholder="请选择"></a>
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">公证员</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" id="notarialUid" readonly class="inp-box" name="notarialUid" placeholder="请选择"></a>
+     </div>
+	 <div class="inp-div" >
+           <span class="inp-span mi">面签员</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" id="facesignUid" readonly class="inp-box" name="facesignUid" placeholder="请选择"></a>
+     </div>
+	 <div class="inp-div no-border">
+           <span class="inp-span mi">要件管理员</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" id="elementUid" readonly class="inp-box" name="elementUid" placeholder="请选择"></a>
+     </div>
+
+ 
+     <div class="clear"></div>
+</div>
+
+<div class="form-box">
+    <div class="clear"> </div>
+	<div class="inp-div no-border">
+           <span class="inp-span">备注</span>
+     </div>
+     <textarea id="textarea" id="remark" name="remark" rows="5" placeholder="如有特殊说明，请在此备注（非必填）。" class="textarea-box"></textarea>
+	 <div class="clear"></div><br>
+</div>
+
+ 
+
+
+<div class="form-box">
+     <div class="clear"></div>
+     <div class="but-two">
+	      <div class="order-but fl dis">提交</div> <a href="loan_mes_relative.html"><div class="order-but fr">增加关联订单</div></a>
+	 </div>
+      <div class="clear"></div>
+     <br>
+</div>
+
+
+ <div class="save-but"></div>
+ </form>
+ <!--取证员-->
+<div class="mui-iframe-wrapper iframe-box channelManagerUid">
+<iframe id="ifranmesUid" src="channelmanager_list.html"></iframe>
+</div>
+
+<script src="./js/mui.min.js"></script>
+<script src="./js/mui.picker.min.js"></script>
+<script src="./js/jquery.min.js"></script>
+<script src="./js/process.js"></script>
+<script>
+  (function($, doc, $$) {
+				$.init();
+				$.ready(function() {
+                        $$(".sel").click(function(){
+					  var userPicker = new $.PopPicker();
+					  userPicker.setData([{
+						value: 'yes',
+						text: '是'
+					  }, {
+						value: 'no',
+						text: '否'
+					  }]);
+					  var _this=$$(this);
+				      userPicker.show(function(items) {
+							_this.val((items[0].text));
+							//返回 false 可以阻止选择框的关闭
+							//return false;
+						});
+				 
+				  });
+				   
+					 
+				});
+			})(mui, document,jQuery);
+
+  var orderNo = GetQueryString("orderNo");
+  $("#orderNo").val(orderNo);
+  $(function(){
+  	//初始化订单数据
+  	$.ajax({ 
+  		 url:'/credit/order/borrow/v/query',
+  		 data:JSON.stringify({"orderNo":orderNo}), 
+  	    type: 'post' ,
+  	    dataType: 'json',  
+  		 async:false,
+  	    contentType:'application/json;charset=utf-8',
+  		 success: function(data){
+  			var order= data.data;
+  			console.log(order);
+  			//债务置换贷款信息初始化
+  			$("#cityCode").val(order.cityCode);
+  			$("#cityName").val(order.cityName);
+  			$("#productCode").val(order.productCode);
+  			$("#productName").val(order.productName);
+  			$("#cooperativeAgencyId").val(order.cooperativeAgencyId);
+  			$("#channelManagerUid").val(order.channelManagerUid);
+  			$("#acceptMemberUid").val(order.acceptMemberUid);
+  			$("#notarialUid").val(order.notarialUid);
+  			$("#facesignUid").val(order.facesignUid);
+  			$("#elementUid").val(order.elementUid);
+  			$("#branchCompany").val(order.branchCompany);
+  			$("#borrowerName").val(order.borrowerName);
+  			$("#phoneNumber").val(order.phoneNumber);
+  			$("#isOldLoanBank").val(order.isOldLoanBank);
+  			$("#oldLoanBankName").val(order.oldLoanBankName);
+  			$("#oldLoanBankSubName").val(order.oldLoanBankSubName);
+  			$("#oldLoanBankNameId").val(order.oldLoanBankNameId);
+  			$("#oldLoanBankSubNameId").val(order.oldLoanBankSubNameId);
+  			$("#oldLoanBankManager").val(order.oldLoanBankManager);
+  			$("#oldLoanBankManagerPhone").val(order.oldLoanBankManagerPhone);
+  			$("#isLoanBank").val(order.isLoanBank);
+  			$("#loanBankName").val(order.loanBankName);
+  			$("#loanSubBankName").val(order.loanSubBankName);
+  			$("#loanBankNameId").val(order.loanBankNameId);
+  			$("#loanSubBankNameId").val(order.loanSubBankNameId);
+  			$("#loanBankNameManagerPhone").val(order.loanBankNameManagerPhone);
+  			$("#loanBankNameManager").val(order.loanBankNameManager);
+  			$("#borrowingDays").val(order.borrowingDays);
+  			$("#loanAmount").val(order.loanAmount);
+  			$("#rate").val(order.rate);
+  			$("#overdueRate").val(order.overdueRate);
+  			$("#chargeMoney").val(order.chargeMoney);
+  			$("#customsPoundage").val(order.customsPoundage);
+  			$("#riskGradeId").val(order.riskGradeId);
+  			$("#otherPoundage").val(order.otherPoundage);
+  			$("#isRebate").val(order.isRebate);
+  			$("#rebateMoney").val(order.rebateMoney);
+  			$("#rebateBankId").val(order.rebateBankId);
+  			$("#rebateBankSubId").val(order.rebateBankSubId);
+  			$("#rebateBank").val(order.rebateBank);
+  			$("#rebateSubBank").val(order.rebateSubBank);
+  			$("#rebateBankCardName").val(order.rebateBankCardName);
+  			$("#rebateBankCardNum").val(order.rebateBankCardNum);
+  			$("#isOnePay").val(order.isOnePay);
+  			$("#remark").val(order.remark);
+  			var productId = order.cityCode+order.productCode;
+  			
+  		//查询渠道经理集合
+			 $.ajax({ 
+  				 url:'/credit/customer/chanlman/v/findChannelManager',
+  				 data:{}, 
+  			    type: 'post' ,
+  			    dataType: 'json',  
+  				 async:false,
+  			    contentType:'application/json;charset=utf-8',
+  				 success: function(data){
+  					 console.log(data.data);
+  					var listChannel = data.data;
+  			    }
+  			  })
+			
+  			 //初始化风控等级集合
+  			  $.ajax({ 
+  				 url:'/credit/customer/risk/v/findRiskGradeList',
+  				 data:JSON.stringify({"cooperativeAgencyId":order.cooperativeAgencyId,"productId":productId}), 
+  			    type: 'post' ,
+  			    dataType: 'json',  
+  				 async:false,
+  			    contentType:'application/json;charset=utf-8',
+  				 success: function(data){
+  					 console.log(data.data);
+  					var riskGradeList = data.data;
+  			    }
+  			  })
+  	    }
+  	  })  
+  	
+  	  
+  	function formToJson(){
+  	     var data = $("#borrowForm").serialize();
+  	    data= decodeURIComponent(data,true);//防止中文乱码  
+  	    data = data.replace(/&/g, "','" );
+  	    data = data.replace(/=/g, "':'" );
+  	    data = "({'" +data + "'})" ;
+  	    obj = eval(data);
+  	    obj = JSON.stringify(obj)
+  	    return obj;
+  	}
+  	
+  	//保存订单
+  	$(".save-but").on("click",function(){
+  		console.log(formToJson());
+  		$.ajax({ 
+  	  		 url:'/credit/order/borrow/v/update',
+  	  		 data:formToJson(),
+  	  	    type: 'post' ,
+  	  	    dataType: 'json',  
+  	  		 async:false,
+  	  	    contentType:'application/json;charset=utf-8',
+  	  		 success: function(data){
+  	  				alert('保存成功');
+  	  			 }
+  	  		 })
+  	});
+  	  //选人样式
+  	//取证
+  	$("#nUrl").on("click",function(){ 
+  		    $(".channelManagerUid").css({"opacity":"1","z-index":"111"});
+  	})
+  	
+  })
+  //取证员返回数据
+  	function returnDataUrl(code,name){
+  		 
+  		  if(code){
+  			   $(".channelManagerUid").css({"opacity":"0","z-index":"-11"});
+  			   $("#channelManagerUid").val(code);
+  			   $("#channelManagerName").val(name);
+  		  }
+  		 
+  	}
+</script>
+</body>
+</html>

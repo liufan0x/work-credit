@@ -1,0 +1,273 @@
+<style>
+	p.after-t{
+		width:90%;
+		margin:0 auto;
+		clear:both;
+		line-height:40px;
+		font-size:15px;
+		color:#777;
+		font-weight:bold;
+
+	}
+	.after-p{
+		color:blue;
+		line-height: 50px;
+		clear:both;
+		height:50px;
+        padding-left:30px
+	}
+	.after-form .form-group{min-width:200px;line-height: 30px;}
+</style>
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<ul class="breadcrumb relative">
+				<li>
+					<a href="javascript:void(0);" ui-sref="afterLoanList">贷后管理</a>
+					<span class="divider"></span>
+				</li>
+				<li class="active">
+					<a href="javascript:void(0);" ui-sref="afterLoanList">全部订单</a>
+					<span class="divider"></span>
+				</li>
+				<li>贷后详情</li>
+			</ul>
+		</div>
+	</div>
+
+	<!--导航-->
+	<div class="row">
+		<form role="form" class="form-inline">
+			<div class="col-md-12">
+				<ul class="nav nav-tabs">
+					<li ng-class="{'active':showView==1}" >
+						<a ng-click="changeView(1)">还款管理</a>
+					</li>
+					<li ng-class="{'active':showView==2}" >
+						<a ng-click="changeView(2)">贷后日志</a>
+					</li>
+					<li ng-class="{'active':showView==3}" >
+						<a ng-click="changeView(3)">询价/查档/诉讼</a>
+					</li>
+					<li class="pull-right">
+						<button type="button" class="btn btn-primary" ng-if=showView==2 ng-click="addClick()">+&nbsp;添加事件 </button>
+					</li>
+				</ul>
+			</div>
+		</form>
+	</div>
+
+	<after-loan-detail ng-show=showView==1></after-loan-detail>
+	<after-loan-log ng-show=showView==2></after-loan-log>
+	<enquiry-edit ng-show=showView==3></enquiry-edit>
+	<common-file-upload></common-file-upload>
+	<common-file-detail></common-file-detail>
+</div>
+
+
+<div class="lhw-alert-bg2"  ng-show="repaymentShow" style="z-index: 1">
+	<div class="lhw-alert-box" style="width:780px;">
+		<div class="lhw-alert-tit">还 款 详 情
+			<div class="x-box" ng-click="repaymentShow=false"></div>
+		</div>
+		<p class="after-t">第<span ng-bind="repayment.repaymentPeriods"></span>期 <!--溢出:{{repayment.overflow}},文件:{{files.length}}--></p>
+		<form class="form-inline ng-pristine ng-valid" name="repaymentFrom" style="margin-bottom:20px;margin-left:30px; ">
+			<div class="form-group">
+				<label>实际还款金额：</label>
+				<input type="text" class="form-control ng-pristine ng-valid ng-isolate-scope ng-empty ng-touched" ng-pattern="/(^[1-9]\d*(\.[0-9]{1,2})?)$|(^0\.[0-9]{1,2})$/" name="amount" ng-model="repayment.amount" required>元
+				<span style="color:red" ng-show="repaymentFrom.amount.$dirty && repaymentFrom.amount.$invalid">
+  						<span ng-show="repaymentFrom.amount.$error.required">必填</span>
+					</span>
+				<span style="color:red" ng-show="verif&&repaymentFrom.amount.$dirty && !(repaymentFrom.amount.$error.required) && !repaymentFrom.amount.$valid">输入有误</span>
+			</div>
+			<div class="form-group">
+				<label style="width: 122px">收款方式：</label>
+				<select class="form-control" ng-model="repayment.repayType" name="repayType" required>
+					<option value="1">手动录入</option>
+				</select>
+				<span style="color:red" ng-show="repaymentFrom.repayType.$dirty && repaymentFrom.repayType.$invalid">
+  						<span ng-show="repaymentFrom.repayType.$error.required">必填</span>
+					</span>
+			</div>
+			<div class="form-group">
+				<label>实际还款日期：</label>
+				<input size="16" type="text" ng-disabled="all" ng-model="repayment.realityPayDate" name="realityPayDate" required class="form-control form_date" style="width: 179px">
+				<span style="color:red" ng-show="repaymentFrom.realityPayDate.$dirty && repaymentFrom.realityPayDate.$invalid">
+					<span ng-show="repaymentFrom.realityPayDate.$error.required">必填</span>
+				</span>
+			</div>
+			<div class="form-group">
+				<label  style="width: 122px">已还本金：</label>
+				<input type="text" class="form-control ng-pristine ng-untouched ng-valid ng-isolate-scope ng-empty" ng-pattern="/(^0?$)|(^[1-9]\d*(\.[0-9]{1,2})?)$|(^0\.[0-9]{1,2})$/" name="givePayPrincipal" required ng-model="repayment.givePayPrincipal">元
+				<span style="color:red" ng-show="repaymentFrom.givePayPrincipal.$dirty && repaymentFrom.givePayPrincipal.$invalid">
+					<span ng-show="repaymentFrom.givePayPrincipal.$error.required">必填</span>
+				</span>
+				<span style="color:red" ng-show="repaymentFrom.givePayPrincipal.$dirty && !(repaymentFrom.givePayPrincipal.$error.required) && !repaymentFrom.givePayPrincipal.$valid">输入有误</span>
+			</div>
+			<div class="form-group">
+				<label>已还利息：</label>
+				<input type="text" class="form-control ng-pristine ng-untouched ng-valid ng-isolate-scope ng-empty" ng-pattern="/(^0?$)|(^[1-9]\d*(\.[0-9]{1,2})?)$|(^0\.[0-9]{1,2})$/" name="givePayInterest" required ng-model="repayment.givePayInterest">元
+				<span style="color:red" ng-show="repaymentFrom.givePayInterest.$dirty && repaymentFrom.givePayInterest.$invalid">
+					<span ng-show="repaymentFrom.givePayInterest.$error.required">必填</span>
+				</span>
+				<span style="color:red" ng-show="repaymentFrom.givePayInterest.$dirty && !(repaymentFrom.givePayInterest.$error.required) && !repaymentFrom.givePayInterest.$valid">输入有误</span>
+			</div>
+			<div class="form-group">
+				<label>应还逾期费：</label>
+				<input type="text" class="form-control ng-pristine ng-untouched ng-valid ng-isolate-scope ng-empty"  name="repayOverdue" ng-pattern="/(^0?$)|(^[1-9]\d*(\.[0-9]{1,2})?)$|(^0\.[0-9]{1,2})$/" required ng-model="repayment.repayOverdue">元
+				<span style="color:red" ng-show="repaymentFrom.repayOverdue.$dirty && repaymentFrom.repayOverdue.$invalid">
+					<span ng-show="repaymentFrom.repayOverdue.$error.required">必填</span>
+				</span>
+				<span style="color:red" ng-show="repaymentFrom.repayOverdue.$dirty && !(repaymentFrom.repayOverdue.$error.required) && !repaymentFrom.repayOverdue.$valid">输入有误</span>
+
+			</div>
+			<div class="form-group">
+				<label  style="width: 108px">已还逾期费：</label>
+				<input type="text" class="form-control ng-pristine ng-untouched ng-valid ng-isolate-scope ng-empty"  ng-disabled="true" name="givePayOverdue"  ng-model="repayment.givePayOverdue">元
+			</div>
+			<div class="col-md-12 col-lg-12">
+				<label>备注：</label>
+				<div class="form-group">
+					<textarea class="form-control ng-pristine ng-isolate-scope ng-empty ng-invalid ng-invalid-required ng-touched" rows="2" ng-model="repayment.remark" name="remark" placeholder="请在此处输入备注" style="width: 493px; height: 101px; overflow-y: auto;" initattrh="54"></textarea>
+				</div>
+			</div>
+			<div style="clear: both;height: 1px"></div>
+			<p class="after-p">
+				<a href="javascript:void(0);" ng-click="uploadshow()">上传附件</a> > &nbsp;&nbsp;
+				<a href="javascript:void(0);" ng-show="files.length>0" ng-click="showfile(files)">查看</a>
+			</p>
+		</form>
+		<div class="lhw-alert-but">
+			<button type="button" class="btn btn-primary lhw-alert-ok" style="margin-right:80px;" ng-click="confirmRepayment();">确  定</button>
+			<button type="button" class="btn btn-default lhw-alert-cancel" ng-click="reset();">重置</button>
+		</div>
+	</div>
+</div>
+
+<div class="lhw-alert-bg2" ng-show="logShow" style="z-index: 1">
+	<div class="lhw-alert-box" style="width:700px;">
+		<div class="lhw-alert-tit">添加事件
+			<div class="x-box" ng-click="logShow=false"></div>
+		</div>
+		<form class="form-inline ng-pristine ng-valid" name="eventFrom" style="margin:20px; ">
+			<div class="form-group">
+				<label style="width: 122px">事件类型：</label>
+				<select class="form-control"  ng-model="log.eventType" name="eventType" required>
+					<option value="{{list.id}}" ng-repeat="list in eventList">{{list.name}}</option>
+				</select>
+				<span style="color:red" ng-show="eventFrom.eventType.$dirty && eventFrom.eventType.$invalid">
+					<span ng-show="eventFrom.eventType.$error.required">必填</span>
+				</span>
+			</div>
+			<div class="form-group">
+				<label>操作时间：</label>
+				<input size="16" type="text" ng-disabled="all" ng-model="log.operateTime" required name="operateTime" class="form-control form_datetime">
+				<span style="color:red" ng-show="eventFrom.operateTime.$dirty && eventFrom.operateTime.$invalid">
+					<span ng-show="eventFrom.operateTime.$error.required">必填</span>
+				</span>
+			</div>
+
+			<div class="col-md-12 col-lg-12">
+				<div class="form-group">
+					<textarea class="form-control ng-pristine ng-isolate-scope ng-empty ng-invalid ng-invalid-required ng-touched" rows="2" ng-model="log.remark" required name="remark" placeholder="请在此处输入备注" style="width: 636px; height: 131px; overflow-y: auto;" initattrh="54"></textarea>
+				</div>
+				<span style="color:red" ng-show="verif&&eventFrom.remark.$dirty && eventFrom.remark.$invalid">
+					<span ng-show="eventFrom.remark.$error.required">必填</span>
+				</span>
+			</div>
+			<div style="clear: both;height: 1px"></div>
+			<p class="after-p">
+				<a href="javascript:void(0);" ng-click="uploadshow()">上传附件</a> >&nbsp;&nbsp;
+				<a href="javascript:void(0);" ng-show="files.length>0" ng-click="showfile(files)">查看</a>
+			</p>
+		</form>
+		<div class="lhw-alert-but">
+			<button type="button" class="btn btn-primary lhw-alert-ok" style="margin-right:80px;" ng-click="addLog()">确  定</button>
+			<button type="button" class="btn btn-default lhw-alert-cancel" ng-click="logShow=false">取消</button>
+		</div>
+	</div>
+</div>
+
+<div class="lhw-alert-bg2" ng-show="logRemarkDetailShow" style="z-index: 1">
+	<div class="lhw-alert-box" style="width:700px;">
+		<div class="lhw-alert-tit">事件详情
+			<div class="x-box" ng-click="logRemarkDetailShow=false"></div>
+		</div>
+		<form class="form-inline ng-pristine ng-valid" style="margin:20px; ">
+			<div class="form-group">
+				<label style="width: 122px">事件类型：</label>
+				<span ng-bind="log.eventTypeName"></span>
+			</div>
+			<div class="form-group">
+				<label>操作时间：</label>
+				<span ng-bind="log.operateTime | date:'yyyy-MM-dd HH:mm'"></span>
+			</div>
+
+			<div class="col-md-12 col-lg-12">
+				<label>备注：</label>
+				<div class="form-group">
+					<textarea class="form-control ng-pristine ng-isolate-scope ng-empty ng-invalid ng-invalid-required ng-touched" readonly rows="5" ng-model="log.remark" required="" name="remark" placeholder="请在此处输入备注" style="width: 493px; height: 101px; overflow-y: auto;" initattrh="54"></textarea>
+				</div>
+			</div>
+			<div style="clear: both;height: 1px"></div>
+			<p class="after-p" ng-if="log.file.length>0"><a href="javascript:void(0);"  ng-click="showfile(log.file)">查看附件</a> > </p>
+		</form>
+		<div class="lhw-alert-but">
+			<button type="button" class="btn btn-primary lhw-alert-ok" style="margin-right:80px;" ng-click="logRemarkDetailShow=false">确  定</button>
+		</div>
+	</div>
+</div>
+
+<div class="lhw-alert-bg2"  ng-show="repaymentDetailShow"  style="z-index: 1">
+	<div class="lhw-alert-box" style="width:760px;">
+		<div class="lhw-alert-tit">事件详情
+			<div class="x-box" ng-click="repaymentDetailShow=false"></div>
+		</div>
+		<p class="after-t">第<span ng-bind="log.repaymentPeriods"></span>期</p>
+		<form class="form-inline ng-pristine ng-valid after-form" style="margin-bottom:20px;margin-left:30px; ">
+			<div class="form-group">
+				<label>实际还款金额：</label>
+				<span ng-bind="log.amount"></span>元
+			</div>
+			<div class="form-group">
+				<label >收款方式：</label>
+				<span ng-if="log.repayType==1">手动录入</span>
+				<span ng-if="log.repayType==2">代扣</span>
+			</div>
+			<div class="form-group">
+				<label>实际还款日期：</label>
+				<span ng-bind="log.realityPayDate|date:'yyyy-MM-dd HH:mm'"></span>
+			</div>
+			<div class="form-group">
+				<label>应还逾期费：</label>
+				<span ng-bind="log.repayOverdue"></span>元
+			</div>
+			<div class="form-group">
+				<label  >已还逾期费：</label>
+				<span ng-bind="log.givePayOverdue"></span>元
+			</div>
+			<div class="form-group">
+				<label   >已还本金：</label>
+				<span ng-bind="log.givePayPrincipal"></span>元
+			</div>
+			<div class="form-group">
+				<label   >已还利息：</label>
+				<span ng-bind="log.givePayInterest"></span>元
+			</div>
+			<div class="col-md-12 col-lg-12">
+				<label>备注：</label>
+				<div class="form-group">
+					<textarea class="form-control ng-pristine ng-isolate-scope ng-empty ng-invalid ng-invalid-required ng-touched" readonly rows="5" ng-model="log.remark" required="" name="remark" placeholder="请在此处输入备注" style="width: 493px; height: 101px; overflow-y: auto;" initattrh="54"></textarea>
+				</div>
+
+			</div>
+			<div style="clear: both;height: 1px"></div>
+			<p class="after-p"  ng-if="log.file.length>0"><a href="javascript:void(0);" ng-click="showfile(log.file)">查看附件</a> > </p>
+		</form>
+		<div class="lhw-alert-but">
+			<button type="button" class="btn btn-primary lhw-alert-ok" style="margin-right:80px;" ng-click="repaymentDetailShow=false">确  定</button>
+		</div>
+	</div>
+</div>
+</html>

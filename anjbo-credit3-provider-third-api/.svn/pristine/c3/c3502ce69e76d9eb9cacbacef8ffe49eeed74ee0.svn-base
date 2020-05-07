@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.yntrust.YntrustRepaymentPayMapper">
+
+    <sql id="Base_Column_List">
+        id, createUid, createTime, updateUid, updateTime, orderNo, trustTransactionNo, transactionNo,
+        voucherType, voucherTypeName, accountNo, accountName, bankTransactionNo, amount, 
+        trustAccountNo, trustAccountName, trustBankCode, status, failMsg,statusName,trustPaymentNos,
+        completeTime,fundAcceptTime,pushStatus,ynProductCode,ynProductName
+    </sql>
+    <select id="select" parameterType="YntrustRepaymentPayDto" resultType="YntrustRepaymentPayDto">
+        select
+        <include refid="Base_Column_List" />
+        from tbl_third_yntrust_repayment_pay
+        where orderNo = #{orderNo}
+        <if test="pushStatus!=null">
+            AND pushStatus = #{pushStatus}
+        </if>
+         <if test="ynProductCode!=null">
+            AND ynProductCode = #{ynProductCode}
+        </if>
+        ORDER BY createTime DESC limit 1
+    </select>
+    <delete id="delete" parameterType="YntrustRepaymentPayDto">
+        delete from tbl_third_yntrust_repayment_pay
+        where orderNo = #{orderNo}
+    </delete>
+    <insert id="insert" parameterType="YntrustRepaymentPayDto">
+        insert into tbl_third_yntrust_repayment_pay
+        (
+            createUid,
+            createTime,
+            orderNo,
+            trustTransactionNo,
+            transactionNo,
+            voucherType,
+            voucherTypeName,
+            accountNo,
+            accountName,
+            bankTransactionNo,
+            amount,
+            trustAccountNo,
+            trustAccountName,
+            trustBankCode,
+            status,
+            failMsg,
+            statusName,
+            trustPaymentNos,
+            completeTime,
+            fundAcceptTime,
+            pushStatus,
+            ynProductCode,
+            ynProductName
+        )
+        values
+        (
+            #{createUid},
+            now(),
+            #{orderNo},
+            #{trustTransactionNo},
+            #{transactionNo},
+            #{voucherType},
+            #{voucherTypeName},
+            #{accountNo},
+            #{accountName},
+            #{bankTransactionNo},
+            #{amount},
+            #{trustAccountNo},
+            #{trustAccountName},
+            #{trustBankCode},
+            #{status},
+            #{failMsg},
+            #{statusName},
+            #{trustPaymentNos},
+            #{completeTime},
+            #{fundAcceptTime},
+            #{pushStatus},
+            #{ynProductCode},
+            #{ynProductName} 
+        )
+    </insert>
+
+    <insert id="insertMap" parameterType="java.util.Map">
+        insert into tbl_third_yntrust_repayment_pay
+        (
+            createUid,
+            createTime,
+            orderNo,
+            trustTransactionNo,
+            transactionNo,
+            voucherType,
+            voucherTypeName,
+            accountNo,
+            accountName,
+            bankTransactionNo,
+            amount,
+            trustAccountNo,
+            trustAccountName,
+            trustBankCode,
+            status,
+            failMsg,
+            statusName,
+            trustPaymentNos,
+            completeTime,
+            fundAcceptTime,
+            pushStatus,
+            ynProductCode,
+            ynProductName 
+        )
+        values
+        (
+            #{createUid},
+            now(),
+            #{orderNo},
+            #{trustTransactionNo},
+            #{transactionNo},
+            #{voucherType},
+            #{voucherTypeName},
+            #{accountNo},
+            #{accountName},
+            #{bankTransactionNo},
+            #{amount},
+            #{trustAccountNo},
+            #{trustAccountName},
+            #{trustBankCode},
+            #{status},
+            #{failMsg},
+            #{statusName},
+            #{trustPaymentNos},
+            #{completeTime},
+            #{fundAcceptTime},
+            #{pushStatus},
+            #{ynProductCode},
+            #{ynProductName}
+        )
+    </insert>
+
+    <update id="update" parameterType="YntrustRepaymentPayDto">
+        update tbl_third_yntrust_repayment_pay
+        <set>
+
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+            <if test="trustTransactionNo != null and trustTransactionNo!=''">
+                trustTransactionNo = #{trustTransactionNo},
+            </if>
+            <if test="transactionNo != null and transactionNo!=''">
+                transactionNo = #{transactionNo},
+            </if>
+            <if test="voucherType != null and voucherType!=''">
+                voucherType = #{voucherType},
+            </if>
+            <if test="voucherTypeName != null and voucherTypeName!=''">
+                voucherTypeName = #{voucherTypeName},
+            </if>
+            <if test="accountNo != null and accountNo!=''">
+                accountNo = #{accountNo},
+            </if>
+            <if test="accountName != null and accountName!=''">
+                accountName = #{accountName},
+            </if>
+            <if test="bankTransactionNo != null and bankTransactionNo!=''">
+                bankTransactionNo = #{bankTransactionNo},
+            </if>
+            <if test="amount != null">
+                amount = #{amount},
+            </if>
+            <if test="trustAccountNo != null and trustAccountNo!=''">
+                trustAccountNo = #{trustAccountNo},
+            </if>
+            <if test="trustAccountName != null and trustAccountName!=''">
+                trustAccountName = #{trustAccountName},
+            </if>
+            <if test="trustBankCode != null and trustBankCode!=''">
+                trustBankCode = #{trustBankCode},
+            </if>
+            <if test="status != null and status!=''">
+                status = #{status},
+            </if>
+            <if test="statusName != null and statusName!=''">
+                statusName = #{statusName},
+            </if>
+            <if test="failMsg != null and failMsg!=''">
+                failMsg = #{failMsg},
+            </if>
+            <if test="trustPaymentNos!=null and trustPaymentNos!=''">
+                trustPaymentNos = #{trustPaymentNos},
+            </if>
+            <if test="completeTime!=null">
+                completeTime = #{completeTime},
+            </if>
+            <if test="fundAcceptTime!=null">
+                fundAcceptTime = #{fundAcceptTime},
+            </if>
+            <if test="pushStatus!=null">
+                pushStatus = #{pushStatus},
+            </if>
+             <if test="ynProductCode != null and ynProductCode!=''">
+                ynProductCode = #{ynProductCode},
+            </if>
+             <if test="ynProductName != null and ynProductName!=''">
+                ynProductName = #{ynProductName}, 
+            </if> 
+        </set>
+        where orderNo = #{orderNo}
+    </update>
+
+    <update id="updateMap" parameterType="java.util.Map">
+        update tbl_third_yntrust_repayment_pay
+        <set>
+
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+            <if test="trustTransactionNo != null and trustTransactionNo!=''">
+                trustTransactionNo = #{trustTransactionNo},
+            </if>
+            <if test="transactionNo != null and transactionNo!=''">
+                transactionNo = #{transactionNo},
+            </if>
+            <if test="voucherType != null and voucherType!=''">
+                voucherType = #{voucherType},
+            </if>
+            <if test="voucherTypeName != null and voucherTypeName!=''">
+                voucherTypeName = #{voucherTypeName},
+            </if>
+            <if test="accountNo != null and accountNo!=''">
+                accountNo = #{accountNo},
+            </if>
+            <if test="accountName != null and accountName!=''">
+                accountName = #{accountName},
+            </if>
+            <if test="bankTransactionNo != null and bankTransactionNo!=''">
+                bankTransactionNo = #{bankTransactionNo},
+            </if>
+            <if test="amount != null">
+                amount = #{amount},
+            </if>
+            <if test="trustAccountNo != null and trustAccountNo!=''">
+                trustAccountNo = #{trustAccountNo},
+            </if>
+            <if test="trustAccountName != null and trustAccountName!=''">
+                trustAccountName = #{trustAccountName},
+            </if>
+            <if test="trustBankCode != null and trustBankCode!=''">
+                trustBankCode = #{trustBankCode},
+            </if>
+            <if test="status != null and status!=''">
+                status = #{status},
+            </if>
+            <if test="statusName != null and statusName!=''">
+                statusName = #{statusName},
+            </if>
+            <if test="failMsg != null and failMsg!=''">
+                failMsg = #{failMsg},
+            </if>
+            <if test="trustPaymentNos!=null and trustPaymentNos!=''">
+                trustPaymentNos = #{trustPaymentNos},
+            </if>
+            <if test="completeTime!=null">
+                completeTime = #{completeTime},
+            </if>
+            <if test="fundAcceptTime!=null">
+                fundAcceptTime = #{fundAcceptTime},
+            </if>
+            <if test="pushStatus!=null">
+                pushStatus = #{pushStatus},
+            </if>
+            <if test="ynProductCode != null and ynProductCode!=''">
+                ynProductCode = #{ynProductCode},
+            </if>
+             <if test="ynProductName != null and ynProductName!=''">
+                ynProductName = #{ynProductName}, 
+            </if> 
+        </set>
+        where orderNo = #{orderNo}
+    </update>
+</mapper>

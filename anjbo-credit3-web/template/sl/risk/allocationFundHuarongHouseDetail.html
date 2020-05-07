@@ -1,0 +1,52 @@
+<form name="huarongKgHouseForm">
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;快鸽提单信息--房产信息</div>
+    <div class="row form-inline detail-row" style="padding:0 10px;">
+        <div class="col-md-6 col-lg-4">
+            <label>所有权人: </label>
+            <span ng-bind="kgHouse.owner"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>房屋地址:</label>
+            <span ng-bind="kgHouse.houseAddress"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>建筑面积:</label>
+            <span ng-bind="kgHouse.builtArea"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>房产证号:</label>
+            <span ng-bind="kgHouse.houseNo"></span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>询价-评估总值:</label>
+            <span ng-bind="kgHouse.totalAssessment"></span>元
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>询价-评估净值:</label>
+            <span ng-bind="kgHouse.worthAssessment"></span>元
+        </div>
+        <div class="col-md-12 col-lg-12">
+            <label style="width:160px">询价-首套房最高可贷:</label>
+            <span ng-bind="kgHouse.firstHouseLoan"></span>元
+        </div>
+    </div>
+</div>
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;</div>
+
+    <div class="clear" style="width:100%; height:1px; clear:both;"></div>
+    <div class="row form-inline relative  detail-row" style="padding:0 10px;">
+        <span class="remark-span remark-lhw">查档：</span>
+        <textarea style="border:1px solid #ddd;width:82%;" readonly="true" class="remark-p remark-lhw-p textarea-lhw ng-binding ng-isolate-scope"  ng-model="kgHouse.consult" name="kgApprovalTrial"> </textarea>
+    </div>
+</div>
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;</div>
+    <div class="clear" style="width:100%; height:1px; clear:both;"></div>
+    <div class="row form-inline relative  detail-row" style="padding:0 10px;">
+        <span class="remark-span remark-lhw">备注：</span>
+        <textarea style="border:1px solid #ddd;width:82%;"  disabled class="remark-p remark-lhw-p textarea-lhw ng-binding ng-isolate-scope"  ng-model="kgHouse.remark" name="kgApprovalTrial"> </textarea>
+    </div>
+</div>
+</form>

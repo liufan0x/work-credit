@@ -1,0 +1,212 @@
+<style>
+    .b-box{
+        width:200px;
+        height:100px;
+        border:1px dashed #ddd;
+        border-radius:4px;
+        float:left;
+        margin-right:20px;
+        float:left;
+        margin-bottom:20px;
+    }
+    .b-box p{
+        width:95%;
+        margin:0 auto;
+        text-align:center;
+        color:#ddd;
+        line-height:20px;
+        padding-top:10px;
+        font-size:12px;
+        color:#999;
+    }
+    .b-box div{
+        width:90%;
+        margin:0 auto;
+        line-height:20px;
+        padding-top:30px;
+        font-size:12px;
+    }
+    .b-box a{
+        text-decoration: underline;
+        color:#5092E1;
+        display:inline-block;;
+        float:left;
+    }
+    .redOnly{
+        background: gainsboro;
+    }
+    .line .form-group span{
+
+        line-height:33px;
+    }
+</style>
+<div class="row" style="padding-top:20px;">
+    <form name="agencyForm" role="form" class="form-inline line">
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="jigou-span">机构名称：</div>
+                <span ng-bind="agencyDto.name"></span>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="jigou-span">登录账户：</div>
+                <span ng-bind="agencyDto.manageAccount"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="jigou-span">机构简称：</div>
+                <span ng-bind="agencyDto.simName"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="jigou-span">机构码：</div>
+                <span ng-bind="agencyDto.agencyCode"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="jigou-span">联系人姓名：</div>
+                <span ng-bind="agencyDto.contactMan"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="jigou-span">联系人手机号：</div>
+                <span ng-bind="agencyDto.contactTel"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="jigou-span">渠道经理：</div>
+                <span ng-bind="agencyDto.chanManName"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="jigou-span">关联受理员：</div>
+                <span ng-bind="agencyDto.customerAgencyAcceptListName">
+                </span>
+            </div>
+        </div>
+        <!--
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="jigou-span">拓展经理：</div>
+                <span ng-bind="agencyDto.expandManagerName"></span>
+            </div>
+        </div>
+        -->
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="jigou-span">申请时间：</div>
+                <span ng-bind="agencyDto.applyDate | date:'yyyy-MM-dd HH:mm'"></span>
+            </div>
+        </div>
+        <div class="col-md-6" ng-if="agencyDto.cooperativeModeId==1">
+            <div class="form-group">
+                <div class="jigou-span">剩余额度：</div>
+                <span ng-bind="agencyDto.surplusQuota"></span>万元
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="jigou-span">费用支付方式：</div>
+                <span ng-repeat="c in agencyDto.agencyIncomeModeDtos">
+                    <span ng-bind="c.name"></span>
+                    <span ng-if="$index==0&&agencyDto.agencyIncomeModeDtos.length>1">,</span>
+                </span>
+
+            </div>
+        </div>
+        <div class="clear"></div>
+        <div class="jigou-line"></div>
+        <div class="clear"></div>
+
+        <div class="col-md-12">
+            <div class="form-group"  style="position: relative">
+                <div class="jigou-span" style="position: absolute;left:0;top:0">产品名称：</div>
+                <div style="margin-left: 135px;">
+                    <div class="b-box" ng-repeat="p in agencyDto.agencyProductDtos">
+                        <p><span ng-bind="p.cityName"></span>&nbsp;&nbsp;<span ng-bind="p.productName"></span></p>
+                        <div><a href="javascript:void(0);" ng-click="processConfig(p)">产品流程配置</a><a style="float:right" href="javascript:void(0);" ng-click="pricingConfig(p)">产品定价配置</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="clear"></div>
+        <div class="jigou-line"></div>
+        <div class="clear"></div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="jigou-span">机构类型：</div>
+                <span ng-bind="agencyDto.typeName"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="jigou-span">合作模式：</div>
+                <span ng-bind="agencyDto.cooperativeMode"></span>
+            </div>
+        </div>
+        <div class="col-md-6" ng-if="agencyDto.cooperativeModeId==1">
+            <div class="form-group">
+                <div class="jigou-span">风险承担比例：</div>
+                <span ng-bind="agencyDto.proportionResponsibility"></span>%
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="form-group">
+                <div class="jigou-span">最低收费标准：</div>
+                <span ng-bind="agencyDto.chargeStandard"></span>元
+            </div>
+        </div>
+        <div class="col-md-6" ng-if="agencyDto.cooperativeModeId==1">
+            <div class="form-group">
+                <div class="jigou-span">最低留置保证金：</div>
+                <span ng-bind="agencyDto.minBond"></span>元
+            </div>
+        </div>
+        <div class="col-md-6" ng-if="agencyDto.cooperativeModeId==1">
+            <div class="form-group">
+                <div class="jigou-span">初始保证金：</div>
+                <span ng-bind="agencyDto.bond"></span>万元
+            </div>
+        </div>
+
+        <div class="col-md-6" ng-if="agencyDto.cooperativeModeId==1">
+            <div class="form-group">
+                <div class="jigou-span">风险承担倍数：</div>
+                <span ng-bind="agencyDto.riskBearMultiple"></span>倍
+            </div>
+        </div>
+        <div class="col-md-6" ng-if="agencyDto.cooperativeModeId==1">
+            <div class="form-group">
+                <div class="jigou-span">授信额度：</div>
+                <span ng-bind="agencyDto.creditLimit"></span>万元
+            </div>
+        </div>
+        <div class="col-md-6" ng-if="agencyDto.cooperativeModeId==1">
+            <div class="form-group">
+                <div class="jigou-span">剩余额度提醒比例：</div>
+                <span ng-bind="agencyDto.surplusQuotaRemind"></span>% * 授信额度
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <file-edit></file-edit>
+            </div>
+        </div>
+
+        <div class="clear"></div>
+    </form>
+</div>
+
+<div class="clear" style="height:15px;"></div>

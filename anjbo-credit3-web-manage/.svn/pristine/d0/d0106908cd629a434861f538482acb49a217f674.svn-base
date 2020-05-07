@@ -1,0 +1,58 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<ul class="breadcrumb">
+				<li>
+					<a>用户管理 </a> <span class="divider"></span>
+				</li>
+				<li class="active">
+					角色列表
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<!--row-->
+	<div class="row">
+		<div class="col-md-12"> 
+		    <form class="form-inline" style="margin-left:30px;">
+				<div class="form-group">
+					<label >角色名称：</label>
+					<input type="text" class="form-control" ng-model="page.name">
+				</div>
+				<button type="submit" class="btn btn-primary" ng-click="query()" style="margin-bottom:10px; margin-right:10px;">查询</button>
+				<button type="button" ng-if="meunAuth.indexOf('auth9auth')>=0" class="btn btn-primary fr" ng-click="addRole(-1)" style=" margin-right:10px;margin-bottom: 10px;">添加角色</button>
+			</form>
+		</div>
+	</div>
+	<!--row-->
+
+	<div class="row">
+		<div class="col-md-12">
+			<!--table-->
+			<table bs-table-control="roleList" id="table"></table>
+			<!--table end-->
+	    </div>
+	</div>
+</div>
+
+
+<div ng-show="false" id="roleEditId">
+	<div class="row">
+		<div class="col-md-14">
+			<form class="form-inline" id="frmRole" name="frmRole">
+				<div class="form-group">
+					<label ><span class="text-warning">*</span>角色名称：</label>
+					<input type="text" class="form-control" name="name" ng-model="roleDto.name" required>
+					<span class="inputError" ng-show="isAudit"><error class="text-danger" ng-show="frmRole.name.$error.required">必填</error></span>
+				</div>
+				<div class="form-group">
+					<label >角色描述：</label>
+					<input type="text" class="form-control" ng-model="roleDto.describe">
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+ 

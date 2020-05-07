@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.ApplyLoanMapper" >
+    
+  <select id="findByApplyLoan" parameterType="java.lang.String" resultType="ApplyLoanDto">
+      select * from tbl_finance_apply_loan where orderNo=#{orderNo} order by createTime desc limit 1
+  </select>
+  
+  <delete id="deleteApplyLoan" parameterType="java.lang.String">
+      delete  from tbl_finance_apply_loan where  orderNo=#{0} order by createTime desc limit 1
+  </delete>	
+  
+  <insert id="addApplyLoan" parameterType="ApplyLoanDto">
+      INSERT INTO `tbl_finance_apply_loan` (
+      `createUid`, `updateUid`, `createTime`, `orderNo`, `borrowerName`, `borrowingDays`, `loanAmount`, `lendingBankId`, 
+      `lendingBankSubId`, `bankName`, `bankAccount`, `chargesReceivedImg`, `remark` ,`payAccountImg`,`mortgageImg`,`mortgageImgType`
+      )VALUES(
+      #{createUid}, #{updateUid}, now(),  #{orderNo}, #{borrowerName}, #{borrowingDays}, #{loanAmount}, #{lendingBankId},
+      #{lendingBankSubId}, #{bankName}, #{bankAccount}, #{chargesReceivedImg}, #{remark} ,#{payAccountImg},#{mortgageImg},#{mortgageImgType});
+  </insert>
+  
+  <update id="updateApplyLoan" parameterType="ApplyLoanDto">
+     update tbl_finance_apply_loan
+     set updateUid=#{updateUid}
+     <if test="borrowerName !=null and borrowerName !='' ">,borrowerName=#{borrowerName}</if>
+     <if test="borrowingDays !=null and borrowingDays >0 ">,borrowingDays=#{borrowingDays}</if>
+     <if test="loanAmount !=null and loanAmount >0 ">,loanAmount=#{loanAmount}</if>
+     <if test="lendingBankId !=null and lendingBankId >0 ">,lendingBankId=#{lendingBankId}</if>
+     <if test="lendingBankSubId !=null and lendingBankSubId >0 ">,lendingBankSubId=#{lendingBankSubId}</if>
+     <if test="bankName !=null and bankName !='' ">,bankName=#{bankName}</if>
+     <if test="bankAccount !=null and bankAccount !='' ">,bankAccount=#{bankAccount}</if>
+     <if test="chargesReceivedImg !=null and chargesReceivedImg !='' ">,chargesReceivedImg=#{chargesReceivedImg}</if>
+     <if test="remark !=null and remark !='' ">,remark=#{remark}</if>
+     <if test="payAccountImg !=null and payAccountImg !='' ">,payAccountImg=#{payAccountImg}</if>
+     <if test="mortgageImg !=null and mortgageImg !='' ">,mortgageImg=#{mortgageImg}</if>
+     <if test="mortgageImgType !=null and mortgageImgType >=0 ">,mortgageImgType=#{mortgageImgType}</if>
+     where orderNo=#{orderNo}
+  </update>
+  	
+</mapper>

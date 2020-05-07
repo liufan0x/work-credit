@@ -1,0 +1,29 @@
+<div class="lhw-alert-bg"  ng-show="isHuaanShow">
+    <div class="lhw-alert-box" style="width:1200px;">
+        <div class="lhw-alert-tit relative" >以下信息推送给资金方105<div class="lhw-x" ng-click="isHuaanShow=false;"></div></div>
+        <div style="width:100%;height:490px; overflow-y:scroll;">
+            <div class="row">
+                <div class="col-md-12">
+                    <ul class="nav nav-tabs">
+                        <li ng-class="{'active':title=='orderShow'}">
+                            <a href="javascript:void(0);" ng-click="title='orderShow'">订单信息</a>
+                        </li>
+                        <li ng-class="{'active':title=='imageShow'}">
+                            <a href="javascript:void(0);" ng-click="title='imageShow'">影像资料</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div ng-show="title=='orderShow'">
+                <allocation-fund-huaan-order-detail></allocation-fund-huaan-order-detail>
+            </div>
+            <div ng-show="title=='imageShow'">
+                <allocation-fund-huaan-businfo-detail></allocation-fund-huaan-businfo-detail>
+            </div>
+        </div>
+
+        <div class="lhw-alert-but">
+            <button type="button" class="btn btn-primary lhw-alert-ok" ng-click="huaanShow(false)" style="margin-right:80px;">关闭</button>
+        </div>
+    </div>
+</div>

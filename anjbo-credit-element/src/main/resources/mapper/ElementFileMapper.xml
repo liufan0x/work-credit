@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.ElementFileMapper">
+
+    <insert id="insertElementFile" parameterType="java.util.List"  useGeneratedKeys ="true" keyProperty="id">
+       	INSERT INTO tbl_element_element_file (
+		elementType,
+		cardType,
+		cardNumber,
+		cardCustomer,
+		boxNo,
+		bankName,
+		bankSubName,
+		type,
+		orderNo
+		)
+		VALUES
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(
+			#{item.elementType},
+			#{item.cardType},
+			#{item.cardNumber},
+			#{item.cardCustomer},
+			#{item.boxNo},
+			#{item.bankName},
+			#{item.bankSubName},
+			#{item.type},
+			#{item.orderNo}
+			)
+		</foreach>
+    </insert>
+    
+     <update id="updateElementFile" parameterType="java.util.List">
+        update tbl_element_element_file
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="cardNumber =case" suffix="end,">
+                 <foreach collection="list" item="item" index="index">
+                     <if test="item.cardNumber !=null and item.cardNumber != ''">
+                         when id=#{item.id} then #{item.cardNumber}
+                     </if>
+                 </foreach>
+            </trim>
+             <trim prefix="cardCustomer =case" suffix="end,">
+                 <foreach collection="list" item="item" index="index">
+                     <if test="item.cardCustomer !=null and item.cardCustomer != ''">
+                         when id=#{item.id} then #{item.cardCustomer}
+                     </if>
+                 </foreach>
+            </trim>
+            <trim prefix="bankName =case" suffix="end,">
+                 <foreach collection="list" item="item" index="index">
+                     <if test="item.bankName !=null and item.bankName != ''">
+                         when id=#{item.id} then #{item.bankName}
+                     </if>
+                 </foreach>
+            </trim>
+             <trim prefix="bankSubName =case" suffix="end,">
+                 <foreach collection="list" item="item" index="index">
+                     <if test="item.bankSubName !=null and item.bankSubName != ''">
+                         when id=#{item.id} then #{item.bankSubName}
+                     </if>
+                 </foreach>
+            </trim>
+             <trim prefix="status =case" suffix="end,">
+                 <foreach collection="list" item="item" index="index">
+                     <if test="item.status !=null and item.status != ''">
+                         when id=#{item.id} then #{item.status}
+                     </if>
+                 </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach collection="list" index="index" item="item" separator="," open="(" close=")">
+            #{item.id,jdbcType=BIGINT}
+        </foreach>
+    </update>
+    
+    <update id="updateStatusByIds" parameterType="java.util.Map" >
+    	update tbl_element_element_file set status = #{status} where id in (${ids})
+    </update>
+    
+     <select id="selectElementFileList" resultType="java.util.Map">
+    	select * from tbl_element_element_file 
+    	
+    	 <if test="array.length>0">
+       		WHERE id in 
+         <foreach collection="array" open="(" close=")" separator="," item="id">
+            #{id}
+         </foreach>
+       
+       </if>
+        <if test="array.length==0">
+        	WHERE id=0
+        </if>
+    	order by type
+    </select>
+    
+    <select id="selectElementFileListByElementType" resultType="java.util.Map" parameterType="java.util.Map" >
+    	select * from tbl_element_element_file where 1=1 
+    	 <if test="ids != null and  ids != ''">
+       		and id in (${ids})
+       </if>
+       <if test="elementType != null and elementType > 0">
+       		and elementType=#{elementType}
+       </if>
+       <if test="orderNo != null and orderNo != ''">
+       		and orderNo=#{orderNo}
+       </if>
+    	order by type
+    </select>
+    
+    
+    <select id="selectElementFileListbyOrderNo" parameterType="java.util.Map" resultType="java.util.Map">
+    	select * from tbl_element_element_file where orderNo=#{orderNo}
+    	<if test="status!=null and status>0">
+    		and status = #{status}
+    	</if>
+    </select>
+    
+    
+    
+    
+</mapper>

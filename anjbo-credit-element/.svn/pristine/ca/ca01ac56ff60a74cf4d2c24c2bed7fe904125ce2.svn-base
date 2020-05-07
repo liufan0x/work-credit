@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.ElementMapper">
+
+     <insert id="saveElementOrder" parameterType="java.util.Map">
+        insert into tbl_element_list 
+        (
+        	id, orderNo, orderStatus, orderType,
+            customerName,idCard,cityName,creditType,
+            borrowingAmount,borrowingDay,channelManagerUid,channelManagerName,
+            acceptMemberUid,acceptMemberName,currentHandlerUid,currentHandler,state,accessFlowId,currentBoxElementSet,boxNo,
+            createTime,updateTime,hasRiskElement,sealDepartment,sealDepartmentId,
+            hasPublicBusiness,cityCode,creditTypeUid,riskPicture,receivablePicture,elsePicture,sealPicture,createUid
+         )
+        values
+        (
+        	null, #{orderNo},#{orderStatus}, #{orderType},
+            #{customerName}, #{idCard},#{cityName}, #{creditType},  
+            #{borrowingAmount},#{borrowingDay},#{channelManagerUid}, #{channelManagerName},
+            #{acceptMemberUid},#{acceptMemberName},#{currentHandlerUid},#{currentHandler},#{state},#{accessFlowId},#{currentBoxElementSet},#{boxNo},
+            now(),now(),#{hasRiskElement},#{sealDepartment},#{sealDepartmentId},
+            #{hasPublicBusiness},#{cityCode},#{creditTypeUid},#{riskPicture},#{receivablePicture},#{elsePicture},#{sealPicture},#{createUid}
+         )
+    </insert>
+    
+       <insert id="saveCredit" parameterType="java.util.Map">
+         insert into tbl_element_list 
+        (
+        	id, orderNo, orderStatus, orderType,
+            customerName,idCard,cityName,creditType,
+            borrowingAmount,borrowingDay,channelManagerUid,channelManagerName,
+            acceptMemberUid,acceptMemberName,currentHandlerUid,currentHandler,state,accessFlowId,currentBoxElementSet,boxNo,
+            createTime,updateTime,sealDepartment,sealDepartmentId,
+            cityCode,creditTypeUid,riskPicture,receivablePicture,elsePicture,sealPicture,
+            previousHandlerUid,notarialUid,facesignUid,createUid
+         )
+        values
+        (
+        	null, #{orderNo},#{orderStatus}, #{orderType},
+            #{customerName}, #{idCard},#{cityName}, #{creditType},  
+            #{borrowingAmount},#{borrowingDay},#{channelManagerUid}, #{channelManagerName},
+            #{acceptMemberUid},#{acceptMemberName},#{currentHandlerUid},#{currentHandler},#{state},#{accessFlowId},#{currentBoxElementSet},#{boxNo},
+            #{createTime},#{createTime},#{sealDepartment},#{sealDepartmentId},
+            #{cityCode},#{creditTypeUid},#{riskPicture},#{receivablePicture},#{elsePicture},#{sealPicture},
+            #{previousHandlerUid},#{notarialUid},#{facesignUid},#{createUid}
+         )
+    </insert>
+    
+    
+    
+    <select id="selectElementListCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+    	select count(*) from
+    	
+    		(
+    		select * from tbl_element_list where 1=1
+  
+			
+				<!-- and  (orderType=3 and acceptMemberUid in (#{currentHandlerUid}) or channelManagerUid in (#{currentHandlerUid})  or createUid in (#{createUid})) -->
+				 
+				and ( (orderType=3 )
+				
+				or (orderType=2
+					<if test="currentHandlerUid != null and currentHandlerUid != '' ">
+				 	and (acceptMemberUid in (${currentHandlerUid}) or channelManagerUid in (${currentHandlerUid})  or createUid in (${createUid}))
+				 	</if>
+				 ) 
+				
+				or orderType=1
+				 <if test="currentHandlerUid != null and currentHandlerUid != '' ">
+				and (currentHandlerUid in (${currentHandlerUid}) or previousHandlerUid = #{updateUid} or notarialUid in (${currentHandlerUid}) or facesignUid in (${currentHandlerUid})
+					
+					 or acceptMemberUid in  (${currentHandlerUid}) 
+					 
+					 or channelManagerUid in (${currentHandlerUid}) 
+					 
+					 or createUid in (${updateUid}) 
+					 
+					<if test="orderNos != '' and orderNos != null">
+					 or orderNo in (${orderNos})
+					</if>
+				
+					   ) 
+				</if> 
+			)
+			) as elementOrder where 1=1
+			
+			<if test="customerName != null and customerName != '' ">
+				and elementOrder.customerName  LIKE '%${customerName}%' 
+
+			</if>
+            <choose>
+             	<when test="orderStatus=='' or orderStatus ==null or orderStatus == 0">
+                </when>
+                <when test="orderStatus!='' and orderStatus !=null and orderStatus==3">
+                    AND elementOrder.orderStatus = 3 OR elementOrder.orderStatus = 5
+                </when>
+                <otherwise>
+                    AND elementOrder.orderStatus = #{orderStatus}
+                </otherwise>
+            </choose>
+			
+			<if test="orderNo != '' and orderNo != null">
+					 and orderNo in (#{orderNo})
+			</if>
+            <if test="cityName != '' and cityName != null">
+                and cityName =#{cityName}
+            </if>
+    </select>
+    
+      <select id="selectElementList" parameterType="java.util.Map" resultType="com.anjbo.bean.element.ElementListDto">
+      
+    		select * from (
+    		
+    			select * from tbl_element_list where 1=1
+  
+			
+				<!-- and  (orderType=3 and acceptMemberUid in (#{currentHandlerUid}) or channelManagerUid in (#{currentHandlerUid})  or createUid in (#{createUid})) -->
+				 
+				and ( (orderType=3 )
+				
+				or (orderType=2
+					<if test="currentHandlerUid != null and currentHandlerUid != '' ">
+				 	and (acceptMemberUid in (${currentHandlerUid}) or channelManagerUid in (${currentHandlerUid})  or createUid in (${createUid}))
+				 	</if>
+				 ) 
+
+				or orderType=1
+				 <if test="currentHandlerUid != null and currentHandlerUid != '' ">
+				and (currentHandlerUid in (${currentHandlerUid}) or previousHandlerUid = #{updateUid} or notarialUid in (${currentHandlerUid}) or facesignUid in (${currentHandlerUid})
+					
+					 or acceptMemberUid in  (${currentHandlerUid}) 
+					 
+					 or channelManagerUid in (${currentHandlerUid}) 
+					 
+					 or createUid in (${updateUid}) 
+					 
+					<if test="orderNos != '' and orderNos != null">
+					 or orderNo in (${orderNos})
+					</if>
+				
+					   ) 
+				</if> 
+			)
+			) as elementOrder where 1=1
+				
+
+			<if test="customerName != null and customerName != '' ">
+				and elementOrder.customerName  LIKE '%${customerName}%' 
+			</if>
+
+              <choose>
+              	  <when test="orderStatus=='' or orderStatus ==null">
+                  </when>
+                  <when test="orderStatus!='' and orderStatus !=null and orderStatus==3">
+                      AND elementOrder.orderStatus = 3 OR elementOrder.orderStatus = 5
+                  </when>
+                  <otherwise>
+                      AND elementOrder.orderStatus = #{orderStatus}
+                  </otherwise>
+              </choose>
+			
+			<if test="orderNo != '' and orderNo != null">
+					 and orderNo in (#{orderNo})
+			</if>
+              <if test="cityName != '' and cityName != null">
+                      and cityName =#{cityName}
+              </if>
+    	    ORDER BY elementOrder.updateTime DESC  limit #{start},#{pageSize} ;
+      </select>
+<!-- limit #{start},#{pageSize}-->
+    <update id="operationStoreButton" parameterType="java.lang.String">
+        update tbl_element_list set storeButton=#{storeButton} where orderNo = #{orderNo} ;
+    </update>
+    
+      <update id="operationTakeButton" parameterType="java.lang.String">
+        update tbl_element_list set takeButton=#{takeButton} where orderNo = #{orderNo} ;
+    </update>
+    
+      <update id="operationBorrowButton" parameterType="java.lang.String">
+        update tbl_element_list set borrowButton=#{borrowButton} where orderNo = #{orderNo} ;
+    </update>
+    
+      <update id="operationReturnButton" parameterType="java.util.Map">
+        update tbl_element_list set returnButton=#{returnButton}
+        <if test="orderStatus!=null and orderStatus > 0">
+        	,orderStatus = #{orderStatus}
+        </if>
+        where orderNo = #{orderNo} ;
+    </update>
+    
+    <select id="selectElementByOrderNo" parameterType="java.util.Map" resultType="com.anjbo.bean.element.ElementListDto">
+    	select * from tbl_element_list where orderNo= #{orderNo} ;
+    </select>
+    
+    
+    <update id="UpdateElementByOrderNo" parameterType="java.util.Map">
+        update tbl_element_list  set currentBoxElementSet=#{currentBoxElementSet},updateTime=now()  where orderNo = #{orderNo} ; 
+    </update>
+    
+    <update id="updateTimeByOrderNo" parameterType="java.util.Map">
+        update tbl_element_list  set updateTime=now()  where orderNo = #{orderNo} ; 
+    </update>
+    
+     <update id="UpdateCreditElementByOrderNo" parameterType="java.util.Map">
+        update tbl_element_list 
+          <set> 
+	         <if test="boxNo !=null and boxNo !=''">
+	                boxNo=#{boxNo},
+	         </if>
+	         
+	          <if test="boxNo !=null and boxNo !=''">
+	                hasRiskElement=#{hasRiskElement},
+	         </if>
+	         
+	         <if test="boxNo !=null and boxNo !=''">
+	                hasPublicBusiness=#{hasPublicBusiness}
+	         </if>
+         </set>
+         where orderNo = #{orderNo} ; 
+    </update>
+    
+     <update id="UpdateElementStatusByOrderNo" parameterType="java.util.Map">
+        update tbl_element_list set updateTime=now()
+         <if test="orderStatus!=null and orderStatus > 0">
+        	,orderStatus = #{orderStatus}
+        </if>
+         where orderNo = #{orderNo} ;
+    </update>
+    
+     <update id="updateCreditElementOrder" parameterType="java.util.Map">
+        update tbl_element_list
+         <set> 
+         <if test="customerName !=null and customerName !=''">
+                customerName=#{customerName},
+         </if>
+         <if test="borrowingAmount !=null and borrowingAmount !=''">
+                borrowingAmount=#{borrowingAmount},
+         </if>
+         <if test="borrowingDay !=null and borrowingDay !=''">
+                borrowingDay=#{borrowingDay},
+         </if>
+         
+          <if test="channelManagerUid !=null and channelManagerUid !=''">
+                channelManagerUid=#{channelManagerUid},
+         </if>
+         
+         <if test="channelManagerName !=null and channelManagerName !=''">
+                channelManagerName=#{channelManagerName},
+         </if>
+         
+         <if test="acceptMemberUid !=null and acceptMemberUid !=''">
+                acceptMemberUid=#{acceptMemberUid},
+         </if>
+         
+         <if test="acceptMemberName !=null and acceptMemberName !=''">
+                acceptMemberName=#{acceptMemberName},
+         </if>
+         <if test="cityCode !=null and cityCode !=''">
+                cityCode=#{cityCode},
+         </if>
+         <if test="cityName !=null and cityName !=''">
+                cityName=#{cityName},
+         </if>
+         <if test="state !=null and state !=''">
+                state=#{state},
+         </if>
+         
+         <if test="currentBoxElementSet !=null and currentBoxElementSet !=''">
+                currentBoxElementSet=#{currentBoxElementSet},
+         </if>
+         
+         <if test="boxNo !=null and boxNo !=''">
+                boxNo=#{boxNo},
+         </if>
+         
+         <if test="creditType !=null and creditType !=''">
+                creditType=#{creditType},
+         </if>
+         
+         <if test="creditTypeUid !=null and creditTypeUid !=''">
+                creditTypeUid=#{creditTypeUid},
+         </if>
+         
+         <if test="previousHandlerUid !=null and previousHandlerUid !=''">
+                previousHandlerUid=#{previousHandlerUid},
+         </if>
+         
+         <if test="notarialUid !=null and notarialUid !=''">
+                notarialUid=#{notarialUid},
+         </if>
+         
+         <if test="facesignUid !=null and facesignUid !=''">
+                facesignUid=#{facesignUid},
+         </if>
+         
+         <if test="createUid !=null and createUid !=''">
+                createUid=#{createUid},
+         </if>
+         
+         <if test="hasPublicBusiness !=null and hasPublicBusiness !=''">
+                hasPublicBusiness=#{hasPublicBusiness},
+         </if>
+         
+         <if test="hasRiskElement !=null and hasRiskElement !=''">
+                hasRiskElement=#{hasRiskElement},
+         </if>
+         
+         </set>	
+		 where  orderNo = #{orderNo} ;
+     </update>
+     
+     
+    <select id="selectElementBydepartId" parameterType="java.util.Map" resultType="com.anjbo.bean.element.ElementListDto">
+    	select * from tbl_element_list 	where sealDepartmentId=#{sealDepartmentId};	
+    </select>
+      
+</mapper>

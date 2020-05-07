@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.PaymentreportMapper">
+    <resultMap id="BaseResultMap" type="PaymentreportDto">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="createUid" jdbcType="VARCHAR" property="createUid" />
+        <result column="createName" jdbcType="VARCHAR" property="createName" />
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="updateUid" jdbcType="VARCHAR" property="updateUid" />
+        <result column="orderNo" jdbcType="VARCHAR" property="orderNo" />
+        <result column="customerName" jdbcType="VARCHAR" property="customerName" />
+        <result column="cityCode" jdbcType="VARCHAR" property="cityCode" />
+        <result column="cityName" jdbcType="VARCHAR" property="cityName" />
+        <result column="productCode" jdbcType="VARCHAR" property="productCode" />
+        <result column="productName" jdbcType="VARCHAR" property="productName" />
+        <result column="loanAmount" jdbcType="DECIMAL" property="loanAmount" />
+        <result column="borrowingDays" jdbcType="INTEGER" property="borrowingDays" />
+        <result column="acceptMemberUid" jdbcType="VARCHAR" property="acceptMemberUid" />
+        <result column="acceptMemberName" jdbcType="VARCHAR" property="acceptMemberName" />
+        <result column="channelManagerUid" jdbcType="VARCHAR" property="channelManagerUid" />
+        <result column="channelManagerName" jdbcType="VARCHAR" property="channelManagerName" />
+        <result column="cooperativeAgencyId" jdbcType="INTEGER" property="cooperativeAgencyId" />
+        <result column="cooperativeAgencyName" jdbcType="VARCHAR" property="cooperativeAgencyName" />
+        <result column="estimateInLoanTime" jdbcType="TIMESTAMP" property="estimateInLoanTime" />
+        <result column="inLoanType" jdbcType="VARCHAR" property="inLoanType" />
+        <result column="status" jdbcType="INTEGER" property="status" />
+        <result column="relationOrderNo" jdbcType="VARCHAR" property="relationOrderNo" />
+        <result column="top" jdbcType="BIT" property="top" />
+        <result column="customerType" jdbcType="VARCHAR" property="customerType" />
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="PaymentReportDto">
+        <result column="remark" jdbcType="LONGVARCHAR" property="remark" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, createTime, createUid, createName, updateTime, updateUid, orderNo, customerName, 
+        cityCode, cityName, productCode, productName, loanAmount, borrowingDays, acceptMemberUid, 
+        acceptMemberName, channelManagerUid, channelManagerName, cooperativeAgencyId, cooperativeAgencyName, 
+        estimateInLoanTime, inLoanType, status, relationOrderNo, top, customerType,remark,customerTypeName
+    </sql>
+
+    <select id="list" parameterType="PaymentReportDto" resultType="PaymentReportDto">
+        select 
+          <include refid="Base_Column_List" />
+        from
+          tbl_finance_paymentreport
+        where 1=1
+        <include refid="listWhere"></include>
+        <if test="status>0">
+            AND  status = #{status}
+        </if>
+        <!--ORDER BY (CASE WHEN top=1 THEN 1 ELSE 10 END)-->
+        <if test="estimateInLoanTimeOrderBy==null || estimateInLoanTimeOrderBy==''">
+            ORDER BY createTime DESC
+        </if>
+        <if test="estimateInLoanTimeOrderBy!=null and estimateInLoanTimeOrderBy!=''">
+            ORDER BY estimateInLoanTime ${estimateInLoanTimeOrderBy}
+        </if>
+        <if test="pageSize>0">
+            limit #{start},#{pageSize}
+        </if>
+    </select>
+
+    <select id="listCount" resultType="java.lang.Integer" parameterType="PaymentReportDto">
+        SELECT
+          count(1)
+        FROM
+        tbl_finance_paymentreport
+        where 1=1
+        <include refid="listWhere"></include>
+        <if test="status>0">
+            AND  status = #{status}
+        </if>
+
+    </select>
+
+    <select id="appList" resultType="PaymentReportDto" parameterType="PaymentReportDto">
+        SELECT
+          <include refid="Base_Column_List"></include>
+        FROM
+          tbl_finance_paymentreport
+        WHERE status IN (0,2)
+        <include refid="listWhere"></include>
+        <if test="channelManagerUid!=null and channelManagerUid!=''">
+            AND (channelManagerUid IN (${channelManagerUid}) OR acceptMemberUid IN (${acceptMemberUid}))
+        </if>
+        ORDER BY createTime DESC
+        <if test="pageSize>0">
+            limit #{start},#{pageSize}
+        </if>
+    </select>
+
+    <sql id="listWhere">
+        <if test="cityCode!=null and cityCode!=''">
+            AND cityCode = #{cityCode}
+        </if>
+        <if test="productCode!=null and productCode!=''">
+            AND productCode = #{productCode}
+        </if>
+        <if test="cooperativeAgencyId>0">
+            AND cooperativeAgencyId = #{cooperativeAgencyId}
+        </if>
+        <if test="agencyId!=null and agencyId>0">
+            AND agencyId = #{agencyId}
+        </if>
+        <if test="customerName!=null and customerName!=''">
+            AND 
+            (
+            customerName LIKE CONCAT('%', #{customerName},'%')
+            or acceptMemberName LIKE CONCAT('%', #{customerName},'%')
+            or channelManagerName LIKE CONCAT('%', #{customerName},'%')
+            )
+        </if>
+        <if test="orderNo!=null and orderNo!=''">
+            AND orderNo IN (${orderNo})
+        </if>
+        <if test="relationOrderNo!=null and relationOrderNo!=''">
+            AND relationOrderNo IN (${relationOrderNo})
+        </if>
+        <if test="estimateInLoanStartTime!=null">
+            <![CDATA[ AND DATE_FORMAT(estimateInLoanTime,'%Y-%m-%d') >= DATE_FORMAT(#{estimateInLoanStartTime}, '%Y-%m-%d') ]]>
+        </if>
+        <if test="estimateInLoanEndTime!=null">
+            <![CDATA[  AND DATE_FORMAT(estimateInLoanTime,'%Y-%m-%d') <= DATE_FORMAT(#{estimateInLoanEndTime}, '%Y-%m-%d')]]>
+        </if>
+        <if test="createStartTime!=null">
+            <![CDATA[ AND DATE_FORMAT(createTime,'%Y-%m-%d') >= DATE_FORMAT(#{createStartTime}, '%Y-%m-%d') ]]>
+        </if>
+        <if test="createEndTime!=null">
+            <![CDATA[  AND DATE_FORMAT(createTime,'%Y-%m-%d') <= DATE_FORMAT(#{createEndTime}, '%Y-%m-%d')]]>
+        </if>
+        <if test="customerType!=null and customerType!=''">
+            AND  customerType = #{customerType}
+        </if>
+        <if test="customerTypeName!=null and customerTypeName!=''">
+            AND customerTypeName = #{customerTypeName}
+        </if>
+    </sql>
+
+
+    <insert id="insert" parameterType="PaymentReportDto" useGeneratedKeys="true" keyProperty="id">
+        <selectKey resultType="java.lang.Integer" order="AFTER"
+                   keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into tbl_finance_paymentreport
+        (
+            createTime, createUid,
+            createName,orderNo, customerName, cityCode,
+            cityName, productCode, productName,
+            loanAmount, borrowingDays, acceptMemberUid, 
+            acceptMemberName, channelManagerUid, 
+            channelManagerName, cooperativeAgencyId, 
+            cooperativeAgencyName, estimateInLoanTime, 
+            inLoanType, status, relationOrderNo, 
+            top, customerType, remark,customerTypeName,agencyId
+            )
+        values
+        (
+            now(), #{createUid},
+            #{createName},#{orderNo}, #{customerName}, #{cityCode},
+            #{cityName}, #{productCode}, #{productName},
+            #{loanAmount}, #{borrowingDays}, #{acceptMemberUid},
+            #{acceptMemberName}, #{channelManagerUid},
+            #{channelManagerName}, #{cooperativeAgencyId},
+            #{cooperativeAgencyName}, #{estimateInLoanTime},
+            #{inLoanType}, #{status}, #{relationOrderNo},
+            #{top}, #{customerType}, #{remark},#{customerTypeName},#{agencyId}
+            )
+    </insert>
+
+    <update id="update" parameterType="PaymentReportDto">
+        update tbl_finance_paymentreport
+        <set>
+
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+
+            <if test="customerName != null and customerName!=''">
+                customerName = #{customerName},
+            </if>
+            <if test="cityCode != null and cityCode!=''">
+                cityCode = #{cityCode},
+            </if>
+            <if test="cityName != null and cityName!=''">
+                cityName = #{cityName},
+            </if>
+            <if test="productCode != null and productCode!=''">
+                productCode = #{productCode},
+            </if>
+            <if test="productName != null and productName!=''">
+                productName = #{productName},
+            </if>
+            <if test="loanAmount != null">
+                loanAmount = #{loanAmount},
+            </if>
+            <if test="borrowingDays != null">
+                borrowingDays = #{borrowingDays},
+            </if>
+            <if test="acceptMemberUid != null and acceptMemberUid!=''">
+                acceptMemberUid = #{acceptMemberUid},
+            </if>
+            <if test="acceptMemberName != null and acceptMemberName!=''">
+                acceptMemberName = #{acceptMemberName},
+            </if>
+            <if test="channelManagerUid != null and channelManagerUid!=''">
+                channelManagerUid = #{channelManagerUid},
+            </if>
+            <if test="channelManagerName != null and channelManagerName!=''">
+                channelManagerName = #{channelManagerName},
+            </if>
+            <if test="cooperativeAgencyId != null">
+                cooperativeAgencyId = #{cooperativeAgencyId},
+            </if>
+            <if test="cooperativeAgencyName != null and cooperativeAgencyName!=''">
+                cooperativeAgencyName = #{cooperativeAgencyName},
+            </if>
+            <if test="estimateInLoanTime != null">
+                estimateInLoanTime = #{estimateInLoanTime},
+            </if>
+            <if test="inLoanType != null and inLoanType!=''">
+                inLoanType = #{inLoanType},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="relationOrderNo != null and relationOrderNo!=''">
+                relationOrderNo = #{relationOrderNo},
+            </if>
+            <if test="top != null">
+                top = #{top},
+            </if>
+            <if test="customerType != null and customerType!=''">
+                customerType = #{customerType},
+            </if>
+            <if test="remark != null and remark!=''">
+                remark = #{remark},
+            </if>
+            <if test="customerTypeName!=null and customerTypeName!=''">
+                customerTypeName = #{customerTypeName},
+            </if>
+        </set>
+        where orderNo = #{orderNo} <if test="id>0"> AND  id=#{id}</if>
+    </update>
+
+    <update id="updateByStatus" parameterType="PaymentReportDto">
+        update tbl_finance_paymentreport
+        <set>
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+
+            <if test="customerName != null and customerName!=''">
+                customerName = #{customerName},
+            </if>
+            <if test="cityCode != null and cityCode!=''">
+                cityCode = #{cityCode},
+            </if>
+            <if test="cityName != null and cityName!=''">
+                cityName = #{cityName},
+            </if>
+            <if test="productCode != null and productCode!=''">
+                productCode = #{productCode},
+            </if>
+            <if test="productName != null and productName!=''">
+                productName = #{productName},
+            </if>
+            <if test="loanAmount != null">
+                loanAmount = #{loanAmount},
+            </if>
+            <if test="borrowingDays != null">
+                borrowingDays = #{borrowingDays},
+            </if>
+            <if test="acceptMemberUid != null and acceptMemberUid!=''">
+                acceptMemberUid = #{acceptMemberUid},
+            </if>
+            <if test="acceptMemberName != null and acceptMemberName!=''">
+                acceptMemberName = #{acceptMemberName},
+            </if>
+            <if test="channelManagerUid != null and channelManagerUid!=''">
+                channelManagerUid = #{channelManagerUid},
+            </if>
+            <if test="channelManagerName != null and channelManagerName!=''">
+                channelManagerName = #{channelManagerName},
+            </if>
+            <if test="cooperativeAgencyId != null">
+                cooperativeAgencyId = #{cooperativeAgencyId},
+            </if>
+            <if test="cooperativeAgencyName != null and cooperativeAgencyName!=''">
+                cooperativeAgencyName = #{cooperativeAgencyName},
+            </if>
+            <if test="estimateInLoanTime != null">
+                estimateInLoanTime = #{estimateInLoanTime},
+            </if>
+            <if test="inLoanType != null and inLoanType!=''">
+                inLoanType = #{inLoanType},
+            </if>
+            <if test="status != null">
+                status = #{status},
+            </if>
+            <if test="relationOrderNo != null and relationOrderNo!=''">
+                relationOrderNo = #{relationOrderNo},
+            </if>
+            <if test="top != null">
+                top = #{top},
+            </if>
+            <if test="customerType != null and customerType!=''">
+                customerType = #{customerType},
+            </if>
+            <if test="remark != null and remark!=''">
+                remark = #{remark},
+            </if>
+        </set>
+        where orderNo = #{orderNo} AND status!=3
+    </update>
+
+    <select id="detail" parameterType="ReportDto" resultType="PaymentreportDto">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM tbl_finance_paymentreport WHERE orderNo = #{orderNo} ORDER BY createTime DESC limit 1
+    </select>
+
+    <select id="detailById" parameterType="PaymentreportDto" resultType="PaymentreportDto">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM tbl_finance_paymentreport WHERE id = #{id}
+    </select>
+
+    <select id="detailByStatus" parameterType="PaymentreportDto" resultType="PaymentreportDto">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM tbl_finance_paymentreport WHERE orderNo = #{orderNo} AND status!=3 ORDER BY createTime DESC limit 1
+    </select>
+
+    <update id="cancelPaymentReport" parameterType="java.lang.String">
+        update tbl_finance_paymentreport SET  status=3 WHERE orderNo=#{orderNo}
+    </update>
+
+    <update id="cancelPaymentReportById" parameterType="java.lang.Integer">
+        update tbl_finance_paymentreport SET  status=3 WHERE id=#{id}
+    </update>
+
+    <select id="listPaymentReportByStatus" resultType="PaymentreportDto" parameterType="PaymentreportDto">
+        SELECT
+        estimateInLoanTime,orderNo
+        FROM tbl_finance_paymentreport WHERE `status`=#{status};
+    </select>
+
+    <update id="cancelReport" parameterType="java.lang.String">
+        update tbl_finance_paymentreport SET  status=3 WHERE orderNo=#{orderNo}
+    </update>
+
+    <update id="cancelReportById" parameterType="java.lang.Integer">
+        update tbl_finance_paymentreport SET  status=3 WHERE id=#{id}
+    </update>
+
+    <select id="detailByRelationOrder" resultType="PaymentreportDto">
+        SELECT
+        <include refid="Base_Column_List"></include>
+        FROM
+        tbl_finance_paymentreport
+        WHERE  relationOrderNo=#{relationOrderNo}
+        ORDER BY createTime DESC limit 1
+    </select>
+</mapper>

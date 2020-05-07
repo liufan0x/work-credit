@@ -1,0 +1,44 @@
+<div class="col-md-12 detail-right-tit">&nbsp;&nbsp; 要件信息</div>
+<div class="row" style="padding-left:30px;">
+	<div class="col-md-12">
+		<div class="form-group">
+			<textarea class="form-control" rows="5" ng-model="obj.remark" placeholder="如有特殊说明,请在此处备注(非必填)" />
+		</div>
+	</div>
+	
+	<div class="col-md-12 " style="padding-left:30px; line-height:30px; padding-botom:20px;">
+		<p>
+			<a href="javascript:void(0)" data-fancybox="iframe" data-src="/plugins/uploadify/upload_image.html?returnFun=elementUpload1" data-type="iframe">点击上传要件照片</a>
+			&nbsp;&nbsp;&nbsp;
+			<span class="chakan-img gallerys processuUpdImg1" style="display: none;">
+                <a href="javascript:void(0);" class="processuView-pic">查看要件照片</a>
+                <img  ng-repeat="img in elementImgList" src="{{img.url}}" class="gallery-pic" style="display: none;"/>
+            </span>
+	</div>
+	
+	<div class="col-md-12 " style="padding-left:30px; line-height:30px; padding-botom:20px;">
+		如要件信息完整，且已通过校验，则可直接提交；
+		<p>如校验不完整但已通过钉钉特批，则需上传截屏证明才可提交
+			<a href="javascript:void(0)" data-fancybox="iframe" data-src="/plugins/uploadify/upload_image.html?returnFun=elementUpload" data-type="iframe">点此上传截屏证明</a>
+			&nbsp;&nbsp;&nbsp;
+			<span class="chakan-img gallerys processuUpdImg" style="display: none;">
+                <a href="javascript:void(0);" class="processuView-pic">查看特批图片</a>
+                <img  ng-repeat="img in docImgList" src="{{img.url}}" class="gallery-pic" style="display: none;"/>
+            </span>
+	</div>
+	
+	
+	<div class="col-md-12" style="padding-left:30px;clear:both;padding-top:20px;">
+		<button type="button" class="btn btn-primary" ng-click="submitSupplement();">提交</button>
+		<button type="button" class="btn btn-warning" ng-show="!orderIsBack" ng-click="backToSubmit()">退回</button>
+		<br><br><br>
+	</div>
+</div>
+
+<script>
+	$(function() {
+		$(".processuView-pic").click(function() {
+			$.openPhotoGallery($(this).next("img"), "deleteElementUrl");
+		});
+	})
+</script>

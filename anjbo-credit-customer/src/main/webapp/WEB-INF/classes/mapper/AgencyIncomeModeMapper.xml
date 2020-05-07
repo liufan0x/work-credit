@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.AgencyIncomeModeMapper">
+	
+	<select id="search" resultType="AgencyIncomeModeDto">
+	  select id,agencyId,incomeMode,`name` from tbl_customer_agency_income_mode where agencyId=#{agencyId}
+	</select>
+
+	<insert id="batchInsert" parameterType="java.util.List">
+		INSERT INTO tbl_customer_agency_income_mode
+		(
+		agencyId,`name`,incomeMode,createTime,createUid
+		)
+		VALUES
+		<foreach collection="list" item="obj" separator=",">
+			(
+			#{obj.agencyId},#{obj.name}, #{obj.incomeMode},now(),#{obj.createUid}
+			)
+		</foreach>
+	</insert>
+
+	<delete id="delete" parameterType="AgencyIncomeModeDto">
+		DELETE FROM tbl_customer_agency_income_mode WHERE agencyId=#{agencyId}
+	</delete>
+
+	<insert id="insert" parameterType="AgencyIncomeModeDto">
+		INSERT INTO tbl_customer_agency_income_mode
+		(
+			agencyId,`name`,incomeMode,createTime,createUid
+		)
+		VALUES
+		(
+			#{agencyId},#{name},#{incomeMode},now(),#{createUid}
+		)
+	</insert>
+	<select id="allAgencyIncomeMode" resultType="AgencyIncomeModeDto">
+		SELECT * FROM tbl_customer_agency_income_mode
+	</select>
+</mapper>

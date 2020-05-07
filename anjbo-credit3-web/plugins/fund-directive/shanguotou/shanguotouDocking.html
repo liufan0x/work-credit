@@ -1,0 +1,142 @@
+<style>
+.sgt-but {
+	position: absolute;
+	top:10px;
+	right:20px;
+}
+</style>
+<div class="lhw-alert-bg2 sgt" style="z-index: 1;">
+	<div class="lhw-alert-box" style="width:1158px;">
+		<div class="lhw-alert-tit relative">以下信息推送给陕国投
+			<div class="lhw-x" ng-click="ordinaryClose()"></div>
+		</div>
+			<div class="row">
+			<div class="col-md-12" style="padding:20px 0 30px 0">
+				<ul class="nav nav-tabs" style="border:0">
+				     <li ng-class="{'active':sgtTTitle=='ZLTS'}" ng-init="sgtTTitle = 'ZLTS'">
+							<a href="javascript:void(0);" ng-click="sgtTTitle='ZLTS'">推送资料</a>
+					</li>
+					<li ng-class="{'active':sgtTTitle=='YHKXX'}" ng-show="true">
+						<a href="javascript:void(0);" ng-click="sgtTTitle='YHKXX'">应还款信息</a>
+					</li>
+					
+				</ul>
+			</div>
+		</div>
+			<div ng-show="sgtTTitle =='ZLTS'">
+			<div style="margin-bottom: 20px;margin-left: 50px">
+				信托审核结果：{{borrowstatus}}   
+			</div>
+				<div style="margin-bottom: 20px;margin-left: 50px">
+				影像资料审核结果：{{businfostatus}}
+				<a href="javascript:void(0)" ng-click="stgpushStatusRefresh()">刷新</a>
+			</div>
+			<div  style="margin-bottom: 20px;margin-left: 50px" >不通过原因: {{reasonsMsg}}{{reasonsMsg2}}</div>
+			</div>
+		<div ng-show="sgtTTitle =='ZLTS'">
+			<div class="row">
+				<div class="col-md-12" style="padding-top:10px; position: relative;">
+					<ul class="nav nav-tabs">
+						<li ng-class="{'active':ordinaryTitle=='borrowInfo'}" ng-init="ordinaryTitle='borrowInfo'">
+							<a href="javascript:void(0);" ng-click="ordinaryTitle='borrowInfo'">借款人信息</a>
+						</li>
+						<li ng-class="{'active':ordinaryTitle=='contractInfo'}">
+							<a href="javascript:void(0);" ng-click="ordinaryTitle='contractInfo'">合同信息</a>
+						</li>
+						<li ng-class="{'active':ordinaryTitle=='mortgagorInfo'}">
+							<a href="javascript:void(0);" ng-click="ordinaryTitle='mortgagorInfo'">抵押人信息</a>
+						</li>
+						<li ng-class="{'active':ordinaryTitle=='busInfo'}">
+							<a href="javascript:void(0);" ng-click="ordinaryTitle='busInfo'">影像资料</a>
+						</li>
+					</ul>
+					<div class="sgt-but">
+							<button  ng-show="ordinaryTitle!='busInfo' && borrowstatus=='审核通过' && pushstatus=='已推送' " ng-disabled="true" type="button" class="btn btn-info" ng-click="save(ordinaryTitle)" style="margin-right:30px;" >保存</button>
+							<button  ng-show="ordinaryTitle!='busInfo' && borrowstatus=='审核不通过' && pushstatus=='已推送' "  type="button" class="btn btn-info" ng-click="save(ordinaryTitle)" style="margin-right:30px;" >保存</button>
+							<button  ng-show="ordinaryTitle!='busInfo' && borrowstatus=='审核中' && pushstatus=='已推送' " ng-disabled="true" type="button" class="btn btn-info" ng-click="save(ordinaryTitle)" style="margin-right:30px;" >保存</button>
+							<button  ng-show="ordinaryTitle!='busInfo' && pushstatus=='未推送' " type="button" class="btn btn-info" ng-click="save(ordinaryTitle)" style="margin-right:30px;" >保存</button>
+							
+							
+							<button type="button" class="btn btn-primary" ng-click="submitBusinfo()" style="margin-right:80px;" ng-show="ordinaryTitle=='busInfo'">单推影像资料</button>
+					
+					
+					</div>
+					
+				</div>
+			</div>
+			<div ng-show="ordinaryTitle=='borrowInfo'" style="width:100%;height:490px; overflow-y:scroll;">
+				<div ng-include="'/plugins/fund-directive/shanguotou/allocationFundShanguotouBorrowInfo.html'"></div>
+			</div>
+			<div ng-show="ordinaryTitle=='contractInfo'" style="width:100%;height:490px; overflow-y:scroll;">
+				<div ng-include="'/plugins/fund-directive/shanguotou/allocationFundShanguotouContractInfo.html'"></div>
+			</div>
+			<div ng-show="ordinaryTitle=='mortgagorInfo'" style="width:100%;height:490px; overflow-y:scroll;">
+				<div ng-include="'/plugins/fund-directive/shanguotou/allocationFundShanguotouMortgagorInfo.html'"></div>
+			</div>
+			<div ng-show="ordinaryTitle=='busInfo'" style="width:100%;height:490px; overflow-y:scroll;">
+				<div ng-include="'/plugins/fund-directive/shanguotou/allocationFundShanguotouBusInfo.html'"></div>
+			</div>
+		</div>
+		<div ng-show="sgtTTitle =='YHKXX'">
+			<div style="margin-bottom: 20px;margin-left: 50px">陕国投放款状态：<span id="lendingStatus" style="color: red;" ng-bind="borrowInfo.lendingStatus"></span> <a ng-click="sgtLending(1)">刷新</a></div>
+			<div style="margin-bottom: 20px;margin-left: 50px">还款计划上传结果：<span id="pushRepaymentStatus" style="color: red;" ng-bind="borrowInfo.pushRepaymentStatus"></span> <a ng-click="sgtHkxx(1)">刷新</a></div>
+				<div>
+					<div class="row form-inline detail-row w147" style="padding:30px 10px; ">
+						<div class="col-md-6 col-lg-4">
+							<label>借款金额: </label>
+							<span ng-bind="contractInfo.pactAmt"></span>万元
+						</div>
+						<div class="col-md-6 col-lg-4">
+							<label>借款期限:</label>
+							<span ng-bind="contractInfo.termLoan"></span>期
+						</div>
+						<div class="col-md-6 col-lg-4">
+							<label>借款利率:</label>
+							<span ng-bind="contractInfo.lnRate"></span>%
+						</div>
+						<div class="col-md-6 col-lg-4">
+							<label>利率单位:</label>
+							<span>月</span>
+						</div>
+						<div class="col-md-6 col-lg-4">
+							<label>扣款日类型:</label>
+							<span ng-show="contractInfo.payType=='01'">相对日扣款</span>
+							<span ng-show="contractInfo.payType=='02'">固定日扣款</span>
+						</div>
+						<div class="col-md-6 col-lg-4">
+							<label>还款方式:</label>
+							<span ng-bind="loanDetail.repaymentName"></span>
+						</div>
+						<div class="col-md-6 col-lg-4">
+							<label>放款日期:</label>
+							<span ng-bind="borrowInfo.sgtLendingTime | date:'yyyy-MM-dd' "></span>
+						</div>
+						
+						<div class="col-md-12 bs-table">
+							<table bs-table-control="orderList" id="table" ></table>
+						</div>
+						
+					</div>
+				</div>
+		</div>
+         <div class="lhw-alert-but" ng-show="sgtTTitle =='ZLTS'">
+			
+				<button  ng-show="borrowstatus=='审核通过' && pushstatus=='已推送'" type="button" class="btn btn-primary" ng-click="submit()" style="margin-right:80px;" ng-disabled="true">资料推送</button>
+				<button ng-show="borrowstatus=='审核不通过' && pushstatus=='已推送'"   type="button" class="btn btn-primary" ng-click="submit()" style="margin-right:80px;" >资料推送</button>
+				<button ng-show="borrowstatus=='审核中' && pushstatus=='已推送'"  type="button" class="btn btn-primary" ng-click="submit()" style="margin-right:80px;"  ng-disabled="true">资料推送</button>
+				<button  ng-show="pushstatus=='未推送' " type="button" class="btn btn-primary" ng-click="submit()" style="margin-right:80px;"  >资料推送</button>
+             
+			
+			
+			</div>
+		<div class="lhw-alert-but" ng-show="sgtTTitle =='YHKXX'">
+				<button id="tsSgtHkxx" type="button" class="btn btn-primary" ng-click="tsYhkxx()" style="margin-right:80px;">确认推送</button>
+				<button type="button" class="btn btn-primary" ng-click="ordinaryClose()" style="margin-right:80px;">取消</button>
+			
+			</div>
+		<!-- <div class="lhw-alert-but">
+			<button type="button" class="btn btn-primary" ng-click="save()" style="margin-right:80px;">确认</button>
+			<button type="button" class="btn btn-danger lhw-alert-cancel" ng-click="ordinaryClose()">取消</button>
+		</div> -->
+	</div>
+</div>

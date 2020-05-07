@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>取证</title>
+<!--标准mui.css-->
+<link rel="stylesheet" href="./css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="./css/order.css" />
+<link href="./css/mui.picker.min.css" rel="stylesheet" />
+</head>
+<body style="font-size:11px;">
+<div class="form-box">
+<div class="detail-box">
+     <iframe src="detail.html" frameborder="0" id="detail-if" style="width:100%;height:307px;"></iframe>
+</div>
+<p class="toggle-p"><span>展开查看订单信息</span></p>
+</div>
+
+<div class="form-box">
+     <div class="inp-div">
+           <span class="inp-span mi">取证日期</span><span class="inp-r"> &nbsp;</span>
+           <input type="text" value="" disabled class="inp-box date" data-options='{"type":"date"}'  name="licenseRevTime" id="licenseRevTime">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">取证银行</span><span class="inp-r">&nbsp;</span>
+           <a href="#"><input type="text" value="" disabled class="inp-box" name="licenseRevBankName" id="licenseRevBankName"></a>
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">取证支行</span><span class="inp-r">&nbsp;</span>
+           <a href="#"><input type="text" value="" disabled class="inp-box" name="licenseRevBankSubName" id="licenseRevBankSubName"></a>
+     </div>
+     <div class="inp-div">
+           <span class="inp-span mi">取证开始时间</span><span class="inp-r icon-d"> &nbsp;</span>
+           <input type="text" value="" readonly class="inp-box date" data-options='{"type":"date"}'  name="licenseRevStartTime" id="licenseRevStartTime" placeholder="请选择">
+     </div>
+	 <div class="inp-div ">
+           <span class="inp-span mi">取证结束时间</span><span class="inp-r icon-d"> &nbsp;</span>
+           <input type="text" value="" readonly class="inp-box date" data-options='{"type":"date"}'  name="licenseRevEndTime" id="licenseRevEndTime" placeholder="请选择" >
+     </div>
+     <div class="inp-div no-border">
+           <span class="inp-span mi">添加取证照片</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" readonly class="inp-box file-upload" name="forensiceImg" id="nImg" ></a>
+           <input type="hidden" id="forensiceImg"/>
+     </div>
+     <div class="clear"></div>
+</div>
+<div class="form-box">
+	  <div class="inp-div">
+           <span class="inp-span mi">预计注销日期</span><span class="inp-r icon-d"> &nbsp;</span>
+           <input type="text" value="" readonly class="inp-box date" data-options='{"type":"date"}'  name="cancelTime" id="cancelTime" placeholder="请选择">
+     </div>
+     <div class="inp-div">
+           <span class="inp-span mi">国土局驻点（注销）</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#" id="nUidUrl"><input type="text" value="" readonly class="inp-box" name="clandBureauUserName" id="clandBureauUserName" placeholder="请选择"></a><input type="hidden"  id="clandBureauUid">
+     		<input type="hidden" id="clandBureauUid"/>
+     </div>
+	
+	 <div class="inp-div no-border">
+           <span class="inp-span mi">国土局（注销）</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#" id="nUrl"><input type="text" value="" readonly class="inp-box" name="clandBureauName" id="clandBureauName" placeholder="请选择"></a>
+		   <input type="hidden"  id="clandBureau">
+     </div>
+	 <div class="clear"></div>
+</div>
+
+
+    <div class="clear"> </div>
+	<div class="inp-div no-border">
+           <span class="inp-span">备注</span>
+     </div>
+     <textarea id="remark" rows="5" placeholder="如有特殊说明，请在此备注（非必填）。" class="textarea-box"></textarea>
+	 <div class="clear"></div>
+ 
+     <div class="sub-but">确认</div>
+     <br>
+</div>
+
+
+<div class="mui-iframe-wrapper iframe-box  landBureau">
+<iframe id="ifranmes" src="landBureau_list.html"></iframe>
+</div>
+
+<!--国土局驻点-->
+<div class="mui-iframe-wrapper iframe-box landBureauUid">
+<iframe id="ifranmesUid" src="landBureauUid_list.html?type='注销'"></iframe>
+</div>
+
+<!--上传图片-->
+<div class="file-box">
+     <div class="file-but">立即上传</div>
+	 <div class="img-box">
+	    <div class="file-add"><input type="file" class="file-inp" name="file" id="file"></div>
+	 </div>
+</div>
+<script src="./js/mui.min.js"></script>
+<script src="./js/mui.picker.min.js"></script>
+<script src="./js/jquery.min.js"></script>
+<script src="./js/process.js"></script>
+<script>
+var orderNo = GetQueryString("orderNo");
+var productCode=GetQueryString("productCode");
+var cityCode = GetQueryString("cityCode");
+$("#ifranmes").attr("src","landBureau_list.html?orderNo="+orderNo+"&pcode="+cityCode);
+$("#ifranmesUid").attr("src","landBureauUid_list.html?type=注销&cityCode="+cityCode+"&productCode="+productCode);
+
+//国土局
+function returnData(code,name){
+  if(code){
+	   $(".landBureau").css({"opacity":"0","z-index":"-11"});
+	   $("#clandBureau").val(code);
+	   $("#clandBureauName").val(name);
+  }
+}
+//国土局驻点
+function returnDataUrl(code,name){
+	  if(code){
+		   $(".landBureauUid").css({"opacity":"0","z-index":"-11"});
+		   $("#clandBureauUid").val(code);
+		   $("#clandBureauUserName").val(name);
+	  }
+	}
+
+ $(function(){
+	 //图片上传
+	$(".file-upload").on("click",function(){
+	    $(".file-box").show();
+	})
+	$(".file-but").on("click",function(){
+		var picAll='';
+        $(".img").each(function(){
+		   picAll+=$(this).attr("src")+",";
+		}) 
+	    $(this).parent(".file-box").hide();
+		if(picAll==""){
+		  $(".file-upload").val("请上传图片");
+		}else{
+		  picAll=picAll.substring(0,picAll.length-1);
+		   $("#forensiceImg").val(picAll);
+		  $(".file-upload").val("已上传");
+		}
+	})
+	
+	$(".file-inp").change(function(){
+        var formData = new FormData();
+        formData.append("file",$("#file")[0].files[0]);
+        $.ajax({ 
+		type:'post',
+	    url: "http://fs.anjbo.com/fs/img/upload", 
+		processData : false,
+		contentType: false,
+		data: formData, 
+		success: function(data){
+			var picUrl=data.url;
+			var ss='<div class="file-img"><img src="'+picUrl+'" class="img"><div class="mui-icon mui-icon-minus file-del"></div></div>';
+            $(".img-box").append(ss);
+			$(".file-del").on("click",function(){
+	            $(this).parent(".file-img").remove();
+	        })
+         },
+		 error:function(xhr,type,errorThrown){
+					console.log(type);
+		}
+	  });	 
+	})
+	//图片上传end
+
+	 var orderNo = GetQueryString("orderNo");
+     $("#detail-if").attr("src","detail.html?orderNo="+orderNo);
+
+     //详情点击效果
+	$(".toggle-p span").on("click",function(){
+		  if($(this).html()=="点击收起订单信息"){ 
+			  $(this).html("展开查看订单信息"); 
+		   }
+		  else{  $(this).html("点击收起订单信息"); }
+		  $(this).parent().prev(".detail-box").toggle();
+	}) 
+
+	 $("#nUidUrl").on("click",function(){ 
+	    $(".landBureauUid").css({"opacity":"1","z-index":"111"});
+	 })
+	 $("#nUrl").on("click",function(){ 
+		    $(".landBureau").css({"opacity":"1","z-index":"111"});
+	 })
+
+	 //初始化数据
+	 
+	 $.ajax({ 
+		 url:"/credit/process/forensics/v/detail",
+		 data:JSON.stringify({"orderNo":orderNo}), 
+         type: 'post' ,
+		 async: true,
+         dataType: 'json',  
+         contentType:'application/json;charset=utf-8',
+		 success: function(data){
+			  var obj= data.data;
+			  $("#licenseRevTime").val(obj.licenseRevTimeStr);
+			  $("#licenseRevBankName").val(obj.licenseRevBankName);
+			  $("#licenseRevBankSubName").val(obj.licenseRevBankSubName);
+			  $("#licenseRevStartTime").val(obj.licenseRevStartTimeStr);
+			  $("#licenseRevEndTime").val(obj.licenseRevEndTimeStr);
+			  $("#forensiceImg").val(obj.forensiceImg);
+			  if(obj.forensiceImg){	
+				$(".file-upload").val("已上传");
+			    arrImg=obj.forensiceImg.split(",");
+				for(var i=0; i<arrImg.length;i++){
+				   var ss='<div class="file-img"><img src="'+arrImg[i]+'" class="img"><div class="mui-icon mui-icon-minus file-del"></div></div>';
+				  $(".file-box").find(".img-box").append(ss);
+				  $(".file-del").on("click",function(){
+	                      $(this).parent(".file-img").remove();
+	              })
+				}
+			  }else{
+			     $(".file-upload").val("请上传图片");
+			  }
+			  $("#cancelTime").val(obj.cancelTimeStr);
+			  $("#clandBureau").val(obj.clandBureau);
+			  $("#clandBureauName").val(obj.clandBureauName);
+			  $("#clandBureauUid").val(obj.clandBureauUid);
+			  $("#clandBureauUserName").val(obj.clandBureauUserName);
+			  $("#remark").val(obj.remark);
+         }
+	   });
+ })
+
+$(".sub-but").click(function(){  
+	var remark =$("#remark").val();
+	var licenseRevStartTime= $("#licenseRevStartTime").val();
+	var licenseRevEndTime = $("#licenseRevEndTime").val();
+	var forensiceImg = $("#forensiceImg").val();
+	var cancelTime = $("#cancelTime").val();
+	var clandBureau =$("#clandBureau").val();
+	var clandBureauUid =$("#clandBureauUid").val();
+	var clandBureauName = $("#clandBureauName").val();
+	var clandBureauUserName=  $("#clandBureauUserName").val();
+	
+	if(licenseRevStartTime ==null ||  licenseRevStartTime =='' ){
+		alert("取证开始时间不能为空");
+		return false;
+	}
+	if(licenseRevEndTime ==null ||  licenseRevEndTime =='' ){
+		alert("取证结束时间不能为空");
+		return false;
+	}
+  	if(forensiceImg ==null ||  forensiceImg =='' ){
+ 		alert("过户照片不能为空");
+  		return false;
+  	}
+	if(cancelTime ==null ||  cancelTime =='' ){
+		alert("预计注销日期不能为空");
+		return false;
+	}
+	if(clandBureauName ==null ||  clandBureauName =='' ){
+		alert("国土局不能为空");
+		return false;
+	}
+	if(clandBureauUserName ==null ||  clandBureauUserName =='' ){
+		alert("国土局驻点不能为空");
+		return false;
+	}
+    var content={"orderNo":orderNo,"licenseRevStartTime":licenseRevStartTime,"licenseRevEndTime":licenseRevEndTime,
+    		 	"forensiceImg":forensiceImg,"cancelTime":cancelTime,"clandBureau":clandBureau,
+    		 	"clandBureauUid":clandBureauUid,"clandBureauName":clandBureauName,"clandBureauUserName":clandBureauUserName,
+    		 	"remark":remark,"uid":GetQueryString("uid"),"deviceId":GetQueryString("deviceId")};
+	 $.ajax({ 
+		url:'/credit/process/forensics/v/add',
+		data:JSON.stringify(content), 
+        type: 'post' ,
+        dataType: 'json',  
+        contentType:'application/json;charset=utf-8',
+		 success: function(data){
+			alert(data.msg);
+        }
+	   });
+ })
+ 
+ 
+
+
+mui.init();
+mui.ready(function() {
+
+  $(".date").on("click",function(){
+	  var _this=$(this);
+	  var optionsJson = _this.attr('data-options') || '{}';
+	  var options = JSON.parse(optionsJson);
+	  var  picker = new mui.DtPicker(options);
+	  picker.show(function(rs) {
+		  _this.val(rs.text);
+		   picker.dispose();
+		});
+     });
+  
+});
+
+</script>
+</body>
+</html>

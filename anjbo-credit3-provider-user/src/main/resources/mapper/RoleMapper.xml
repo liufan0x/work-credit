@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.RoleMapper">
+	<sql id="sqlwhereSearch">
+		<where>
+			<if test="null!=id and id > 0 "> AND a.`id`=#{id}</if>
+			<if test="null!=name and ''!=name"> AND a.`name` LIKE CONCAT('%', #{name}, '%')</if>
+			<if test="null!=describe and ''!=describe"> AND a.`describe`=#{describe}</if>
+			<if test="null!=agencyId and agencyId>0"> AND a.`agencyId`=#{agencyId}</if>
+			<if test="null!=common and ''!=common"> AND a.`common`=#{common}</if>
+			<if test="null!=enable and ''!=enable"> AND a.`enable`=#{enable}</if>
+			<if test="null!=createUid and ''!=createUid"> AND a.`createUid`=#{createUid}</if>
+			<if test="null!=updateUid and ''!=updateUid"> AND a.`updateUid`=#{updateUid}</if>
+			<!-- <if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if> 
+				<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if> -->
+			<!-- <if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if> 
+				<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if> -->
+			<if test="null!=remark and ''!=remark"> AND a.`remark`=#{remark}</if>
+			<if test="null!=fromRole and fromRole>0"> AND a.`fromRole`=#{fromRole}</if>
+			and a.`name` != '超级管理员'
+		</where>
+	</sql>
+
+
+	<!-- 获取实体 -->
+	<select id="find" parameterType="RoleDto" resultType="RoleDto">
+		SELECT a.*
+		FROM tbl_user_role a
+		<include refid="sqlwhereSearch" />
+	</select>
+
+	<!-- 查询 -->
+	<select id="search" parameterType="RoleDto" resultType="RoleDto">
+		SELECT a.*,count(b.roleId) as count
+		FROM tbl_user_role a
+		LEFT JOIN
+		tbl_user_base b on a.id = b.roleId
+		<include refid="sqlwhereSearch" />
+		GROUP BY a.id
+		<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+	</select>
+
+	<!-- 查询 -->
+	<select id="count" parameterType="RoleDto" resultType="int">
+		SELECT count(1)
+		FROM tbl_user_role a
+		<include refid="sqlwhereSearch" />
+	</select>
+
+
+	<!-- 增删改 -->
+	<insert id="insert" parameterType="RoleDto"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into tbl_user_role
+		(`name`,`describe`,agencyId,common,enable,createUid,updateUid,createTime)
+		values
+		(#{name},#{describe},#{agencyId},1,0,#{createUid},#{createUid},now())
+	</insert>
+
+
+	<delete id="delete" parameterType="RoleDto">
+		DELETE FROM tbl_user_role a
+		<include refid="sqlwhereSearch" />
+	</delete>
+
+	<update id="update" parameterType="RoleDto">
+		UPDATE tbl_user_role
+		<set>
+			<if test="null!=name">`name`=#{name},</if>
+			<if test="null!=describe">`describe`=#{describe},</if>
+			<if test="null!=agencyId">`agencyId`=#{agencyId},</if>
+			<if test="null!=common">`common`=#{common},</if>
+			<if test="null!=enable">`enable`=#{enable},</if>
+			<if test="null!=createUid">`createUid`=#{createUid},</if>
+			<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+			<if test="null!=createTime">`createTime`=#{createTime},</if>
+			<if test="null!=updateTime">`updateTime`=#{updateTime},</if>
+			<if test="null!=remark">`remark`=#{remark},</if>
+			<if test="null!=fromRole">`fromRole`=#{fromRole}</if>
+		</set>
+		WHERE ID=#{id}
+	</update>
+
+	<insert id="insertByAgency">
+		INSERT INTO
+		tbl_user_role(name,`describe`,agencyId,common,enable,createUid,fromRole)
+		SELECT * FROM (
+		SELECT name,`describe`,#{0},common,enable,#{1},id AS fromRole
+		FROM tbl_user_role
+		WHERE agencyId=1 AND name
+		in('受理经理','渠道经理','受理员','公证经办人','面签员','取证员','国土局驻点（注销）','国土局驻点（过户）','国土局驻点（领新证）','国土局驻点（抵押）','还款专员')
+		) ruNew WHERE fromRole NOT IN(SELECT fromRole FROM tbl_user_role WHERE
+		agencyId=#{0})
+	</insert>
+
+</mapper>

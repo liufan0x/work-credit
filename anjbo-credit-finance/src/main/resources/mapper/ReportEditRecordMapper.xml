@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.ReportEditRecordMapper">
+    <resultMap id="BaseResultMap" type="ReportEditRecordDto">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="createUid" jdbcType="VARCHAR" property="createUid" />
+        <result column="updateUid" jdbcType="VARCHAR" property="updateUid" />
+        <result column="startVal" jdbcType="VARCHAR" property="startVal" />
+        <result column="endVal" jdbcType="VARCHAR" property="endVal" />
+        <result column="colName" jdbcType="VARCHAR" property="colName" />
+        <result column="beanColumn" jdbcType="VARCHAR" property="beanColumn" />
+        <result column="orderNo" jdbcType="VARCHAR" property="orderNo" />
+        <result column="reportId" jdbcType="INTEGER" property="reportId" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, createTime, updateTime, createUid, updateUid, startVal, endVal, colName,
+        beanColumn, orderNo,reportId
+    </sql>
+    <select id="list" parameterType="ReportEditRecordDto" resultType="ReportEditRecordDto">
+        select
+        <include refid="Base_Column_List" />
+        from tbl_finance_report_editrecord
+        where orderNo in (${orderNo})
+        <if test="reportId>0">
+            AND reportId = #{reportId}
+        </if>
+    </select>
+    <insert id="insert" parameterType="ReportEditRecordDto" useGeneratedKeys="true" keyProperty="id">
+        <selectKey resultType="java.lang.Integer" order="AFTER"
+                   keyProperty="id">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+        insert into tbl_finance_report_editrecord
+           (
+            createTime,
+            createUid,
+            startVal, endVal, colName, 
+            beanColumn, orderNo,reportId
+            )
+        values
+          (
+            now(),
+            #{createUid},
+            #{startVal}, #{endVal}, #{colName},
+            #{beanColumn}, #{orderNo},#{reportId}
+            )
+    </insert>
+
+    <update id="update" parameterType="ReportEditRecordDto">
+        update tbl_finance_report_editrecord
+        <set>
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+            <if test="startVal != null and startVal!=''">
+                startVal = #{startVal},
+            </if>
+            <if test="endVal != null and endVal!=''">
+                endVal = #{endVal},
+            </if>
+            <if test="colName != null and colName!=''">
+                colName = #{colName},
+            </if>
+            <if test="beanColumn != null and beanColumn!=''">
+                beanColumn = #{beanColumn},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+</mapper>

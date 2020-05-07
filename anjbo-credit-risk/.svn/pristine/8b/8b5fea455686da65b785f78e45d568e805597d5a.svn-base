@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.RiskBaseMapper">
+
+	<select id="listImg" parameterType="java.util.Map" resultType="java.util.Map">
+		select * from tbl_risk_ael_img where imgType=#{imgType} and orderNo=#{orderNo}
+	</select>
+	
+	<delete id="deleteImgById" parameterType="java.util.Map">
+		DELETE FROM tbl_risk_ael_img WHERE id in (${id})
+	</delete>	
+	
+	<insert id="insertImg" parameterType="java.util.List">
+		INSERT INTO  tbl_risk_ael_img
+		(
+			imgType,imgUrl,orderNo
+		)
+		VALUES
+		<foreach collection="list" separator="," item="obj">
+		(
+			#{obj.imgType},#{obj.imgUrl},#{obj.orderNo}
+		)
+		</foreach>
+	</insert>
+	<select id="listImgById" parameterType="java.util.Map" resultType="java.util.Map">
+		select * from tbl_risk_ael_img where id in (${id})
+	</select>
+</mapper>

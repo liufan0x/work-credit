@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.SealDepartmentMapper">
+
+    <select id="selectSealDepartmentList" parameterType="java.util.Map" resultType="java.util.Map">
+    	select * from tbl_element_seal_department
+    </select>
+    
+    <select id="selectSealDepartmentInfoById" parameterType="java.util.Map" resultType="java.util.Map">
+    	select * from tbl_element_seal_department where id=#{sealDepartmentId}
+    </select>
+    
+    
+     <update id="updateSealElementSet" parameterType="java.util.Map">
+        update tbl_element_seal_department set currentBoxElementSet= #{currentBoxElementSet}  where id = #{id} ;
+    </update>
+    
+    
+</mapper>

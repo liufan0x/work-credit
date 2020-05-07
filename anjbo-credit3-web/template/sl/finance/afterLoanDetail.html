@@ -1,0 +1,88 @@
+<style>
+.after-tip{
+	width:100%;
+	margin:0 auto;
+	padding:20px 20px 10px 20px;
+	clear: both;
+}
+.after-tip span {
+	display: block;
+	width: 304px;
+	float: left;
+	font-size: 15px;
+	line-height: 36px;
+}
+.audit-add-but {
+	width: 90px;
+	text-align: center;
+	cursor: pointer;
+	line-height: 28px;
+	height: 28px;
+	border-radius: 4px;
+	border: 1px solid blue;
+	color: blue;
+	font-size: 13px;
+	display: inline-block;
+}
+.after-loan-prepay{
+	width: 100px;
+	text-align: center;
+	cursor: pointer;
+	line-height: 35px;
+	height: 35px;
+	border-radius: 4px;
+	border: 1px solid #0099cc;
+	color: #0099cc;
+	font-size: 13px;
+	display: block;
+	float:right;
+	margin-right:91px;
+}
+	.after-but{
+		width:90px;
+		height:30px;
+		background:#337ab7;
+		font-size:14px;
+		text-align: center;
+		line-height: 30px;
+		position: relative;
+		top:-76px;
+		border-radius:5px;
+		float:right;
+         margin-right:20px;
+	}
+	.after-but a{
+		color: white;
+	}
+
+</style>
+
+<div class="row">
+	<div class="after-tip">
+		<span>客户姓名:&nbsp;{{afterLoanListDto.borrowerName}}</span>
+		<span>合同编号:&nbsp;{{afterLoanListDto.contractNo}}</span>
+		<span>产品类型:&nbsp;{{afterLoanListDto.productName}}</span>
+		<span>借款金额:&nbsp;{{afterLoanListDto.loanAmountTmp}}元</span>
+		<span>还款方式:&nbsp;{{afterLoanListDto.repaymentName}}</span>
+		<span>借款期限:&nbsp;{{afterLoanListDto.borrowingPeriods}}期</span>
+		<span>费率:&nbsp;{{afterLoanListDto.rate}}%/月</span>
+		<span>逾期费率:&nbsp;{{afterLoanListDto.overdueRate}}%/天</span>
+	</div>
+</div>
+<div class="row" ng-if="fundCode=='1000'">
+	<div class="col-md-12">
+		<span class="after-loan-prepay" ng-click="prepayShow2()">提前清贷</span>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12 bs-table">
+		<table bs-table-control="orderList" data-show-export="false" id="table" ></table>
+		<!-- 这个版本暂时不做展期 20180412
+		<div class="after-but" ng-if="lastPeriods"><a href="javascipt:void(0);">申请展期</a></div>
+		-->
+	</div>
+</div>
+
+
+

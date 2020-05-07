@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="GBK"?>
+<paras>
+	<name>谬奸疙非尧架漏亭迹灿件粉帅圳申呵架（歌辐未捷歧）</name>   <!--企业名称-->
+	<bankcode>102</bankcode>	               <!--银行编码-->
+    <CIS>400090001604411</CIS>	               <!--工行CIS号-->	
+	<enterprise>
+		<port>6000</port> <!--监听端口-->
+		<commlevel>
+			<store>icbc/certificate/rpstore</store> <!--D企业通讯层证书-->
+			<storepass>12345678</storepass>         <!--D企业通讯层证书口令-->
+		</commlevel> 
+		<datalevel>
+			<cerfile>icbc/certificate/rp.cer</cerfile> <!--企业数据层公钥-->
+			<key>icbc/certificate/rp.key</key>         <!--企业数据层私钥-->
+			<keypass>12345678</keypass>                <!--企业数据层私钥口令-->
+		</datalevel>
+	</enterprise>
+	<ICBC>
+		<IP>cmpgtcg3.dccnet.com.cn</IP>  <!--工行系统地址-->
+		<port>8446</port>                <!--工行监听端口-->
+		<commlevel>
+			<truststore>icbc/certificate/CESHItrust</truststore> <!--D工行通讯层证书-->
+		</commlevel> 
+		<datalevel>
+			<cerfile>icbc/certificate/admin.crt</cerfile>        <!--D工行数据层公钥-->
+		</datalevel>
+	</ICBC>
+	<AnjboDefines>
+		<id>rp.y.4000</id>
+		<version>0.0.0.1</version>
+	</AnjboDefines>
+</paras>

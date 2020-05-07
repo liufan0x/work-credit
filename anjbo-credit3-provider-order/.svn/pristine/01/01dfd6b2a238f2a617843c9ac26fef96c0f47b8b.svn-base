@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.order.FlowMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and ''!=id"> AND `id`=#{id}</if>
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<if test="null!=currentProcessId and ''!=currentProcessId"> AND `currentProcessId`=#{currentProcessId}</if>
+		<if test="null!=nextProcessId and ''!=nextProcessId"> AND `nextProcessId`=#{nextProcessId}</if>
+		<if test="null!=handleUid and ''!=handleUid"> AND `handleUid`=#{handleUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(handleTimeBegin)"> AND handleTime >= #{handleTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(handleTimeEnd)"> AND handleTime &lt;= #{handleTimeEnd}</if>
+		-->
+		<if test="null!=backReason and ''!=backReason"> AND `backReason`=#{backReason}</if>
+		<if test="null!=returnType and ''!=returnType"> AND `returnType`=#{returnType}</if>
+		<if test="null!=timeNum and timeNum>0"> AND `timeNum`=#{timeNum}</if>
+		<if test="null!=isNewWalkProcess and isNewWalkProcess>0"> AND `isNewWalkProcess`=#{isNewWalkProcess}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="FlowDto" resultType="FlowDto">    
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `currentProcessId`, `nextProcessId`, `handleUid`, `handleTime`, `backReason`, `returnType`, `timeNum`, `isNewWalkProcess` 
+	FROM tbl_order_flow 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="FlowDto" resultType="FlowDto">
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `currentProcessId`, `nextProcessId`, `handleUid`, `handleTime`, `backReason`, `returnType`, `timeNum`, `isNewWalkProcess`
+	FROM tbl_order_flow 
+	<include refid="sqlwhereSearch"/>
+	order by handleTime
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="FlowDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_order_flow 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="FlowDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_order_flow(
+		`createUid`,
+		`createTime`,
+		`updateUid`,
+		`updateTime`,
+		`orderNo`,
+		`currentProcessId`,
+		`nextProcessId`,
+		`handleUid`,
+		`handleTime`,
+		`backReason`,
+		`returnType`,
+		`timeNum`,
+		`isNewWalkProcess`
+	) VALUES(
+		#{updateUid},
+		now(),
+		#{updateUid},
+		now(),
+		#{orderNo},
+		#{currentProcessId},
+		#{nextProcessId},
+		#{handleUid},
+		now(),
+		#{backReason},
+		#{returnType},
+		#{timeNum},
+		#{isNewWalkProcess}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="FlowDto" >
+    DELETE FROM tbl_order_flow 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="FlowDto" >
+    UPDATE tbl_order_flow
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=currentProcessId">`currentProcessId`=#{currentProcessId},</if>
+		<if test="null!=nextProcessId">`nextProcessId`=#{nextProcessId},</if>
+		<if test="null!=handleUid">`handleUid`=#{handleUid},</if>
+		<if test="null!=handleTime">`handleTime`=#{handleTime},</if>
+		<if test="null!=backReason">`backReason`=#{backReason},</if>
+		<if test="null!=returnType">`returnType`=#{returnType},</if>
+		<if test="null!=timeNum">`timeNum`=#{timeNum},</if>
+		<if test="null!=isNewWalkProcess">`isNewWalkProcess`=#{isNewWalkProcess},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+    <select id="selectEndOrderFlow" parameterType="FlowDto" resultType="FlowDto">
+		select * from tbl_order_flow where orderNo = #{orderNo} ORDER BY createTime desc LIMIT 0,1 
+	</select>
+	
+	<select id="selectOrderNoByUid" parameterType="java.lang.String" resultType="java.lang.String">
+		select DISTINCT(orderNo) from tbl_order_flow a where a.handleUid = #{0};
+	</select>
+	
+</mapper>

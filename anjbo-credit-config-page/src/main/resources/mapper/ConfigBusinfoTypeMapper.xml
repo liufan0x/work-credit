@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.ConfigBusinfoTypeMapper">
+	
+	<select id="selectBusinfoParentType" resultType="java.util.Map">
+		select * from tbl_config_businfo_type where pid=0 and productCode = #{productCode}
+	</select>
+	
+	<select id="selectBusinfoSonType" parameterType="java.util.Map" resultType="java.util.Map">
+		select * from tbl_config_businfo_type where pid!=0 and productCode = #{productCode}
+	</select>
+	
+	<select id="getAllType" parameterType="java.util.Map" resultType="java.util.Map" >
+	  	select * from tbl_config_businfo_type
+	  	where pid >0 and productCode = #{productCode}
+    </select>
+	
+	<select id="selectNecessaryBusinfo" parameterType="java.util.Map" resultType="java.util.Map">
+		SELECT * FROM tbl_config_businfo_type WHERE productCode=#{productCode} AND pid!=0 AND isMust=1
+	</select>
+</mapper>

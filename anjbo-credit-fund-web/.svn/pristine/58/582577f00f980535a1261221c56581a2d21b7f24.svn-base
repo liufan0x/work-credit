@@ -1,0 +1,26 @@
+<form name="huarongKgApprovalForm">
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;快鸽风控初审意见</div>
+    <div class="clear" style="width:100%; height:1px; clear:both;"></div>
+    <div class="row form-inline relative  detail-row" style="padding:0 10px;">
+        <span class="remark-span remark-lhw">审批意见：</span>
+        <textarea style="border:1px solid #ddd;width:82%;" class="remark-p remark-lhw-p textarea-lhw ng-binding ng-isolate-scope"  ng-model="kgApproval.trial" name="kgApprovalTrial"> </textarea>
+    </div>
+</div>
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;快鸽风控终审意见</div>
+    <div class="clear" style="width:100%; height:1px; clear:both;"></div>
+    <div class="row form-inline relative  detail-row" style="padding:0 10px;">
+        <span class="remark-span remark-lhw">审批意见：</span>
+        <textarea style="border:1px solid #ddd;width:82%;" class="remark-p remark-lhw-p textarea-lhw ng-binding ng-isolate-scope"  ng-model="kgApproval.judgment" name="kgApprovalTrial"> </textarea>
+    </div>
+</div>
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;快鸽首席风险意见</div>
+    <div class="clear" style="width:100%; height:1px; clear:both;"></div>
+    <div class="row form-inline relative  detail-row" style="padding:0 10px;">
+        <span class="remark-span remark-lhw">审批意见：</span>
+        <textarea style="border:1px solid #ddd;width:82%;" class="remark-p remark-lhw-p textarea-lhw ng-binding ng-isolate-scope"  ng-model="kgApproval.chiefRiskOpinion" name="kgApprovalChiefRiskOpinion"> </textarea>
+    </div>
+</div>
+</form>

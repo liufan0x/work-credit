@@ -1,0 +1,37 @@
+<div>
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;快鸽提单信息--借款人信息</div>
+	<form style="padding:0 50px" class="form-inline ng-pristine ng-invalid ng-invalid-required ng-valid-min" name="orderForm">
+		<div class="form-group" style="width:100%">
+			<div style="overflow: hidden;margin-bottom: 30px">
+				<div style="float: left">
+					<span>计划还款时间:</span>
+					<input size="16" type="text" ng-disabled="HTStaus=='待推送回款计划'||HTStaus=='推送完成'" ng-model="huaRongDto.repaymentPlan.repaymentTime" readonly class="form-control form_dateu">
+				</div>
+				<div style="float: right">
+					<span>期供金额(本金+利息):</span>
+					<input type="text" class="form-control" ng-disabled="HTStaus=='待推送回款计划'||HTStaus=='推送完成'" ng-model="huaRongDto.repaymentPlan.repaymentAccount"> 元
+				</div>
+			</div>
+			<div style="overflow: hidden;margin-bottom: 30px">
+				<div style="float: left">
+					<span>计划还款利息:</span>
+					<input type="text" class="form-control" ng-disabled="HTStaus=='待推送回款计划'||HTStaus=='推送完成'" ng-model="huaRongDto.repaymentPlan.interest"> 元
+				</div>
+				<div style="float: right">
+					<span>计划还款本金:</span>
+					<input style="width: 300px;" type="text" ng-disabled="HTStaus=='待推送回款计划'||HTStaus=='推送完成'" class="form-control" ng-model="huaRongDto.repaymentPlan.capital"> 元
+				</div>
+			</div>
+			<div style="overflow: hidden;margin-bottom: 30px">
+				<div style="float: left">
+					<span>剩余本金:</span>
+					<input type="text" class="form-control" ng-disabled="HTStaus=='待推送回款计划'||HTStaus=='推送完成'" ng-model="huaRongDto.repaymentPlan.psRemPrcp"> 元
+				</div>
+				<div style="float: right">
+					<span>贷款执行利率:</span>
+					<input style="width: 300px;" type="text" ng-disabled="HTStaus=='待推送回款计划'||HTStaus=='推送完成'" class="form-control" ng-model="huaRongDto.repaymentPlan.psIntRate"> %
+				</div>
+			</div>
+		</div>
+	</form>
+</div>

@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.FirstAuditMapper">
+    <resultMap id="BaseResultMap" type="FirstAuditDto">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="createUid" jdbcType="VARCHAR" property="createUid" />
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="updateUid" jdbcType="VARCHAR" property="updateUid" />
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="orderNo" jdbcType="VARCHAR" property="orderNo" />
+        <result column="auditTime" jdbcType="TIMESTAMP" property="auditTime" />
+        <result column="isShow" jdbcType="INTEGER" property="isShow" />
+    </resultMap>
+    
+    <sql id="Base_Column_List">
+        id, createUid, createTime, updateUid, updateTime, orderNo, auditTime, isShow,remark,auditStatus,handleUid
+    </sql>
+   
+   <select id="listDetail" parameterType="java.lang.String" resultType="firstAuditDto">
+   	SELECT
+   		* FROM tbl_risk_audit_first where orderNo=#{orderNo}
+   </select>
+   
+   <select id="detail" parameterType="java.lang.String" resultType="firstAuditDto">
+   	SELECT
+   		*
+   	FROM tbl_risk_audit_first where orderNo=#{orderNo} ORDER BY createTime DESC LIMIT 1;
+   </select>
+   
+    <insert id="insert" parameterType="FirstAuditDto">
+       <selectKey resultType="int" keyProperty="id">
+            select
+            last_insert_id()
+        </selectKey>
+        insert into tbl_risk_audit_first 
+        	(
+        		id, createUid, createTime, 
+            	updateUid, orderNo, 
+            	auditTime, isShow, remark,auditStatus,handleUid,
+				`productName`, `loanAmount`, `debtRatio`, `loanPoportion`, 
+				`productLoanPoportion`,`propertyOwner`, `propertyName`, 
+				`area`, `assessment`, `mortgageSituation`, `addressOld`, `amountOld`,
+				`addressNew`, `amountNew`, `monthNum`, `yearNum`, 
+				`business`, `sunMoney`, `loanName`, `loanAccount`, `loanBankId`, `loanBankName`, 
+				`loanBankSubId`, `loanBankSubName`, `paymentName`, 
+				`paymentAccount`, `paymentBankId`, `paymentBankName`, `paymentBankSubId`, 
+				`paymentBankSubName`, `rate`, `overdueRate`, `other`
+            )
+        	values
+        	(
+        		null, #{createUid},now(), 
+            	#{updateUid}, #{orderNo}, 
+            	#{auditTime}, #{isShow}, #{remark},#{auditStatus},#{handleUid},
+            	#{productName},#{loanAmount},#{debtRatio},#{loanPoportion},
+            	#{productLoanPoportion},#{propertyOwner},#{propertyName},
+            	#{area},#{assessment},#{mortgageSituation},#{addressOld},#{amountOld},
+            	#{addressNew},#{amountNew},#{monthNum},#{yearNum},
+            	#{business},#{sunMoney},#{loanName},#{loanAccount},#{loanBankId},#{loanBankName},
+            	#{loanBankSubId},#{loanBankSubName},#{paymentName},
+            	#{paymentAccount},#{paymentBankId},#{paymentBankName},#{paymentBankSubId},
+            	#{paymentBankSubName},#{rate},#{overdueRate},#{other}
+            )
+    </insert>
+    
+    <update id="update" parameterType="FirstAuditDto">
+        update tbl_risk_audit_first
+        <set>
+            <if test="createUid != null and createUid!=''">
+                createUid = #{createUid},
+            </if>
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+            <if test="orderNo != null and orderNo!=''">
+                orderNo = #{orderNo},
+            </if>
+            <if test="auditTime != null">
+                auditTime = #{auditTime},
+            </if>
+            <if test="isShow != null">
+                isShow = #{isShow},
+            </if>
+            <if test="remark != null and remark!=''">
+                remark = #{remark},
+            </if>
+            <if test="auditStatus!=null">
+            	auditStatus = #{auditStatus},
+            </if>
+            <if test="handleUid!=null and handleUid!=''">
+            	handleUid = #{handleUid},
+            </if>
+            
+            <if test="productName!=null and productName!=''">
+            	productName = #{productName},
+            </if>
+            <if test="loanAmount!=null and loanAmount>0">
+            	loanAmount = #{loanAmount},
+            </if>
+            <if test="debtRatio!=null and debtRatio!=''">
+            	debtRatio = #{debtRatio},
+            </if>
+            <if test="loanPoportion!=null and loanPoportion!=''">
+            	loanPoportion = #{loanPoportion},
+            </if>
+            <if test="productLoanPoportion!=null and productLoanPoportion!=''">
+            	productLoanPoportion = #{productLoanPoportion},
+            </if>
+            <if test="propertyOwner!=null and propertyOwner!=''">
+            	propertyOwner = #{propertyOwner},
+            </if>
+            <if test="propertyName!=null and propertyName!=''">
+            	propertyName = #{propertyName},
+            </if>
+            <if test="area!=null and area>0">
+            	area = #{area},
+            </if>
+            <if test="assessment!=null and assessment!=''">
+            	assessment = #{assessment},
+            </if>
+            <if test="mortgageSituation!=null and mortgageSituation!=''">
+            	mortgageSituation = #{mortgageSituation},
+            </if>
+            <if test="addressOld!=null and addressOld!=''">
+            	addressOld = #{addressOld},
+            </if>
+            
+            <if test="amountOld!=null and amountOld!=''">
+            	amountOld = #{amountOld},
+            </if>
+            <if test="addressNew!=null and addressNew!=''">
+            	addressNew = #{addressNew},
+            </if>
+            <if test="amountNew!=null and amountNew!=''">
+            	amountNew = #{amountNew},
+            </if>
+            <if test="monthNum!=null and monthNum!=''">
+            	monthNum = #{monthNum},
+            </if>
+            <if test="yearNum!=null and yearNum!=''">
+            	yearNum = #{yearNum},
+            </if>
+            <if test="business!=null and business!=''">
+            	business = #{business},
+            </if>
+            <if test="sunMoney!=null and sunMoney!=''">
+            	sunMoney = #{sunMoney},
+            </if>
+            <if test="loanName!=null and loanName!=''">
+            	loanName = #{loanName},
+            </if>
+            <if test="loanAccount!=null and loanAccount!=''">
+            	loanAccount = #{loanAccount},
+            </if>
+            <if test="loanBankId!=null and loanBankId!=''">
+            	loanBankId = #{loanBankId},
+            </if>
+            <if test="loanBankName!=null and loanBankName!=''">
+            	loanBankName = #{loanBankName},
+            </if>
+            <if test="loanBankSubId!=null and loanBankSubId!=''">
+            	loanBankSubId = #{loanBankSubId},
+            </if>
+            <if test="loanBankSubName!=null and loanBankSubName!=''">
+            	loanBankSubName = #{loanBankSubName},
+            </if>
+            
+            <if test="paymentName!=null and paymentName!=''">
+            	paymentName = #{paymentName},
+            </if>
+            <if test="paymentAccount!=null and paymentAccount!=''">
+            	paymentAccount = #{paymentAccount},
+            </if>
+            <if test="paymentBankId!=null">
+            	paymentBankId = #{paymentBankId},
+            </if>
+            <if test="paymentBankName!=null and paymentBankName!=''">
+            	paymentBankName = #{paymentBankName},
+            </if>
+            <if test="paymentBankSubId!=null">
+            	paymentBankSubId = #{paymentBankSubId},
+            </if>
+            <if test="paymentBankSubName!=null and paymentBankSubName!=''">
+            	paymentBankSubName = #{paymentBankSubName},
+            </if>
+            <if test="rate!=null and rate!=''">
+            	rate = #{rate},
+            </if>
+            <if test="overdueRate!=null">
+            	overdueRate = #{overdueRate},
+            </if>
+            <if test="other!=null and other!=''">
+            	other = #{other},
+            </if>
+        </set>
+        where orderNo = #{orderNo} ORDER BY createTime DESC LIMIT 1
+    </update>
+    
+    <select id="listByTime" resultType="StatisticsDto" parameterType="java.util.Map">
+    	SELECT f.orderNo,f.auditTime,DATE_FORMAT(f.auditTime,'%Y-%m-%d %H:%i:%s') as auditTimeStr,
+    	af.auditTime as finalAuditTime, DATE_FORMAT(af.auditTime,'%Y-%m-%d %H:%i:%s') as finalAuditTimeStr
+		    	FROM tbl_risk_audit_first f 
+		LEFT JOIN tbl_risk_audit_final af on af.orderNo = f.orderNo
+    	WHERE 1=1
+    	<if test="startTime !=null">
+    		<![CDATA[ and f.auditTime >= #{startTime} ]]> 
+    	</if>
+    	<if test="endTime !=null">
+    		<![CDATA[  and DATE_FORMAT(f.auditTime,'%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')]]>
+    	</if>
+    	 limit #{start},#{pageSize}
+    </select>
+    
+    <select id="listByTimeCount" resultType="java.lang.Integer" parameterType="java.util.Map">
+    	SELECT 
+    		count(1) 
+    	FROM tbl_risk_audit_first f 
+    	WHERE 1=1
+    	<if test="startTime != null">
+    		<![CDATA[ and auditTime >= #{startTime} ]]> 
+    	</if>
+    	<if test="endTime != null">
+    		<![CDATA[  and DATE_FORMAT(auditTime,'%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')]]>
+    	</if>
+    </select>
+    
+    <!-- 初审 出/回款start -->
+    <select id="findforeclosureList" parameterType="java.lang.String" resultType="FirstForeclosureAuditDto">
+       select * from tbl_risk_audit_first_foreclosure where orderNo= #{0}
+    </select>	
+    <delete id="delFirstForeclosure" parameterType="java.lang.String">
+       delete from tbl_risk_audit_first_foreclosure where orderNo=#{0}
+    </delete>
+    <insert id="addFirstForeclosure" parameterType="FirstForeclosureAuditDto">
+      INSERT INTO `anjbo-server-risk`.`tbl_risk_audit_first_foreclosure` (
+        `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `loanAccountType`, `loanName`, `loanAccount`, `loanBankId`, `loanBankName`, `loanBankSubId`, `loanBankSubName`
+      ) VALUES (
+        #{createUid}, now(), #{updateUid}, now(), #{orderNo}, #{loanAccountType}, #{loanName}, #{loanAccount}, #{loanBankId}, #{loanBankName}, #{loanBankSubId}, #{loanBankSubName}
+      );
+    </insert>
+    
+    <select id="findPaymentList" parameterType="java.lang.String" resultType="FirstPaymentAuditDto">
+      select * from tbl_risk_audit_first_payment where orderNo=#{0}
+    </select>	
+    <delete id="delFirstPayment" parameterType="java.lang.String">
+       delete from tbl_risk_audit_first_payment where orderNo=#{0}
+    </delete>
+    <insert id="addFirstPayment" parameterType="FirstPaymentAuditDto">
+      INSERT INTO `anjbo-server-risk`.`tbl_risk_audit_first_payment` (
+      `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `paymentAccountType`, `paymentName`, `paymentAccount`, `paymentBankId`, `paymentBankName`, `paymentBankSubId`, `paymentBankSubName`
+      ) VALUES (
+       #{createUid}, now(), #{updateUid}, now(), #{orderNo}, #{paymentAccountType}, #{paymentName}, #{paymentAccount}, #{paymentBankId}, #{paymentBankName}, #{paymentBankSubId}, #{paymentBankSubName}
+      );
+    </insert>
+    <!-- 初审 出/回款end -->
+</mapper>

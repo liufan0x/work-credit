@@ -1,0 +1,79 @@
+<div  class="form-inline detail-row" ng-if="!agencyDto.agencyWaitSign">
+    <div class="col-md-8" style="position: relative;">
+        <label style="position: absolute;top:0;left:0;">
+            <span>附件：</span>
+        </label>
+
+        <table class="table table-bordered" style="margin-left:174px;float:left;width:600px">
+            <thead>
+                <tr>
+                    <th>资料名称</th>
+                    <th>文档数</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td ng-bind="m.title"></td>
+                <td ng-bind="detailFiles.length"></td>
+                <td>
+                    <span ng-click="detailFileShow(true,m.key)" class="btn btn-info detail-right-save ng-binding ng-scope">下载</span>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<table class="table table-bordered" style="margin-left:0px;float:left;width:600px" ng-if="agencyDto.agencyWaitSign&&''!=agencyDto.agencyWaitSign">
+    <thead>
+    <tr>
+        <th>资料名称</th>
+        <th>文档数</th>
+        <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td ng-bind="m.title"></td>
+        <td ng-bind="detailFiles.length"></td>
+        <td>
+            <span ng-click="detailFileShow(true,m.key)" class="btn btn-info detail-right-save ng-binding ng-scope">下载</span>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+
+<div class="lhw-alert-bg" id="detailFileShow{{m.key}}" style="display: none;">
+    <div class="lhw-alert-box" >
+        <div class="lhw-alert-tit" style="line-height:40px">下载请右击另存为</div>
+        <div style="padding:10px;height:300px;overflow-y:auto;">
+            <div class="row form-inline detail-row" style="padding:0 10px;">
+                <div class="tan-pic">
+                    <table class="table">
+                        <tbody>
+                        <tr ng-repeat="f in detailFiles">
+
+                            <td class="caozuo chakan-img gallerys" style="text-align: left">
+                                <input type="checkbox" name="fileIds" value="{{f.id}}" ng-if="downloadOrDelete=='delete'"/>
+                                <!--
+                                <span><a href="{{f.url}}" ng-bind="f.name" ng-click="download(f)" target="_blank"></a></span>&nbsp;&nbsp;
+                                -->
+                                <span><a href="{{f.url}}" ng-bind="f.name" target="_blank"></a></span>&nbsp;&nbsp;
+                                <span><a href="{{f.url}}" download  target="_blank" >下载</a></span>&nbsp;&nbsp;
+                                <span ng-show="f.type.indexOf('image')>=0" class="gallery-pic-img" title="{{f.url}}"></span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+        <div class="lhw-alert-but" style="height:63px;line-height:40px;">
+            <button type="button" class="btn btn-primary lhw-alert-cancel" ng-click="detailFileShow(false,m.key)">关闭</button>
+        </div>
+    </div>
+</div>
+

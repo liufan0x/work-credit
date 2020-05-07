@@ -1,0 +1,37 @@
+<div class="container-fluid" id="foreclosure">
+	<!--标题-->
+	<div class="row">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;结清原贷款信息
+			<a ng-show="!isEdit" style="display:inline-block;float:right;padding-right: 10px;" ui-sref="orderList" >返回上一步</a>
+			<span ng-show="isEdit" class="detail-trash2 text-danger" ng-click="deleteDetail('foreclosure-detail')" >隐藏</span>
+			<div style="position:absolute;right:400px;top:0px;">
+			  <span id="elementFlag" ng-bind="elementFlag">是否已收到要件：是</span>
+			  <span><a id="elementInfo" ng-bind="elementInfo" ng-click="showDetail('elementEntrance');">要件详情</a></span>
+			</div>
+		</div>
+	</div>
+	<!--标题 end-->
+	<div class="row detail-row detail-lhw" >
+		<div class="col-md-6 col-lg-4"><label>结清原贷款日期：</label><span ng-bind="obj.foreclosureTime | date:'yyyy-MM-dd' "></div>
+        <div class="col-md-6 col-lg-4"><label>结清原贷款金额：</label><span ng-bind="obj.loanAmount"></span>万</div>
+        <div class="col-md-6 col-lg-4" ng-if="obj.isBankEnd==0"><label>结清原贷款银行：</label><span ng-bind="obj.foreclosureBankName"></span> - <span ng-bind="obj.foreclosureBankSubName"></span></div>
+        <div class="col-md-6 col-lg-4" ng-if="obj.isBankEnd==1"><label>结清原贷款地点：</label><span ng-bind="obj.foreclosureAddress"></span></div>
+		<div class="col-md-6 col-lg-4"><label>银行卡户名：</label><span ng-bind="obj.bankCardMaster"></span></div>
+        <div class="col-md-6 col-lg-4"><label>银行卡账号：</label><span ng-bind="obj.bankNo"></span></div>
+        <div class="col-md-6 col-lg-4"><label>取证员：</label><span ng-bind="obj.licenseRever"></span></div>
+        <div class="col-md-6 col-lg-4"><label>预计取证时间：</label><span ng-bind="obj.licenseRevTimeStr "></div>
+        <!-- <div class="col-md-6 col-lg-4"><label>取证银行：</label><span ng-bind="obj.licenseRevBankName"></span>-<span ng-bind="obj.licenseRevBankSubName"></span></div> -->
+	</div>
+	<!--备注-->
+	<div class="row relative" ng-if="obj.remark!='' && obj.remark!=null">
+		<span class="remark-span remark-lhw">备注：</span>
+		<textarea class="remark-p remark-lhw-p textarea-lhw" readonly="readonly" ng-bind="obj.remark"  > </textarea>
+	</div>
+	<!--备注end-->
+	
+	<!--图片 放大插件-->
+	<div class="row gallerys">
+		<img ng-repeat="img in obj.imgs" ng-src="{{img}}" width="150" height="150" class="detail-img gallery-pic">
+	</div>
+	<!--图片end-->
+</div>

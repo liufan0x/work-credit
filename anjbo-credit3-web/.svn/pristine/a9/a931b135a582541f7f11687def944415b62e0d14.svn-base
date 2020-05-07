@@ -1,0 +1,402 @@
+<style>
+    .w140{position: absolute;top:0px; min-height:700px;width:100%;bottom:0;overflow: auto}
+    .w140 .detail-row label{width:180px}
+    .line{width:96%;margin-left:0px;height:1px;padding-top:10px;margin-bottom:10px; border-bottom:1px solid #ddd;clear:both;}
+    .line26{line-height:26px; }
+    .small-w{font-size:12px;color:#999; width:200px;float:left}
+    .text-l{padding-left:100px;}
+    .text-l label{text-align: left;}
+    .nameU{background:#3396fb; height:32px;line-height: 32px; width: 32px;border-radius:50%;
+        text-align: center; color:#fff; font-size: 11px;position: absolute;top:0px;left:10px;  }
+    .nameU2{position:relative;top:27px;display:inline-block;width:56px;text-align:center; font-size:12px;}
+    .detail-row span.r{position:relative;left:80px;display:block;line-height:22px;width:92%;}
+</style>
+<div class="container-fluid w140" id="hhh">
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="breadcrumb" ng-if="isElement">
+                <li>
+                    <a>要件管理</a>
+                    <span class="divider"></span>
+                </li>
+                <li class="active">
+                    <a ui-sref="eleAccessList">要件管理列表</a>
+                    <span class="divider"></span>
+                </li>
+                <li class="active">详情</li>
+                <a style="display:inline-block;float:right;padding-right: 10px;" ui-sref="eleAccessList" >返回上一页</a>
+            </ul>
+            <ul class="breadcrumb" ng-if="!isElement">
+                <li>
+                    <a>要件管理</a>
+                    <span class="divider"></span>
+                </li>
+                <li class="active">
+                    <a ui-sref="boxList">柜子管理</a>
+                    <span class="divider"></span>
+                </li>
+                <li class="active">
+                    <a ng-click="goHref()">开箱记录</a>
+                    <span class="divider"></span>
+                </li>
+                <li class="active">详情</li>
+                <a style="display:inline-block;float:right;padding-right: 10px;" ng-click="goHref()" >返回上一页</a>
+            </ul>
+        </div>
+    </div>
+    <div class="row detail-row form-inline w" ng-if="obj">
+        <!-- 公章信息 start -->
+        <div ng-if="obj.isSeal">
+            <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;&nbsp;&nbsp;公章信息</div>
+            <div class="text-l">
+                <div class="col-md-12"><span>公章所属部门：</span><span ng-bind="obj.sealDepartment"></span></div>
+                <div class="col-md-12"><span>要件柜箱号：</span><span ng-bind="obj.boxNo"></span></div>
+            </div>
+        </div>
+        <!-- 公章信息 end -->
+
+        <!-- 订单基本信息 start -->
+        <div ng-if="!obj.isSeal">
+            <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;&nbsp;&nbsp;订单基本信息</div>
+            <div class="text-l">
+                <div class="col-md-12"><span>客户：</span><span ng-bind="obj.customerName"></span></div>
+                <div class="col-md-3"><span>业务：</span><span>{{obj.cityName}}-{{obj.creditType}}</span></div>
+                <div class="col-md-3"><span>贷款金额/期限：</span>
+                    <span ng-bind="obj.borrowingAmount"></span><span>万/</span>
+                    <span ng-bind="obj.borrowingDay"></span><span>天</span>
+                </div>
+                <div class="col-md-3"><span>渠道经理/受理员：</span>
+                    <span ng-bind="obj.channelManagerName"></span><span>/</span>
+                    <span ng-bind="obj.acceptMemberName"></span>
+                </div>
+                <div class="col-md-3"><span>当前节点：</span>
+                    <span ng-if="obj.orderType==1">{{obj.state}}</span>
+                    <span ng-if="obj.orderType==2">暂无</span>
+                </div>
+                <div class="col-md-12"><span>要件柜箱号：</span><span ng-bind="obj.boxNo"></span></div>
+            </div>
+        </div>
+        <!-- 订单基本信息 end -->
+
+        <!-- 剩余要件详情 start -->
+        <div ng-if="1==1">
+            <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;&nbsp;&nbsp;当前要件箱中的{{obj.thing}}</div>
+            <div class="text-l">
+            <div ng-if="obj.stillEle.eleFileRiskList">
+                <div class="col-md-12"><label>风控要件：</label></div>
+                <div ng-repeat="(index,ob) in obj.stillEle.eleFileRiskList" class="col-md-12 line26">
+                    <div class="col-md-1"><label>{{index +1 }}、{{ob.title }}</label></div>
+                    <div ng-repeat="o in ob.detailList" >
+                        <div class="small-w"><span>{{o.name}}：{{o.value}}</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="line" ng-if="obj.stillEle.eleFileRiskList&&obj.stillEle.eleFilePayList"/>
+            <div ng-if="obj.stillEle.eleFilePayList">
+                <div class="col-md-12"><label>回款要件：</label></div>
+                <div ng-repeat="(index,ob) in obj.stillEle.eleFilePayList" class="col-md-12 line26">
+                    <div class="col-md-1"><label>{{index +1 }}、{{ob.title }}</label></div>
+                    <div ng-repeat="o in ob.detailList" >
+                        <div class="small-w"><span>{{o.name}}：{{o.value}}</span></div>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="obj.stillEle.eleFileSealList">
+                <div class="col-md-12"><label>公章：</label></div>
+                <div ng-repeat="(index,ob) in obj.stillEle.eleFileSealList" class="col-md-12 line26">
+                    <div class="col-md-12"><label>{{index +1 }}、{{ob.title }}</label></div>
+                    <div ng-repeat="o in ob.detailList" >
+                        <div class="small-w"><span>{{o.name}}：{{o.value}}</span></div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div ng-show="obj.sealPicture">
+                <div class="col-md-12"><label>公章图片</label></div>
+                <div class="col-md-12" class="gallerys">
+                   <span class="gallerys">
+                       <img ng-repeat="item in obj.sealPicture track by $index" ng-src="{{item}}" class="gallery-pic" width="90" height="90" style="margin-right:10px">
+                   </span>
+                </div>
+            </div>
+            <div ng-show="obj.elsePicture">
+                <div class="col-md-12"><label>其他图片</label></div>
+                <div class="col-md-12" class="gallerys">
+                   <span class="gallerys">
+                       <img ng-repeat="item in obj.elsePicture track by $index" ng-src="{{item}}" class="gallery-pic" width="90" height="90" style="margin-right:10px">
+                   </span>
+                </div>
+            </div> -->
+            <div ng-if="!obj.stillEle">
+                <div class="col-md-12"><label>暂无{{obj.thing}}</label></div>
+            </div>
+        </div>
+        </div>
+        <!-- 剩余要件详情 end -->
+
+        <!-- 操作要件详情 start -->
+        <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;&nbsp;&nbsp;{{obj.handleOne}}</div>
+        <div class="text-l">
+
+            <div class="col-md-12">
+                <div class="col-md-3" style="width:350px" ng-if="obj.operationType==2"><span>申请人：</span><span ng-bind="obj.applierName"></span></div>
+                <div class="col-md-3" style="width:350px" ng-if="obj.operationType>7"><span>修改人：</span><span ng-bind="obj.currentHandler"></span></div>
+                <div class="col-md-3" style="width:350px" ng-if="obj.operationType<8"> <span>操作人：</span><span ng-bind="obj.currentHandler"></span></div>
+                <div class="col-md-3"><span>{{obj.handleThree}}时间：</span><span>{{obj.operationTime | date:'yyyy-MM-dd HH:mm'}}</span></div>
+                <div class="col-md-3" style="width:350px" ng-if="obj.operationType>7"> <span>修改对象：</span><a><span ng-click="goDetailHref()" ng-bind="obj.operationDetail.updateObject"></span></a></div>
+            </div>
+            <div class="col-md-12" ng-if="obj.operationType==1&&!obj.isSeal">
+                <div class="col-md-3" style="width:350px"><span>是否对公业务：</span>
+                    <span ng-if="obj.hasPublicBusiness==0">否</span>
+                    <span ng-if="obj.hasPublicBusiness==1">是</span>
+                </div>
+                <div class="col-md-3"><span>是否已收到风控要件：</span>
+                    <span ng-if="obj.hasRiskElement==0">否</span>
+                    <span ng-if="obj.hasRiskElement==1">是</span>
+                </div>
+            </div>
+            <div>
+            <div ng-if="obj.handleEle.eleFileRiskList&&obj.operationType<8">
+                <div class="line"/>
+                <div class="col-md-12"><label>{{obj.handleTwo}}风控要件：</label></div>
+                <div ng-repeat="(index,ob) in obj.handleEle.eleFileRiskList" class="col-md-12 line26">
+                    <div class="col-md-1"><label>{{index +1 }}、{{ob.title }}</label></div>
+                    <div ng-repeat="o in ob.detailList" >
+                        <div class="small-w"><span>{{o.name}}：{{o.value}}</span></div>
+                    </div>
+                </div>
+            </div>
+             <div ng-show="obj.riskPicture">
+                 <div class="col-md-12"><label>风控要件图片</label></div>
+                 <div class="col-md-12" class="gallerys">
+                    <span class="gallerys">
+                        <img ng-repeat="item in obj.riskPicture track by $index" ng-src="{{item}}" class="gallery-pic" width="90" height="90" style="margin-right:10px">
+                    </span>
+                 </div>
+             </div>
+            <div ng-if="obj.handleEle.eleFilePayList&&obj.operationType<8">
+                <div class="line"/>
+                <div class="col-md-12"><label>{{obj.handleTwo}}回款要件：</label></div>
+                <div ng-repeat="(index,ob) in obj.handleEle.eleFilePayList" class="col-md-12 line26">
+                    <div class="col-md-1"><label>{{index +1 }}、{{ob.title }}</label></div>
+                    <div ng-repeat="o in ob.detailList" >
+                        <div class="small-w"><span>{{o.name}}：{{o.value}}</span></div>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="obj.receivablePicture">
+                <div class="col-md-12"><label>回款要件图片</label></div>
+                <div class="col-md-12" class="gallerys">
+                   <span class="gallerys">
+                       <img ng-repeat="item in obj.receivablePicture track by $index" ng-src="{{item}}" class="gallery-pic" width="90" height="90" style="margin-right:10px">
+                   </span>
+                </div>
+            </div>
+            <div ng-if="obj.handleEle.eleFileSealList&&obj.operationType<8">
+                <div class="line"/>
+                <div class="col-md-12"><label>{{obj.handleTwo}}公章：</label></div>
+                <div ng-repeat="(index,ob) in obj.handleEle.eleFileSealList" class="col-md-12 line26">
+                    <div class="col-md-1"><label>{{index +1 }}、{{ob.title }}</label></div>
+                    <div ng-repeat="o in ob.detailList" >
+                        <div class="small-w"><span>{{o.name}}：{{o.value}}</span></div>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="obj.sealPicture">
+                <div class="col-md-12"><label>公章图片</label></div>
+                <div class="col-md-12" class="gallerys">
+                   <span class="gallerys">
+                       <img ng-repeat="item in obj.sealPicture track by $index" ng-src="{{item}}" class="gallery-pic" width="90" height="90" style="margin-right:10px">
+                   </span>
+                </div>
+            </div>
+            <!-- 修改前基本信息-->
+            <div ng-if="obj.operationType==12">
+            	<div class="line"/>
+                <div class="col-md-12"><label>修改前</label></div>
+                 <div class="col-md-12"><label>{{obj.handleTwo}}客户基本信息：</label></div>
+                <div class="col-md-12"><span>客户姓名：</span><span ng-bind="obj.operationDetail.beforeInfo.customerName"></span></div>
+                <div class="col-md-12"><span>渠道经理：</span><span ng-bind="obj.operationDetail.beforeInfo.channelManagerName"></span></div>
+                <div class="col-md-12"><span>受理员：</span><span ng-bind="obj.operationDetail.beforeInfo.acceptMemberName"></span></div>
+                <div class="col-md-12"><span>业务城市：</span><span ng-bind="obj.operationDetail.beforeInfo.cityName"></span></div>
+                <div class="col-md-12"><span>业务类型：</span><span ng-bind="obj.operationDetail.beforeInfo.creditType"></span></div>
+                <div class="col-md-12"><span>借款金额：</span><span ng-bind="obj.operationDetail.beforeInfo.borrowingAmount"></span>万</div>
+                <div class="col-md-12"><span>借款期限：</span><span ng-bind="obj.operationDetail.beforeInfo.borrowingDay"></span>天</div>
+            </div>
+             <!-- 修改后基本信息-->
+            <div ng-if="obj.operationType==12">
+            	<div class="line"/>
+                <div class="col-md-12"><label>修改后</label></div>
+                 <div class="col-md-12"><label>{{obj.handleTwo}}客户基本信息：</label></div>
+                <div class="col-md-12"><span>客户姓名：</span><span ng-bind="obj.operationDetail.afterInfo.customerName"></span></div>
+                <div class="col-md-12"><span>渠道经理：</span><span ng-bind="obj.operationDetail.afterInfo.channelManagerName"></span></div>
+                <div class="col-md-12"><span>受理员：</span><span ng-bind="obj.operationDetail.afterInfo.acceptMemberName"></span></div>
+                <div class="col-md-12"><span>业务城市：</span><span ng-bind="obj.operationDetail.afterInfo.cityName"></span></div>
+                <div class="col-md-12"><span>业务类型：</span><span ng-bind="obj.operationDetail.afterInfo.creditType"></span></div>
+                <div class="col-md-12"><span>借款金额：</span><span ng-bind="obj.operationDetail.afterInfo.borrowingAmount"></span>万</div>
+                <div class="col-md-12"><span>借款期限：</span><span ng-bind="obj.operationDetail.afterInfo.borrowingDay"></span>天</div>
+            </div>
+            
+            <!-- 修改前-->
+            <div ng-if="obj.operationType==8||obj.operationType==9">
+            	<div class="line"/>
+                <div class="col-md-12"><label>修改前</label></div>
+                 <div class="col-md-12"><label>{{obj.handleTwo}}风控要件：</label></div>
+                <div ng-repeat="(index,ob) in obj.operationDetail.beforeList" class="col-md-12 line26">
+                    <div class="col-md-1"><label>{{index +1 }}、{{ob.title }}</label></div>
+                    <div ng-repeat="o in ob.data" >
+                        <div class="small-w" ng-if="o.value!=null&&o.value!=''"><span>{{o.title}}：{{o.value}}</span></div>
+                    </div>
+                </div>
+            </div>
+             <!-- 修改后-->
+            <div ng-if="obj.operationType==8||obj.operationType==9">
+            	<div class="line"/>
+                <div class="col-md-12"><label>修改后</label></div>
+                 <div class="col-md-12"><label>{{obj.handleTwo}}风控要件：</label></div>
+                <div ng-repeat="(index,ob) in obj.operationDetail.afterList" class="col-md-12 line26">
+                    <div class="col-md-1"><label>{{index +1 }}、{{ob.title }}</label></div>
+                    <div ng-repeat="o in ob.data" >
+                        <div class="small-w" ng-if="o.value!=null&&o.value!=''"><span>{{o.title}}：{{o.value}}</span></div>
+                    </div>
+                    <div ng-show="ob.status==6" style="color:red;">(已修改)</div>
+                    <div ng-show="ob.status==7" style="color:red;">(已取消存入)</div>
+                    <div ng-show="ob.status==8" style="color:red;">(已取消归还)</div>
+                </div>
+            </div>
+            <!-- 修改前风控要件-->
+            <div ng-if="obj.operationType==10||obj.operationType==11">
+            	<div class="line"/>
+                <div class="col-md-12"><label>修改前</label></div>
+                 <div class="col-md-12"><label>{{obj.handleTwo}}回款要件：</label></div>
+                <div ng-repeat="(index,ob) in obj.operationDetail.beforeList" class="col-md-12 line26">
+                    <div class="col-md-1"><label>{{index +1 }}、{{ob.title }}</label></div>
+                    <div ng-repeat="o in ob.data" >
+                        <div class="small-w" ng-if="o.value!=null&&o.value!=''"><span>{{o.title}}：{{o.value}}</span></div>
+                    </div>
+                </div>
+            </div>
+             <!-- 修改后风控要件-->
+            <div ng-if="obj.operationType==10||obj.operationType==11">
+            	<div class="line"/>
+                <div class="col-md-12"><label>修改后</label></div>
+                 <div class="col-md-12"><label>{{obj.handleTwo}}回款要件：</label></div>
+                <div ng-repeat="(index,ob) in obj.operationDetail.afterList" class="col-md-12 line26">
+                    <div class="col-md-1"><label>{{index +1 }}、{{ob.title }}</label></div>
+                    <div ng-repeat="o in ob.data" >
+                        <div class="small-w" ng-if="o.value!=null&&o.value!=''"><span>{{o.title}}：{{o.value}}</span></div>
+                    </div>
+                    <div ng-show="ob.status==6" style="color:red;">(已修改)</div>
+                    <div ng-show="ob.status==7" style="color:red;">(已取消存入)</div>
+                    <div ng-show="ob.status==8" style="color:red;">(已取消归还)</div>
+                </div>
+            </div>
+            <!-- 修改前公章-->
+            <div ng-if="obj.operationType==13||obj.operationType==14">
+            	<div class="line"/>
+                <div class="col-md-12"><label>修改前</label></div>
+                 <div class="col-md-12"><label>{{obj.handleTwo}}公章：</label></div>
+                <div ng-repeat="(index,ob) in obj.operationDetail.beforeList" class="col-md-12 line26">
+                    <div class="col-md-1"><label>{{index +1 }}、{{ob.title }}</label></div>
+                    <div ng-repeat="o in ob.data" >
+                        <div class="small-w" ng-if="o.value!=null&&o.value!=''"><span>{{o.title}}：{{o.value}}</span></div>
+                    </div>
+                </div>
+            </div>
+             <!-- 修改后公章-->
+            <div ng-if="obj.operationType==13||obj.operationType==14">
+            	<div class="line"/>
+                <div class="col-md-12"><label>修改后</label></div>
+                 <div class="col-md-12"><label>{{obj.handleTwo}}公章：</label></div>
+                <div ng-repeat="(index,ob) in obj.operationDetail.afterList" class="col-md-12 line26">
+                    <div class="col-md-1"><label>{{index +1 }}、{{ob.title }}</label></div>
+                    <div ng-repeat="o in ob.data" >
+                        <div class="small-w" ng-if="o.value!=null&&o.value!=''"><span>{{o.title}}：{{o.value}}</span></div>
+                    </div>
+                    <div ng-show="ob.status==7" style="color:red;">(已取消存入)</div>
+                    <div ng-show="ob.status==8" style="color:red;">(已取消归还)</div>
+                </div>
+            </div>
+             <!-- 修改原因-->
+            <div ng-if="obj.operationType>7">
+            	<div class="line"/>
+                <div class="col-md-12"><label>修改原因</label></div>
+                <div class="col-md-12 line26" ng-if="obj.operationDetail.editReason">
+                    <span ng-if="obj.operationDetail.editReason">{{obj.operationDetail.editReason}}</span>
+                    <span ng-if="!obj.operationDetail.editReason">-</span>
+                </div>
+            </div>
+        </div>
+            <div ng-if="(obj.operationType==2||obj.operationType==6)&&obj.orderType==3">
+                <div class="line"/>
+                <div class="col-md-12">
+                    <label>借用原因</label>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-12 line26" ng-if="obj.fileToSeal"><span>用印文件名称：</span><span ng-bind="obj.fileToSeal"></span></div>
+                    <div class="col-md-12 line26" ng-if="obj.sealFileCount>0"><span>文件份数：</span>
+                        <span ng-if="obj.sealFileCount">{{obj.sealFileCount}}份</span>
+                        <span ng-if="!obj.sealFileCount">-</span>
+                    </div>
+                    <div class="col-md-12 line26" ng-if="obj.fileType"><span>文件类别：</span><span ng-bind="obj.fileType"></span></div>
+                    <div class="col-md-12 line26" ng-if="obj.reason"><span>补充说明：</span>
+                        <span ng-if="obj.reason">{{obj.reason}}</span>
+                        <span ng-if="!obj.reason">-</span>
+                    </div>
+                </div>
+               <div class="col-md-12">
+                    <label>文件图片</label>
+                </div>
+                <div class="col-md-12" class="gallerys">
+                   <span class="gallerys">
+                       <img ng-repeat="item in obj.fileImgUrl track by $index" ng-src="{{item}}" class="gallery-pic" width="90" height="90" style="margin-right:10px">
+                   </span>
+                </div>
+            </div>
+            <!-- <div class="col-md-12 line26" ng-if="obj.remark"><span>补充说明：</span>
+                <span ng-if="obj.remark">{{obj.remark}}</span>
+                <span ng-if="!obj.remark">-</span>
+            </div> -->
+            <div ng-if="obj.borrowDay">
+                <div class="line"/>
+                <div class="col-md-12"><span>借用时间：</span>
+                    <span ng-bind="obj.beginBorrowElementTime | date:'yyyy-MM-dd HH:mm'"></span>
+                    <span>至</span>
+                    <span ng-bind="obj.endBorrowElementTime | date:'yyyy-MM-dd HH:mm'"></span>
+                    <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;共</span>
+                    <span ng-bind="obj.borrowDay"></span>
+                    <span>小时</span>
+                </div>
+            </div>
+           <!--  <div ng-show="obj.pictureList">
+                <div class="line"/>
+                <div class="col-md-12"><label>{{obj.thing}}图片</label></div>
+                <div class="col-md-12" class="gallerys">
+                   <span class="gallerys">
+                       <img ng-repeat="item in obj.pictureList track by $index" ng-src="{{item}}" class="gallery-pic" width="90" height="90" style="margin-right:10px">
+                   </span>
+                </div>
+            </div> -->
+            <div ng-if="obj.remark">
+                <div class="line"/>
+                <div class="col-md-12">
+                    <label ng-if="obj.operationType!=2&&obj.operationType!=3&&obj.operationType!=6&&obj.operationType!=7">补充说明</label>
+                    <label ng-if="obj.operationType==2||obj.operationType==3||obj.operationType==6||obj.operationType==7">{{obj.thing}}借用原因</label>
+                </div>
+                <div class="col-md-12"><label ng-bind="obj.remark"></label></div>
+            </div>
+            <div ng-if="obj.flowList">
+                <div class="line"/>
+                <div class="col-md-12"><label>审批意见</label></div>
+                <div ng-repeat="item in obj.flowList" class="col-md-12" style="min-height:70px;position: relative;">
+                    <label style="position: absolute;left:0;width:70px;">
+                        <span  class="nameU"  ng-bind="item.auditorName|limitTo:-2"></span>
+                        <span  class="nameU2"  ng-bind="item.auditorName"></span>
+                    </label>
+                    <span class="r" ng-bind="item.remark"></span>
+                </div>
+            </div>
+        </div>
+        <!-- 操作要件详情 end -->
+    </div>
+    <div style="width:100%;height:60px;clear:both;"></div>
+</div>

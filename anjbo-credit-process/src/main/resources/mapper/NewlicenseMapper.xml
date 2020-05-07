@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.NewlicenseMapper">
+	
+	<select id="selectNewlicense" parameterType="NewlicenseDto" resultType="NewlicenseDto">
+	   select n.*, 
+	    DATE_FORMAT(n.newlicenseTime,'%Y-%m-%d') as newlicenseTimeStr,DATE_FORMAT(n.newlicenseStartTime,'%Y-%m-%d') as newlicenseStartTimeStr,DATE_FORMAT(n.newlicenseEndTime,'%Y-%m-%d') as newlicenseEndTimeStr,DATE_FORMAT(m.mortgageTime,'%Y-%m-%d') as mortgageTimeStr,
+	    m.mortgageTime,m.mlandBureauName,m.mlandBureau,m.mlandBureauUid,m.mlandBureauUserName from tbl_process_app_newlicense  n
+	   left join tbl_process_app_mortgage m on m.orderNo=n.orderNo
+	   where n.orderNo=#{orderNo}
+	</select>
+	
+	<insert id="addNewlicense" parameterType="NewlicenseDto" >
+	   INSERT INTO `tbl_process_app_newlicense` (
+	    `createUid`, `createTime`, `updateUid`, `orderNo`, `newlicenseTime`, `nlandBureau`, `newlicenseStartTime`, `newlicenseEndTime`, `nlandBureauUid`, `remark`,
+	    `newlicenseImg`,`nlandBureauName`,`nlandBureauUserName`
+	    ) VALUES (
+	     #{createUid}, now(), #{updateUid}, #{orderNo}, #{newlicenseTime}, #{nlandBureau}, #{newlicenseStartTime}, #{newlicenseEndTime}, #{nlandBureauUid}, #{remark},
+	     #{newlicenseImg},#{nlandBureauName},#{nlandBureauUserName}
+	    )
+	</insert>
+	<update id="updateNewlicense" parameterType="NewlicenseDto">
+	     update tbl_process_app_newlicense
+			set
+		    <if test="updateUid!= null and updateUid !='' " >
+        		updateUid = #{updateUid},
+      		</if>
+			<if test="newlicenseImg != null and newlicenseImg !=''" >
+        		newlicenseImg = #{newlicenseImg},
+      		</if>
+      		<if test="newlicenseStartTime != null " >
+        		newlicenseStartTime = #{newlicenseStartTime},
+      		</if>
+      		<if test="newlicenseEndTime != null" >
+        		newlicenseEndTime = #{newlicenseEndTime},
+      		</if>
+      		<if test="newlicenseTime != null" >
+        		newlicenseTime = #{newlicenseTime},
+      		</if>
+      		<if test="nlandBureauUid != null and nlandBureauUid!=''" >
+        		nlandBureauUid = #{nlandBureauUid},
+      		</if>
+      		<if test="nlandBureau != null and nlandBureau !=''"  >
+        		nlandBureau = #{nlandBureau},
+      		</if>
+      		<if test="nlandBureauName != null and nlandBureauName!=''" >
+        		nlandBureauName = #{nlandBureauName},
+      		</if>
+      		<if test="nlandBureauUserName != null and nlandBureauUserName!=''" >
+        		nlandBureauUserName = #{nlandBureauUserName},
+      		</if>
+      		<if test="remark!= null and remark !='' " >
+	        	remark = #{remark},
+	      	</if>
+		   orderNo=#{orderNo}
+		where orderNo =#{orderNo}
+	</update>
+</mapper>

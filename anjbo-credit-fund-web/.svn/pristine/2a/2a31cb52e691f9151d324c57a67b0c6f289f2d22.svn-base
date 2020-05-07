@@ -1,0 +1,150 @@
+
+<div class="container-flung-bind">
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="breadcrumb">
+                <li>
+                    <a>要件管理</a>
+                    <span class="divider"></span>
+                </li>
+                <li class="active">
+                    <a ui-sref="auditList">要件审批设置</a>
+                    <span class="divider"></span>
+                </li>
+                <li class="active" ng-if="isAdd">添加</li>
+                <li class="active" ng-if="!isAdd">编辑</li>
+                <a style="display:inline-block;float:right;padding-right: 10px;" ui-sref="auditList" >返回上一页</a>
+            </ul>
+        </div>
+    </div>
+    <form method="post" name="myForm" id="myForm" class="form-inline w145 detail-row borrowfrom-supplement">
+    <div class="row detail-row form-inline w" >
+        <!-- 新增 -->
+        <div ng-if="isAdd">
+            <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;城市选择</div>
+            <div class="col-md-12 col-lg-4">
+                <label>城市：</label>
+                <select class="form-control" name="city" ng-model="obj.city" style="width: 200px;" required>
+                    <option value="" >请选择</option>
+                    <option ng-repeat="item in cityList" value="{{item.cityName}}">{{item.cityName}}</option>
+                </select>
+                <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="myForm.city.$error.required">必选</error>
+		        </span>
+            </div>
+            <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;审批类型选择</div>
+            <div class="col-md-3">
+                <label>审批类型：</label>
+                <select class="form-control" name="type" ng-model="obj.type" style="width: 200px;" required>
+                    <option value="" >请选择</option>
+                    <option value="1" ng-repeat="item in typeList" ng-if="item==1" >要件审批（非业务流程借出）</option>
+                    <option value="2" ng-repeat="item in typeList" ng-if="item==2">要件审批（财务申请）</option>
+                    <option value="3" ng-repeat="item in typeList" ng-if="item==3" >公章审批</option>
+                    <option value="4" ng-repeat="item in typeList" ng-if="item==4" >业务流程借出</option>
+                </select>
+                <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="myForm.type.$error.required">必选</error>
+		        </span>
+            </div>
+            <div class="col-md-9" ng-show="!typeList"><span>温馨提示：该城市已设置好所有的审批类型，如需修改，请返回审批列表，选择对应城市的审批类型进行编辑</span></div>
+        </div>
+
+        <!-- 编辑 -->
+        <div ng-if="!isAdd">
+            <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;城市选择</div>
+            <div class="col-md-12 col-lg-4">
+                <label>城市：</label>
+                <span ng-bind="obj.city"></span>
+            </div>
+            <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;审批类型选择</div>
+            <div class="col-md-12">
+                <label>审批类型：</label>
+                <span ng-if="obj.type==1" >要件审批（非业务流程借出）</span>
+                <span ng-if="obj.type==2" >要件审批（财务申请）</span>
+                <span ng-if="obj.type==3" >公章审批</span>
+                <span ng-if="obj.type==4" >业务流程借出</span>
+            </div>
+        </div>
+
+        <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;审批设置&nbsp;&nbsp;（注意：至少设置一级审批人，最多设置五级）</div>
+        <div class="shenpi-box">
+            <span class="tip" style="width: 110px;text-align: right;padding-right: 10px">默认审批人：</span>
+            <span class="shenpi-ins"></span>
+            <img src="/images/yjg/add.png" ng-click="openYjg(openIndex)" class="shenpi-img" ng-if="ifAdd">
+
+            <input class="ng-hide" name="degree1" ng-model="approve[0]" required>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="myForm.degree1.$error.required">必选</error>
+            </span>
+        </div>
+        <div class="shenpi-box">
+            <span class="tip" style="width: 110px;text-align: right;padding-right: 10px">默认抄送人：</span>
+            <span class="shenpi-ins2"></span>
+            <img src="/images/yjg/add.png" ng-click="openYjg(openIndex,2)" class="shenpi-img" ng-if="ifCC2">
+
+            <input class="ng-hide" name="other" ng-model="CC[0]" required>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="myForm.other.$error.required">必选</error>
+            </span>
+        </div>
+    </div>
+
+    <div class="col-md-12">
+        <label>
+            <button type="button" class="btn btn-primary"
+                    ng-click="save((!isAdd||(myForm.city.$valid && myForm.type.$valid))&&(myForm.degree1.$valid && myForm.other.$valid))">
+                <span ng-if="isAdd" >提交</span>
+                <span ng-if="!isAdd" >保存</span>
+            </button>
+        </label>
+    </div>
+    </form>
+</div>
+
+<!-- 弹出代码 -->
+<div class="yjg-alert">
+    <div class="black-bg"></div>
+    <div class="yjg-alert-box">
+        <div class="x-box" ng-click="closeYjg()"></div>
+        <div class="tit">添加审批人</div>
+        <div class="tip" ng-if="!ifCC">审批角色名称：<input type="text" class="yjg-name" id="shenpiRole">  <span> 如：直属经理</span></div>
+        <div class="tip2"><span>请选择</span> 已选择</div>
+        <div class="left">
+            <div class="search"><span></span><input type="text" class="tan-input" ng-change="searchUser()" ng-model="searchKey"></div>
+            <div class="nav" id="yjg-nav">
+                <ul>
+                    <li ng-repeat="x in depA">
+                        <p ng-click="getUser($event,x.id)"><span class="arrow"></span><span class="doc"></span>{{x.name}}({{x.userCount}})</p>
+                        <ul>
+                            <li ng-repeat="y in x.menu">
+                                <p ng-click="getUser($event,y.id)"><span class="arrow"></span><span class="doc"></span>{{y.name}}({{y.userCount}})</p>
+                                <ul>
+                                    <li ng-repeat="z in y.menu">
+                                        <p ng-click="getUser($event,z.id)"><span class="arrow"></span><span class="doc"></span>{{z.name}}({{z.userCount}})</p>
+                                        <ul>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <div class="nav" id="yjg-nav2" style="display:none;"><ul></ul></div>
+        </div>
+        <div class="left">
+            <div class="nav2">
+                <ul>
+                    <li ng-repeat="m in approveA">{{m.name}}<span ng-click="delApprove(m.uid)">X</span></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="tip3">温馨提示：请从左侧列表中选择审批人。</div>
+        <div class="bottom">
+            <a class="ok fl" ng-click="okYjg()">确定</a>
+            <a class="cancel fr" ng-click="closeYjg()">取消</a>
+        </div>
+    </div><!-- yjg-alert-box -->
+</div><!-- yjg-alert -->
+<!-- 弹出代码 end-->

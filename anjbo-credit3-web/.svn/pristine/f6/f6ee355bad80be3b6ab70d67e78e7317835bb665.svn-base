@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+		<meta name="keywords" content="" />
+		<meta name="description" content="" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta name="robots" content="index, follow" />
+		<meta name="googlebot" content="index, follow" />
+
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=8,IE=9,IE=10" />
+
+		<meta http-equiv="expires" content="0">
+		<meta http-equiv="pragma" content="no-cache">
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="cache-control" content="no-store">
+
+		<!-- uc强制竖屏 -->
+		<meta name="screen-orientation" content="portrait">
+		<!-- QQ强制竖屏 -->
+		<meta name="x5-orientation" content="portrait">
+		<title>借要件审批详情</title>
+		<link rel="stylesheet" href="../other/aui/css/aui.2.0.css" />
+		<link rel="stylesheet" href="../css/common.css" />
+	 
+  
+		<style>
+			div#approDocDetailCtrl {
+				position: absolute;
+				width: 100%;
+				min-height: 100%;
+				font-size: .8rem;
+				color: #555;
+				background: #f1f1f1;
+			}
+			
+			div#approDocDetailCtrl div.headerPart {
+				position: relative;
+				margin-top: .5rem;
+				background: #fff;
+			}
+			
+			div#approDocDetailCtrl div.headerPart>div:nth-child(1) {
+				position: relative;
+				padding: .75rem;
+				border-bottom: 1px solid #e6e6e6;
+			}
+			
+			div#approDocDetailCtrl div.headerPart>div:nth-child(1) p {
+				padding-left: 2rem;
+			}
+			
+			div#approDocDetailCtrl div.headerPart>div:nth-child(1) span {
+				position: absolute;
+				left: .75rem;
+				top: 1rem;
+				width: 1.5rem;
+				height: 1.5rem;
+			}
+			
+			div#approDocDetailCtrl div.headerPart>div:nth-child(1) span img {
+				width: 100%;
+				height: auto;
+			}
+			
+			div#approDocDetailCtrl div.headerPart>div:nth-child(2) {
+				padding: .5rem 0 .6rem;
+			}
+			
+			div#approDocDetailCtrl div.headerPart>div:nth-child(2) p {
+				padding-left: 2.75rem;
+			}
+			
+			div#approDocDetailCtrl div.headerPart>span {
+				position: absolute;
+				display: block;
+				width: 5rem;
+				height: 4.1rem;
+				top: .75rem;
+				right: 1rem;
+				top: .5rem;
+			}
+			
+			div#approDocDetailCtrl div.headerPart>span.fail_icon {
+				background: url(../img/approval_fail.png)no-repeat center center;
+				background-size: 100% auto;
+			}
+			div#approDocDetailCtrl div.headerPart>span.cx_icon {
+				background: url(../img/cx.png)no-repeat center center;
+				background-size: 100% auto;
+			}
+			
+			div#approDocDetailCtrl div.headerPart>span.succ_icon {
+				background: url(../img/approval_succ.png)no-repeat center center;
+				background-size: 100% auto;
+			}
+			
+			div#approDocDetailCtrl>div.contentPart {
+				margin-top: .5rem;
+				padding: 0;
+				background: #fff;
+				font-size: .8rem;
+			}
+			
+			div#approDocDetailCtrl>div.contentPart>div:nth-child(1) {
+				padding: .75rem;
+				border-bottom: 1px solid #e6e6e6;
+				font-size: .75rem;
+			}
+			
+			div#approDocDetailCtrl>div.contentPart>div:nth-child(2) {
+				padding: 0 .75rem;
+			}
+			
+			div#approDocDetailCtrl>div.contentPart>div:nth-child(2)>div {
+				border-bottom: 1px solid #e6e6e6;
+			}
+			
+			div#approDocDetailCtrl>div.contentPart>div:nth-child(2)>div:last-child {
+				border: 0;
+			}
+			
+			div#approDocDetailCtrl>div.contentPart>div:nth-child(2)>div p {
+				position: relative;
+				padding-top: .5rem;
+				padding-left: .75rem;
+			}
+			
+			div#approDocDetailCtrl>div.contentPart>div:nth-child(2)>div p span {
+				position: absolute;
+				display: block;
+				width: .2rem;
+				height: .8rem;
+				top: .7rem;
+				left: 0;
+				background: #0cbbd3;
+			}
+			
+			div#approDocDetailCtrl>div.contentPart>div:nth-child(2)>div p>font:nth-child(1) {
+				display: inline-block;
+				min-width: 4rem;
+			}
+			
+			div#approDocDetailCtrl>div.contentPart>div:nth-child(2)>div p:last-child {
+				padding-bottom: .5rem;
+			}
+			
+			div#approDocDetailCtrl div.cell {
+				color: #555;
+				position: relative;
+				padding: 0 .75rem;
+				border-bottom: 1px solid #e6e6e6;
+			}
+			
+			div#approDocDetailCtrl div.cell>span {
+				display: block;
+				position: absolute;
+				left: .75rem;
+				width: 1rem;
+				height: 1rem;
+				border: 1px solid #cbc9c9;
+				border-radius: .5rem;
+			}
+			
+			div#approDocDetailCtrl div.cell>div {
+				margin-left: 1.75rem;
+				border-left: 2px solid #f0f0e5;
+			}
+			
+			div#approDocDetailCtrl div.cell p {
+				padding: .5rem 0 .5rem 1rem;
+			}
+			
+			div#approDocDetailCtrl div.cell p>font:nth-child(1) {
+				display: inline-block;
+				min-width: 3.75rem;
+			}
+			
+			div#approDocDetailCtrl div.cell p span {
+				display: inline-block;
+				top: .2rem;
+				position: relative;
+				width: .2rem;
+				height: .8rem;
+				background: #0cbbd3;
+				margin-right: .5rem;
+			}
+			
+			div#approDocDetailCtrl div.userList {
+				font-size: .75rem;
+				padding-bottom: 2rem !important;
+			}
+			
+			div#approDocDetailCtrl div.userList>div {
+				position: relative;
+				padding: .6rem 0rem .6rem 1.9rem;
+				border-bottom: 0 !important;
+			}
+			
+			div#approDocDetailCtrl div.userList>div:nth-child(1) {
+				margin-top: .6rem;
+			}
+			
+			div#approDocDetailCtrl div.userList>div>span {
+				position: absolute;
+				left: 0;
+				top: .4rem;
+			}
+			
+			div#approDocDetailCtrl div.userList>div>span>img {
+				width: 1.5rem;
+				height: 1.5rem;
+			}
+			
+			div#approDocDetailCtrl div.userList>div font {
+				margin-right: .6rem;
+			}
+			
+			div#approDocDetailCtrl div.btn-group {
+				border-top: 1px solid #e6e6e6;
+			}
+			
+			div#approDocDetailCtrl div.btn-group>span {
+				width: 33.3%;
+				float: left;
+				margin: .5rem 0;
+			}
+			
+			div#approDocDetailCtrl div.btn-group>span:nth-child(2) {
+				border-left: 1px solid #e6e6e6;
+				border-right: 1px solid #e6e6e6;
+			}
+			
+			div#approDocDetailCtrl div.userInfo>div {
+				width: 100%;
+				height: 1.6rem;
+			}
+			
+			div#approDocDetailCtrl div.userInfo>div>img {
+				width: 1.6rem;
+				height: 1.6rem;
+				border-radius: .8rem;
+			}
+			div#approDocDetailCtrl div.dis>p {
+				color:#DCDCDC;
+			}
+			div#approDocDetailCtrl div.contentPart>div:nth-child(2)>div.dis>p>span {
+				background:#DCDCDC;
+			}
+			#tiaozhuanbut div,#twobut{
+				line-height:60px;
+				text-align:center;
+				color:#0cbbd3;
+				font-size:15px;
+				width:100%;
+			}
+			#twobut{
+				display: flex;
+					justify-content:center;
+			}
+			#twobut span{
+				flex:1;
+			}
+			div#approDocDetailCtrl div.contentPart>div:nth-child(2)>div.dis>p>span{
+					background:transparent;
+					border:.05rem solid #dcdcdc; 
+			}
+			div#approDocDetailCtrl div.contentPart>div:nth-child(2)>div p span{
+				width:.75rem;
+				height:.75rem;
+				border-radius:50%;
+				top:.65rem;
+				left:-0.3rem;
+				background: url(../img/choice.png) no-repeat center center;
+        background-size: 100% auto;
+			}
+			.line-box{
+				line-height:2rem;
+				padding:0 !important;
+			}
+			.line-box b{
+				display: block;
+				font-weight: normal;
+				float:right;
+			}
+			.yanchang{
+				display:none;
+			}
+		
+		</style>
+<!-- 		<script type="text/javascript">
+			function browserRedirect() {
+                if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {  
+				    //alert("iphone!");    
+				} else if (/(Android)/i.test(navigator.userAgent)) {  
+				    //alert("andriod");   
+				} else {  
+				    document.write('<div style="background:lightgrey;position:fixed;height:100%;width:100%;">请在app或钉钉手机客户端打开该页面!</div>');
+                	if (!!(window.attachEvent && !window.opera)) { 
+                		document.execCommand("stop"); 
+                	} else { 
+                		window.stop(); 
+                	}  
+				};  
+            }
+            browserRedirect(); 
+		</script> -->
+	</head>
+
+	<body>
+		<div id="approDocDetailCtrl">
+			<div class="headerPart">
+				<div>
+					<p style="font-size: .75rem;">
+						<font id="applierName"></font>
+					</p>
+					<p style="font-size: .6rem;padding-top: .25rem;">
+						<font class="color_999" id="myState"></font>
+					</p>
+
+					<span class="heafImgContainer" id="applierHead">
+						<font class="no_img"></font>
+					</span>
+				</div>
+				<div>
+					<p>
+						客户姓名
+						<font  style="padding-left:2rem" id="customerName"></font>
+					</p>
+				</div>
+				<!--图标状态  class :  succ_icon 成功    fail_icon 拒绝 -->
+			</div>
+
+			<div class="contentPart" id="riskElementsContainer">
+				<div>申请借用的风控要件</div>
+				<div id="riskElements">
+					<!-- 风控要件 -->
+				</div>
+			</div>
+
+			<div class="contentPart" id="receivableElementContainer">
+				<div>申请借用的回款要件</div>
+				<div id="receivableElements">
+
+					<!-- 回款要件 -->
+
+				</div>
+			</div>
+
+			<div class="contentPart">
+						<div id="timetit">要件借用时间</div>
+						<div class="cell">
+								 <p class="line-box">开始时间<b id="startTime"></b></p>
+						</div>
+						<div class="cell">
+								<p class="line-box">结束时间<b id="endTime"></b></p>
+						</div>
+						<div class="cell">
+								<p class="line-box">借用时长<b id="borrowDay"></b></p>
+						</div>
+			</div>
+
+			<div class="contentPart">
+				<div id="timetit2">要件借用原因</div>
+				<div class="cell">
+					<div style="border: 0;margin: 0;padding: .5rem 0;">
+						<span id="reason" style="font-size: .75rem;"><font class="color_999">该申请未填写原因!</font></span>
+					</div>
+				</div>
+			</div>
+			
+			<div class="contentPart">
+				<div id="timetit3">审批意见</div>
+				<div class="userList" id="auditors">
+					<!-- 审批人列表 -->
+				</div>
+			</div>
+			
+			<!--延长借用时间-->
+			<div class="contentPart yanchang">
+						<div id="timetit">新要件借用时间</div>
+						<div class="cell">
+								<p class="line-box">开始时间<b id="startTime2"></b></p>
+						</div>
+						<div class="cell">
+								<p class="line-box">结束时间<b id="endTime2"></b></p>
+						</div>
+						<div class="cell">
+								<p class="line-box">借用时长<b id="borrowDay2"></b></p>
+						</div>
+			</div>
+			<div class="contentPart yanchang">
+						<div id="timetit2">延长要件借用时间的原因</div>
+						<div class="cell">
+							<div style="border: 0;margin: 0;padding: .5rem 0;">
+								<span id="reason2" style="font-size: .75rem;"><font class="color_999">该申请未填写原因!</font></span>
+							</div>
+						</div>
+			</div>
+			<div class="contentPart yanchang">
+				<div>审批意见</div>
+				<div class="userList" id="auditors3">
+					<!-- 审批人列表 -->
+				</div>
+			</div>
+			<!--延长借用时间end-->
+			
+			
+			
+      
+		
+
+			<div class="contentPart" id="copyContainer">
+				<div>抄送人 <span style="font-size:12px;display:inline-block;padding-left:10px;color:#999;">审批通过后，通知抄送人</span></div>
+
+				<div class="cell text_center">
+					<div style="border: 0;margin: 0;">
+						<div class="aui-row" style="padding: .75rem 0;" id="copyList">
+							<!-- 抄送人 -->
+						</div>
+					</div>
+				</div>
+			</div>
+			<div id="auditors2"></div>
+			<div id="tiaozhuanbut"></div>
+			<div id="twobut"></div>
+		</div>
+		
+
+<!--
+	<script src="../js/zepto.min.js"></script> 
+	<script src="../js/common.js?1.0"></script>
+	<script src="../js/aui-dialog.js"></script>
+	<script src="../js/approval_doc_detail.js?1.10"></script>
+-->
+<script src="../build/approval_doc.js"></script>
+</body>	
+</html>

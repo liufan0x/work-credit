@@ -1,0 +1,99 @@
+<style>
+.form-inline.w165 label {width: 170px;}
+</style>
+<div class="container-fluid">
+	<!--
+    	作者：lic@anjbo.com
+    	时间：2017-08-31
+    	描述：标题
+    -->
+	<div class="row">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;
+			<span ng-bind="pageConfigDto.title + '详情'"></span>
+			<span ng-if="isEdit" class="detail-trash2 text-danger" ng-click="deleteDetail({processName:processName})" >隐藏</span>
+			<span ng-if="!isEdit" class="detail-trash2" ng-click="goBack()" >返回上一步</span>
+		</div>
+	</div>
+	
+	<!--
+    	作者：lic@anjbo.com
+    	时间：2017-08-31
+    	描述：标签
+    -->
+	<div class="row" ng-if="pageConfigDto.type == 1" >
+		<div class="col-md-12">
+			<ul class="nav nav-tabs">
+				<li ng-repeat="pageTabConfig in pageConfigDto.pageTabConfigDtos track by $index" ng-class="{'active':showView==pageTabConfig.title}" >
+					<a ng-click="changeView(pageTabConfig)" ng-bind="pageTabConfig.title"></a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	<!--
+    	作者：lic@anjbo.com
+    	时间：2017-08-18
+    	描述：详情字段
+    -->
+	<form method="post" class="form-inline w165 detail-row">
+		<span ng-show="pageTabConfigDto.isShow" ng-bind-html="pageTabConfigDto.showText"></span>
+		<div ng-repeat="pageTabRegionConfig in pageTabConfigDto.pageTabRegionConfigDtos" ng-show="!pageTabConfigDto.isShow">
+			<div class="col-md-12 detail-right-tit ">
+				&nbsp;&nbsp;<span ng-bind="pageTabRegionConfig.title"></span>
+				<span ng-if="$index==0" >&nbsp;&nbsp;<span ng-bind-html="pageTabConfigDto.remarks"></span></span>
+			</div>
+			<div ng-repeat="formList in pageTabRegionConfig.valueList">
+				<div ng-if="pageTabRegionConfig.type==2" class="col-md-12 danbao-tit">&nbsp;&nbsp; {{pageTabRegionConfig.title}}（<span class="num-box" ng-bind="$index+1"></span>）</div>
+				<form-list ng-repeat="m in formList">
+					
+					<div ng-if="m.type != 1000 && m.type != 1008" ng-class="{'col-md-12 col-lg-12':m.col==3 , 'col-md-6 col-lg-8':m.col==2,'col-md-6 col-lg-4':m.col==1 }">
+						
+						<!-- 表单标题: -->
+						<label ng-if="m.type == 6 && !m.isHide" style="text-align:right; line-heigth:44px; position:absolute; letf:0;top:0;">
+							<span ng-bind="m.title + '：'"></span>
+						</label>
+						
+						<label ng-if="m.type != 6 && !m.isHide">
+							<span ng-bind="m.title + '：'"></span>
+						</label>
+						<!-- 单位 -->
+						
+						<type5 ng-if="m.type == 5 && !m.isHide ">
+							<span class="chakan-img gallerys">
+								<list ng-repeat="imgMap in m.dataList">
+									<span class="gallery-pic-img" title="{{imgMap}}" ng-show="$index==0"></span>
+								</list>
+								<span ng-if="m.dataList.length>0">({{m.dataList.length}})</span>
+							</span>
+						</type5>
+						
+						
+						<type6 ng-if="m.type == 6 && !m.isHide">
+							<textarea  ng-bind="m.showValue" class="remark-p remark-lhw-p textarea-lhw" readonly="true" style="margin-left:165px;"></textarea>
+						</type6>
+						<span ng-if></span>
+						
+						<span ng-if="m.type != 5 && m.type != 6 && m.type != 1000 && !m.isHide" ng-bind="m.showValue"></span>
+						
+						<span class="a-span" ng-if="!m.isHide" ng-bind="m.single"></span>
+						
+					</div>
+					<div ng-if="m.type != 1000 && m.type != 1008 && m.type != 6 && !m.isHide && m.title=='净值（扣全税）'" ng-class="{'col-md-12 col-lg-12':m.col==3 , 'col-md-6 col-lg-8':m.col==2,'col-md-6 col-lg-4':m.col==1 }">
+					     <label>
+							<span> &nbsp;&nbsp;</span>
+						</label>
+					</div>
+					<special-type1000 ng-if="m.type==1000 && !m.isHide" >
+								
+					</special-type1000>
+					<div style="margin-left:565px;">
+					<special-type1008 ng-if="m.type==1008 && !m.isHide" >
+					
+					</special-type1008>
+					</div>
+				</form-list>
+			</div>
+		</div>
+	</form>
+	
+</div>

@@ -1,0 +1,40 @@
+<button type="button" class="btn btn-primary" ng-click="selectRepaymentPlan(true)">查看还款计划</button>
+
+<div class="lhw-alert-bg" ng-show="showPlay">
+<div class="lhw-alert-box" style="width:605px">
+<div class="lhw-alert-tit relative">还款计划<span class="x-box" ng-click="showPlay=false"></span></div>
+<div class="lhw-alert-con">
+	<div class="row">
+	  <div class="col-md-12">
+		<div class="tan-word-all" ng-if="play.monthlyPayments>0">
+			<div style="margin-left: 50px;float: left;"><p>· 贷款总额：{{play.total}}万元<br>· 还款月数：{{play.months}}个月<br>· 每月月供：{{play.monthlyPayments}}元</p></div>
+			<div style="margin-left: 120px;float: left;"><p>· 还款总额：{{play.totalRefund}}万元<br>· 利息总额：{{play.totalInterest}}万元<br>· 商贷利率：{{play.syRates}}%</p></div>
+		</div>
+		<div class="tan-word-all" ng-if="play.monthlyPrincipal>0">
+			<div style="margin-left: 50px;float: left;"><p>· 贷款总额：{{play.total}}万元<br>· 还款月数：{{play.months}}个月<br>· 每月本金：{{play.monthlyPrincipal}}元</p></div>
+			<div style="margin-left: 120px;float: left;"><p>· 还款总额：{{play.totalRefund}}万元<br>· 利息总额：{{play.totalInterest}}万元<br>· 商贷利率：{{play.syRates}}%</p></div>
+		</div>
+		<div class="tan-data" style="height: 300px;overflow-y: scroll;width: 95%;margin: 10px auto;">
+			<table style="width:100%" class=" table table-hover table-striped">
+				<thead>
+					<tr class="tb-title">
+						<th>期次</th>
+						<th>偿还利息</th>
+						<th>偿还本金</th>
+						<th>还款额</th>
+						<th>剩余本金</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="l in play.totalInfos">
+						<td ng-bind="l.indexDate"></td>
+						<td ng-bind="l.monthlyInterest"></td>
+						<td ng-bind="l.monthlyPrincipal"></td>
+						<td ng-bind="l.monthlyPayments"></td>
+						<td ng-bind="l.remainder"></td>
+					</tr>
+				</tbody>
+			</table>
+	      </div>
+		</div>
+	</div>

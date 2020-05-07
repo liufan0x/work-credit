@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.anjbo.dao.CustomerAgencyFeescaleDetailMapper">	
+	<!-- where条件引用sql-->
+	<sql id="customerAgencyFeescaleDetailWhereSQL">
+		<where>
+	       		<if test="feescaleid != null and feescaleid > 0">
+					and `feescaleid` = #{feescaleid}
+				</if>
+	       		<if test="raskcontrolid != null and raskcontrolid > 0">
+					and `raskcontrolid` = #{raskcontrolid}
+				</if>
+	       		<if test="sectionid != null and sectionid > 0">
+					and `sectionid` = #{sectionid}
+				</if>
+	       		<if test="field != null and field > 0">
+					and `field` = #{field}
+				</if>
+	       		<if test="maxfield != null and maxfield > 0">
+					and `maxfield` = #{maxfield}
+				</if>
+	       		<if test="rate != null and rate > 0">
+					and `rate` = #{rate}
+				</if>
+	       		<if test="overduerate != null and overduerate > 0">
+					and `overduerate` = #{overduerate}
+				</if>
+	       		<if test="modeid != null and modeid > 0">
+					and `modeid` = #{modeid}
+				</if>
+	       		<if test="createTime != null">
+					and `createTime` = #{createTime}
+				</if>
+	       		<if test="updateTime != null">
+					and `updateTime` = #{updateTime}
+				</if>
+	       		<if test="createUid != null and createUid != ''">
+					and `createUid` = #{createUid}
+				</if>
+	       		<if test="updateUid != null and updateUid != ''">
+					and `updateUid` = #{updateUid}
+				</if>
+	       		<if test="remark != null and remark != ''">
+					and `remark` = #{remark}
+				</if>
+		</where>
+	</sql>
+	<!-- 获取收费标准详细列表-->
+	<select id="selectCustomerAgencyFeescaleDetailList" parameterType="customerAgencyFeescaleDetailDto" resultType="customerAgencyFeescaleDetailDto">
+		select * from tbl_customer_agency_feescale_detail 
+		<include refid="customerAgencyFeescaleDetailWhereSQL" />
+		<if test="pageSize>0">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	
+	<!-- 获取收费标准详细总数-->
+	<select id="selectCustomerAgencyFeescaleDetailCount" parameterType="customerAgencyFeescaleDetailDto" resultType="int">
+		select count(*) from tbl_customer_agency_feescale_detail 
+		<include refid="customerAgencyFeescaleDetailWhereSQL" />
+	</select>	
+		
+	<!-- 新增收费标准详细-->
+	<insert id="addCustomerAgencyFeescaleDetail" parameterType="customerAgencyFeescaleDetailDto" useGeneratedKeys="true" keyProperty="id">
+		insert	into tbl_customer_agency_feescale_detail(
+			<trim suffixOverrides=",">
+				<if test="feescaleid != null">`feescaleid`,</if>
+				<if test="raskcontrolid != null">`raskcontrolid`,</if>
+				<if test="sectionid != null">`sectionid`,</if>
+				<if test="field != null">`field`,</if>
+				<if test="maxfield != null">`maxfield`,</if>
+				<if test="rate != null">`rate`,</if>
+				<if test="overduerate != null">`overduerate`,</if>
+				<if test="modeid != null">`modeid`,</if>
+				<if test="createTime != null">`createTime`,</if>
+				<if test="updateTime != null">`updateTime`,</if>
+				<if test="createUid != null">`createUid`,</if>
+				<if test="updateUid != null">`updateUid`,</if>
+				<if test="remark != null">`remark`,</if>
+			</trim>
+		)
+		values(	
+			<trim suffixOverrides=",">
+				<if test="feescaleid != null">#{feescaleid},</if>
+				<if test="raskcontrolid != null">#{raskcontrolid},</if>
+				<if test="sectionid != null">#{sectionid},</if>
+				<if test="field != null">#{field},</if>
+				<if test="maxfield != null">#{maxfield},</if>
+				<if test="rate != null">#{rate},</if>
+				<if test="overduerate != null">#{overduerate},</if>
+				<if test="modeid != null">#{modeid},</if>
+				<if test="createTime != null">#{createTime},</if>
+				<if test="updateTime != null">#{updateTime},</if>
+				<if test="createUid != null">#{createUid},</if>
+				<if test="updateUid != null">#{updateUid},</if>
+				<if test="remark != null">#{remark},</if>
+			</trim>
+		)
+	</insert>
+	
+	<!-- 修改收费标准详细-->
+	<update id="updateCustomerAgencyFeescaleDetail" parameterType="customerAgencyFeescaleDetailDto" >
+	 update tbl_customer_agency_feescale_detail
+	<set> 
+			<trim suffixOverrides=",">
+				<if test="feescaleid != null">`feescaleid` = #{feescaleid},</if>
+				<if test="raskcontrolid != null">`raskcontrolid` = #{raskcontrolid},</if>
+				<if test="sectionid != null">`sectionid` = #{sectionid},</if>
+				<if test="field != null">`field` = #{field},</if>
+				<if test="maxfield != null">`maxfield` = #{maxfield},</if>
+				<if test="rate != null">`rate` = #{rate},</if>
+				<if test="overduerate != null">`overduerate` = #{overduerate},</if>
+				<if test="modeid != null">`modeid` = #{modeid},</if>
+				<if test="createTime != null">`createTime` = #{createTime},</if>
+				<if test="updateTime != null">`updateTime` = #{updateTime},</if>
+				<if test="createUid != null">`createUid` = #{createUid},</if>
+				<if test="updateUid != null">`updateUid` = #{updateUid},</if>
+				<if test="remark != null">`remark` = #{remark},</if>
+			</trim>
+	</set> 
+	 where id = #{id}
+	</update>
+
+	<!-- 根据ID删除收费标准详细-->
+    <delete id="deleteCustomerAgencyFeescaleDetailById" parameterType="int">
+		delete	from tbl_customer_agency_feescale_detail where id = #{0}
+    </delete>
+
+	<!-- 根据收费标准ID删除收费标准详细-->
+    <delete id="deleteCustomerAgencyFeescaleDetailByFeescaleId" parameterType="int">
+		delete	from tbl_customer_agency_feescale_detail where feescaleid = #{0}
+    </delete>
+
+	<delete id="deleteCustomerAgencyFeescaleDetailByFeescaleIds" parameterType="java.lang.String">
+		delete	from tbl_customer_agency_feescale_detail where feescaleid in (${feescaleids})
+	</delete>
+
+	<!-- 根据ID查询收费标准详细 -->
+	<select id="selectCustomerAgencyFeescaleDetailById" parameterType="int" resultType="customerAgencyFeescaleDetailDto">
+		select	* from tbl_customer_agency_feescale_detail where id = #{0}
+	</select>
+	
+</mapper>

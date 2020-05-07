@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.huarong.KgIndivMapper" >
+ <select id="getKgIndiv" parameterType="String" resultType="map">  
+         select * from  tbl_third_hr_kg_indiv  where  orderNo=#{orderNo} order by id DESC limit 0,1
+    </select> 
+	<!-- 添加订单共同担保人信息 -->
+	<insert id="saveKgIndiv" parameterType="Map">
+		INSERT INTO tbl_third_hr_kg_indiv  (
+			applSeq,
+			orderNo,
+			custName,
+			docType,
+			docNo,
+			mobile,
+			marStatus,
+			sCustName,
+			sDocType,
+			sDocNo,
+			sMobile,
+			sMarStatus,
+			cardLife,
+			totalPremises,
+			totalCredit,
+			debtRatio,
+			overdueCredit,
+			yIsBank,
+			loanYear,
+			houseNum,
+			quotaUsed,
+			loanAmount,
+			creditFindNum,
+			xIsBank,
+			defaultRate,
+			overdraft,
+			totalCreditLia,
+			foreclosureRate,
+			companyRight,
+			rightMortgage,
+			remark
+
+		)
+		VALUES
+		(
+			#{applSeq},
+			#{orderNo},
+			#{custName},
+			#{docType},
+			#{docNo},
+			#{mobile},
+			
+			
+			#{marStatus},
+			#{sCustName},
+			#{sDocType},
+		
+		
+			#{sDocNo},
+			#{sMobile},
+			#{sMarStatus},
+			
+			
+			#{cardLife},
+			#{totalPremises},
+			#{totalCredit},
+			
+			
+			#{debtRatio},
+			#{overdueCredit},
+			#{yIsBank},
+		
+		
+			#{loanYear},
+			#{houseNum},
+			#{quotaUsed},
+	
+	
+			#{loanAmount},
+			#{creditFindNum},
+			#{xIsBank},
+	
+	
+			#{defaultRate},
+			#{overdraft},
+			#{totalCreditLia},
+			
+			#{foreclosureRate},
+			#{companyRight},
+			#{rightMortgage},
+			#{remark}
+	
+		)
+	</insert>
+	
+</mapper>

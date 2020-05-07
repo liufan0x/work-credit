@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.OrderBaseHousePurchaserMapper" >
+	<!-- 添加订单买房人信息 -->
+	<insert id="saveOrderBaseHousePurchaser" parameterType="OrderBaseHousePurchaserDto">
+		INSERT INTO tbl_order_base_house_purchaser (
+			createUid,
+			createTime,
+			orderNo,
+			buyName,
+			buyPhoneNumber,
+			buyMarriageState,
+			buyCardNumber,
+			buyCardType,
+			<if test="isFinish != null and isFinish > 0">
+			isFinish,
+			</if>
+			sort
+		)
+		VALUES
+		(
+			#{createUid},
+			now(),
+			#{orderNo},
+			#{buyName},
+			#{buyPhoneNumber},
+			#{buyMarriageState},
+			#{buyCardNumber},
+			#{buyCardType},
+			<if test="isFinish != null and isFinish > 0">
+			#{isFinish},
+			</if>
+			#{sort}
+		)
+	</insert>
+	
+	<!-- 修改订单买房人信息 -->
+	<update id="updateOrderHousePurchaser" parameterType="OrderBaseHousePurchaserDto">
+	  	UPDATE tbl_order_base_house_purchaser 
+	  	<set>
+	  		<if test="createUid != null and createUid != ''">
+	  			createUid = #{createUid},
+	  		</if>
+	  		<if test="updateUid != null and updateUid != ''">
+	  			updateUid = #{updateUid},
+	  		</if>
+	  		<if test="buyName != null and buyName != ''">
+	  			buyName = #{buyName},
+	  		</if>
+	  		<if test="buyPhoneNumber != null and buyPhoneNumber != ''">
+	  			buyPhoneNumber = #{buyPhoneNumber},
+	  		</if>
+	  		<if test="buyMarriageState != null and buyMarriageState != ''">
+	  			buyMarriageState = #{buyMarriageState},
+	  		</if>
+	  		<if test="buyCardNumber != null and buyCardNumber != ''">
+	  			buyCardNumber = #{buyCardNumber},
+	  		</if>
+	  		<if test="buyCardType != null and buyCardType != ''">
+	  			buyCardType = #{buyCardType},
+	  		</if>
+	  		<if test="sort != null and sort > 0">
+	  			sort = #{sort},
+	  		</if>
+	  		<if test="isFinish != null and isFinish != ''">
+	  			isFinish = #{isFinish},
+	  		</if>
+	  		updateTime = now()
+	  	</set>
+	  	WHERE id = #{id}
+  	</update>
+  	
+  	<!-- 修改订单买房人信息 -->
+	<update id="updateOrderHousePurchaserNull" parameterType="OrderBaseHousePurchaserDto">
+	  	UPDATE tbl_order_base_house_purchaser 
+	  	SET
+	  			updateUid = #{updateUid},
+	  			buyName = #{buyName},
+	  			buyPhoneNumber = #{buyPhoneNumber},
+	  			buyMarriageState = #{buyMarriageState},
+	  			buyCardNumber = #{buyCardNumber},
+	  			buyCardType = #{buyCardType},
+	  			<if test="isFinish != null and isFinish > 0">
+	  			isFinish = #{isFinish},
+	  			</if>
+	  			updateTime = now()
+	  	WHERE id = #{id}
+  	</update>
+  	
+	<!-- 查询订单买房人信息 -->
+	<select id="selectOrderHousePurchaserByOrderNo" parameterType="java.lang.String" resultType="OrderBaseHousePurchaserDto">
+  		select 
+  			id,
+  			createUid,
+			createTime,
+			updateUid,
+			updateTime,
+			orderNo,
+			buyName,
+			buyPhoneNumber,
+			buyMarriageState,
+			buyCardNumber,
+			buyCardType,
+			sort,
+			isFinish
+  		from tbl_order_base_house_purchaser where orderNo=#{orderNo}
+  		ORDER BY id
+    </select>
+    
+    <!-- 查询订单买房人信息 -->
+	<select id="selectOrderHousePurchaserById" parameterType="int" resultType="OrderBaseHousePurchaserDto">
+  		select 
+  			id,
+  			createUid,
+			createTime,
+			updateUid,
+			updateTime,
+			orderNo,
+			buyName,
+			buyPhoneNumber,
+			buyMarriageState,
+			buyCardNumber,
+			buyCardType,
+			sort,
+			isFinish
+  		from tbl_order_base_house_purchaser where id=#{id}
+    </select>
+    
+    <!-- 删除买房人信息 -->
+    <delete id="deleteHousePurchaserById" parameterType="int">
+    	delete from tbl_order_base_house_purchaser
+    	where id =#{0}
+    </delete>
+    
+    <!-- 删除买房人信息 -->
+    <delete id="deleteHousePurchaserByOrderNo" parameterType="string">
+    	delete from tbl_order_base_house_purchaser
+    	where orderNo =#{0}
+    </delete>
+</mapper>

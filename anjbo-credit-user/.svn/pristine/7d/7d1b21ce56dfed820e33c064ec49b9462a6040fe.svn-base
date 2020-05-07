@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.AuthorityMapper">
+
+	<select id="selectAuthorityByProductId" parameterType="AuthorityDto" resultType="AuthorityDto">
+		select * from tbl_authority where processId = #{processId} and name = #{name} 
+	</select>
+	
+	<select id="selectUserAuthorityList" resultType="java.util.Map">
+		select * from tbl_user_authority 
+	</select>
+	
+	<select id="selectResource" resultType="java.util.Map" >
+		select * from tbl_resource where isEnable = 0 
+	</select>
+	
+	<select id="selectAuthority" resultType="java.util.Map" >
+		select * from tbl_authority where isEnable = 0 
+	</select>
+	
+	<insert id="insertUserAuthority" parameterType="java.util.Map">
+		insert into tbl_user_authority (uid,authorityId,createTime)
+		values (#{uid},#{authorityId},now())
+	</insert>
+	<insert id="insertUserAuthorityAdmin">
+		INSERT INTO tbl_user_authority(uid, authorityId)
+		SELECT #{uid} AS uid, GROUP_CONCAT(CONVERT(id , char)) AS authorityId
+		FROM tbl_authority 
+		WHERE id IN(1,100,101<if test="isAllPermi">,7,9,27</if>) OR (type=1 AND NAME LIKE '%[A]' AND processId IN(
+			SELECT id FROM `anjbo-server-product`.tbl_product_process WHERE showAgency=1 AND productId IN(
+				SELECT CONCAT(cityCode,productCode) FROM `anjbo-server-customer`.tbl_customer_agency_product WHERE agencyId=#{agentId}
+			)
+		))
+		<!-- SELECT #{uid} AS uid, GROUP_CONCAT(CONVERT(id, char)) AS authorityId 
+		FROM tbl_authority 
+		WHERE id IN(1,100,101<if test="isAllPermi">,7,9,27</if>) OR (type=1 AND NAME IN('提单[A]','公证[A]','面签[A]','申请放款[A]','结清原贷款[A]','取证[A]','注销[A]','过户[A]','领新证[A]')) -->
+	</insert>
+	<update id="signUserAuthorityAdmin">
+		UPDATE tbl_user_authority SET authorityId=CONCAT('7,9,27,',authorityId) WHERE uid=#{uid}
+	</update>
+	
+	<update id="updateUserAuthority" parameterType="java.util.Map">
+		update tbl_user_authority set authorityId = #{authorityId} where uid = #{uid} 
+	</update>
+	
+	<select id="selectUserAuthority" resultType="java.util.Map" parameterType="java.lang.String" >
+		select * from tbl_user_authority where uid = #{0} 
+	</select>
+	
+	<insert id="insertRoleAuthority" parameterType="java.util.Map">
+		insert into tbl_role_authority (roleId,authorityId,createTime)
+		values (#{roleId},#{authorityId},now())
+	</insert>
+	
+	<update id="updateRoleAuthority" parameterType="java.util.Map">
+		update tbl_role_authority set authorityId = #{authorityId} where roleId = #{roleId} 
+	</update>
+	
+	<select id="selectRoleAuthority" resultType="java.util.Map" parameterType="int" >
+		select * from tbl_role_authority where roleId = #{0} 
+	</select>
+	
+	<select id="selectAuthorityDtoByAuthorityDto" parameterType="AuthorityDto" resultType="AuthorityDto" >
+		select * from tbl_authority where name = #{name} 
+	</select>
+	
+	<select id="selectAuthorityByProcessIds" parameterType="java.lang.String" resultType="AuthorityDto">
+		select * from tbl_authority where processId in (${processIds}) 
+	</select>
+	
+</mapper>

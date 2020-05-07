@@ -1,0 +1,56 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<ul class="breadcrumb relative">
+				<li>
+					<a>订单管理</a>
+					<span class="divider"></span>
+				</li>
+				<li class="active">全部订单</li>
+			</ul>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12"> 
+			<form class="form-inline search" style="margin-bottom:20px;margin-left:30px; ">
+				<div class="form-group">
+					<label>城市-产品-状态：</label>
+					<select class="form-control" ng-model="page.cityCode" style="width: 100px;">
+						<option value="">全部</option>
+						<option ng-repeat="list in conditions.citys" ng-if="$index!=0" value="{{list.cityCode}}">{{list.cityName}}</option>
+					</select>
+					- 
+					<select class="form-control" ng-model="page.productCode" style="width: 200px;">
+						<option value="">全部</option>
+						<option ng-repeat="list in productList" ng-if="$index!=0" value="{{list.productCode}}">{{list.productName}}</option>
+					</select>
+					-
+					<select class="form-control" ng-model="page.state" style="width: 180px;" >
+						<option value="">全部</option>
+						<option ng-repeat="list in stateList" ng-if="$index!=0" value="{{list.stateName}}">{{list.stateName}}</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label>客户类型：</label>
+					<select class="form-control" ng-model="page.customerType" style="width: 224px;">
+						<option value="" >全部</option>
+						<option value="1">个人</option>
+						<option value="2">小微企业</option>
+					</select>
+				</div>	
+				<div class="form-group">
+					<label >客户姓名：</label>
+					<input type="text" class="form-control" ng-model="page.customerName">
+				</div>
+				<button type="submit" class="btn btn-default" ng-click="query()" style="margin-bottom:10px; margin-right:10px;">
+					查询
+				</button>
+			</form>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12 bs-table">
+			<table bs-table-control="orderList" data-show-export="false" id="table" ></table>
+		</div>
+	</div>
+</div>

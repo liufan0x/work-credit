@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.ArchiveMapper">
+    
+    <resultMap id="BaseResultMap" type="archiveDto">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="createUid" jdbcType="VARCHAR" property="createUid" />
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="updateUid" jdbcType="VARCHAR" property="updateUid" />
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="orderNo" jdbcType="VARCHAR" property="orderNo" />
+        <result column="archiveId" jdbcType="VARCHAR" property="archiveId" />
+        <result column="estateType" jdbcType="INTEGER" property="estateType" />
+        <result column="estateNo" jdbcType="VARCHAR" property="estateNo" />
+        <result column="identityNo" jdbcType="VARCHAR" property="identityNo" />
+        <result column="message" jdbcType="VARCHAR" property="message" />
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, createUid, createTime, updateUid, updateTime, orderNo, archiveId, estateType, 
+        estateNo, identityNo, message
+    </sql>
+    
+    <select id="detail" parameterType="java.lang.String" resultType="archiveDto">
+    	SELECT
+    		<include refid="Base_Column_List"/>
+    	FROM tbl_risk_archive WHERE archiveId = #{archiveId} ORDER BY createTime DESC LIMIT 1;
+    </select>
+    
+     <select id="detailByOrderNo" parameterType="java.lang.String" resultType="archiveDto">
+    	SELECT
+    		<include refid="Base_Column_List"/>
+    	FROM tbl_risk_archive WHERE orderNo = #{orderNo} ORDER BY createTime DESC
+    </select>
+    
+    <select id="listArchive" parameterType="java.lang.String" resultType="archiveDto">
+    	SELECT
+    		<include refid="Base_Column_List"/>
+    	FROM tbl_risk_archive WHERE orderNo = #{orderNo}
+    </select>
+    
+    <insert id="insert" parameterType="archiveDto">
+        insert into tbl_risk_archive 
+        (
+        	id, createUid, createTime, updateUid,
+            orderNo,archiveId, estateType,
+            estateNo,identityNo, message
+        )
+        values 
+        (	
+        	null, #{createUid},now(), #{updateUid},
+            #{orderNo},#{archiveId}, #{estateType},
+            #{estateNo}, #{identityNo}, #{message}
+         )
+    </insert>
+    
+    <insert id="insertByMap" parameterType="java.util.Map">
+        insert into tbl_risk_archive 
+        (
+        	id, createUid, createTime, updateUid,
+            orderNo,archiveId, estateType,
+            estateNo,identityNo, message
+        )
+        values 
+        (	
+        	null, #{createUid},now(), #{updateUid},
+            #{orderNo},#{archiveId}, #{estateType},
+            #{estateNo}, #{identityNo}, #{message}
+         )
+    </insert>
+    
+    <update id="update" parameterType="archiveDto">
+        update tbl_risk_archive
+        <set>
+            <if test="createUid != null and createUid!=''">
+                createUid = #{createUid},
+            </if>
+            <if test="createTime != null">
+                createTime = #{createTime},
+            </if>
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+            <if test="updateTime != null">
+                updateTime = #{updateTime},
+            </if>
+            <if test="archiveId != null and archiveId!=''">
+                archiveId = #{archiveId},
+            </if>
+            <if test="estateType != null">
+                estateType = #{estateType},
+            </if>
+            <if test="estateNo != null and estateNo!=''">
+                estateNo = #{estateNo},
+            </if>
+            <if test="identityNo != null and identityNo!=''">
+                identityNo = #{identityNo},
+            </if>
+            <if test="message != null and message!=''">
+                message = #{message}
+            </if>          
+        </set>
+        where id = #{id}
+    </update>
+    
+    
+    <update id="updateByOrderNo" parameterType="archiveDto">
+        update tbl_risk_archive
+        <set>
+            <if test="createUid != null and createUid!=''">
+                createUid = #{createUid},
+            </if>
+            <if test="createTime != null">
+                createTime = #{createTime},
+            </if>
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+            <if test="updateTime != null">
+                updateTime = #{updateTime},
+            </if>
+            <if test="archiveId != null and archiveId!=''">
+                archiveId = #{archiveId},
+            </if>
+            <if test="estateType != null">
+                estateType = #{estateType},
+            </if>
+            <if test="estateNo != null and estateNo!=''">
+                estateNo = #{estateNo},
+            </if>
+            <if test="identityNo != null and identityNo!=''">
+                identityNo = #{identityNo},
+            </if>
+            <if test="message != null and message!=''">
+                message = #{message}
+            </if>
+
+        </set>
+        where orderNo = #{orderNo}
+    </update>
+    
+    
+     <update id="updateByMap" parameterType="java.util.Map">
+        update tbl_risk_archive
+        <set>
+            <if test="createUid != null and createUid!=''">
+                createUid = #{createUid},
+            </if>
+            <if test="createTime != null">
+                createTime = #{createTime},
+            </if>
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+            <if test="updateTime != null">
+                updateTime = #{updateTime},
+            </if>
+            <if test="archiveId != null and archiveId!=''">
+                archiveId = #{archiveId},
+            </if>
+            <if test="estateType != null">
+                estateType = #{estateType},
+            </if>
+            <if test="estateNo != null and estateNo!=''">
+                estateNo = #{estateNo},
+            </if>
+            <if test="identityNo != null and identityNo!=''">
+                identityNo = #{identityNo},
+            </if>
+            <if test="message != null and message!=''">
+                message = #{message}
+            </if>
+  
+        </set>
+        where id = #{id}
+    </update>
+    
+     <update id="updateByArchiveId" parameterType="archiveDto">
+        update tbl_risk_archive
+        <set>
+            <if test="createUid != null and createUid!=''">
+                createUid = #{createUid},
+            </if>
+            <if test="createTime != null">
+                createTime = #{createTime},
+            </if>
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+            <if test="updateTime != null">
+                updateTime = #{updateTime},
+            </if>
+            <if test="archiveId != null and archiveId!=''">
+                archiveId = #{archiveId},
+            </if>
+            <if test="estateType != null">
+                estateType = #{estateType},
+            </if>
+            <if test="estateNo != null and estateNo!=''">
+                estateNo = #{estateNo},
+            </if>
+            <if test="identityNo != null and identityNo!=''">
+                identityNo = #{identityNo},
+            </if>
+            <if test="message != null and message!=''">
+                message = #{message}
+            </if>
+        </set>
+        where archiveId = #{archiveId}
+    </update>
+    
+     <select id="selectArchiveByOrderNoAndArchiveId" parameterType="java.util.Map" resultType="archiveDto">
+  		SELECT 
+			<include refid="Base_Column_List"/>  	
+  		FROM tbl_risk_archive WHERE orderNo = #{orderNo}  AND archiveId = #{archiveId} LIMIT 0,1
+  	</select>
+  	
+  	 <select id="selectByOrderNoAndArchiveId" parameterType="archiveDto" resultType="archiveDto">
+  		SELECT 
+			<include refid="Base_Column_List"/>  	
+  		FROM tbl_risk_archive WHERE orderNo = #{orderNo}  AND archiveId = #{archiveId} LIMIT 0,1
+  	</select>
+  	
+  	<delete id="delete" parameterType="archiveDto">
+  		DELETE FROM tbl_risk_archive WHERE archiveId=#{archiveId} and orderNO = #{orderNo}
+  	</delete>
+</mapper>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.process.AppFddReleaseMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(releaseTimeBegin)"> AND releaseTime >= #{releaseTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(releaseTimeEnd)"> AND releaseTime &lt;= #{releaseTimeEnd}</if>
+		-->
+		<if test="null!=releaseUid and ''!=releaseUid"> AND `releaseUid`=#{releaseUid}</if>
+		<if test="null!=rlandBureauName and ''!=rlandBureauName"> AND `rlandBureauName`=#{rlandBureauName}</if>
+		<if test="null!=remark and ''!=remark"> AND `remark`=#{remark}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="AppFddReleaseDto" resultType="AppFddReleaseDto">    
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `releaseTime`, `releaseUid`, `rlandBureauName`, `remark` 
+	FROM tbl_process_app_fdd_release 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="AppFddReleaseDto" resultType="AppFddReleaseDto">
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `releaseTime`, `releaseUid`, `rlandBureauName`, `remark`
+	FROM tbl_process_app_fdd_release 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="AppFddReleaseDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_process_app_fdd_release 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="AppFddReleaseDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_process_app_fdd_release(
+		`createUid`,
+		`createTime`,
+		`updateUid`,
+		`updateTime`,
+		`orderNo`,
+		`releaseTime`,
+		`releaseUid`,
+		`rlandBureauName`,
+		`remark`
+	) VALUES(
+		#{createUid},
+		now(),
+		#{createUid},
+		now(),
+		#{orderNo},
+		#{releaseTime},
+		#{releaseUid},
+		#{rlandBureauName},
+		#{remark}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="AppFddReleaseDto" >
+    DELETE FROM tbl_process_app_fdd_release 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="AppFddReleaseDto" >
+    UPDATE tbl_process_app_fdd_release
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=releaseTime">`releaseTime`=#{releaseTime},</if>
+		<if test="null!=releaseUid">`releaseUid`=#{releaseUid},</if>
+		<if test="null!=rlandBureauName">`rlandBureauName`=#{rlandBureauName},</if>
+		<if test="null!=remark">`remark`=#{remark},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

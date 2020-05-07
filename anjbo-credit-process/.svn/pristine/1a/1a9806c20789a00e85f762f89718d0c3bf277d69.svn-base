@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.ManagerAuditMapper">
+	
+	<select id="selectManagerAudit" parameterType="ManagerAuditDto" resultType="ManagerAuditDto">
+	   select * from tbl_process_audit_manager where orderNo=#{orderNo}
+	</select>
+	
+	<insert id="addManagerAudit" parameterType="ManagerAuditDto" >
+	    INSERT INTO `tbl_process_audit_manager` (
+	    `createUid`, `createTime`, `updateUid`, `orderNo`, `remark`, `auditFirstUid`,status,auditTime
+	    ) VALUES (
+	     #{createUid}, now(), #{updateUid}, #{orderNo},   #{remark}, #{auditFirstUid},status,now()
+	    )
+	</insert>
+	<update id="updateManagerAudit" parameterType="ManagerAuditDto">
+	   update tbl_process_audit_manager set updateUid=#{updateUid},remark=#{remark},auditFirstUid=#{auditFirstUid},status=#{status},auditTime=#{auditTime}
+	   where orderNo=#{orderNo}
+	</update>
+	
+	<update id="updateStatus" parameterType="ManagerAuditDto">
+	    update tbl_process_audit_manager set updateUid=#{updateUid},status=#{status},auditTime=#{auditTime}
+	   where orderNo=#{orderNo}
+	</update>
+	<select id="selectManagerAll" parameterType="ManagerAuditDto" resultType="ManagerAuditDto">
+	  select *,DATE_FORMAT(auditTime,'%Y-%m-%d %H:%i:%s') as auditTimeStr from tbl_process_audit_manager where orderNo IN (${orderNo})
+	</select>
+	<select id="selectManagerCount" resultType="java.lang.Integer">
+	  select count(1) from tbl_process_audit_manager
+	</select>
+</mapper>

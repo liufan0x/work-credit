@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.order.BaseHouseLendingMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<if test="null!=lendingBankId and lendingBankId>0"> AND `lendingBankId`=#{lendingBankId}</if>
+		<if test="null!=lendingBankBranchId and lendingBankBranchId>0"> AND `lendingBankBranchId`=#{lendingBankBranchId}</if>
+		<if test="null!=lendingImgs and ''!=lendingImgs"> AND `lendingImgs`=#{lendingImgs}</if>
+		<if test="null!=bankAccount and ''!=bankAccount"> AND `bankAccount`=#{bankAccount}</if>
+		<if test="null!=bankUserName and ''!=bankUserName"> AND `bankUserName`=#{bankUserName}</if>
+		<if test="null!=remark and ''!=remark"> AND `remark`=#{remark}</if>
+		<if test="null!=isFinish and isFinish>0"> AND `isFinish`=#{isFinish}</if>
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=lendingBankName and ''!=lendingBankName"> AND `lendingBankName`=#{lendingBankName}</if>
+		<if test="null!=lendingBankBranchName and ''!=lendingBankBranchName"> AND `lendingBankBranchName`=#{lendingBankBranchName}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="BaseHouseLendingDto" resultType="BaseHouseLendingDto">    
+	SELECT *
+	FROM tbl_order_base_house_lending 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="BaseHouseLendingDto" resultType="BaseHouseLendingDto">
+	SELECT `id`, `orderNo`, `lendingBankId`, `lendingBankBranchId`, `lendingImgs`, `bankAccount`, `bankUserName`, `remark`, `isFinish`, `createUid`, `createTime`, `updateUid`, `updateTime`, `lendingBankName`, `lendingBankBranchName`
+	FROM tbl_order_base_house_lending 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="BaseHouseLendingDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_order_base_house_lending 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="BaseHouseLendingDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_order_base_house_lending(
+		`orderNo`,
+		`lendingBankId`,
+		`lendingBankBranchId`,
+		`lendingImgs`,
+		`bankAccount`,
+		`bankUserName`,
+		`remark`,
+		`isFinish`,
+		`createUid`,
+		`createTime`,
+		`updateUid`,
+		`updateTime`,
+		`lendingBankName`,
+		`lendingBankBranchName`
+	) VALUES(
+		#{orderNo},
+		#{lendingBankId},
+		#{lendingBankBranchId},
+		#{lendingImgs},
+		#{bankAccount},
+		#{bankUserName},
+		#{remark},
+		#{isFinish},
+		#{createUid},
+		now(),
+		#{createUid},
+		now(),
+		#{lendingBankName},
+		#{lendingBankBranchName}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="BaseHouseLendingDto" >
+    DELETE FROM tbl_order_base_house_lending 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="BaseHouseLendingDto" >
+    UPDATE tbl_order_base_house_lending
+	<set>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=lendingBankId">`lendingBankId`=#{lendingBankId},</if>
+		<if test="null!=lendingBankBranchId">`lendingBankBranchId`=#{lendingBankBranchId},</if>
+		<if test="null!=lendingImgs">`lendingImgs`=#{lendingImgs},</if>
+		<if test="null!=bankAccount">`bankAccount`=#{bankAccount},</if>
+		<if test="null!=bankUserName">`bankUserName`=#{bankUserName},</if>
+		<if test="null!=remark">`remark`=#{remark},</if>
+		<if test="null!=isFinish">`isFinish`=#{isFinish},</if>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=lendingBankName">`lendingBankName`=#{lendingBankName},</if>
+		<if test="null!=lendingBankBranchName">`lendingBankBranchName`=#{lendingBankBranchName},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

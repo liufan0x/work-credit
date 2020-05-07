@@ -1,0 +1,19 @@
+<div class="container-fluid">
+	
+	<place-order-detail></place-order-detail>
+
+	<div id="viewRow">
+		
+	</div>
+	<audit-final-detail></audit-final-detail>
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;法务意见</div>
+	<div class="row">
+		<div class="form-group">
+			<textarea class="form-control" ng-model="obj.remark" rows="5" placeholder="请在此处输入审批意见，退回请在此处填写退回意见（必填）"/>
+		</div>
+		<div class="col-md-12">
+			<button type="button" class="btn btn-primary" ng-click="showCeoSubmit();">审批通过</button>
+			<button type="button" class="btn btn-warning" ng-show="!orderIsBack" ng-click="showCeoBack();">不通过（退回）</button>
+		</div>
+	</div>
+</div>

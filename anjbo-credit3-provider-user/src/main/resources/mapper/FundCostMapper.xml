@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.FundCostMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=fundId and fundId>0"> AND `fundId`=#{fundId}</if>
+		<if test="null!=productId and productId>0"> AND `productId`=#{productId}</if>
+		<if test="null!=dayRate and dayRate>0"> AND `dayRate`=#{dayRate}</if>
+		<if test="null!=overdueRate and overdueRate>0"> AND `overdueRate`=#{overdueRate}</if>
+		<if test="null!=overdueRateHas and overdueRateHas>0"> AND `overdueRateHas`=#{overdueRateHas}</if>
+		<if test="null!=riskProvision and riskProvision>0"> AND `riskProvision`=#{riskProvision}</if>
+		<if test="null!=riskProvisionHas and riskProvisionHas>0"> AND `riskProvisionHas`=#{riskProvisionHas}</if>
+		<if test="null!=discountHas and discountHas>0"> AND `discountHas`=#{discountHas}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<if test="null!=remark and ''!=remark"> AND `remark`=#{remark}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="FundCostDto" resultType="FundCostDto">    
+	SELECT `id`, `fundId`, `productId`, `dayRate`, `overdueRate`, `overdueRateHas`, `riskProvision`, `riskProvisionHas`, `discountHas`, `createTime`, `updateTime`, `createUid`, `updateUid`, `remark` 
+	FROM tbl_customer_fund_cost 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="FundCostDto" resultType="FundCostDto">
+	SELECT `id`, `fundId`, `productId`, `dayRate`, `overdueRate`, `overdueRateHas`, `riskProvision`, `riskProvisionHas`, `discountHas`, `createTime`, `updateTime`, `createUid`, `updateUid`, `remark`
+	FROM tbl_customer_fund_cost 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="FundCostDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_customer_fund_cost 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="FundCostDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_customer_fund_cost(
+		`fundId`,
+		`productId`,
+		`dayRate`,
+		`overdueRate`,
+		`overdueRateHas`,
+		`riskProvision`,
+		`riskProvisionHas`,
+		`discountHas`,
+		`createTime`,
+		`updateTime`,
+		`createUid`,
+		`updateUid`,
+		`remark`
+	) VALUES(
+		#{fundId},
+		#{productId},
+		#{dayRate},
+		#{overdueRate},
+		#{overdueRateHas},
+		#{riskProvision},
+		#{riskProvisionHas},
+		#{discountHas},
+		now(),
+		now(),
+		#{createUid},
+		#{createUid},
+		#{remark}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="FundCostDto" >
+    DELETE FROM tbl_customer_fund_cost 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="FundCostDto" >
+    UPDATE tbl_customer_fund_cost
+	<set>
+		<if test="null!=fundId">`fundId`=#{fundId},</if>
+		<if test="null!=productId">`productId`=#{productId},</if>
+		<if test="null!=dayRate">`dayRate`=#{dayRate},</if>
+		<if test="null!=overdueRate">`overdueRate`=#{overdueRate},</if>
+		<if test="null!=overdueRateHas">`overdueRateHas`=#{overdueRateHas},</if>
+		<if test="null!=riskProvision">`riskProvision`=#{riskProvision},</if>
+		<if test="null!=riskProvisionHas">`riskProvisionHas`=#{riskProvisionHas},</if>
+		<if test="null!=discountHas">`discountHas`=#{discountHas},</if>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=remark">`remark`=#{remark},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

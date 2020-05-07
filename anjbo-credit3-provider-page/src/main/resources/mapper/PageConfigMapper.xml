@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.PageConfigMapper">
+	
+	
+	<select id="selectPageBusinfoConfig" resultType="PageBusinfoTypeDto">
+		select * from tbl_config_businfo_type where productCode = #{productCode}
+	</select>
+	
+	<select id="selectPageListConfig" resultType="PageListConfigDto">
+		select * from tbl_config_page_list where productCode = #{productCode}
+	</select>
+	
+	<select id="selectPageListColumnsConfig" resultType="PageListColumnsConfigDto">
+		select * from tbl_config_page_list_columns where listName = #{listName}
+	</select>
+	
+	<select id="selectPageConfigDtoList" resultType="PageConfigDto">
+		select * from tbl_config_page_base
+	</select>
+	
+	<select id="selectPageConfigSelectValuesDtoList" resultType="PageConfigSelectValuesDto">
+		select * from tbl_config_page_select_values 
+	</select>
+	
+	<select id="selectPageTabConfigDtoList" resultType="PageTabConfigDto">
+		select * from tbl_config_page_tab order by sort
+	</select>
+	
+	<select id="selectPageTabRegionConfigDtoList" resultType="PageTabRegionConfigDto">
+		select * from tbl_config_page_tab_region order by sort
+	</select>
+	
+	<select id="selectPageTabRegionFormConfigDtoList" resultType="PageTabRegionFormConfigDto">
+		select * from tbl_config_page_tab_region_form order by sort
+	</select>
+	
+</mapper>

@@ -1,0 +1,63 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
+
+	<link rel="stylesheet" th:href="@{/css/reset.css}"> <!-- CSS reset -->
+	<link rel="stylesheet" th:href="@{/css/style.css}"> <!-- Resource style -->
+	<script th:src="@{/js/modernizr.js}"></script> <!-- Modernizr -->
+  	
+	<title>创建查档任务</title>
+</head>
+<body>
+	<form class="cd-form floating-labels" id="form1" name="form1" action="#">
+		<fieldset>
+			<legend>1.查档信息</legend>
+			
+			<div>
+				<h4>产权证类型</h4>
+				<input type="hidden" th:value="${agencyId}" id="agencyId"/>
+				<p class="cd-select icon">
+					<select class="budget" name="estateType" id="estateType">
+						<option value="0">房地产权证书</option>
+						<option value="1">不动产权证书(粤2015)</option> 
+						<option value="2">不动产权证书(粤2016)</option>
+						<option value="3">不动产权证书(粤2017)</option>
+						<option value="4">不动产权证书(粤2018)</option>
+						<option value="5">不动产权证书(粤2019)</option>
+						<option value="6">不动产权证书(粤2020)</option>
+					</select>
+				</p>
+			</div> 
+			
+			<div class="icon">
+				<label class="cd-label" for="cd-company">房产证号</label>
+				<input class="company" type="text" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"
+				 name="estateNo" id="estateNo" required>
+		    </div> 
+
+		    <div class="icon">
+		    	<label class="cd-label" for="cd-company">姓名/身份证号</label>
+				<input class="company" type="text" name="identityNo" id="identityNo" required>
+		    </div> 
+		    
+		    <div class="icon">
+		    	<label class="cd-label" for="cd-company">短信通知（输入手机号）</label>
+				<input class="company" type="text" name="phone" id="phone" required>
+		    </div> 
+		    
+		    <div>
+		      	<input type="button" class="submit" value="创建任务"><span>&nbsp;&nbsp;&nbsp;创建过程会查档，请耐心等待1-2分钟...</span>
+		    </div>
+
+		</fieldset>
+
+	</form>
+	
+<script th:src="@{/js/jquery-2.1.1.js}"></script>
+<script th:src="@{/js/main.js}"></script> <!-- Resource jQuery -->
+</body>
+</html>

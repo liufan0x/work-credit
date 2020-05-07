@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="anjbo-order:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <root id="archive" name="anjbo-order.war">
+      <element id="artifact" artifact-name="anjbo-order:war exploded" />
+    </root>
+  </artifact>
+</component>

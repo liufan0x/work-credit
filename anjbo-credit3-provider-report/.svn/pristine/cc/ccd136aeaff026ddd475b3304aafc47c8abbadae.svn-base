@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.AuditFirstMapper">
+
+  <select id="findbyFirst" parameterType="java.util.Map" resultType="java.util.Map">
+ 	SELECT 
+ 		t.uid,IFNULL(COUNT(DISTINCT t.orderNo), 0) AS orderCount,
+	 	IFNULL((sum(t.timeNum) / COUNT(DISTINCT t.orderNo)),0) AS timeNumAvg,
+		IFNULL(SUM(t.borrowingAmount), 0) AS orderAmount
+	FROM (
+		SELECT DISTINCT
+			b.orderNo,f.handleUid AS uid,sum(f.timeNum) AS timeNum,b.borrowingAmount
+		FROM
+			tbl_order_flow f
+		LEFT JOIN tbl_order_list_base b ON b.orderNo = f.orderNo
+		WHERE
+			f.currentProcessId = #{processId} AND b.productCode != "04"
+			<if test="cityCode != null and cityCode != '' "> and b.cityCode=#{cityCode}</if>
+		    <if test="productCode != null and productCode !='' "> and b.productCode=#{productCode} </if>
+		   	<if test="createTime !=null and (createTime==1 or createTime== '1')"><![CDATA[  and DATEDIFF(f.createTime,NOW())=-1 ]]> </if>
+		   	<if test="createTime !=null and (createTime==2 or createTime== '2')"> and  YEARWEEK(date_format(f.createTime,'%Y-%m-%d')) = YEARWEEK(now())-1 </if>
+		   	<if test="createTime !=null and (createTime==3 or createTime== '3')"> and PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format( f.createTime, '%Y%m' ) ) =1 </if>
+		   	<if test="createTime !=null and (createTime==4 or createTime== '4')"> and date_format(f.createTime, '%Y%m') = date_format(CURDATE() , '%Y%m')</if>
+			GROUP BY b.orderNo, f.handleUid
+	) t 
+	WHERE t.uid IN (${uid})
+	GROUP BY t.uid
+  </select>
+
+   <select id="findByAuthority" parameterType="java.lang.String" resultType="AuthorityDto">
+  	 SELECT id,name,processId  FROM tbl_authority where isEnable=0 and type=1 and name=#{name}
+   </select>
+   <select id="findByUser" parameterType="java.util.Map" resultType="UserDto">
+      SELECT DISTINCT b.id,b.name,b.uid,b.cityCode,a.authorityId as remark from tbl_user_base b
+	  LEFT JOIN tbl_user_authority a on a.uid=b.uid
+	  LEFT JOIN tbl_authority  au on FIND_IN_SET(au.id,a.authorityId)
+	  where b.isEnable=0 and au.isEnable=0 and au.type=1 and au.name=#{name}
+   </select>
+</mapper>

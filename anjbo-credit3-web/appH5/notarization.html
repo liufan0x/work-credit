@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>公证</title>
+<!--标准mui.css-->
+<link rel="stylesheet" href="./css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="./css/order.css" />
+<link href="./css/mui.picker.min.css" rel="stylesheet" />
+</head>
+<body>
+<form id="form">
+<div class="form-box">
+     <div class="inp-div">
+           <span class="inp-span mi">公证日期</span><span class="inp-r icon-d"> &nbsp;</span>
+           <input type="text" value="" readonly class="inp-box date" data-options='{"type":"date"}'  id="notarizationTime" placeholder="请选择">
+     </div>
+	 
+	  <div class="inp-div">
+           <span class="inp-span mi">公证地点</span><span class="inp-r arrow">&nbsp;</span>
+           <a id="nUrl" href="#"><input type="text" value="" readonly class="inp-box" id="notarizationAddress" placeholder="请选择"></a>
+           <input type="hidden" value=""  id="notarizationAddressCode">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">预计出款日期</span><span class="inp-r icon-d"> &nbsp;</span>
+           <input type="text" value="" readonly class="inp-box date" data-options='{"type":"date"}'  id="estimatedTime" placeholder="请选择">
+     </div>
+      <div class="inp-div no-border" >
+           <span class="inp-span mi">添加公证照片</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" readonly class="inp-box file-upload" id="nImg" ></a>
+           <input type="hidden" value=""  id="notarizationImg">
+     </div>
+     <div class="clear"></div>
+</div>
+<div class="form-box">
+    <div class="clear"> </div>
+	<div class="inp-div no-border">
+           <span class="inp-span">备注</span>
+     </div>
+     <textarea id="remark" rows="5" placeholder="如有特殊说明，请在此备注（非必填）。" class="textarea-box"></textarea>
+	 <div class="clear"></div>
+     <div class="sub-but">确认</div>
+     <br>
+</div>
+</form>
+<div class="mui-iframe-wrapper iframe-box">
+<iframe id="ifranmes" src="notarization_list.html"></iframe>
+</div>
+<!--上传图片-->
+<div class="file-box">
+     <div class="file-but">立即上传</div>
+	 <div class="img-box">
+	    <div class="file-add"><input type="file" class="file-inp" name="file" id="file"></div>
+	 </div>
+</div>
+
+<script src="./js/mui.min.js"></script>
+<script src="./js/mui.picker.min.js"></script>
+<script src="./js/jquery.min.js"></script>
+<script src="./js/process.js"></script>
+<script>
+var orderNo = GetQueryString("orderNo");
+var productCode=GetQueryString("productCode");
+var cityCode = GetQueryString("cityCode");
+$("#ifranmes").attr("src","notarization_list.html?orderNo="+orderNo+"&cityCode="+cityCode);
+
+function returnData(orderNo,addressCode,address){
+  if(orderNo){
+	   $(".iframe-box").css({"opacity":"0","z-index":"-11"});
+	   $("#notarizationAddress").val(address);
+	   $("#notarizationAddressCode").val(addressCode);
+  }
+}
+ $(function(){
+	   //图片上传
+	$(".file-upload").on("click",function(){
+	    $(".file-box").show();
+	})
+	$(".file-but").on("click",function(){
+		var picAll='';
+        $(".img").each(function(){
+		   picAll+=$(this).attr("src")+",";
+		}) 
+	    $(this).parent(".file-box").hide();
+		if(picAll==""){
+		  $(".file-upload").val("请上传图片");
+		}else{
+		  picAll=picAll.substring(0,picAll.length-1);
+		  //alert(picAll);
+		   $("#notarizationImg").val(picAll);
+		  $(".file-upload").val("已上传");
+		}
+	})
+	
+	$(".file-inp").change(function(){
+        var formData = new FormData();
+        formData.append("file",$("#file")[0].files[0]);
+        $.ajax({ 
+		type:'post',
+	    url: "http://fs.anjbo.com/fs/img/upload", 
+		processData : false,
+		contentType: false,
+		data: formData, 
+		success: function(data){
+			var picUrl=data.url;
+			var ss='<div class="file-img"><img src="'+picUrl+'" class="img"><div class="mui-icon mui-icon-minus file-del"></div></div>';
+            $(".img-box").append(ss);
+			$(".file-del").on("click",function(){
+	            $(this).parent(".file-img").remove();
+	        })
+         },
+		 error:function(xhr,type,errorThrown){
+					console.log(type);
+		}
+	  });	 
+	})
+	//图片上传end
+	 $("#nUrl").on("click",function(){ 
+	    $(".iframe-box").css({"opacity":"1","z-index":"111"});
+	 })
+	 var orderNo = GetQueryString("orderNo");
+	 $.ajax({ 
+		 url:'/credit/process/notarization/v/init',
+		 data:JSON.stringify({"orderNo":orderNo}), 
+         type: 'post' ,
+         dataType: 'json',  
+         contentType:'application/json;charset=utf-8',
+		 success: function(data){
+			var obj= data.data;
+		    var img = obj.notarizationImg;
+		    if(img!=null && img!=''){
+		    	 $("#nImg").val("已上传");
+		    }
+		    $("#notarizationTime").val(obj.notarizationTimeStr);
+		    $("#notarizationAddress").val(obj.notarizationAddress);
+		    $("#notarizationAddressCode").val(obj.notarizationAddressCode);
+		    $("#estimatedTime").val(obj.estimatedTimeStr);
+		    $("#remark").val(obj.remark);
+		    $("#notarizationImg").val(obj.notarizationImg);
+			if(obj.notarizationImg){	
+				$(".file-upload").val("已上传");
+			    arrImg=obj.notarizationImg.split(",");
+				for(var i=0; i<arrImg.length;i++){
+				   var ss='<div class="file-img"><img src="'+arrImg[i]+'" class="img"><div class="mui-icon mui-icon-minus file-del"></div></div>';
+				   $(".file-box").find(".img-box").append(ss); 
+				}
+				 $(".file-del").on("click",function(){
+	                      $(this).parent(".file-img").remove();
+	              })
+			  }else{
+			     $(".file-upload").val("请上传图片");
+			  }
+         }
+	   });
+ })
+
+$(".sub-but").click(function(){  
+	var orderNo = GetQueryString("orderNo");
+	var remark =$("#remark").val();
+	var notarizationTime =$("#notarizationTime").val();
+	var notarizationAddress =$("#notarizationAddress").val();
+	var notarizationAddressCode= $("#notarizationAddressCode").val();
+	var estimatedTime = $("#estimatedTime").val();
+	var notarizationImg = $("#notarizationImg").val();
+	if(notarizationTime ==null ||  notarizationTime =='' ){
+		alert("公证日期不能为空");
+		return false;
+	}
+	if(notarizationAddress ==null ||  notarizationAddress =='' ){
+		alert("公证地点不能为空");
+		return false;
+	}
+	if(estimatedTime ==null ||  estimatedTime =='' ){
+		alert("预计出款时间不能为空");
+		return false;
+	}
+	if(notarizationImg ==null ||  notarizationImg =='' ){
+		alert("公证照片不能为空");
+		return false;
+	}
+		
+    var content={"orderNo":orderNo,"notarizationTime":notarizationTime,"notarizationAddress":notarizationAddress,
+    		"notarizationAddressCode":notarizationAddressCode,"estimatedTime":estimatedTime,"notarizationImg":notarizationImg,"remark":remark
+    		,"uid":GetQueryString("uid"),"deviceId":GetQueryString("deviceId")};
+	 $.ajax({ 
+		url:'/credit/process/notarization/v/add',
+		data:JSON.stringify(content), 
+        type: 'post' ,
+        dataType: 'json',  
+        contentType:'application/json;charset=utf-8',
+		 success: function(data){
+			alert(data.msg);
+        }
+	   });
+ })
+
+
+mui.init();
+mui.ready(function() {
+
+  $(".sel").click(function(){
+	  var userPicker = new mui.PopPicker();
+	  userPicker.setData([{
+		value: 'yes',
+		text: '是'
+	  }, {
+		value: 'no',
+		text: '否'
+	  }]);
+	  var _this=$(this);
+	  userPicker.show(function(items) {
+			_this.val((items[0].text));
+			//返回 false 可以阻止选择框的关闭
+			//return false;
+		});
+  });
+   
+  $(".date").on("click",function(){
+	  var _this=$(this);
+	  var optionsJson = _this.attr('data-options') || '{}';
+	  var options = JSON.parse(optionsJson);
+	  var  picker = new mui.DtPicker(options);
+	  picker.show(function(rs) {
+		  _this.val(rs.text);
+		   picker.dispose();
+		});
+     });
+  
+});
+
+		 
+
+
+</script>
+</body>
+</html>

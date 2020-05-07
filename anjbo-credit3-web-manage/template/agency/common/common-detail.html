@@ -1,0 +1,133 @@
+<style>
+.form-inline.w165 label {width: 170px;}
+	.hang-hw{width:100%;clear:both;min-height:50px;}
+.form-inline label{line-height:30px;}
+</style>
+<div class="container-fluid">
+	<!--
+    	作者：lic@anjbo.com
+    	时间：2017-08-31
+    	描述：标题
+    -->
+	<div class="row">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;
+			<span ng-bind="pageConfigDto.title + '详情'"></span>
+			<a href="javascript:void(0);"><span ng-if="isEdit" class="detail-trash2 text-danger" ng-click="deleteDetail({processName:processName})" style="display：inline-block;float:right">隐藏</span></a>
+			<span ng-if="!isEdit" class="detail-trash2" ng-click="goBack()" style="display:inline-block;float:right;"><a href="javasrcipt:void(0);">返回上一步</a></span>
+		</div>
+	</div>
+	
+	<!--
+    	作者：lic@anjbo.com
+    	时间：2017-08-31
+    	描述：标签
+    -->
+	<div class="row" ng-if="pageConfigDto.type == 1" >
+		<div class="col-md-12">
+			<ul class="nav nav-tabs">
+				<li ng-repeat="pageTabConfig in pageConfigDto.pageTabConfigDtos track by $index" ng-class="{'active':showView==pageTabConfig.title}" >
+					<a ng-click="changeView(pageTabConfig)" ng-bind="pageTabConfig.title"></a>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	<!--
+    	作者：lic@anjbo.com
+    	时间：2017-08-18
+    	描述：详情字段
+    -->
+	<form method="post" class="form-inline w165 detail-row">
+		<div ng-repeat="pageTabRegionConfig in pageTabConfigDto.pageTabRegionConfigDtos">
+			<div class="col-md-12 detail-right-tit " ng-if="pageTabRegionConfig.formClasses!='addExpandManager'">
+				&nbsp;&nbsp;<span ng-bind="pageTabRegionConfig.title"></span>
+				<span ng-if="$index==0" >&nbsp;&nbsp;<span ng-bind-html="pageTabConfigDto.remarks"></span></span>
+			</div>
+			<div ng-repeat="formList in pageTabRegionConfig.valueList" ng-if="pageTabRegionConfig.formClasses!='addExpandManager'">
+				<div ng-if="pageTabRegionConfig.type==2" class="col-md-12 danbao-tit ">&nbsp;&nbsp; {{pageTabRegionConfig.title}}（<span class="num-box" ng-bind="$index+1"></span>）</div>
+
+				<form-list ng-repeat="m in formList" style="line-height:45px">
+
+
+
+
+
+					<div ng-if="m.type != 1000 && m.type != 1008" class="" ng-class="{'col-md-12 col-lg-12':m.col==3 , 'col-md-6 col-lg-8':m.col==2,'col-md-6 col-lg-4':m.col==1 }">
+
+						<!-- 表单标题: -->
+						<label ng-if="m.type == 6 &&m.type!=23&&pageTabRegionConfig.formClasses!='waitInvestigation'&& !m.isHide" style="text-align:right; line-heigth:44px; position:absolute; letf:0;top:0;">
+							<span ng-if="!m.isBr"ng-bind="m.title+'：'"></span>
+							<span ng-if="m.isBr"ng-bind-html="m.brValue"></span>
+						</label>
+						<label ng-if="m.type == 6 &&m.type!=23&&pageTabRegionConfig.formClasses=='waitInvestigation'&& !m.isHide" style="text-align:right; line-heigth:44px; position:absolute; letf:0;top:0;">
+							<span ng-if="!m.isBr&&m.key=='remarks'&&m.showValue!=''" ng-bind="m.title+'：'"></span>
+							<span ng-if="!m.isBr&&m.key!='remarks'" ng-bind="m.title+'：'"></span>
+							<span ng-if="m.isBr&&m.key=='remarks'&&m.showValue!=''" ng-bind-html="m.brValue"></span>
+							<span ng-if="m.isBr&&m.key!='remarks'" ng-bind-html="m.brValue"></span>
+						</label>
+						
+						<label ng-if="m.type != 6 &&m.type!=23&& !m.isHide">
+							<span ng-if="pageTabConfigDto.tabClass=='cancelConfirm' &&m.key!='investigationManagerName'" ng-bind="m.title + '：'"></span>
+							<span ng-if="pageTabConfigDto.tabClass!='cancelConfirm'&&pageTabConfigDto.tabClass!='cancelDistribution'&&pageTabConfigDto.tabClass!='addAgency'" ng-bind="m.title + '：'"></span>
+							<span ng-if="pageTabConfigDto.tabClass=='cancelDistribution'&&m.key!='investigationManagerName'&&m.key!='channelManagerName'" ng-bind="m.title + '：'"></span>
+							<span ng-if="pageTabConfigDto.tabClass=='addAgency'&&m.key!='investigationManagerName'" ng-bind="m.title + '：'"></span>
+						</label>
+						<!-- 单位 -->
+						<type4 ng-if="m.type == 4 && !m.isHide ">
+							<span ng-if="m.key=='applyDate'" ng-bind="m.showValue|date:'yyyy-MM-dd'"></span>
+							<span ng-if="m.key!='applyDate'" ng-bind="m.showValue|date:'yyyy-MM-dd HH:mm'"></span>
+						</type4>
+						<type5 ng-if="m.type == 5 && !m.isHide ">
+							<span class="chakan-img gallerys">
+								<list ng-repeat="imgMap in m.dataList">
+									<span class="gallery-pic-img" title="{{imgMap}}" ng-show="$index==0"></span>
+								</list>
+								<span ng-if="m.dataList.length>0">({{m.dataList.length}})</span>
+							</span>
+						</type5>
+
+						<div ng-if="m.type == 6 && !m.isHide &&pageTabRegionConfig.formClasses=='waitInvestigation'" >
+							<p  ng-bind-html="m.showValue"  ng-if="m.key=='remarks'&&m.showValue!=''" style="margin-left:165px; padding:10px; line-height:30px; background: #eee;border:1px solid #ddd; border-radius: 3px;"></p>
+							<p  ng-bind-html="m.showValue"  ng-if="m.key!='remarks'" style="margin-left:165px; padding:10px; line-height:30px; background: #eee;border:1px solid #ddd; border-radius: 3px;"></p>
+							<div style="width:100%;height:30px;clear:both;"></div>
+						</div>
+						<div ng-if="m.type == 6 && !m.isHide &&pageTabRegionConfig.formClasses!='waitInvestigation'" >
+							<p  ng-bind-html="m.showValue"   style="margin-left:165px; padding:10px; line-height:30px; background: #eee;border:1px solid #ddd; border-radius: 3px;"></p>
+							<div style="width:100%;height:30px;clear:both;"></div>
+						</div>
+
+						<!--时间并列-->
+						<type1 ng-if="m.type==21 && !m.isHide">
+							<span ng-bind="m.value"></span> ~ <span ng-bind="m.specialValue"></span>
+						</type1>
+
+						<type1 ng-if="m.type==20 && !m.isHide">
+							<span ng-bind="m.showValue"></span>
+						</type1>
+
+						<type1 ng-if="m.type==23 && !m.isHide" class="common-file-detail" process-id="{{pageTabConfigDto.tblName}}"></type1>
+
+						<span ng-if="m.type != 5 &&m.type!=23 && m.type!=4&& m.type != 6 &&m.type!=21 &&m.type!=20&& m.type != 1000 && !m.isHide &&pageTabConfigDto.tabClass!='cancelConfirm'&&pageTabConfigDto.tabClass!='cancelDistribution'&&pageTabConfigDto.tabClass!='addAgency'" ng-bind="m.showValue"></span>
+						<span ng-if="m.type != 5 &&m.type!=23 && m.type!=4&& m.type != 6 &&m.type!=21 &&m.type!=20&& m.type != 1000 && !m.isHide &&pageTabConfigDto.tabClass=='cancelConfirm' &&m.key!='investigationManagerName'" ng-bind="m.showValue"></span>
+						<span ng-if="m.type != 5 &&m.type!=23 && m.type!=4&& m.type != 6 &&m.type!=21 &&m.type!=20&& m.type != 1000 && !m.isHide &&pageTabConfigDto.tabClass=='cancelDistribution' &&m.key!='investigationManagerName'&&m.key!='channelManagerName'" ng-bind="m.showValue"></span>
+						<span ng-if="m.type != 5 &&m.type!=23 && m.type!=4&& m.type != 6 &&m.type!=21 &&m.type!=20&& m.type != 1000 && !m.isHide &&pageTabConfigDto.tabClass=='addAgency' &&m.key!='investigationManagerName'" ng-bind="m.showValue"></span>
+
+						<span class="a-span" ng-if="!m.isHide" ng-bind="m.single"></span>
+						</div>
+
+
+					<special-type1000 ng-if="m.type==1000 && !m.isHide" >
+								
+					</special-type1000>
+					
+					<special-type1008 ng-if="m.type==1008 && !m.isHide" >
+					
+					</special-type1008>
+
+				</form-list>
+
+			</div>
+		</div>
+	</form>
+	
+</div>

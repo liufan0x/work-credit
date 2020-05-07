@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.OrderBaseCustomerMapper" >
+	<!-- 添加订单客户信息 -->
+	<insert id="saveOrderCustomer" parameterType="OrderBaseCustomerDto">
+		INSERT INTO tbl_order_base_customer (
+			createUid,
+			createTime,
+			orderNo,
+			customerName,
+			customerAge,
+			customerSex,
+			customerCardType,
+			customerCardNumber,
+			customerHouseholdRegister,
+			customerCulture,
+			customerCompany,
+			customerPosition,
+			customerWorkTime,
+			customerMarriageState,
+			customerBodiesState,
+			customerNationsType,
+			customerWifeName,
+			customerWifeCardType,
+			customerWifeCardNumber,
+			customerWifePhone,
+			customerWifeMarriageState,
+			customerWifePosition,
+			customerWifeCompany,
+			customerHouseInfo,
+			customerCatInfo,
+			customerAnnualIncome,
+			customerFamilyAverageAnnualIncome,
+			customerIncomeRepaymentProportion,
+			customerLiabilitiesRatio,
+			customerInsurance,
+			customerPropertyRightProportion,
+			customerPreference,
+			customerStage,
+			customerCreditCardOverdraft,
+			customerRating,
+			isHasCar,
+			isHasCarLoan,
+			isHasRoom,
+			isHasRoomLoan,
+			isHasChildren,
+			<if test="isFinish != null and isFinish > 0">
+			isFinish,
+			</if>
+			companyName, licenseNumber, representative, registeredCapital, establishTime, employeesNumber, category, operatingAddress,
+			remark
+		)
+		VALUES
+		(
+			#{createUid},
+			now(),
+			#{orderNo},
+			#{customerName},
+			#{customerAge},
+			#{customerSex},
+			#{customerCardType},
+			#{customerCardNumber},
+			#{customerHouseholdRegister},
+			#{customerCulture},
+			#{customerCompany},
+			#{customerPosition},
+			#{customerWorkTime},
+			#{customerMarriageState},
+			#{customerBodiesState},
+			#{customerNationsType},
+			#{customerWifeName},
+			#{customerWifeCardType},
+			#{customerWifeCardNumber},
+			#{customerWifePhone},
+			#{customerWifeMarriageState},
+			#{customerWifePosition},
+			#{customerWifeCompany},
+			#{customerHouseInfo},
+			#{customerCatInfo},
+			#{customerAnnualIncome},
+			#{customerFamilyAverageAnnualIncome},
+			#{customerIncomeRepaymentProportion},
+			#{customerLiabilitiesRatio},
+			#{customerInsurance},
+			#{customerPropertyRightProportion},
+			#{customerPreference},
+			#{customerStage},
+			#{customerCreditCardOverdraft},
+			#{customerRating},
+			#{isHasCar},
+			#{isHasCarLoan},
+			#{isHasRoom},
+			#{isHasRoomLoan},
+			#{isHasChildren},
+			<if test="isFinish != null and isFinish > 0">
+			#{isFinish},
+			</if>
+			#{companyName}, #{licenseNumber}, #{representative}, #{registeredCapital}, #{establishTime}, #{employeesNumber}, #{category}, #{operatingAddress},
+			#{remark}
+		)
+	</insert>
+	
+	<!-- 修改订单客户信息 -->
+	<update id="updateOrderCustomer" parameterType="OrderBaseCustomerDto">
+	  	UPDATE tbl_order_base_customer 
+	  	<set>
+	  		<if test="createUid != null and createUid != ''">
+	  			createUid = #{createUid},
+	  		</if>
+	  		<if test="updateUid != null and updateUid != ''">
+	  			updateUid = #{updateUid},
+	  		</if>
+	  		<if test="customerName != null and customerName != ''">
+	  			customerName = #{customerName},
+	  		</if>
+	  		<if test="customerAge != null and customerAge != ''">
+	  			customerAge = #{customerAge},
+	  		</if>
+	  		<if test="customerSex != null and customerSex != ''">
+	  			customerSex = #{customerSex},
+	  		</if>
+	  		<if test="customerCardType != null and customerCardType != ''">
+	  			customerCardType = #{customerCardType},
+	  		</if>
+	  		<if test="customerCardNumber != null and customerCardNumber != ''">
+	  			customerCardNumber = #{customerCardNumber},
+	  		</if>
+	  		<if test="customerHouseholdRegister != null and customerHouseholdRegister != ''">
+	  			customerHouseholdRegister = #{customerHouseholdRegister},
+	  		</if>
+	  		<if test="customerCulture != null and customerCulture != ''">
+	  			customerCulture = #{customerCulture},
+	  		</if>
+	  		<if test="customerCompany != null and customerCompany != ''">
+	  			customerCompany = #{customerCompany},
+	  		</if>
+	  		<if test="customerPosition != null and customerPosition != ''">
+	  			customerPosition = #{customerPosition},
+	  		</if>
+	  		<if test="customerWorkTime != null and customerWorkTime != ''">
+	  			customerWorkTime = #{customerWorkTime},
+	  		</if>
+	  		<if test="customerMarriageState != null and customerMarriageState != ''">
+	  			customerMarriageState = #{customerMarriageState},
+	  		</if>
+	  		<if test="customerBodiesState != null and customerBodiesState != ''">
+	  			customerBodiesState = #{customerBodiesState},
+	  		</if>
+	  		<if test="customerNationsType != null and customerNationsType != ''">
+	  			customerNationsType = #{customerNationsType},
+	  		</if>
+	  		<if test="customerWifeName != null and customerWifeName != ''">
+	  			customerWifeName = #{customerWifeName},
+	  		</if>
+	  		<if test="customerWifeCardType != null and customerWifeCardType != ''">
+	  			customerWifeCardType = #{customerWifeCardType},
+	  		</if>
+	  		<if test="customerWifeCardNumber != null and customerWifeCardNumber != ''">
+	  			customerWifeCardNumber = #{customerWifeCardNumber},
+	  		</if>
+	  		<if test="customerWifePhone != null and customerWifePhone != ''">
+	  			customerWifePhone = #{customerWifePhone},
+	  		</if>
+	  		<if test="customerWifeMarriageState != null and customerWifeMarriageState != ''">
+	  			customerWifeMarriageState = #{customerWifeMarriageState},
+	  		</if>
+	  		<if test="customerWifePosition != null and customerWifePosition != ''">
+	  			customerWifePosition = #{customerWifePosition},
+	  		</if>
+	  		<if test="customerWifeCompany != null and customerWifeCompany != ''">
+	  			customerWifeCompany = #{customerWifeCompany},
+	  		</if>
+	  		<if test="customerHouseInfo != null and customerHouseInfo != ''">
+	  			customerHouseInfo = #{customerHouseInfo},
+	  		</if>
+	  		<if test="customerCatInfo != null and customerCatInfo != ''">
+	  			customerCatInfo = #{customerCatInfo},
+	  		</if>
+	  		<if test="customerAnnualIncome != null and customerAnnualIncome != ''">
+	  			customerAnnualIncome = #{customerAnnualIncome},
+	  		</if>
+	  		<if test="customerFamilyAverageAnnualIncome != null and customerFamilyAverageAnnualIncome != ''">
+	  			customerFamilyAverageAnnualIncome = #{customerFamilyAverageAnnualIncome},
+	  		</if>
+	  		<if test="customerIncomeRepaymentProportion != null and customerIncomeRepaymentProportion != ''">
+	  			customerIncomeRepaymentProportion = #{customerIncomeRepaymentProportion},
+	  		</if>
+	  		<if test="customerLiabilitiesRatio != null and customerLiabilitiesRatio != ''">
+	  			customerLiabilitiesRatio = #{customerLiabilitiesRatio},
+	  		</if>
+	  		<if test="customerInsurance != null and customerInsurance != ''">
+	  			customerInsurance = #{customerInsurance},
+	  		</if>
+	  		<if test="customerPropertyRightProportion != null and customerPropertyRightProportion > 0">
+	  			customerPropertyRightProportion = #{customerPropertyRightProportion},
+	  		</if>
+	  		<if test="customerPreference != null and customerPreference != ''">
+	  			customerPreference = #{customerPreference},
+	  		</if>
+	  		<if test="customerStage != null and customerStage != ''">
+	  			customerStage = #{customerStage},
+	  		</if>
+	  		<if test="customerCreditCardOverdraft != null and customerCreditCardOverdraft != ''">
+	  			customerCreditCardOverdraft = #{customerCreditCardOverdraft},
+	  		</if>
+	  		<if test="customerRating != null and customerRating != ''">
+	  			customerRating = #{customerRating},
+	  		</if>
+	  		<if test="remark != null and remark != ''">
+	  			remark = #{remark},
+	  		</if>
+	  		<if test="isHasCar != null and isHasCar != ''">
+	  			isHasCar = #{isHasCar},
+	  		</if>
+	  		<if test="isHasCarLoan != null and isHasCarLoan != ''">
+	  			isHasCarLoan = #{isHasCarLoan},
+	  		</if>
+	  		<if test="isHasRoom != null and isHasRoom != ''">
+	  			isHasRoom = #{isHasRoom},
+	  		</if>
+	  		<if test="isHasRoomLoan != null and isHasRoomLoan != ''">
+	  			isHasRoomLoan = #{isHasRoomLoan},
+	  		</if>
+	  		<if test="isHasChildren != null and isHasChildren != ''">
+	  			isHasChildren = #{isHasChildren},
+	  		</if>
+	  		<if test="isFinish != null and isFinish != ''">
+	  			isFinish = #{isFinish},
+	  		</if>
+	  		<if test="null!=companyName">companyName=#{companyName},</if>
+			<if test="null!=licenseNumber">licenseNumber=#{licenseNumber},</if>
+			<if test="null!=representative">representative=#{representative},</if>
+			<if test="null!=registeredCapital">registeredCapital=#{registeredCapital},</if>
+			<if test="null!=establishTime">establishTime=#{establishTime},</if>
+			<if test="null!=employeesNumber">employeesNumber=#{employeesNumber},</if>
+			<if test="null!=category">category=#{category},</if>
+			<if test="null!=operatingAddress">operatingAddress=#{operatingAddress},</if>
+	  		updateTime = now()
+	  	</set>
+	  	WHERE orderNo = #{orderNo}
+  	</update>
+  	
+  	<!-- 修改订单客户信息 -->
+	<update id="updateOrderCustomerNull" parameterType="OrderBaseCustomerDto">
+	  	UPDATE tbl_order_base_customer 
+	  	SET
+	  			customerName = #{customerName},
+	  			customerAge = #{customerAge},
+	  			customerSex = #{customerSex},
+	  			customerCardType = #{customerCardType},
+	  			customerCardNumber = #{customerCardNumber},
+	  			customerHouseholdRegister = #{customerHouseholdRegister},
+	  			customerCulture = #{customerCulture},
+	  			customerCompany = #{customerCompany},
+	  			customerPosition = #{customerPosition},
+	  			customerWorkTime = #{customerWorkTime},
+	  			customerMarriageState = #{customerMarriageState},
+	  			customerBodiesState = #{customerBodiesState},
+	  			customerNationsType = #{customerNationsType},
+	  			customerWifeName = #{customerWifeName},
+	  			customerWifeCardType = #{customerWifeCardType},
+	  			customerWifeCardNumber = #{customerWifeCardNumber},
+	  			customerWifePhone = #{customerWifePhone},
+	  			customerWifeMarriageState = #{customerWifeMarriageState},
+	  			customerWifePosition = #{customerWifePosition},
+	  			customerWifeCompany = #{customerWifeCompany},
+	  			customerHouseInfo = #{customerHouseInfo},
+	  			customerCatInfo = #{customerCatInfo},
+	  			customerAnnualIncome = #{customerAnnualIncome},
+	  			customerFamilyAverageAnnualIncome = #{customerFamilyAverageAnnualIncome},
+	  			customerIncomeRepaymentProportion = #{customerIncomeRepaymentProportion},
+	  			customerLiabilitiesRatio = #{customerLiabilitiesRatio},
+	  			customerInsurance = #{customerInsurance},
+	  			customerPropertyRightProportion = #{customerPropertyRightProportion},
+	  			customerPreference = #{customerPreference},
+	  			customerStage = #{customerStage},
+	  			customerCreditCardOverdraft = #{customerCreditCardOverdraft},
+	  			customerRating = #{customerRating},
+	  			isHasCar = #{isHasCar},
+	  			isHasCarLoan = #{isHasCarLoan},
+	  			isHasRoom = #{isHasRoom},
+	  			isHasRoomLoan = #{isHasRoomLoan},
+	  			isHasChildren = #{isHasChildren},
+	  			remark = #{remark},
+	  			<if test="isFinish != null and isFinish > 0">
+	  			isFinish = #{isFinish},
+	  			</if>
+	  			<if test="null!=companyName">companyName=#{companyName},</if>
+				<if test="null!=licenseNumber">licenseNumber=#{licenseNumber},</if>
+				<if test="null!=representative">representative=#{representative},</if>
+				<if test="null!=registeredCapital">registeredCapital=#{registeredCapital},</if>
+				<if test="null!=establishTime">establishTime=#{establishTime},</if>
+				<if test="null!=employeesNumber">employeesNumber=#{employeesNumber},</if>
+				<if test="null!=category">category=#{category},</if>
+				<if test="null!=operatingAddress">operatingAddress=#{operatingAddress},</if>
+	  			updateTime = now()
+	  	WHERE orderNo = #{orderNo}
+  	</update>
+  	
+  	<!-- 修改订单客户企业信息 -->
+	<update id="updateOrderCustomerCompanyNull" parameterType="OrderBaseCustomerDto">
+	  	UPDATE tbl_order_base_customer 
+	  	SET
+	  			companyName=#{companyName},
+				licenseNumber=#{licenseNumber},
+				representative=#{representative},
+				registeredCapital=#{registeredCapital},
+				establishTime=#{establishTime},
+				employeesNumber=#{employeesNumber},
+				category=#{category},
+		        operatingAddress=#{operatingAddress},
+	  			updateTime = now()
+	  	WHERE orderNo = #{orderNo}
+  	</update>
+  	
+	<!-- 查询订单客户信息 -->
+	<select id="selectOrderCustomerByOrderNo" parameterType="java.lang.String" resultType="OrderBaseCustomerDto">
+  		select 
+  			id,
+  			createUid,
+			createTime,
+			updateUid,
+			updateTime,
+			orderNo,
+			customerName,
+			customerAge,
+			customerSex,
+			customerCardType,
+			customerCardNumber,
+			customerHouseholdRegister,
+			customerCulture,
+			customerCompany,
+			customerPosition,
+			customerWorkTime,
+			customerMarriageState,
+			customerBodiesState,
+			customerNationsType,
+			customerWifeName,
+			customerWifeCardType,
+			customerWifeCardNumber,
+			customerWifePhone,
+			customerWifeMarriageState,
+			customerWifePosition,
+			customerWifeCompany,
+			customerHouseInfo,
+			customerCatInfo,
+			customerAnnualIncome,
+			customerFamilyAverageAnnualIncome,
+			customerIncomeRepaymentProportion,
+			customerLiabilitiesRatio,
+			customerInsurance,
+			customerPropertyRightProportion,
+			customerPreference,
+			customerStage,
+			customerCreditCardOverdraft,
+			customerRating,
+			isHasCar,
+			isHasCarLoan,
+			isHasRoom,
+			isHasRoomLoan,
+			isHasChildren,
+			remark,
+			companyName, licenseNumber, representative, registeredCapital, establishTime, employeesNumber, category, operatingAddress,
+			isFinish
+  		from tbl_order_base_customer where orderNo=#{orderNo}
+    </select>
+    
+    <!-- 查询批量orderNos信息 -->
+	<select id="allCustomerNos" parameterType="java.util.Map" resultType="java.util.Map">
+  		select 
+  			id,
+  			createUid,
+			createTime,
+			updateUid,
+			updateTime,
+			orderNo,
+			customerName,
+			customerAge,
+			customerSex,
+			customerCardType,
+			customerCardNumber,
+			customerHouseholdRegister,
+			customerCulture,
+			customerCompany,
+			customerPosition,
+			customerWorkTime,
+			customerMarriageState,
+			customerBodiesState,
+			customerNationsType,
+			customerWifeName,
+			customerWifeCardType,
+			customerWifeCardNumber,
+			customerWifePhone,
+			customerWifeMarriageState,
+			customerWifePosition,
+			customerWifeCompany,
+			customerHouseInfo,
+			customerCatInfo,
+			customerAnnualIncome,
+			customerFamilyAverageAnnualIncome,
+			customerIncomeRepaymentProportion,
+			customerLiabilitiesRatio,
+			customerInsurance,
+			customerPropertyRightProportion,
+			customerPreference,
+			customerStage,
+			customerCreditCardOverdraft,
+			customerRating,
+			isHasCar,
+			isHasCarLoan,
+			isHasRoom,
+			isHasRoomLoan,
+			isHasChildren,
+			remark,
+			companyName, licenseNumber, representative, registeredCapital, establishTime, employeesNumber, category, operatingAddress,
+			isFinish
+  		from tbl_order_base_customer where orderNo in (#{orderNos})
+    </select>
+</mapper>

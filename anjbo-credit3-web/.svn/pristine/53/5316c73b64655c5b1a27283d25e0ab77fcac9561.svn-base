@@ -1,0 +1,59 @@
+<div>
+	<div>
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;应还款信息</div>
+		<form style="padding:0 50px" class="form-inline ng-pristine ng-invalid ng-invalid-required ng-valid-min" name="orderForm">
+			<div>
+				<div class="row form-inline detail-row w147" style="padding:30px 10px; ">
+					<div class="col-md-6 col-lg-6">
+						<label>计划还款时间: </label>
+						<input ng-disabled="ynStatus.planStatus&&ynStatus.planStatus.msg!='待推送应还款计划'" type="text" readonly ng-model="yunnanAudit.repayDate" class="form-control form_dateu" />
+					</div>
+					<div class="col-md-6 col-lg-6">
+						<label>借款期限:</label>
+						<input ng-disabled="ynStatus.planStatus&&ynStatus.planStatus.msg!='待推送应还款计划'" type="text" ng-model="yunnanAudit.borrowingDays" class="form-control" />天
+					</div>
+					<div class="col-md-6 col-lg-6">
+						<label>计划还款利息:</label>
+						<input ng-disabled="ynStatus.planStatus&&ynStatus.planStatus.msg!='待推送应还款计划'" type="text" ng-model="yunnanAudit.repayProfit" class="form-control" />元
+					</div>
+					<div class="col-md-6 col-lg-6">
+						<label>计划还款本金:</label>
+						<input ng-disabled="ynStatus.planStatus&&ynStatus.planStatus.msg!='待推送应还款计划'" type="text" ng-model="yunnanAudit.repayPrincipal" class="form-control" />元
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div ng-show="showZhanqi1" class="col-md-12 detail-right-tit">&nbsp;&nbsp;应还款信息(展期)</div>
+	<form ng-show="showZhanqi1" style="padding:0 50px" class="form-inline ng-pristine ng-invalid ng-invalid-required ng-valid-min" name="orderForm">
+		<div>
+			<div class="row form-inline detail-row w147" style="padding:30px 10px; ">
+				<div class="col-md-6 col-lg-6">
+					<label>计划还款时间: </label>
+					<input type="text" readonly ng-model="audit_delay.repayDate" class="form-control form_dateu" />
+				</div>
+				<div class="col-md-6 col-lg-6">
+					<label>借款期限:</label>
+					<input type="text" ng-model="audit_delay.borrowingDays" class="form-control" />天
+				</div>
+				<div class="col-md-6 col-lg-6">
+					<label>计划还款利息:</label>
+					<input type="text" ng-model="audit_delay.repayProfit" class="form-control" />元
+				</div>
+				<div class="col-md-6 col-lg-6">
+					<label>计划还款本金:</label>
+					<input type="text" ng-model="audit_delay.repayPrincipal" class="form-control" />元
+				</div>
+				<div class="col-md-6 col-lg-6">
+					<label style="width:130px">还款计划变更原因:</label>
+					<select class="form-control ng-pristine ng-valid ng-not-empty ng-touched" ng-model="audit_delay.changeReason" style="width:180px">
+						<option value="">请选择</option>
+						<option value="0">项目结清</option>
+						<option value="1">提前部分还款</option>
+						<option value="2">错误更正</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>

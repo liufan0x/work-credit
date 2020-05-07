@@ -1,0 +1,218 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.anjbo.dao.tools.BookingMapper">
+	<select id="selectBookingList" resultType="Booking" parameterType="Booking">
+		select 
+		   *,
+		   date_format(createTime,'%Y-%m-%d %H:%i:%s') as createTimeStr
+ 		 from tbl_tools_booking_base
+		order by createTime desc
+		<if test="pagesize > 0">
+			limit #{start},#{pagesize}
+		</if>
+	</select>
+	<select id="selectBookingCount" resultType="int" parameterType="Booking">
+			select 
+			  count(1)
+ 		 from tbl_tools_booking_base
+   </select>
+	<select id="selectBookingDetailList" resultType="BookingDetail" parameterType="BookingDetail">
+		select 
+		    t1.id as bookingId,
+			t1.bookingType,
+			t1.szItemNo,
+			t1.bookingSzAreaOid,
+			t1.registrationAreaOid,
+			t1.startWorkDay,
+			t1.endWorkDay,
+			t1.startWorkTime,
+			t1.endWorkTime,
+			t2.id,
+			t2.bookingCode,
+			t2.houseName,
+			t2.houseNum,
+			t2.proveType,
+			t2.proveCode,
+			t2.proveYear,
+			t2.personName,
+			t2.phoneNumber,
+			t2.certificateType,
+			t2.certificateNo,
+			t2.bookingDate,
+			t2.workTimeSolt,
+			t2.type,
+			t2.status,
+			date_format(t2.cancelTime,'%Y-%m-%d %H:%i:%s') as cancelTimeStr,
+		    date_format(t2.createTime,'%Y-%m-%d %H:%i:%s') as createTimeStr,
+		    t2.fzFileNo,
+		    t2.isXL
+ 		 from tbl_tools_booking_detail t2 left join tbl_tools_booking_base t1 on t2.bookingId = t1.id
+ 		 where t2.uid=#{uid}
+		order by t2.createTime desc
+		<if test="pagesize > 0">
+			limit #{start},#{pagesize}
+		</if>
+	</select>
+	<select id="selectBookingDetailCount" resultType="int" parameterType="BookingDetail">
+			select 
+			  count(1)
+ 		 from tbl_tools_booking_detail
+ 		 where uid=#{uid}
+   </select>
+	<select id="selectBookingDetail" resultType="BookingDetail" parameterType="int">
+		select 
+		    t1.id as bookingId,
+			t1.bookingType,
+			t1.unitType,
+			t1.szItemNo,
+			t1.bookingSzAreaOid,
+			t1.registrationAreaOid,
+			t1.startWorkDay,
+			t1.endWorkDay,
+			t1.startWorkTime,
+			t1.endWorkTime,
+			t2.id,
+			t2.bookingCode,
+			t2.houseName,
+			t2.houseNum,
+			t2.proveType,
+			t2.proveCode,
+			t2.proveYear,
+			t2.personName,
+			t2.phoneNumber,
+			t2.certificateType,
+			t2.certificateNo,
+			t2.bookingDate,
+			t2.workTimeSolt,
+			t2.type,
+			t2.status,
+			t2.uid,
+			date_format(t2.cancelTime,'%Y-%m-%d %H:%i:%s') as cancelTimeStr,
+		    date_format(t2.createTime,'%Y-%m-%d %H:%i:%s') as createTimeStr,
+		    t2.fzFileNo,
+		    t2.isXL
+ 		 from tbl_tools_booking_detail t2 left join tbl_tools_booking_base t1 on t2.bookingId = t1.id
+		where t2.id=#{0}
+	</select>
+   <select id="bookingExit" resultType="java.lang.Integer" parameterType="Booking">
+   	select id from tbl_tools_booking_base
+   	where bookingType=#{bookingType}
+   	and szItemNo=#{szItemNo}
+	and bookingSzAreaOid=#{bookingSzAreaOid}
+	and registrationAreaOid=#{registrationAreaOid}
+	and type=1
+   </select>
+   <insert id="addBooking" parameterType="Booking">
+   	<selectKey resultType="int" keyProperty="id">
+		select last_insert_id()
+	</selectKey>
+   	insert into tbl_tools_booking_base(
+   		bookingType,
+		szItemNo,
+		bookingSzAreaOid,
+		registrationAreaOid,
+		type
+   	)values(
+	   	#{bookingType},
+	   	#{szItemNo},
+	   	#{bookingSzAreaOid},
+	   	#{registrationAreaOid},
+		1
+   	)
+   </insert>
+   <insert id="addBookingDetail" parameterType="BookingDetail">
+   	<selectKey resultType="int" keyProperty="id">
+		select last_insert_id()
+	</selectKey>
+   	insert into tbl_tools_booking_detail(
+		bookingId,
+		bookingCode,
+		houseName,
+		houseNum,
+		proveType,
+		proveCode,
+		proveYear,
+		personName,
+		phoneNumber,
+		certificateType,
+		certificateNo,
+		bookingDate,
+		workTimeSolt,
+		type,
+		uid,
+		device,
+		version,
+		fzFileNo,
+		isXL
+   	)values(
+   		#{bookingId},
+		#{bookingCode},
+		#{houseName},
+		#{houseNum},
+		#{proveType},
+		#{proveCode},
+		#{proveYear},
+		#{personName},
+		#{phoneNumber},
+		#{certificateType},
+		#{certificateNo},
+		#{bookingDate},
+		#{workTimeSolt},
+		#{type},
+		#{uid},
+		#{device},
+		#{version},
+		#{fzFileNo},
+		#{isXL}
+   	)
+   </insert>
+   <update id="updateBookingCode" parameterType="BookingDetail">
+   		update tbl_tools_booking_detail set
+	   		bookingCode = #{bookingCode},
+	   		bookingDate = #{bookingDate},
+	   		workTimeSolt = #{workTimeSolt},
+	   		status = #{status}
+   		where id = #{id}
+   </update>
+   <update id="updateBookingDetailStatus" parameterType="BookingDetail">
+   		update tbl_tools_booking_detail set
+	   		status = #{status}
+	   		<if test="status==2">
+	   		,cancelTime = now()
+	   		</if>
+   		where id = #{id}
+   </update>
+   <select id="bookingDetailExit" resultType="BookingDetail" parameterType="BookingDetail">
+   	select t1.id,t1.bookingCode,t1.status from tbl_tools_booking_detail t1
+   	left join tbl_tools_booking_base t2 on t1.bookingId=t2.id
+   	where t1.houseName=#{houseName}
+	and	t1.proveType=#{proveType}
+	and	t1.proveCode=#{proveCode}
+	and	t1.personName=#{personName}
+	and	t1.phoneNumber=#{phoneNumber}
+	and	t1.certificateType=#{certificateType}
+	and	t1.certificateNo=#{certificateNo}
+	and t2.bookingType = #{bookingType}
+	and t2.szItemNo = #{szItemNo}
+   </select>
+   <update id="updateBookingDetail" parameterType="BookingDetail">
+   	update tbl_tools_booking_detail set
+   		bookingId=#{bookingId},
+   		houseName=#{houseName},
+		proveType=#{proveType},
+		proveCode=#{proveCode},
+		personName=#{personName},
+		phoneNumber=#{phoneNumber},
+		certificateType=#{certificateType},
+		certificateNo=#{certificateNo},
+		fzFileNo=#{fzFileNo},
+		isXL=#{isXL}
+	where id=#{id}
+   </update>
+   <delete id="deleteBookingDetail" parameterType="int">
+   		delete from tbl_tools_booking_detail where id=#{0}
+   </delete>
+   <update id="updateBookingBase" parameterType="java.util.Map">
+   	update tbl_tools_booking_base set bookingType=#{newBookingType},szItemNo=#{newSzItemNo} where bookingType = #{bookingType} and szItemNo = #{szItemNo}
+   </update>
+</mapper>

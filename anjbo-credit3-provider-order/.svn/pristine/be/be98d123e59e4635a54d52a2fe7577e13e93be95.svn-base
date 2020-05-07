@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.order.BusinfoTypeMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=name and ''!=name"> AND `name`=#{name}</if>
+		<if test="null!=pid and pid>0"> AND `pid`=#{pid}</if>
+		<if test="null!=isMust and isMust>0"> AND `isMust`=#{isMust}</if>
+		<if test="null!=productCode and ''!=productCode"> AND `productCode`=#{productCode}</if>
+		<if test="null!=isFaceInfo and isFaceInfo>0"> AND `isFaceInfo`=#{isFaceInfo}</if>
+		<if test="null!=pcPid and pcPid>0"> AND `pcPid`=#{pcPid}</if>
+		<if test="null!=remark and ''!=remark"> AND `remark`=#{remark}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="BusinfoTypeDto" resultType="BusinfoTypeDto">    
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `name`, `pid`, `isMust`, `productCode`, `isFaceInfo`, `pcPid`, `remark` 
+	FROM tbl_order_businfo_type 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="BusinfoTypeDto" resultType="BusinfoTypeDto">
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `name`, `pid`, `isMust`, `productCode`, `isFaceInfo`, `pcPid`, `remark`
+	FROM tbl_order_businfo_type 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="BusinfoTypeDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_order_businfo_type 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="BusinfoTypeDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_order_businfo_type(
+		`createUid`,
+		`createTime`,
+		`updateUid`,
+		`updateTime`,
+		`name`,
+		`pid`,
+		`isMust`,
+		`productCode`,
+		`isFaceInfo`,
+		`pcPid`,
+		`remark`
+	) VALUES(
+		#{createUid},
+		now(),
+		#{createUid},
+		now(),
+		#{name},
+		#{pid},
+		#{isMust},
+		#{productCode},
+		#{isFaceInfo},
+		#{pcPid},
+		#{remark}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="BusinfoTypeDto" >
+    DELETE FROM tbl_order_businfo_type 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="BusinfoTypeDto" >
+    UPDATE tbl_order_businfo_type
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=name">`name`=#{name},</if>
+		<if test="null!=pid">`pid`=#{pid},</if>
+		<if test="null!=isMust">`isMust`=#{isMust},</if>
+		<if test="null!=productCode">`productCode`=#{productCode},</if>
+		<if test="null!=isFaceInfo">`isFaceInfo`=#{isFaceInfo},</if>
+		<if test="null!=pcPid">`pcPid`=#{pcPid},</if>
+		<if test="null!=remark">`remark`=#{remark},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+  <!-- 查询影像资料子类型 -->
+	<select id="getSonType" resultType="Map" parameterType="java.util.Map">
+		SELECT * FROM tbl_order_businfo_type t WHERE t.id in (${typeId})
+	</select>  
+    
+  <select id="getParentBusInfoTypes" parameterType="java.util.Map" resultType="java.util.Map" >
+	  select * from 
+	  tbl_order_businfo_type 
+	  WHERE pid&lt;1
+	  <if test="productCode != null and productCode != ''">
+	  	and productCode=#{productCode}
+	  </if>
+	  <!-- 只展示畅贷面签资料 -->
+	  <if test="isChangLoan != null and isChangLoan == 1">
+	  	and (id=60000 or id=60300)
+	  </if>
+    </select> 
+    
+   <!-- 查询面签需要上传的影像资料类型数 -->
+	<select id="mustFaceBusInfoCount" resultType="int" parameterType="Map">
+		select count(1) from tbl_order_businfo_type 
+		where 
+			productCode = ${productCode} and isMust = 1
+		<if test="productCode != null and productCode == '01'">
+			and pid = 10000
+		</if>
+		<if test="productCode != null and productCode == '02'">
+			and pid = 20000
+		</if>
+		<if test="productCode != null and productCode == '03'">
+			and pid = 60000
+		</if>
+		<if test="productCode != null and productCode == '04'">
+			and pid = 70000 and id != 70008
+		</if>
+		<if test="productCode != null and productCode == '05'">
+			and pid = 80000
+		</if>
+	</select>  
+</mapper>

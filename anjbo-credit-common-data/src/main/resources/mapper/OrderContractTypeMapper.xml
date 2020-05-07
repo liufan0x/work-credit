@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.OrderContractTypeMapper">
+	
+	<!-- 查询合同父类集合 -->
+	<select id="getParentContractTypes" parameterType="java.util.Map" resultType="java.util.Map" >
+		select * from 
+		  tbl_common_order_contract_type 
+		  WHERE pid&lt;1	
+	</select>
+	
+	<!-- 查询合同子类集合 -->
+	<select id="getSonContractTypes" parameterType="java.util.Map" resultType="java.util.Map" >
+		select * from 
+		  tbl_common_order_contract_type 
+		  WHERE pid&gt;1	
+	</select>
+	
+</mapper>

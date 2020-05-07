@@ -1,0 +1,13 @@
+<form class="form-inline"  >
+	<div class="form-group">
+		<select class="form-control" ng-model="sumbitDto.agencgId" style="width: 100px;" >
+			<option value="1">快鸽按揭</option>
+		</select>
+		-
+		<select class="form-control" choice-dict="bookingSzAreaOid" style="width: 100px;" ng-model="sumbitDto.cityCode">
+		</select>
+		-
+		<select class="form-control" agencg-id="{{sumbitDto.agencgId}}" style="width: 180px;" city-code="{{sumbitDto.cityCode}}" choice-personnel2="{{personnelType}}" ng-model="sumbitDto.uid">
+		</select>
+	</div>
+</form>

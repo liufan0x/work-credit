@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>诉讼</title>
+<!--标准mui.css-->
+<link rel="stylesheet" href="./css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="./css/order.css" />
+<link href="./css/mui.picker.min.css" rel="stylesheet" />
+</head>
+<body>
+ 
+<div class="form-box">
+     <div class="inp-div">
+           <span class="inp-span mi">姓名/ 组织名称</span><span class="inp-r">&nbsp;</span>
+           <input type="text" value=""  class="inp-box" name="bank3" placeholder="请输入">
+     </div>
+	   <div class="inp-div no-border" style="height:60px;">
+           <span class="inp-span mi">身份证号码/ <br>组织机构代码</span><span class="inp-r"></span>
+           <input type="text" value=""  class="inp-box" name="bank3" placeholder="请输入">
+     </div>
+	 
+	 <div class="clear" > </div>
+</div>
+
+<div class="clear" style="height:10px;"></div>
+
+<div class="but-two">
+	      <div class="order-but fl">查深圳</div> <a href="order_relative.html"><div class="order-but fr" style="background:#ff9900;">查全国</div></a>
+</div>
+<div class="clear"> </div><br> 
+
+<p class="tit-p">查询结果 (此结果来自深圳市房地产信息系统)</p>
+<p class="detail-p">查询时间：<span>2017-05-21 22:56 </span><br>
+
+评估总值：<span>20000000 </span>元<br>
+
+评估净值：<span>56566523 </span>元<br>
+
+首套房最高可贷：<span>254 </span>万
+</p>
+
+<br> <br> <br>
+
+ 
+ 
+
+<script src="./js/mui.min.js"></script>
+<script src="./js/mui.picker.min.js"></script>
+<script src="./js/jquery.min.js"></script>
+<script>
+  (function($, doc, $$) {
+				$.init();
+				$.ready(function() {
+
+                      $$(".sel").click(function(){
+					  var userPicker = new $.PopPicker();
+					  userPicker.setData([{
+						value: 'yes',
+						text: '同致诚'
+					  }, {
+						value: 'no',
+						text: '否'
+					  }]);
+					  var _this=$$(this);
+				      userPicker.show(function(items) {
+							_this.val((items[0].text));
+							//返回 false 可以阻止选择框的关闭
+							//return false;
+						});
+				 
+				  });
+  		 
+					 
+				});
+			})(mui, document,jQuery);
+</script>
+</body>
+</html>

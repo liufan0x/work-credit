@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.UserMapper">
+
+	<select id="findUserByAccountMobile" parameterType="java.lang.String" resultType="UserDto">
+		select
+			uid,account,name,passWord,mobile,email,position, isEnable,identity,roleId,deptId,agencyId, dingtalkUid, deptIdArray, isAdmin, CAST(indateStart AS CHAR) indateStart,CAST(indateEnd AS CHAR) indateEnd,idCard
+		from tbl_user_base where (mobile = #{0} or account = #{0})
+	</select>
+	<select id="loginByAccountMobile" parameterType="java.lang.String" resultType="UserDto">
+		select 
+			uid,account,name,passWord,mobile,email,position, deptIdArray,deptId,agencyId,identity,roleId,isEnable,dingtalkUid, isAdmin,
+			CAST(indateStart AS CHAR) indateStart,CAST(indateEnd AS CHAR) indateEnd 
+		from tbl_user_base where 1=1 
+		<if test="null!= account and  ''!= account"> and account=#{account}</if>
+		<if test="null!= mobile and  ''!= mobile"> and mobile=#{mobile}</if>
+	</select>
+	<select id="getEntityByUid" parameterType="java.lang.String" resultType="UserDto">
+		select uid,account,name,passWord,mobile,email,position, deptIdArray,deptId,agencyId,identity,roleId,isEnable,dingtalkUid, isAdmin, CAST(indateStart AS CHAR) indateStart,CAST(indateEnd AS CHAR) indateEnd
+		from tbl_user_base where uid=#{uid}
+	</select>
+	<select id="getEntityByMobile" parameterType="java.lang.String" resultType="UserDto">
+		select uid,account,name,passWord,mobile,email,position, deptIdArray,deptId,agencyId,identity,roleId,isEnable,dingtalkUid, isAdmin, CAST(indateStart AS CHAR) indateStart,CAST(indateEnd AS CHAR) indateEnd 
+		from tbl_user_base where mobile=#{mobile}
+	</select>
+	<update id="updatePwd" parameterType="UserDto">
+		update tbl_user_base set passWord = #{password} where 1=1
+		<choose>
+			<when test="null!=uid and ''!=uid"> AND uid=#{uid}</when>
+			<otherwise> AND account=#{account}</otherwise>
+		</choose>
+	</update>
+	
+	<!-- @rewrite KangLG<2017-11-02> deptID/deptIds支持员工同属多部门 -->
+	<select id="selectUserList" resultType="UserDto" parameterType="UserDto">
+		select  
+			t1.id,t1.uid,t1.account,t1.name,t1.password,t1.telphone,t1.mobile,t1.email,t1.position,t1.identity,t1.cityCode,t1.roleId,
+			t1.deptId,t1.deptIdArray,t1.jobNumber,t1.agencyId,t1.isEnable,
+			t1.approveRemark,t1.idCard,t1.createUid,t1.updateUid,t1.createTime,t1.updateTime,
+			t1.remark,t1.appIsShow,t1.dingtalkUid,t1.dingtalkDepId,t1.sourceFrom,t1.isAdmin,t2.id as fundId
+		from `anjbo-server-user`.tbl_user_base t1 
+		left join `anjbo-server-customer`.tbl_customer_fund t2 on t1.uid = t2.managerUid
+		where t1.account != 'admin' 
+		<if test="agencyId != null and agencyId != '' ">
+			and t1.agencyId = #{agencyId}
+		</if>
+		<if test="deptId != null and deptId != 0">
+			and t1.deptIdArray LIKE CONCAT('%', #{deptId}, '%')
+		</if>
+		<if test="deptIds!=null and deptIds!=''">
+			and (<foreach collection="deptIdsArray" index="index" item="item" open="" close="" separator="or"> t1.deptIdArray LIKE CONCAT('%',#{item},'%') </foreach>)		
+		</if>
+		<!-- 处理上下级关系 -->
+		<if test="myDeptId>0">
+			<!-- 普通成员只能看自己及子部门成员 -->
+			and (t1.deptId!=#{myDeptId} or (t1.deptId=#{myDeptId} and t1.uid=#{uid})
+					<!-- 上级部门可以看自己及普通成员及子部门成员 -->
+					<if test="identity==1">
+						or (t1.deptId=#{myDeptId} and t1.identity=0)
+					</if>
+				)
+		</if>
+		<if test="roleId != null and roleId != 0">
+			and t1.roleId = #{roleId} 
+		</if>
+		<if test="name != null and name != ''">
+			and t1.`name` like CONCAT('%',#{name},'%') 
+		</if>
+		<if test="start!=null">
+			and t1.account != 'admin'
+			limit #{start},#{pageSize}
+		</if>
+	</select>	
+	<select id="selectUserCount" resultType="int" parameterType="UserDto">
+		select count(1) from tbl_user_base where account != 'admin' 
+		<if test="agencyId != null and agencyId != '' ">
+			and agencyId = #{agencyId}
+		</if>
+		<if test="deptId != null and deptId != 0">
+			and deptIdArray LIKE CONCAT('%', #{deptId}, '%')
+		</if>
+		<if test="deptIds!=null and deptIds!=''">
+			and (<foreach collection="deptIdsArray" index="index" item="item" open="" close="" separator="or"> deptIdArray LIKE CONCAT('%',#{item},'%') </foreach>)
+		</if>
+		<!-- 处理上下级关系 -->
+		<if test="myDeptId>0">
+			<!-- 普通成员只能看自己及子部门成员 -->
+			and (deptId!=#{myDeptId} or (deptId=#{myDeptId} and uid=#{uid})
+					<!-- 上级部门可以看自己及普通成员及子部门成员 -->
+					<if test="identity==1">
+						or (deptId=#{myDeptId} and identity=0)
+					</if>
+				)
+		</if>
+		<if test="roleId != null and roleId != 0">
+			and roleId = #{roleId} 
+		</if>
+		<if test="name != null and name != ''">
+			and `name`  like CONCAT('%',#{name},'%') 
+		</if> 
+	</select>
+	
+	<select id="search" resultType="UserDto" parameterType="UserDto">
+		select * from tbl_user_base where 1=1
+		<if test="null!=agencyId and agencyId>0"> and agencyId=#{agencyId}</if>
+		<if test="true==isAdmin"> and isAdmin=1</if>
+		<if test="null!=deptId and deptId>0"> and deptId=#{deptId}</if>
+		<if test="null!=remark and '已推送APP'==remark"> AND (remark IS NULL OR remark!=#{remark})</if>
+	</select>
+	<select id="searchByDingtalk" resultType="UserDto" parameterType="UserDto">
+		select deptIdArray, dingtalkUid, uid, account, name  from tbl_user_base where dingtalkUid is not null
+	</select>
+	
+	<!-- 仅用于检验手机号是否重复，或根据UID获取用户信息 -->	
+	<select id="findUserDto" resultType="UserDto" parameterType="UserDto">
+		select * from tbl_user_base where 
+		<if test="mobile != null ">uid != #{uid} and mobile = #{mobile}</if>
+		<if test="mobile == null ">uid = #{uid}</if>		 
+	</select>
+	
+	<insert id="insertUser" parameterType="UserDto">
+		INSERT INTO `tbl_user_base` ( `uid`, `account`, `name`, `password`, `mobile`, `email`, `position`, `identity`, `cityCode`, `roleId`, `deptId`, `agencyId`, `isEnable`, `createUid`, `updateUid`, `createTime` ,appIsShow, dingtalkUid, deptIdArray, sourceFrom, isAdmin,indateStart,indateEnd,idCard) 
+		VALUES (#{uid}, #{account}, #{name}, #{password}, #{mobile}, #{email}, #{position}, #{identity}, #{cityCode}, #{roleId}, #{deptId}, #{agencyId}, #{isEnable}, #{createUid}, #{createUid}, now(),#{appIsShow}, #{dingtalkUid}, #{deptIdArray}, #{sourceFrom}, #{isAdmin},#{indateStart},#{indateEnd},#{idCard})
+	</insert>
+	
+	<update id="updateUser" parameterType="UserDto">
+		update tbl_user_base SET uid = #{uid} , `appIsShow` = #{appIsShow} 
+		<if test="null!=agencyId and agencyId>1">,agencyId=#{agencyId}, isAdmin=IF(1=#{isAdmin},1,isAdmin)</if>
+		<if test="isEnable != null">
+			,isEnable = #{isEnable}
+		</if>
+		<if test="approveRemark != null and approveRemark != ''">
+			,approveRemark = #{approveRemark}
+		</if>
+		<if test="name != null and name != ''">
+			,`name` = #{name}
+		</if>
+		<if test="mobile != null and mobile != ''">
+			,`mobile` = #{mobile}
+		</if>
+		<if test="email != null and email != ''">
+			,`email` = #{email}
+		</if>
+		<if test="position != null and position != ''">
+			,`position` = #{position}
+		</if>
+		<if test="deptId != null and deptId != ''">
+			,`deptId` = #{deptId}
+		</if>
+		<if test="roleId != null and roleId != ''">
+			,`roleId` = #{roleId}
+		</if>
+		<if test="cityCode != null and cityCode != ''">
+			,`cityCode` = #{cityCode}
+		</if>
+		<if test="identity != null and identity>-1">
+			,`identity` = #{identity}
+		</if> 
+		<if test="null!=deptIdArray and ''!=deptIdArray">, deptIdArray=#{deptIdArray}</if>
+		<if test="null!=dingtalkUid and ''!=dingtalkUid">, dingtalkUid = #{dingtalkUid}</if>
+		<if test="null!=indateStart and ''!=indateStart">
+			,<choose><when test="'0000-00-00'==indateEnd">indateStart=null</when><otherwise>indateStart = #{indateStart, jdbcType=TIMESTAMP}</otherwise></choose> 
+		</if>
+		<if test="null!=indateEnd and ''!=indateEnd">
+			,<choose><when test="'0000-00-00'==indateEnd">indateEnd=null</when><otherwise>indateEnd = #{indateEnd, jdbcType=TIMESTAMP}</otherwise></choose> 
+		</if>
+		<if test="null!=idCard and ''!=idCard">, idCard = #{idCard}</if>
+		<if test="null!=sourceFrom and ''!=sourceFrom">, sourceFrom = #{sourceFrom}</if>
+		where uid = #{uid} 
+	</update>	
+	<update id="updateStatus" parameterType="UserDto">
+		update tbl_user_base SET isEnable=#{isEnable} where agencyId>1 AND uid=#{uid} 
+	</update>
+	
+	<!-- 解绑 -->
+	<update id="update4Unbind" parameterType="UserDto">
+		update tbl_user_base SET agencyId=0,deptId=0,deptIdArray=0,roleId=-1,isEnable=3,isAdmin=0,approveRemark='' where agencyId>1 AND uid=#{uid} 
+	</update>
+	<update id="update4UnbindAgency" parameterType="UserDto">
+		update tbl_user_base SET agencyId=0,deptId=0,deptIdArray=0,roleId=-1,isEnable=3,isAdmin=0,approveRemark='' where agencyId>1 AND agencyId=#{agencyId} 
+	</update>
+	<update id="update4SyncOldUser" parameterType="UserDto">
+		update tbl_user_base SET remark=#{remark} where uid=#{uid} 
+	</update>
+	
+	<!-- 根据部门分组统计用户数量 -->
+	<select id="selectUserCountGroupByDeptId" parameterType="UserDto" resultType="java.util.Map">
+		select identity, deptIdArray as deptId, count(1) as count from tbl_user_base
+		where account != 'admin'
+		<if test="agencyId != null and agencyId != ''">
+			and agencyId = #{agencyId}
+		</if>
+		group by identity,deptIdArray
+	</select>
+	
+	<select id="selectUidByDeptIds" parameterType="java.lang.String" resultType="java.lang.String">
+		select uid from tbl_user_base where deptIdArray in (${deptIds})
+	</select>
+	<select id="selectUidByDeptList" parameterType="list" resultType="java.lang.String">
+		select uid from tbl_user_base where 1=1 and(<foreach collection="list" index="index" item="item" open="" separator=" or " close="">deptIdArray like CONCAT('%', #{item}, '%')</foreach>)
+	</select>
+	
+	<insert id="insert" parameterType="UserDto">
+		insert into tbl_user_base(agencyId,deptIdArray,deptId, 
+			dingtalkUid,uid,jobNumber,account,name,password, 
+			position,identity,cityCode,roleId,isEnable,appIsShow, 
+			idCard,telphone,mobile,email,createTime) 
+		values 
+			(#{agencyId}, #{deptIdArray}, #{deptId}, 
+			 #{dingtalkUid}, #{uid}, #{jobNumber}, #{account}, #{name}, #{password}, 
+			 #{position}, #{identity}, #{cityCode}, #{roleId}, #{isEnable}, #{appIsShow}, 
+			 #{idCard}, #{telphone}, #{mobile}, #{email}, NOW())
+	</insert>
+	<insert id="batchInsert" parameterType="java.util.List">
+		insert into tbl_user_base(agencyId,deptIdArray,deptId, 
+			dingtalkUid,uid,jobNumber,account,name,password, 
+			position,identity,cityCode,roleId,isEnable,appIsShow, 
+			telphone,mobile,email,createTime) values 
+		<foreach collection="list" index="index" item="item" separator="," >
+			(#{item.agencyId}, #{item.deptIdArray}, #{item.deptId}, 
+			 #{item.dingtalkUid}, #{item.uid}, #{item.jobNumber}, #{item.account}, #{item.name}, #{item.password}, 
+			 #{item.position}, #{item.identity}, #{item.cityCode}, #{item.roleId}, #{item.isEnable}, #{item.appIsShow}, 
+			 #{item.telphone}, #{item.mobile}, #{item.email}, NOW())
+		</foreach>
+	</insert>
+	<update id="batchUpdate" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" open="" close="" separator=";">
+        	<choose>
+        		<when test="1==item.agencyId and 'ByUID'==item.remark">
+        			update tbl_user_base set 
+        				deptIdArray=#{item.deptIdArray}, deptId=#{item.deptId},
+        				jobNumber=#{item.jobNumber}, name=#{item.name},
+        				position=#{item.position}, isEnable=IF(isEnable=0, #{item.isEnable}, 1),
+        				telphone=#{item.telphone}, mobile=#{item.mobile}, email=#{item.email}, remark='钉钉BY钉Uid', updateTime=NOW() 
+        			where agencyId=1 and dingtalkUid=#{item.dingtalkUid}
+        		</when><when test="1==item.agencyId and 'ByUName'==item.remark">
+        			update tbl_user_base set 
+        				deptIdArray=#{item.deptIdArray}, deptId=#{item.deptId},
+        				dingtalkUid=#{item.dingtalkUid}, jobNumber=#{item.jobNumber}, 
+        				position=#{item.position}, isEnable=IF(isEnable=0, #{item.isEnable}, 1),
+        				telphone=#{item.telphone}, mobile=#{item.mobile}, email=#{item.email}, remark='钉钉BY姓名', updateTime=NOW() 
+        			where agencyId=1 and name=#{item.name}
+        		</when><otherwise>
+        		</otherwise>
+        	</choose>    
+        </foreach> 
+    </update>
+    <update id="batchMoveMobile" parameterType="java.util.List">
+        <foreach collection="list" index="index" item="item" open="" close="" separator=";">
+      		update tbl_user_base set 
+      			mobile=CONCAT('_',mobile), remark=CONCAT('手机号与钉钉UID(',#{item.dingtalkUid},')不匹配或重复处理'), updateTime=NOW()
+      		where agencyId=1 and mobile=#{item.mobile}
+        </foreach> 
+    </update>
+    
+    <select id="selectUidByAgencyId" parameterType="java.lang.Integer" resultType="java.lang.String">
+		SELECT 
+			uid 
+		FROM 
+			tbl_user_base 
+		WHERE 
+			agencyId = #{agencyId};
+	</select>
+	
+	<!-- 查询用户资方id -->
+	<select id="selectFundByUid" parameterType="java.lang.String" resultType="CustomerFundDto">
+		select * from `anjbo-server-customer`.tbl_customer_fund where managerUid = #{uid}
+	</select>
+	
+</mapper>

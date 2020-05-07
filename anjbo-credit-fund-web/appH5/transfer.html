@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>过户</title>
+<!--标准mui.css-->
+<link rel="stylesheet" href="./css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="./css/order.css" />
+<link href="./css/mui.picker.min.css" rel="stylesheet" />
+</head>
+<body>
+<div class="form-box">
+<div class="detail-box">
+     <iframe src="detail.html" frameborder="0" id="detail-if" style="width:100%;height:307px;"></iframe>
+</div>
+<p class="toggle-p"><span>展开查看订单信息</span></p>
+</div>
+<div class="form-box">
+     <div class="inp-div">
+           <span class="inp-span mi">过户日期</span><span class="inp-r "> &nbsp;</span>
+           <input type="text" value="" disabled class="inp-box "   id="transferTime">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">国土局</span><span class="inp-r ">&nbsp;</span>
+           <a href="#"><input type="text" value="" disabled class="inp-box" id="tlandBureauName" ></a>
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">过户开始时间</span><span class="inp-r icon-d"> &nbsp;</span>
+           <input type="text" value="" readonly class="inp-box date" data-options='{"type":"date"}'  id="transferStartTime" placeholder="请选择">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">过户结束时间</span><span class="inp-r icon-d"> &nbsp;</span>
+           <input type="text" value="" readonly class="inp-box date" data-options='{"type":"date"}'  id="transferEndTime" placeholder="请选择">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">过户回执编号</span><span class="inp-r ">&nbsp;</span>
+           <input type="tel" value=""  class="inp-box" id="receiptNumber" placeholder="请输入">
+     </div>
+
+      <div class="inp-div no-border" >
+           <span class="inp-span mi">添加过户照片</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#"><input type="text" value="" readonly class="inp-box file-upload" id="nImg" ></a>
+           <input type="hidden" id="transferImg">
+     </div>
+     <div class="clear"></div>
+</div>
+
+<div class="form-box">
+     <div class="inp-div">
+           <span class="inp-span mi">预计领新证日期</span><span class="inp-r icon-d"> &nbsp;</span>
+           <input type="text" value="" readonly class="inp-box date" data-options='{"type":"date"}'  id="newlicenseTime" placeholder="请选择">
+     </div>
+	 <div class="inp-div">
+           <span class="inp-span mi">国土局驻点（领新证）</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#" id="nUidUrl"><input type="text" value="" readonly class="inp-box" id="nlandBureauUserName"  placeholder="请选择"></a>
+           <input type="hidden"  id="nlandBureauUid">
+     </div>
+	 <div class="inp-div no-border">
+           <span class="inp-span mi">国土局（领新证）</span><span class="inp-r arrow">&nbsp;</span>
+           <a href="#" id="nUrl"><input type="text" value="" readonly class="inp-box" id="nlandBureauName"  placeholder="请选择"></a>
+           <input type="hidden"  id="nlandBureau">
+     </div>
+	 <div class="clear"></div>
+</div>
+
+<div class="form-box">
+    <div class="clear"> </div>
+	<div class="inp-div no-border">
+           <span class="inp-span">备注</span>
+     </div>
+     <textarea id="remark" rows="5" placeholder="如有特殊说明，请在此备注（非必填）。" class="textarea-box"></textarea>
+	 <div class="clear"></div>
+ 
+     <div class="sub-but">确认</div>
+     <br>
+</div>
+
+
+<div class="mui-iframe-wrapper iframe-box  landBureau">
+<iframe id="ifranmes" src="landBureau_list.html"></iframe>
+</div>
+
+<div class="mui-iframe-wrapper iframe-box landBureauUid">
+<iframe id="ifranmesUid" src="landBureauUid_list.html"></iframe>
+</div>
+
+<!--上传图片-->
+<div class="file-box">
+     <div class="file-but">立即上传</div>
+	 <div class="img-box">
+	    <div class="file-add"><input type="file" class="file-inp" name="file" id="file"></div>
+	 </div>
+</div>
+<script src="./js/mui.min.js"></script>
+<script src="./js/mui.picker.min.js"></script>
+<script src="./js/jquery.min.js"></script>
+<script src="./js/process.js"></script>
+<script>
+var urlip="";
+var orderNo = GetQueryString("orderNo");
+var productCode=GetQueryString("productCode");
+var cityCode = GetQueryString("cityCode");
+$("#ifranmes").attr("src","landBureau_list.html?orderNo="+orderNo+"&pcode="+cityCode);
+$("#ifranmesUid").attr("src","landBureauUid_list.html?type=领新证&cityCode="+cityCode+"&productCode="+productCode);
+$("#detail-if").attr("src","detail.html?orderNo="+orderNo);
+
+function returnData(code,name){
+  if(code){
+	   $(".landBureau").css({"opacity":"0","z-index":"-11"});
+	   $("#nlandBureau").val(code);
+	   $("#nlandBureauName").val(name);
+  }
+}
+
+function returnDataUrl(code,name){
+	  if(code){
+		   $(".landBureauUid").css({"opacity":"0","z-index":"-11"});
+		   $("#nlandBureauUid").val(code);
+		   $("#nlandBureauUserName").val(name);
+	  }
+	}
+
+ $(function(){
+	  //图片上传
+	$(".file-upload").on("click",function(){
+	    $(".file-box").show();
+	})
+	$(".file-but").on("click",function(){
+		var picAll='';
+        $(".img").each(function(){
+		   picAll+=$(this).attr("src")+",";
+		}) 
+	    $(this).parent(".file-box").hide();
+		if(picAll==""){
+		  $(".file-upload").val("请上传图片");
+		}else{
+		  picAll=picAll.substring(0,picAll.length-1);
+		  //alert(picAll);
+		   $("#transferImg").val(picAll);
+		  $(".file-upload").val("已上传");
+		}
+	})
+	
+	$(".file-inp").change(function(){
+        var formData = new FormData();
+        formData.append("file",$("#file")[0].files[0]);
+        $.ajax({ 
+		type:'post',
+	    url: "http://fs.anjbo.com/fs/img/upload", 
+		processData : false,
+		contentType: false,
+		data: formData, 
+		success: function(data){
+			var picUrl=data.url;
+			var ss='<div class="file-img"><img src="'+picUrl+'" class="img"><div class="mui-icon mui-icon-minus file-del"></div></div>';
+            $(".img-box").append(ss);
+			$(".file-del").on("click",function(){
+	            $(this).parent(".file-img").remove();
+	        })
+         },
+		 error:function(xhr,type,errorThrown){
+					console.log(type);
+		}
+	  });	 
+	})
+	//图片上传end
+	  //详情点击效果
+	$(".toggle-p span").on("click",function(){
+		  if($(this).html()=="点击收起订单信息"){ 
+			  $(this).html("展开查看订单信息"); 
+		   }
+		  else{  $(this).html("点击收起订单信息"); }
+		  $(this).parent().prev(".detail-box").toggle();
+	}) 
+
+	 $("#nUidUrl").on("click",function(){ 
+	    $(".landBureauUid").css({"opacity":"1","z-index":"111"});
+	 })
+	 $("#nUrl").on("click",function(){ 
+		    $(".landBureau").css({"opacity":"1","z-index":"111"});
+	 })
+	 $.ajax({ 
+		 url:urlip+'/credit/process/transfer/v/detail',
+		 data:JSON.stringify({"orderNo":orderNo}), 
+         type: 'post' ,
+         dataType: 'json',  
+         contentType:'application/json;charset=utf-8',
+		 success: function(data){
+			var obj= data.data;
+		    var img = obj.transferImg;
+		    if(img!=null && img!=''){
+		    	 $("#nImg").val("已上传");
+		    }
+		    $("#transferTime").val(obj.transferTimeStr);
+		    $("#tlandBureauName").val(obj.tlandBureauName);
+		    $("#transferStartTime").val(obj.transferStartTimeStr);
+		    $("#transferEndTime").val(obj.transferEndTimeStr);
+		    $("#receiptNumber").val(obj.receiptNumber);
+		    $("#transferImg").val(obj.transferImg);
+			if(obj.transferImg){	
+				$(".file-upload").val("已上传");
+			    arrImg=obj.transferImg.split(",");
+				for(var i=0; i<arrImg.length;i++){
+				   var ss='<div class="file-img"><img src="'+arrImg[i]+'" class="img"><div class="mui-icon mui-icon-minus file-del"></div></div>';
+				  $(".file-box").find(".img-box").append(ss);
+				  $(".file-del").on("click",function(){
+	                      $(this).parent(".file-img").remove();
+	              })
+				}
+			  }else{
+			     $(".file-upload").val("请上传图片");
+			  }
+		    $("#nlandBureauUid").val(obj.nlandBureauUid);
+		    $("#nlandBureauUserName").val(obj.nlandBureauUserName);
+		    $("#nlandBureauName").val(obj.nlandBureauName);
+		    $("#nlandBureau").val(obj.nlandBureau);
+		    $("#newlicenseTime").val(obj.newlicenseTimeStr);
+		    $("#remark").val(obj.remark);
+         }
+	   });
+ })
+
+$(".sub-but").click(function(){  
+	var remark =$("#remark").val();
+	var transferStartTime =$("#transferStartTime").val();
+	var transferEndTime =$("#transferEndTime").val();
+	var receiptNumber= $("#receiptNumber").val();
+	var transferImg = $("#transferImg").val();
+	var nlandBureauUid = $("#nlandBureauUid").val();
+	var nlandBureauUserName = $("#nlandBureauUserName").val();
+	var nlandBureauName = $("#nlandBureauName").val();
+	var nlandBureau=  $("#nlandBureau").val();
+	var newlicenseTime=  $("#newlicenseTime").val();
+	
+	if(transferStartTime ==null ||  transferStartTime =='' ){
+		alert("过户开始时间不能为空");
+		return false;
+	}
+	if(transferEndTime ==null ||  transferEndTime =='' ){
+		alert("过户结束时间不能为空");
+		return false;
+	}
+	if(receiptNumber ==null ||  receiptNumber =='' ){
+		alert("过户回执编号不能为空");
+		return false;
+	}
+ 	if(transferImg ==null ||  transferImg =='' ){
+ 		alert("过户照片不能为空");
+ 		return false;
+ 	}
+	if(newlicenseTime ==null ||  newlicenseTime =='' ){
+		alert("预计领新证日期不能为空");
+		return false;
+	}
+	if(nlandBureauName ==null ||  nlandBureauName =='' ){
+		alert("国土局不能为空");
+		//return false;
+	}
+	if(nlandBureauUserName ==null ||  nlandBureauUserName =='' ){
+		alert("国土局驻点不能为空");
+		//return false;
+	}
+    var content={"orderNo":orderNo,"transferStartTime":transferStartTime,"transferEndTime":transferEndTime,
+    		 	"receiptNumber":receiptNumber,"transferImg":transferImg,"nlandBureauUid":nlandBureauUid,
+    		 	"nlandBureauUserName":nlandBureauUserName,"nlandBureauName":nlandBureauName,"nlandBureau":nlandBureau,
+    		 	"newlicenseTime":newlicenseTime,"remark":remark,"uid":GetQueryString("uid"),"deviceId":GetQueryString("deviceId")};
+	 $.ajax({ 
+		url:urlip+'/credit/process/transfer/v/add',
+		data:JSON.stringify(content), 
+        type: 'post' ,
+        dataType: 'json',  
+        contentType:'application/json;charset=utf-8',
+		 success: function(data){
+			alert(data.msg);
+        }
+	   });
+ })
+ 
+ 
+
+
+mui.init();
+mui.ready(function() {
+
+  $(".sel").click(function(){
+	  var userPicker = new mui.PopPicker();
+	  userPicker.setData([{
+		value: 'yes',
+		text: '是'
+	  }, {
+		value: 'no',
+		text: '否'
+	  }]);
+	  var _this=$(this);
+	  userPicker.show(function(items) {
+			_this.val((items[0].text));
+			//返回 false 可以阻止选择框的关闭
+			//return false;
+		});
+  });
+   
+  $(".date").on("click",function(){
+	  var _this=$(this);
+	  var optionsJson = _this.attr('data-options') || '{}';
+	  var options = JSON.parse(optionsJson);
+	  var  picker = new mui.DtPicker(options);
+	  picker.show(function(rs) {
+		  _this.val(rs.text);
+		   picker.dispose();
+		});
+     });
+  
+});
+
+</script>
+</body>
+</html>

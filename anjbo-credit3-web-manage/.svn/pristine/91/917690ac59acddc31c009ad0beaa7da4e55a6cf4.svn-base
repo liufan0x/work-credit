@@ -1,0 +1,128 @@
+<div class="container-fluid">
+	<div class="clear" style="height:10px;"></div>
+	<div class="row">
+		<div class="col-md-12">
+			<ul class="breadcrumb">
+				<li><a ui-sref="fundList">资金方管理</a></li>
+				<li><a ui-sref="fundCostList({'fundId':{{fundId}},'fundName':'{{fundName}}'})">资金方成本列表</a></li>
+				<li><span>修改资金成本</span></li>			
+				<li class="go-back"> <a ui-sref="fundCostList({'fundId':{{fundId}},'fundName':'{{fundName}}'})" >返回上一步</a></li>
+			</ul>
+		</div>
+	</div>
+	<div class="row">
+		<form role="form" name="fundCostForm" class="form-inline">
+			<div class="col-md-12">
+				<div class="row">
+					<div class="col-md-6 col-lg-4">
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<div class="jigou-span">城市-业务品种：</div>
+						        	<select class="form-control" style="width: 100px;" ng-model="cityCode" >
+										<option ng-repeat="city in cityList" value="{{city.code}}">{{city.name}}</option>
+									</select>
+									-
+									<select class="form-control" ng-model="fundCostDto.productId" name="productId" required>
+										<option value="">请选择</option>
+										<option ng-repeat="product in productList" ng-if="((product.id|limitTo:6:4)=='01' || (product.id|limitTo:6:4)=='02' || (product.id|limitTo:6:4)=='03') && ((product.id|limitTo:4) == cityCode)" value="{{product.id}}">{{product.productName}}</option>
+									</select>
+									<span style="color:red" ng-show="fundCostForm.productId.$dirty && fundCostForm.productId.$invalid">
+				  						<span ng-show="fundCostForm.productId.$error.required">必选</span>
+									</span>
+								</div> 
+							</div>
+							<div class="col-md-12 ">
+								<div class="form-group" >
+									<div class="jigou-span"> 日费率：</div>
+									<input type="text" class="form-control" ng-model="fundCostDto.dayRate" name="dayRate" required />%/天
+									<span style="color:red" ng-show="fundCostForm.dayRate.$dirty && fundCostForm.dayRate.$invalid">
+				  						<span ng-show="fundCostForm.dayRate.$error.required">日费率必填</span>
+									</span>
+								</div> 
+							</div>
+							<div class="col-md-12 ">
+								<div class="form-group">
+									<div class="jigou-span"> 逾期费率：</div>
+									<select class="form-control" ng-model="fundCostDto.overdueRateHas" >
+										<option value="1">有</option>
+										<option value="0">无</option>
+									</select>
+								</div> 
+							</div>
+							<div class="col-md-12 " ng-if="fundCostDto.overdueRateHas == 1">
+								<div class="form-group">
+									<div class="jigou-span"> &nbsp;</div>
+									<input type="text" class="form-control" ng-model="fundCostDto.overdueRate" name="overdueRate" required />%/天
+									<span style="color:red" ng-show="fundCostForm.overdueRate.$dirty && fundCostForm.overdueRate.$invalid">
+				  						<span ng-show="fundCostForm.overdueRate.$error.required">逾期费率必填</span>
+									</span>
+								</div> 
+							</div>
+							<div class="col-md-12 ">
+								<div class="form-group">
+									<div class="jigou-span"> 风险拨备：</div>
+									<select class="form-control" ng-model="fundCostDto.riskProvisionHas">
+										<option value="1">有</option>
+										<option value="0">无</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-12 " ng-if="fundCostDto.riskProvisionHas == 1">
+								<div class="form-group">
+									<div class="jigou-span"> &nbsp;</div>
+									<input type="text" class="form-control" ng-model="fundCostDto.riskProvision" name="riskProvision" required />% 
+									<span style="color:red" ng-show="fundCostForm.riskProvision.$dirty && fundCostForm.riskProvision.$invalid">
+				  						<span ng-show="fundCostForm.riskProvision.$error.required">风险拨备必填</span>
+									</span>
+								</div> 
+							</div>
+						</div>
+					</div>
+
+					<div class="col-md-6 col-lg-8">
+						<div class="row">
+							<div class="col-md-12 ">
+								<div class="form-group" >
+									<div class="jigou-span">优惠：</div>
+									<select class="form-control" ng-model="fundCostDto.discountHas">
+										<option value="1">有</option>
+										<option value="0">无</option>
+									</select>
+								</div>
+							</div>
+							<div class="col-md-12" ng-repeat="discount in discountList" ng-if="fundCostDto.discountHas==1" >
+								<div class="form-group " style="width:600px;">
+									<div class="jigou-span"> &nbsp;</div>
+									<input type="text" class="form-control" placeholder="满足金额" ng-model="discount.money" name="money{{$index}}" required />万元<input type="text" class="form-control" ng-model="discount.rate" name="rate{{$index}}" placeholder="费率" required />%/天
+									
+									<span style="color:red" ng-show="isShowError && (fundCostForm.money{{$index}}.$invalid || fundCostForm.rate{{$index}}.$invalid)">
+										 
+				  						<span ng-show="fundCostForm.money{{$index}}.$error.required || fundCostForm.rate{{$index}}.$error.required">必填</span>
+									</span>
+									 
+								</div>
+								<div class="form-group relative" style="height:33px;"><span ng-class="{true:'jia-but',false:'jian-but'}[$index==0]" ng-click="jiajian($index)"></span> </div>
+								
+									
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</form>
+	</div>
+
+	<div class="clear" style="height:15px;"></div>
+	<div class="jigou-line"></div>
+	<div class="clear" style="height:15px;"></div>
+	<div class="row">
+		<div class="col-md-12">
+			<div class="jigou-span">&nbsp;</div>
+			<button type="button" class="btn btn-success" ng-if="isAdd" ng-click="addOrEdit(true)">保存并继续添加</button>
+			<button type="button" class="btn btn-primary" ng-click="addOrEdit(false)">保存</button>
+			<button type="button" class="btn btn-default" ng-click="cancel()">取消</button> 
+		</div>
+	</div>
+</div>

@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+	<head>
+ 		<meta charset="UTF-8" />
+		<meta name="Keywords" content="" />
+		<meta name="Description" content="" />
+		<link rel="shortcut icon" href="images/icon.png" />
+		<meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="css/select2.css" rel="stylesheet">
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/bootstrap-datetimepicker.css" rel="stylesheet">
+		<link href="css/bootstrap-table.css" rel="stylesheet">
+		<link href="css/jquery.fancybox.css" rel="stylesheet">
+		<link href="css/select2-bootstrap.css" rel="stylesheet">
+		<link href="css/base.css" rel="stylesheet">
+ 		<link rel="stylesheet" href="css/jquery.bigautocomplete.css" type="text/css" />
+		<title>快鸽信贷业务系统</title>
+		<style>
+    html,body{
+      width : 100%;
+      height : 100%;
+      margin:0;
+	  position:relative;
+	  z-index:-2;
+      
+    }</style>
+	</head>
+<body ng-controller="index">
+	
+<!-- 头部 -->
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<div id="top">
+				<div id="topBar">
+					<div class="userPanel">
+						<ul>
+							<li>
+							欢迎您：
+							<span ng-bind="userDto.name"></span>
+							<a rel="nofollow" ng-click="showUpdatePwd()">修改密码</a>&nbsp;&nbsp;&nbsp;&nbsp;
+							<a class="text-danger" rel="nofollow" ng-click="showLogout()">退出</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--row-->
+	<div class="row">
+		<div class="col-md-12">
+			 <nav class="navbar navbar-default navbar-inverse" role="navigation">
+				  <div class="navbar-header">
+					   <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+							 <span class="sr-only">Toggle navigation</span>
+							 <span class="icon-bar"></span>
+							 <span class="icon-bar"></span>
+							 <span class="icon-bar"></span>
+						</button>
+						<a class="navbar-brand" href="#"><img alt="Bootstrap Image Preview" src="./images/logo.png"  width="50"/></a>
+						<span class="index-tit" >快鸽信贷系统</span>
+					</div>
+					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+						 <ul class="nav navbar-nav" style="display: none;"> 
+							 <li class="dropdown">
+							     <a class="dropdown-toggle" data-toggle="dropdown">订单管理<strong class="caret"></strong></a>
+								 <ul class="dropdown-menu">
+									 <li><a ng-click="goPage('orderList')" >订单列表</a></li>
+								</ul>
+							</li>
+							<li class="dropdown"  ng-if="isShow" style="display: none;">
+							     <a class="dropdown-toggle" data-toggle="dropdown">要件管理<strong class="caret"></strong></a>
+								 <ul class="dropdown-menu">
+									 <li><a ng-click="goPage('eleAccessList')" >要件管理列表</a></li>
+								</ul>
+							</li>
+						</ul>
+					
+					</div>
+				</nav>
+	        </div>
+	</div>
+	<!--row-->
+</div>
+<!-- 头部end -->
+		 
+<!--main-->
+<div class="" ui-view="">
+     
+</div>
+<!--main end-->
+
+<div ng-show="false" id="editId"  style="display: none;">
+	<div class="row">
+		<div class="col-md-14">
+		<form class="form-inline" >
+			<div class="form-group">
+				<label >原密码：</label>
+				<input type="password" class="form-control" ng-model="pwdDto.oldPwd">
+			</div>
+			<div class="form-group">
+				<label >新密码：</label>
+				<input type="password" class="form-control" ng-model="pwdDto.newPwd1">
+			</div>
+			<div class="form-group">
+				<label >确认新密码：</label>
+				<input type="password" class="form-control" ng-model="pwdDto.newPwd2">
+			</div>
+			<p ng-if="pwdDto.errorInfo!=''" class="text-danger" ng-bind="pwdDto.errorInfo"></p>
+		</form>
+		</div>
+	</div>
+</div>
+
+<div ng-show="false" id="capitalId"  style="display: none;">
+	<div class="row">
+	  <div class="col-md-14">
+	  <form class="form-inline" >
+	      <div class="">
+	        <label style="width:67px;">金额：</label>
+	        <input type="money" class="form-control" ng-model="obj.withholdMoney" onkeyup="value=value.replace(/[^\d.]/g,'')">&nbsp;元
+	      </div>
+	      <div class="">
+	        <textarea  class="form-control" ng-model="obj.remarks" style="width:276px; margin:10px auto; height:130px;"  placeholder="如有特殊说明，请在此处备注（非必填）"></textarea>
+	      </div>
+	       <p ng-if="msg.errorInfo!=''" class="text-danger"  ng-bind="msg.errorInfo"></p>
+		</div>
+		</form>
+	</div>
+</div>
+
+</body>
+	<script type="text/javascript" src="script/common/jquery.min.js"></script>
+	<script type="text/javascript" src="script/common/angular.min.js"></script>
+	<script src="script/common/bootstrap.min.js"></script>
+	<script type="text/javascript" src="script/common/bootstrap-datetimepicker.min.js" charset="UTF-8"></script><!--日期-->
+    <script type="text/javascript" src="script/common/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="script/common/bootstrap-table.min.js" charset="UTF-8"></script><!--表格-->
+    <script type="text/javascript" src="script/common/bootstrap-table-zh-CN.min.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="script/common/bootstrap-table-angular.min.js" charset="UTF-8"></script>
+	<script type="text/javascript" src="script/common/bootstrap-table-export.min.js" charset="UTF-8"></script> 
+	<script type="text/javascript" src="script/common/tableExport.js" charset="UTF-8"></script> 
+    <script type="text/javascript" src="plugins/jquery-photo-gallery/jquery.photo.gallery.js"></script><!--图片放大-->
+    <script type="text/javascript" src="script/common/bootstrap-suggest.js"></script><!--下拉搜索-->
+	<script type="text/javascript" src="script/common/select2.full.min.js"></script><!--下拉-->
+	<script type="text/javascript" src="script/common/jquery.fancybox.min.js"></script><!--弹出图片上传-->
+	<script type="text/javascript" src="script/common/jquery.bigautocomplete1.js"></script>
+	<script type="text/javascript" src="script/sea.js?123"></script>
+	<script type="text/javascript" src="script/common/Paging.js"></script>
+	<script type="text/javascript" >
+		seajs.use("index");
+	</script>
+</html>

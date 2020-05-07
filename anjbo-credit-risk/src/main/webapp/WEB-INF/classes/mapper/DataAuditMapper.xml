@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.DataAuditMapper">
+   		<select id="detail" parameterType="java.lang.String" resultType="DataAuditDto">
+   		   select *,DATE_FORMAT(auditTime,'%Y-%m-%d') as auditTimeStr from tbl_risk_audit_dataAudit where orderNo=#{0}
+   		    GROUP by createTime desc
+   		    limit 1
+   		</select>
+   		<insert id="insert" parameterType="DataAuditDto">
+   		   INSERT INTO `tbl_risk_audit_dataAudit` 
+   		    ( `createUid`, `createTime`, `updateUid`, `orderNo`, `remark`, `auditTime`) 
+   		   VALUES (#{createUid}, NOW(), #{updateUid},  #{orderNo}, #{remark},NOW());
+   		</insert>
+   		<update id="update" parameterType="DataAuditDto">
+   		    update tbl_risk_audit_dataAudit
+   		    set remark=#{remark} , auditTime=NOW() , updateUid=#{updateUid} 
+   		    where orderNo=#{orderNo}
+   		</update>
+</mapper>

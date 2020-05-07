@@ -1,0 +1,27 @@
+eureka:  
+  instance:
+    preferIpAddress: true
+    instanceId: ${spring.cloud.client.ipAddress}:${server.port}
+  client:
+    service-url:
+      defaultZone: http://server-eureka001:60100/eureka/
+      
+spring:
+  profiles:
+    active: dev
+  application:
+    name: anjbo-credit3-provider-tools
+  cloud:
+    bus:
+      trace:
+        enabled: true
+    config:
+      profile: ${spring.profiles.active}
+      label: master
+      name: ${spring.application.name},anjbo-credit3-common,anjbo-credit3-ams
+      discovery:
+        service-id: anjbo-credit3-server-config
+        enabled: true
+
+server:
+  port: 60005

@@ -1,0 +1,237 @@
+ul,li,p,body{margin:0;padding:0;}
+.fl{ float:left;}
+.fr{ float:right;}
+.shenpi-box{
+  line-height:35px;
+  clear:both;
+  width:100%;
+}
+.shenpi-box img{
+  position:relative;
+  width:20px;
+  top:2px;
+  margin:0 10px;
+  cursor:pointer;
+}
+.shenpi-box span.tip{
+    display:inline-block;
+	float:left;
+}
+.shenpi-box .con{
+  display:inline-block;
+	float:left;
+  padding:0 10px 0 10px;
+  line-height:32px;
+  height:32px;
+  background:#e4e4e4;
+  color:#333;
+  cursor:pointer;
+  font-size:13px;
+  position:relative;
+}
+.shenpi-box .con .x{
+  position:absolute;
+  top:0;
+  width:15px;
+  height:15px;
+  line-height:15px;
+  right:0;
+  text-align:center;
+  z-index:22
+}
+.shenpi-box .con .x:hover{
+  color:#aaa;
+}
+.shenpi-box .arrow{
+  display:inline-block;
+  float:left;
+  width:40px;
+  height:32px;
+  background:url(../images/go.png) no-repeat center center;
+}
+.yjg-alert{
+	position:fixed;
+	z-index:998;
+	width:100%;
+	height:100%;
+	top:0;
+	left:0;
+	bottom:0;
+	right:0;
+	display:none;
+}
+.black-bg{
+	position:fixed;
+	top:0;
+	left:0;
+	bottom:0;
+	right:0;
+	width:100%;
+	background:#000;
+	-moz-opacity: 0.3; /* FF 3.5以下 */  
+	opacity: 0.3; /* FF 3.5及以上 */  
+	filter: alpha(opacity=30); /* IE6及以上 */  
+	z-index:-1;
+}
+.yjg-alert-box{
+  width:600px;
+  margin:150px auto 0 auto;
+  background:#fff;
+  border-radius:6px;
+  position:relative;
+  font-size:15px;
+  overflow:hidden;
+}
+.yjg-alert .x-box{
+  width:26px;
+  height:26px;
+  position:absolute;
+  top:8px;
+  right:8px;
+  background:url(../images/x.png) no-repeat center center;
+  cursor:pointer;
+}
+.yjg-alert .tit{
+  line-height:45px;
+  text-align:center;
+  background:#4a77ac;
+  color:#fff;
+}
+.yjg-alert .tip{
+  line-height:40px;
+  padding-top:6px;
+  color:#333;
+  text-align:center;
+}
+.yjg-alert .tip2{
+  line-height:32px;
+  width:95%;
+  margin:0 auto;
+  color:#999;
+}
+.yjg-alert .tip2 span{
+  width:53%;
+  float:left;
+  
+  display:block;
+}
+.yjg-alert .tip3{
+  line-height:20px;
+   width:90%;
+   height:20px;
+   margin-left:3%;
+   clear:both;
+   color:#999;
+}
+.yjg-alert .left{
+  width:268px;
+  height:347px;
+  float:left;
+  margin:0 15px 10px 15px;
+  border:1px solid #c8c8c8;
+}
+.yjg-alert .search{
+  width:90%;
+  margin:10px auto;
+  height:35px;
+  line-height:35px;
+  border-radius:3px;
+  border:1px solid #c8c8c8;
+}
+.yjg-alert .search span{
+   display:block;
+   float:left;
+   width:35px;
+   height:35px;
+   background:url(../images/search.png) no-repeat center center;
+ }
+.yjg-alert .search .tan-input{
+  border:none;
+  background:transparent;
+ }
+.yjg-alert .nav{
+  width:98%;
+  height:290px;
+  margin:5px auto;
+  overflow-y:auto;
+  overflow-x:hidden;
+}
+.yjg-alert .nav li p{
+  width:100%;
+  height:36px;
+  line-height:36px;
+  color:#333;
+  display:block;
+  position:relative;
+  text-decoration:none;
+  cursor:pointer;
+}
+.yjg-alert ul{list-style:none;}
+.yjg-alert .nav span{
+  display:block;
+  width:22px;
+  height:36px;
+  float:left;
+}
+.yjg-alert .nav .arrow{
+  display:block;
+  width:22px;
+  height:36px;
+  float:left;
+  background:url(../images/right2.png) no-repeat center center;
+}
+.yjg-alert .nav .arrow.shou{
+    background:url(../images/shou2.png) no-repeat center center;
+}
+.yjg-alert .nav .doc{
+   width:22px;
+   float:left;
+   height:36px;
+   background:url(../images/wenjian.png) no-repeat center center;
+}
+.yjg-alert .nav ul ul{margin-left:22px;display:none;}
+.yjg-alert .nav2{
+  width:94%;
+  height:332px;
+  margin:5px auto;
+  overflow-y:auto;
+  overflow-x:hidden;
+}
+.yjg-alert .nav2 li{
+  width:96%;
+  margin:0 auto;
+  height:36px;
+  font-size:14px;
+  line-height:36px;
+  color:#333;
+  display:block;
+  position:relative;
+  text-decoration:none;
+}
+.yjg-alert .nav2 span{
+   display:inline-block;
+   float:right;
+   cursor:pointer;
+   width:40px;
+   text-align:center;
+   color:#afacac;
+ }
+.yjg-alert .bottom{
+	width:300px;
+	margin: 20px auto 20px auto;
+	clear: both;
+	height: 40px;
+}
+.yjg-alert .bottom a{
+  width:118px;
+  height:38px;
+  line-height:38px;
+  text-align:center;
+  border-radius:3px;
+  font-size:16px;
+  display:block;
+  color: #fff;
+  cursor:pointer;
+  background: #0cbbd3;
+}
+.yjg-alert .bottom a.cancel{ background: #c8c8c8;}

@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.AgencyFeescaleDetailMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=feescaleid and feescaleid>0"> AND `feescaleid`=#{feescaleid}</if>
+		<if test="null!=raskcontrolid and raskcontrolid>0"> AND `raskcontrolid`=#{raskcontrolid}</if>
+		<if test="null!=sectionid and sectionid>0"> AND `sectionid`=#{sectionid}</if>
+		<if test="null!=field and field>0"> AND `field`=#{field}</if>
+		<if test="null!=maxfield and maxfield>0"> AND `maxfield`=#{maxfield}</if>
+		<if test="null!=rate and rate>0"> AND `rate`=#{rate}</if>
+		<if test="null!=overduerate and overduerate>0"> AND `overduerate`=#{overduerate}</if>
+		<if test="null!=modeid and modeid>0"> AND `modeid`=#{modeid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<if test="null!=remark and ''!=remark"> AND `remark`=#{remark}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="AgencyFeescaleDetailDto" resultType="AgencyFeescaleDetailDto">    
+	SELECT `id`, `feescaleid`, `raskcontrolid`, `sectionid`, `field`, `maxfield`, `rate`, `overduerate`, `modeid`, `createTime`, `updateTime`, `createUid`, `updateUid`, `remark` 
+	FROM tbl_customer_agency_feescale_detail 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="AgencyFeescaleDetailDto" resultType="AgencyFeescaleDetailDto">
+	SELECT `id`, `feescaleid`, `raskcontrolid`, `sectionid`, `field`, `maxfield`, `rate`, `overduerate`, `modeid`, `createTime`, `updateTime`, `createUid`, `updateUid`, `remark`
+	FROM tbl_customer_agency_feescale_detail 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="AgencyFeescaleDetailDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_customer_agency_feescale_detail 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="AgencyFeescaleDetailDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_customer_agency_feescale_detail(
+		`feescaleid`,
+		`raskcontrolid`,
+		`sectionid`,
+		`field`,
+		`maxfield`,
+		`rate`,
+		`overduerate`,
+		`modeid`,
+		`createTime`,
+		`updateTime`,
+		`createUid`,
+		`updateUid`,
+		`remark`
+	) VALUES(
+		#{feescaleid},
+		#{raskcontrolid},
+		#{sectionid},
+		#{field},
+		#{maxfield},
+		#{rate},
+		#{overduerate},
+		#{modeid},
+		now(),
+		now(),
+		#{createUid},
+		#{createUid},
+		#{remark}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="AgencyFeescaleDetailDto" >
+    DELETE FROM tbl_customer_agency_feescale_detail 
+	WHERE ID=#{id}
+  </delete>
+  
+  <update id="update" parameterType="AgencyFeescaleDetailDto" >
+    UPDATE tbl_customer_agency_feescale_detail
+	<set>
+		<if test="null!=feescaleid">`feescaleid`=#{feescaleid},</if>
+		<if test="null!=raskcontrolid">`raskcontrolid`=#{raskcontrolid},</if>
+		<if test="null!=sectionid">`sectionid`=#{sectionid},</if>
+		<if test="null!=field">`field`=#{field},</if>
+		<if test="null!=maxfield">`maxfield`=#{maxfield},</if>
+		<if test="null!=rate">`rate`=#{rate},</if>
+		<if test="null!=overduerate">`overduerate`=#{overduerate},</if>
+		<if test="null!=modeid">`modeid`=#{modeid},</if>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=remark">`remark`=#{remark},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

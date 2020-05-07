@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.ReceivableForMapper">
+
+  <!-- 查询详情 --> 
+  <select id="findByReceivableFor" parameterType="ReceivableForDto" resultType="ReceivableForDto">
+      select `createTime`, `createUid`, `updateUid`, `orderNo`,isFrist,  `oneTimePay`,  `payMentAmount`, `payMentPic` ,DATE_FORMAT(payMentAmountDate,'%Y-%m-%d %H:%i') as payMentAmountDate 
+      from tbl_finance_receivable_for 
+      where orderNo=#{orderNo}
+      <if test="isFrist >0">
+         and isFrist=#{isFrist}
+      </if>
+       order by createTime 
+  </select>
+  <!-- 查询状态为0的 -->
+  <select id="selectByStatus" parameterType="java.lang.String" resultType="ReceivableForDto">
+	   select * from tbl_finance_receivable_for where orderNo=#{0}  limit 1
+  </select>
+  <!-- 添加数据 -->
+   <insert id="addReceivableFor" parameterType="ReceivableForDto">
+	    INSERT INTO `tbl_finance_receivable_for` (
+	     `createTime`, `createUid`, `updateUid`, `orderNo`,  `oneTimePay`, `payMentAmountDate`, `payMentAmount`, `payMentPic`,isFrist,agencyId,productCode
+	    ) VALUES (
+	     now(), #{createUid}, #{updateUid}, #{orderNo},  #{oneTimePay}, #{payMentAmountDate}, #{payMentAmount}, #{payMentPic},#{isFrist},#{agencyId},#{productCode}
+	    )
+  </insert>
+  <!-- 完善信息 -->
+   <update id="updateReceivableFor" parameterType="ReceivableForDto">
+      update tbl_finance_receivable_for set updateUid=#{updateUid},
+      oneTimePay=#{oneTimePay},payMentAmountDate=#{payMentAmountDate},payMentAmount=#{payMentAmount},payMentPic=#{payMentPic},isFrist=#{isFrist},agencyId=#{agencyId},productCode=#{productCode}
+      where orderNo = #{orderNo}
+  </update>
+ <!-- 删除信息 -->
+  <delete id="delectFor" parameterType="ReceivableForDto">
+	     delete  from tbl_finance_receivable_for where orderNo=#{orderNo}
+	      <if test="isFrist >0">
+             and isFrist=#{isFrist}
+      </if>
+  </delete>
+  <!-- 修改信息 撤回用 -->
+  <update id="updwithdraw" parameterType="ReceivableForDto" >
+  	     update tbl_finance_receivable_for set status=0 where orderNo=#{orderNo} and status=1 order by updateTime desc limit 1
+  </update>
+  <select id="findByCountPay" parameterType="java.lang.String" resultType="java.math.BigDecimal">
+     select sum(payMentAmount)  from tbl_finance_receivable_for where orderNo=#{0}
+  </select>
+  
+  <!-- 根据机构回款时间查询订单 -->
+  <select id="search4AgencyOrderTime" parameterType="ReceivableForDto" resultType="String">
+      SELECT orderNo FROM tbl_finance_receivable_for WHERE 1=1
+	  <if test="agencyId>0"> AND agencyId=#{agencyId}</if>
+	  <if test="null!=payMentAmountDateStart and ''!=payMentAmountDateStart"> AND payMentAmountDate&gt;=#{payMentAmountDateStart}</if>
+	  <if test="null!=payMentAmountDateEnd   and ''!=payMentAmountDateEnd"> AND payMentAmountDate&lt;=#{payMentAmountDateEnd}</if>
+  </select>
+  <!-- 回款报表查询 -->
+  <select id="search4reportChart" parameterType="ReceivableForDto" resultType="ReceivableForDto">
+      <include refid="sqlSearch4report"/>
+	  GROUP BY payMentAmountDateFmt ORDER BY payMentAmountDate ASC
+  </select>
+  <select id="search4report" parameterType="ReceivableForDto" resultType="ReceivableForDto">
+      <include refid="sqlSearch4report"/>
+	  GROUP BY payMentAmountDateFmt,productCode ORDER BY payMentAmountDate DESC
+  </select>
+  <sql id="sqlSearch4report">
+  	  SELECT DATE_FORMAT(payMentAmountDate,'%Y年%m月') payMentAmountDateFmt, productCode, SUM(payMentAmount) reportSum, COUNT(1) reportCount 
+	  FROM tbl_finance_receivable_for WHERE 1=1
+	  <if test="agencyId>0"> AND agencyId=#{agencyId}</if>
+	  <if test="null!=orderNo and ''!=orderNo"> AND orderNo IN(${orderNo})</if>
+	  <if test="null!=payMentAmountDateStart and ''!=payMentAmountDateStart"> AND payMentAmountDate&gt;=#{payMentAmountDateStart}</if>
+	  <if test="null!=payMentAmountDateEnd   and ''!=payMentAmountDateEnd"> AND payMentAmountDate&lt;=#{payMentAmountDateEnd}</if>
+  </sql>
+  
+  	<!-- App机构回款月统计数据查询 -->
+	<select id="findPaymentStatisticMonth" parameterType="java.lang.String" resultType="java.util.Map">
+	 	SELECT
+	 		payMentAmountDate time,
+			YEAR (payMentAmountDate) year,
+			MONTH (payMentAmountDate) month,
+			SUM(payMentAmount) totalAmount,
+			COUNT(1) count
+		FROM
+			tbl_finance_receivable_for
+		WHERE
+			payMentAmountDate IS NOT NULL
+		<if test="orderNos != null and orderNos != '' "> AND orderNo IN (${orderNos}) </if>
+		GROUP BY
+			DATE_FORMAT(payMentAmountDate, '%Y%m')
+		ORDER BY
+			payMentAmountDate DESC
+	</select>
+	
+	<!-- App机构回款统计总数据查询 -->
+	<select id="findPaymentStatisticTotal" parameterType="java.lang.String" resultType="java.util.Map">
+	 	SELECT
+			SUM(payMentAmount) totalAmount,
+			COUNT(1) count
+		FROM
+			tbl_finance_receivable_for
+		WHERE
+			payMentAmountDate IS NOT NULL
+		<if test="orderNos != null and orderNos != '' "> AND orderNo IN (${orderNos}) </if>
+	</select>
+	
+	<!-- App机构回款月统计详情数据查询 -->
+	<select id="findPaymentStatisticDetail" resultType="java.util.Map">
+	 	SELECT
+	 		orderNo,
+			DAY (payMentAmountDate) day,
+			DATE_FORMAT(payMentAmountDate, '%H:%i') time,
+			payMentAmount,
+			productCode
+		FROM
+			tbl_finance_receivable_for
+		WHERE
+			payMentAmountDate IS NOT NULL
+		<if test="orderNos != null and orderNos != '' "> AND orderNo IN (${orderNos}) </if>
+		AND 
+			YEAR (payMentAmountDate) = #{year}
+		AND 
+			MONTH (payMentAmountDate) = #{month}
+		ORDER BY
+			payMentAmountDate DESC
+	</select>
+	
+	<!-- 根据订单查询App机构回款数据 -->
+	<select id="findPaymentByLoan" parameterType="java.lang.String" resultType="java.util.Map">
+	 	SELECT
+	 		a.orderNo,
+			GROUP_CONCAT(IFNULL(DATE_FORMAT(payMentAmountDate, '%Y/%m/%d'),'')) payMentTimes,
+			GROUP_CONCAT(IFNULL(payMentAmount,0)) payMentAmounts,
+			case when a.type=2 then 0 else 1 end isNomalPayMent		
+		FROM
+			tbl_finance_receivable_has a
+		LEFT JOIN 
+			`anjbo-server-orderNo`.tbl_finance_receivable_for b 
+		ON 
+			a.orderNo = b.orderNo
+		WHERE
+			a.orderNo IN (${orderNos})
+		GROUP BY 
+			a.orderNo
+	</select>
+	
+	<!-- App当月回款数据 -->
+	<select id="findPaymentStatisticByMonthAndOrderNos" parameterType="java.lang.String" resultType="java.util.Map">
+	 	SELECT
+			SUM(payMentAmount) paymentTotalAmount,
+			COUNT(1) paymentCount
+		FROM
+			tbl_finance_receivable_for
+		WHERE
+			payMentAmountDate IS NOT NULL
+		AND 
+			orderNo IN (${orderNos})
+		AND
+			YEAR(payMentAmountDate) = #{year}
+		AND 
+			MONTH(payMentAmountDate) = #{month}	
+	</select>
+</mapper>

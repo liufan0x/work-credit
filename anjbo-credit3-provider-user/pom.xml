@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.anjbo</groupId>
+	<artifactId>anjbo-credit3-provider-user</artifactId>
+	<version>3.11.0</version>
+	<name>anjbo-credit3-provider-user</name>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.6.RELEASE</version>
+		<relativePath />
+	</parent>
+
+	<properties>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+
+		<!-- docker -->
+		<docker.server.id>sihai-credit3-docker</docker.server.id>
+		<docker.registryUrl>39.108.117.253:180</docker.registryUrl>
+		<docker.baseImage>frolvlad/alpine-oraclejdk8:latest</docker.baseImage>
+		<docker.host>http://39.108.117.253:2375</docker.host>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.anjbo</groupId>
+			<artifactId>anjbo-credit3-iface-user</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.anjbo</groupId>
+			<artifactId>anjbo-credit3-iface-data</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.cloud</groupId>
+				<artifactId>spring-cloud-dependencies</artifactId>
+				<version>Dalston.SR4</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		<plugins>
+			<!-- 编译环境 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+					<encoding>${project.build.sourceEncoding}</encoding>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+
+			<plugin>
+				<groupId>com.spotify</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<executions>
+					<!-- 执行 mvn package 时 自动 执行 mvn docker:build -->
+					<execution>
+						<id>build-image</id>
+						<phase>package</phase>
+						<goals>
+							<goal>build</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<imageName>${docker.registryUrl}/library/${project.artifactId}:${project.version}</imageName>
+					<baseImage>${docker.registryUrl}/${docker.baseImage}</baseImage>
+					<forceTags>true</forceTags>
+					<entryPoint>["java", "-jar", "/${project.build.finalName}.jar"]</entryPoint>
+					<resources>
+						<resource>
+							<targetPath>/</targetPath>
+							<directory>${project.build.directory}</directory>
+							<include>${project.build.finalName}.jar</include>
+						</resource>
+					</resources>
+					<serverId>${docker.server.id}</serverId>
+					<registryUrl>${docker.registryUrl}</registryUrl>
+					<dockerHost>${docker.host}</dockerHost>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

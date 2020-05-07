@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.order.BaseCustomerMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<if test="null!=customerName and ''!=customerName"> AND `customerName`=#{customerName}</if>
+		<if test="null!=customerAge and ''!=customerAge"> AND `customerAge`=#{customerAge}</if>
+		<if test="null!=customerSex and ''!=customerSex"> AND `customerSex`=#{customerSex}</if>
+		<if test="null!=customerCardType and ''!=customerCardType"> AND `customerCardType`=#{customerCardType}</if>
+		<if test="null!=customerCardNumber and ''!=customerCardNumber"> AND `customerCardNumber`=#{customerCardNumber}</if>
+		<if test="null!=customerHouseholdRegister and ''!=customerHouseholdRegister"> AND `customerHouseholdRegister`=#{customerHouseholdRegister}</if>
+		<if test="null!=customerCulture and ''!=customerCulture"> AND `customerCulture`=#{customerCulture}</if>
+		<if test="null!=customerCompany and ''!=customerCompany"> AND `customerCompany`=#{customerCompany}</if>
+		<if test="null!=customerPosition and ''!=customerPosition"> AND `customerPosition`=#{customerPosition}</if>
+		<if test="null!=customerWorkTime and ''!=customerWorkTime"> AND `customerWorkTime`=#{customerWorkTime}</if>
+		<if test="null!=customerMarriageState and ''!=customerMarriageState"> AND `customerMarriageState`=#{customerMarriageState}</if>
+		<if test="null!=customerBodiesState and ''!=customerBodiesState"> AND `customerBodiesState`=#{customerBodiesState}</if>
+		<if test="null!=customerNationsType and ''!=customerNationsType"> AND `customerNationsType`=#{customerNationsType}</if>
+		<if test="null!=customerWifeName and ''!=customerWifeName"> AND `customerWifeName`=#{customerWifeName}</if>
+		<if test="null!=customerWifeCardType and ''!=customerWifeCardType"> AND `customerWifeCardType`=#{customerWifeCardType}</if>
+		<if test="null!=customerWifeCardNumber and ''!=customerWifeCardNumber"> AND `customerWifeCardNumber`=#{customerWifeCardNumber}</if>
+		<if test="null!=customerWifePhone and ''!=customerWifePhone"> AND `customerWifePhone`=#{customerWifePhone}</if>
+		<if test="null!=customerWifeMarriageState and ''!=customerWifeMarriageState"> AND `customerWifeMarriageState`=#{customerWifeMarriageState}</if>
+		<if test="null!=customerWifePosition and ''!=customerWifePosition"> AND `customerWifePosition`=#{customerWifePosition}</if>
+		<if test="null!=customerWifeCompany and ''!=customerWifeCompany"> AND `customerWifeCompany`=#{customerWifeCompany}</if>
+		<if test="null!=customerHouseInfo and ''!=customerHouseInfo"> AND `customerHouseInfo`=#{customerHouseInfo}</if>
+		<if test="null!=customerCatInfo and ''!=customerCatInfo"> AND `customerCatInfo`=#{customerCatInfo}</if>
+		<if test="null!=customerAnnualIncome and ''!=customerAnnualIncome"> AND `customerAnnualIncome`=#{customerAnnualIncome}</if>
+		<if test="null!=customerFamilyAverageAnnualIncome and ''!=customerFamilyAverageAnnualIncome"> AND `customerFamilyAverageAnnualIncome`=#{customerFamilyAverageAnnualIncome}</if>
+		<if test="null!=customerIncomeRepaymentProportion and ''!=customerIncomeRepaymentProportion"> AND `customerIncomeRepaymentProportion`=#{customerIncomeRepaymentProportion}</if>
+		<if test="null!=customerLiabilitiesRatio and ''!=customerLiabilitiesRatio"> AND `customerLiabilitiesRatio`=#{customerLiabilitiesRatio}</if>
+		<if test="null!=customerInsurance and ''!=customerInsurance"> AND `customerInsurance`=#{customerInsurance}</if>
+		<if test="null!=customerPropertyRightProportion and customerPropertyRightProportion>0"> AND `customerPropertyRightProportion`=#{customerPropertyRightProportion}</if>
+		<if test="null!=customerPreference and ''!=customerPreference"> AND `customerPreference`=#{customerPreference}</if>
+		<if test="null!=customerStage and ''!=customerStage"> AND `customerStage`=#{customerStage}</if>
+		<if test="null!=customerCreditCardOverdraft and ''!=customerCreditCardOverdraft"> AND `customerCreditCardOverdraft`=#{customerCreditCardOverdraft}</if>
+		<if test="null!=customerRating and ''!=customerRating"> AND `customerRating`=#{customerRating}</if>
+		<if test="null!=remark and ''!=remark"> AND `remark`=#{remark}</if>
+		<if test="null!=isFinish and isFinish>0"> AND `isFinish`=#{isFinish}</if>
+		<if test="null!=companyName and ''!=companyName"> AND `companyName`=#{companyName}</if>
+		<if test="null!=licenseNumber and ''!=licenseNumber"> AND `licenseNumber`=#{licenseNumber}</if>
+		<if test="null!=representative and ''!=representative"> AND `representative`=#{representative}</if>
+		<if test="null!=registeredCapital and registeredCapital>0"> AND `registeredCapital`=#{registeredCapital}</if>
+		<if test="null!=establishTime and ''!=establishTime"> AND `establishTime`=#{establishTime}</if>
+		<if test="null!=employeesNumber and employeesNumber>0"> AND `employeesNumber`=#{employeesNumber}</if>
+		<if test="null!=category and ''!=category"> AND `category`=#{category}</if>
+		<if test="null!=operatingAddress and ''!=operatingAddress"> AND `operatingAddress`=#{operatingAddress}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="BaseCustomerDto" resultType="BaseCustomerDto">    
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `customerName`, `customerAge`, `customerSex`, `customerCardType`, `customerCardNumber`, `customerHouseholdRegister`, `customerCulture`, `customerCompany`, `customerPosition`, `customerWorkTime`, `customerMarriageState`, `customerBodiesState`, `customerNationsType`, `customerWifeName`, `customerWifeCardType`, `customerWifeCardNumber`, `customerWifePhone`, `customerWifeMarriageState`, `customerWifePosition`, `customerWifeCompany`, `customerHouseInfo`, `customerCatInfo`, `customerAnnualIncome`, `customerFamilyAverageAnnualIncome`, `customerIncomeRepaymentProportion`, `customerLiabilitiesRatio`, `customerInsurance`, `customerPropertyRightProportion`, `customerPreference`, `customerStage`, `customerCreditCardOverdraft`, `customerRating`, `remark`, `isFinish`, `companyName`, `licenseNumber`, `representative`, `registeredCapital`, `establishTime`, `employeesNumber`, `category`, `operatingAddress`, isHasCar,isHasCarLoan,isHasRoom,isHasRoomLoan,isHasChildren 
+	FROM tbl_order_base_customer 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="BaseCustomerDto" resultType="BaseCustomerDto">
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `customerName`,
+	 `customerAge`, `customerSex`, `customerCardType`, `customerCardNumber`, `customerHouseholdRegister`, 
+	 `customerCulture`, `customerCompany`, `customerPosition`, `customerWorkTime`, `customerMarriageState`,
+	  `customerBodiesState`, `customerNationsType`, `customerWifeName`, `customerWifeCardType`, `customerWifeCardNumber`, 
+	  `customerWifePhone`, `customerWifeMarriageState`, `customerWifePosition`, `customerWifeCompany`, `customerHouseInfo`,
+	   `customerCatInfo`, `customerAnnualIncome`, `customerFamilyAverageAnnualIncome`, `customerIncomeRepaymentProportion`, 
+	   `customerLiabilitiesRatio`, `customerInsurance`, `customerPropertyRightProportion`, `customerPreference`, `customerStage`, 
+	   `customerCreditCardOverdraft`, `customerRating`, `remark`, `isFinish`, `companyName`, `licenseNumber`, `representative`, 
+	   `registeredCapital`, `establishTime`, `employeesNumber`, `category`, `operatingAddress`, isHasCar,isHasCarLoan,isHasRoom,isHasRoomLoan,isHasChildren
+	FROM tbl_order_base_customer 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="BaseCustomerDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_order_base_customer 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="BaseCustomerDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_order_base_customer(
+		`createUid`,
+		`createTime`,
+		`updateUid`,
+		`updateTime`,
+		`orderNo`,
+		`customerName`,
+		`customerAge`,
+		`customerSex`,
+		`customerCardType`,
+		`customerCardNumber`,
+		`customerHouseholdRegister`,
+		`customerCulture`,
+		`customerCompany`,
+		`customerPosition`,
+		`customerWorkTime`,
+		`customerMarriageState`,
+		`customerBodiesState`,
+		`customerNationsType`,
+		`customerWifeName`,
+		`customerWifeCardType`,
+		`customerWifeCardNumber`,
+		`customerWifePhone`,
+		`customerWifeMarriageState`,
+		`customerWifePosition`,
+		`customerWifeCompany`,
+		`customerHouseInfo`,
+		`customerCatInfo`,
+		`customerAnnualIncome`,
+		`customerFamilyAverageAnnualIncome`,
+		`customerIncomeRepaymentProportion`,
+		`customerLiabilitiesRatio`,
+		`customerInsurance`,
+		`customerPropertyRightProportion`,
+		`customerPreference`,
+		`customerStage`,
+		`customerCreditCardOverdraft`,
+		`customerRating`,
+		`remark`,
+		`isFinish`,
+		`companyName`,
+		`licenseNumber`,
+		`representative`,
+		`registeredCapital`,
+		`establishTime`,
+		`employeesNumber`,
+		`category`,
+		`operatingAddress`
+	) VALUES(
+		#{createUid},
+		now(),
+		#{createUid},
+		now(),
+		#{orderNo},
+		#{customerName},
+		#{customerAge},
+		#{customerSex},
+		#{customerCardType},
+		#{customerCardNumber},
+		#{customerHouseholdRegister},
+		#{customerCulture},
+		#{customerCompany},
+		#{customerPosition},
+		#{customerWorkTime},
+		#{customerMarriageState},
+		#{customerBodiesState},
+		#{customerNationsType},
+		#{customerWifeName},
+		#{customerWifeCardType},
+		#{customerWifeCardNumber},
+		#{customerWifePhone},
+		#{customerWifeMarriageState},
+		#{customerWifePosition},
+		#{customerWifeCompany},
+		#{customerHouseInfo},
+		#{customerCatInfo},
+		#{customerAnnualIncome},
+		#{customerFamilyAverageAnnualIncome},
+		#{customerIncomeRepaymentProportion},
+		#{customerLiabilitiesRatio},
+		#{customerInsurance},
+		#{customerPropertyRightProportion},
+		#{customerPreference},
+		#{customerStage},
+		#{customerCreditCardOverdraft},
+		#{customerRating},
+		#{remark},
+		#{isFinish},
+		#{companyName},
+		#{licenseNumber},
+		#{representative},
+		#{registeredCapital},
+		#{establishTime},
+		#{employeesNumber},
+		#{category},
+		#{operatingAddress}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="BaseCustomerDto" >
+    DELETE FROM tbl_order_base_customer 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="BaseCustomerDto" >
+    UPDATE tbl_order_base_customer
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=customerName">`customerName`=#{customerName},</if>
+		<if test="null!=customerAge">`customerAge`=#{customerAge},</if>
+		<if test="null!=customerSex">`customerSex`=#{customerSex},</if>
+		<if test="null!=customerCardType">`customerCardType`=#{customerCardType},</if>
+		<if test="null!=customerCardNumber">`customerCardNumber`=#{customerCardNumber},</if>
+		<if test="null!=customerHouseholdRegister">`customerHouseholdRegister`=#{customerHouseholdRegister},</if>
+		<if test="null!=customerCulture">`customerCulture`=#{customerCulture},</if>
+		<if test="null!=customerCompany">`customerCompany`=#{customerCompany},</if>
+		<if test="null!=customerPosition">`customerPosition`=#{customerPosition},</if>
+		<if test="null!=customerWorkTime">`customerWorkTime`=#{customerWorkTime},</if>
+		<if test="null!=customerMarriageState">`customerMarriageState`=#{customerMarriageState},</if>
+		<if test="null!=customerBodiesState">`customerBodiesState`=#{customerBodiesState},</if>
+		<if test="null!=customerNationsType">`customerNationsType`=#{customerNationsType},</if>
+		<if test="null!=customerWifeName">`customerWifeName`=#{customerWifeName},</if>
+		<if test="null!=customerWifeCardType">`customerWifeCardType`=#{customerWifeCardType},</if>
+		<if test="null!=customerWifeCardNumber">`customerWifeCardNumber`=#{customerWifeCardNumber},</if>
+		<if test="null!=customerWifePhone">`customerWifePhone`=#{customerWifePhone},</if>
+		<if test="null!=customerWifeMarriageState">`customerWifeMarriageState`=#{customerWifeMarriageState},</if>
+		<if test="null!=customerWifePosition">`customerWifePosition`=#{customerWifePosition},</if>
+		<if test="null!=customerWifeCompany">`customerWifeCompany`=#{customerWifeCompany},</if>
+		<if test="null!=customerHouseInfo">`customerHouseInfo`=#{customerHouseInfo},</if>
+		<if test="null!=customerCatInfo">`customerCatInfo`=#{customerCatInfo},</if>
+		<if test="null!=customerAnnualIncome">`customerAnnualIncome`=#{customerAnnualIncome},</if>
+		<if test="null!=customerFamilyAverageAnnualIncome">`customerFamilyAverageAnnualIncome`=#{customerFamilyAverageAnnualIncome},</if>
+		<if test="null!=customerIncomeRepaymentProportion">`customerIncomeRepaymentProportion`=#{customerIncomeRepaymentProportion},</if>
+		<if test="null!=customerLiabilitiesRatio">`customerLiabilitiesRatio`=#{customerLiabilitiesRatio},</if>
+		<if test="null!=customerInsurance">`customerInsurance`=#{customerInsurance},</if>
+		<if test="null!=customerPropertyRightProportion">`customerPropertyRightProportion`=#{customerPropertyRightProportion},</if>
+		<if test="null!=customerPreference">`customerPreference`=#{customerPreference},</if>
+		<if test="null!=customerStage">`customerStage`=#{customerStage},</if>
+		<if test="null!=customerCreditCardOverdraft">`customerCreditCardOverdraft`=#{customerCreditCardOverdraft},</if>
+		<if test="null!=customerRating">`customerRating`=#{customerRating},</if>
+		<if test="null!=remark">`remark`=#{remark},</if>
+		<if test="null!=isFinish">`isFinish`=#{isFinish},</if>
+		<if test="null!=companyName">`companyName`=#{companyName},</if>
+		<if test="null!=licenseNumber">`licenseNumber`=#{licenseNumber},</if>
+		<if test="null!=representative">`representative`=#{representative},</if>
+		<if test="null!=registeredCapital">`registeredCapital`=#{registeredCapital},</if>
+		<if test="null!=establishTime">`establishTime`=#{establishTime},</if>
+		<if test="null!=employeesNumber">`employeesNumber`=#{employeesNumber},</if>
+		<if test="null!=category">`category`=#{category},</if>
+		<if test="null!=operatingAddress">`operatingAddress`=#{operatingAddress},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+    <!-- 查询批量orderNos信息 -->
+	<select id="allCustomerNos" parameterType="java.lang.String" resultType="java.util.Map">
+  		select 
+  			id,
+  			createUid,
+			createTime,
+			updateUid,
+			updateTime,
+			orderNo,
+			customerName,
+			customerAge,
+			customerSex,
+			customerCardType,
+			customerCardNumber,
+			customerHouseholdRegister,
+			customerCulture,
+			customerCompany,
+			customerPosition,
+			customerWorkTime,
+			customerMarriageState,
+			customerBodiesState,
+			customerNationsType,
+			customerWifeName,
+			customerWifeCardType,
+			customerWifeCardNumber,
+			customerWifePhone,
+			customerWifeMarriageState,
+			customerWifePosition,
+			customerWifeCompany,
+			customerHouseInfo,
+			customerCatInfo,
+			customerAnnualIncome,
+			customerFamilyAverageAnnualIncome,
+			customerIncomeRepaymentProportion,
+			customerLiabilitiesRatio,
+			customerInsurance,
+			customerPropertyRightProportion,
+			customerPreference,
+			customerStage,
+			customerCreditCardOverdraft,
+			customerRating,
+			remark,
+			companyName, licenseNumber, representative, registeredCapital, establishTime, employeesNumber, category, operatingAddress,
+			isFinish
+  		from tbl_order_base_customer where orderNo=#{orderNo}
+    </select>  
+    
+</mapper>

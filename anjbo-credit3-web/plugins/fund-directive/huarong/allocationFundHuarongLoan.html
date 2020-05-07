@@ -1,0 +1,136 @@
+
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;放款数据
+      <button type="button" ng-click="saveA(9)" class="btn btn-info detail-right-save"  >保存</button> 
+    </div>
+    <div class="row form-inline detail-row w112" style="padding:0 10px;">
+        <div class="col-md-6 col-lg-4">
+            <label>申请人姓名: </label> <input  ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" name="kgLoanCustName" ng-model="huaRongDto.kgLoan.custName" class="form-control" required/>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanCustName.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>证件类型:</label>
+            <select ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" class="form-control" name="kgLoanIdType" ng-disabled="all" ng-model="huaRongDto.kgLoan.idType" required style="width:179px;">
+                <option value="">请选择</option>
+                <option value="身份证">身份证</option>
+                <option value="军官证">军官证</option>
+                <option value="台湾同胞来往内地通行证">台湾同胞来往内地通行证</option>
+                <option value="港澳居民来往内地通行证">港澳居民来往内地通行证</option>
+                <option value="员工代码">员工代码</option>
+                <option value="其他证件">其他证件</option>
+            </select>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanIdType.$error.required">必选</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>证件号: </label> <input  ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" name="kgLoanIdNo" ng-model="huaRongDto.kgLoan.idNo" class="form-control" required/>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanIdNo.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>贷款申请金额: </label> <input  ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" string-to-number name="kgLoanApplyAmt" ng-model="huaRongDto.kgLoan.applyAmt" class="form-control" required/> 万元
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanApplyAmt.$error.required">必填</error>
+		    </span>
+        </div>
+        <!--new-->
+        <div class="col-md-6 col-lg-4">
+            <label>审批通过金额: </label> <input  ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" string-to-number name="kgLoanApprvAmt" ng-model="huaRongDto.kgLoan.apprvAmt" class="form-control" required/> 万元
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanApprvAmt.$error.required">必填</error>
+		    </span>
+        </div>
+        <!--new-->
+        <div class="col-md-6 col-lg-4">
+            <label>申请期限单位:</label>
+            <select ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" class="form-control" name="kgLoanApplyTnrUnit" ng-disabled="all" ng-model="huaRongDto.kgLoan.applyTnrUnit" required style="width:179px;">
+                <option value="">请选择</option>
+                <option value="月">月</option>
+                <option value="日">日</option>
+            </select>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanApplyTnrUnit.$error.required">必选</error>
+		    </span>
+        </div>
+
+
+        <div class="col-md-6 col-lg-4">
+            <label>申请期限: </label> <input  ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" string-to-number name="kgLoanApplyTnr" ng-model="huaRongDto.kgLoan.applyTnr" class="form-control" required/> <span ng-bind="huaRongDto.kgLoan.applyTnrUnit"></span>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanApplyTnr.$error.required">必填</error>
+		    </span>
+        </div>
+        <!--new-->
+        <div class="col-md-6 col-lg-4">
+            <label>还款方式:</label>
+            <select ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" class="form-control" name="kgLoanMtdCde" ng-disabled="all" ng-model="huaRongDto.kgLoan.mtdCde" required style="width:179px;">
+                <option value="">请选择</option>
+                <option value="按月分期还款">按月分期还款</option>
+                <option value="等额本金还款">等额本金还款</option>
+                <option value="利随本清">利随本清</option>
+                <option value="按月还息到期还本付息">按月还息到期还本付息</option>
+                <option value="按月还息+等额本息(10+12)">按月还息+等额本息(10+12)</option>
+                <option value="按日计息,利随本清">按日计息,利随本清</option>
+            </select>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanMtdCde.$error.required">必选</error>
+		    </span>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <label>借款人利率: </label> <input  ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" string-to-number name="kgLoanApr" ng-model="huaRongDto.kgLoan.apr" class="form-control" required/> %/天
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanApr.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>罚息执行利率: </label> <input  ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" string-to-number name="kgLoanOdIntRate" ng-model="huaRongDto.kgLoan.odIntRate" class="form-control" required/> %/天
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanOdIntRate.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>合作商贴息比例: </label> <input  ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" string-to-number name="kgLoanSysbPct" ng-model="huaRongDto.kgLoan.sysbPct" class="form-control" required/>%
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanSysbPct.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>合作商贴息金额: </label> <input  ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" string-to-number name="kgLoanSysbAmt" ng-model="huaRongDto.kgLoan.sysbAmt" class="form-control" required/>元
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanSysbAmt.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>助贷商贴息比例: </label> <input  ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" string-to-number name="kgLoanHrdPct" ng-model="huaRongDto.kgLoan.hrdPct" class="form-control" required/>%
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanHrdPct.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>助贷商贴息金额: </label> <input  ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" type="text" string-to-number name="kgLoanHrdAmt" ng-model="huaRongDto.kgLoan.hrdAmt" class="form-control" required/>元
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanHrdAmt.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>是否差额打款:</label>
+            <select ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" class="form-control" name="kgLoanIfCeOut" ng-model="huaRongDto.kgLoan.ifCeOut" required style="width:179px;">
+                <option value="Y">是</option>
+                <option value="N">否</option>
+            </select>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongKgLoanForm.kgLoanIfCeOut.$error.required">必选</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>起息日: </label>
+            <input  ng-disabled="dealStatus=='审批通过'||dealStatus=='待审批'" size="16" type="text" name="kgLoanRepaymentTime" ng-model="huaRongDto.kgLoan.repaymentTime" ng-disabled="all" class="form-control form_date"/>
+        </div>
+
+    </div>
+</div>

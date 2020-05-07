@@ -1,0 +1,26 @@
+<div class="container-fluid" id="managerAudit">
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;分配订单意见
+		<a ng-show="!isEdit" style="display:inline-block;float:right;padding-right: 10px;" ui-sref="orderList" >返回上一步</a>
+		<div style="position:absolute;right:400px;top:0px;">
+			  <span id="elementFlag" ng-bind="elementFlag">是否已收到要件：是</span>
+			  <span><a id="elementInfo" ng-bind="elementInfo" ng-click="showDetail('elementEntrance');">要件详情</a></span>
+		</div>
+		<span ng-show="isEdit" class="detail-trash2 text-danger" ng-click="deleteDetail('manager-audit-detail')" >隐藏</span>
+		
+	</div>
+	<div class="col-md-12 detail-row detail-lhw">
+		 分配订单意见（分配人：<span class="text-danger" ng-bind="obj.managerAuditName"></span> ） 
+		<span ng-bind="obj.createTime | date:'yyyy-MM-dd HH:mm' ">
+	</div>
+	<div class="col-md-12" ng-if="obj.remark!='' && obj.remark!=null">
+		 
+		<textarea class="" ng-bind="obj.remark" readonly="readonly"  style="background:transparent;resize:none;outline:medium;border:none;width:94%;padding:10px;line-height: 30px;"> </textarea>
+	</div>
+</div>
+
+<script>
+$(function(){
+	
+})
+
+</script>

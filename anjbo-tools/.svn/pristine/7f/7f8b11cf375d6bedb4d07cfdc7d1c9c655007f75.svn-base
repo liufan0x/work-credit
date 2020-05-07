@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.mort.DegreeBAMapper" >
+ 	<!-- 查询宝安区学位是否锁定 -->
+ 	 <select id="queryBaoAnDegree" parameterType="DegreeBADto" resultType="DegreeBADto">
+ 	 	select id,region,streetDirectly,schoolName,userYear,houseProperty,
+ 	 	houseAddress,createTime from tbl_degree_room_lock
+ 	 	where houseAddress=#{houseAddress}
+    </select>
+ 	<!-- 查询宝安区房屋物业房号 -->
+ 	 <select id="queryPropertyRoomList" parameterType="DegreeBADto" resultType="DegreeBADto">
+ 	 	select id,region,streetDirectly,schoolName,userYear,houseProperty,
+ 	 	houseAddress,createTime from tbl_degree_room_lock
+ 	 	where houseAddress like '%${houseAddress}%' 
+    </select>
+</mapper>

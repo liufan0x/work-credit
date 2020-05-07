@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.PageFlowMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and ''!=id"> AND `id`=#{id}</if>
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<if test="null!=currentProcessId and ''!=currentProcessId"> AND `currentProcessId`=#{currentProcessId}</if>
+		<if test="null!=nextProcessId and ''!=nextProcessId"> AND `nextProcessId`=#{nextProcessId}</if>
+		<if test="null!=handleUid and ''!=handleUid"> AND `handleUid`=#{handleUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(handleTimeBegin)"> AND handleTime >= #{handleTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(handleTimeEnd)"> AND handleTime &lt;= #{handleTimeEnd}</if>
+		-->
+		<if test="null!=backReason and ''!=backReason"> AND `backReason`=#{backReason}</if>
+		<if test="null!=returnType and ''!=returnType"> AND `returnType`=#{returnType}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="PageFlowDto" resultType="PageFlowDto">    
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `currentProcessId`, `nextProcessId`, `handleUid`, `handleTime`, `backReason`, `returnType` 
+	FROM tbl_page_flow 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="PageFlowDto" resultType="PageFlowDto">
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `currentProcessId`, `nextProcessId`, `handleUid`, `handleTime`, `backReason`, `returnType`
+	FROM tbl_page_flow 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="PageFlowDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_page_flow 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="PageFlowDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_page_flow(
+		`createUid`,
+		`createTime`,
+		`updateUid`,
+		`updateTime`,
+		`orderNo`,
+		`currentProcessId`,
+		`nextProcessId`,
+		`handleUid`,
+		`handleTime`,
+		`backReason`,
+		`returnType`
+	) VALUES(
+		#{handleUid},
+		now(),
+		#{handleUid},
+		now(),
+		#{orderNo},
+		#{currentProcessId},
+		#{nextProcessId},
+		#{handleUid},
+		#{handleTime},
+		#{backReason},
+		#{returnType}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="PageFlowDto" >
+    DELETE FROM tbl_page_flow 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="PageFlowDto" >
+    UPDATE tbl_page_flow
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=currentProcessId">`currentProcessId`=#{currentProcessId},</if>
+		<if test="null!=nextProcessId">`nextProcessId`=#{nextProcessId},</if>
+		<if test="null!=handleUid">`handleUid`=#{handleUid},</if>
+		<if test="null!=handleTime">`handleTime`=#{handleTime},</if>
+		<if test="null!=backReason">`backReason`=#{backReason},</if>
+		<if test="null!=returnType">`returnType`=#{returnType},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

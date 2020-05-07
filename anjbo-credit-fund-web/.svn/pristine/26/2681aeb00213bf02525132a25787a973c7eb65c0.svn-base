@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+<title>询价</title>
+<!--标准mui.css-->
+<link rel="stylesheet" href="./css/mui.min.css">
+<!--App自定义的css-->
+<link rel="stylesheet" type="text/css" href="./css/order.css" />
+<link href="./css/mui.picker.min.css" rel="stylesheet" />
+<script src="http://cdn.static.runoob.com/libs/angular.js/1.4.6/angular.min.js"></script>
+</head>
+<body>
+<div  ng-app="myApp"  ng-controller="siteCtrl"> 
+		<div class="form-box">
+		     <div class="inp-div">
+		           <span class="inp-span mi">房产名称</span><span class="inp-r arrow">&nbsp;</span>
+		           <input type="text" value=""  class="inp-box"  readonly="" ng-click="setItems()" name="propertyName" placeholder="请选择" ng-model="enquiry.propertyName">
+		           <input type="hidden" ng-model="enquiry.propertyId">
+		     </div>
+		      <div class="inp-div">
+		           <span class="inp-span mi">楼栋</span><span class="inp-r arrow">&nbsp;</span>
+		           <input type="text" value=""  class="inp-box"   readonly="" ng-click="setItems()" placeholder="请选择" ng-model="enquiry.buildingName">
+		           <input type="hidden" ng-model="enquiry.buildingId">
+		     </div>
+		      <div class="inp-div">
+		           <span class="inp-span mi">房号</span><span class="inp-r arrow">&nbsp;</span>
+		           <input type="text" value=""  class="inp-box"  readonly="" ng-click="setItems()"  placeholder="请选择" ng-model="enquiry.roomName">
+		           <input type="hidden" ng-model="enquiry.roomId">
+		     </div>
+			  <div class="inp-div">
+		           <span class="inp-span mi">建筑面积</span><span class="inp-r">㎡</span>
+		           <input type="number" value=""  class="inp-box"  placeholder="请输入" ng-model="enquiry.area">
+		     </div>
+			   <div class="inp-div">
+		           <span class="inp-span mi">登记价格</span><span class="inp-r">元</span>
+		           <input type="number" value=""  class="inp-box"  placeholder="请输入" ng-model="enquiry.registerPrice">
+		     </div>
+<!-- 		      <div class="inp-div "  ng-if="productCode == '02'"> -->
+<!-- 		           <span class="inp-span mi">是否消费贷</span><span class="inp-r icon-d">&nbsp;</span> -->
+<!-- 		            <a href="#"><input type="text" value=""  class="inp-box sel" readonly=""  placeholder="请输入" ></a> -->
+<!-- 		           <input type="hidden" ng-model="enquiry.consumerloans" name="consumerloans"> -->
+<!-- 		     </div> -->
+<!-- 		      <span id="cons"> -->
+<!-- 		      <div class="inp-div "  ng-if="productCode == '02'"> -->
+<!-- 		           <span class="inp-span mi">成交价格</span><span class="inp-r">元</span> -->
+<!-- 		           <input type="text" value=""  class="inp-box"  placeholder="请输入" ng-model="enquiry.transactionprice"> -->
+<!-- 		     </div> -->
+<!-- 		       </span> -->
+<!-- 		      <div class="inp-div "  ng-if="productCode == '02'"> -->
+<!-- 		           <span class="inp-span mi">权利人</span><span class="inp-r icon-d">&nbsp;</span> -->
+<!-- 		           <input type="text" value=""  class="inp-box sel2" readonly=""  placeholder="请输入"> -->
+<!-- 		           <input type="hidden" ng-model="enquiry.obligee" name="obligee"> -->
+<!-- 		     </div> -->
+<!-- 		      <div class="inp-div no-border"  ng-if="productCode == '02'"> -->
+<!-- 		           <span class="inp-span mi">购房期限</span><span class="inp-r icon-d">&nbsp;</span> -->
+<!-- 		           <input type="text" value=""  class="inp-box sel3" readonly=""  placeholder="请输入"> -->
+<!-- 		           <input type="hidden" ng-model="enquiry.range" name="range"> -->
+<!-- 		     </div> -->
+			 <div class="clear" > </div>
+		</div>
+		<div class="clear" style="height:10px;"> </div>
+		<div class="sub-but" ng-click="queryEnquiry($event)">查询</div> 
+		<div id="jgShow"  style="display:none">
+		<p class="tit-p">查询结果 (此结果来自深圳市房地产信息系统)</p>
+		<p class="detail-p">查询时间：<span ng-bind="enquiry.createTime | date:'yyyy-MM-dd HH:mm'"></span><br>
+		评估总值：<span ng-bind="enquiry.totalPrice"></span>元<br>
+		评估净值：<span ng-bind="enquiry.netPrice" ></span>元<br>
+		首套房最高可贷：<span ng-bind="enquiry.maxLoanPrice"></span>万元
+		</p>
+		</div>
+		<div class="clear"> </div>
+		<br> <br>
+</div>
+ 
+ 
+<script src="./js/mui.min.js"></script>
+<script src="./js/mui.picker.min.js"></script>
+<script src="./js/jquery.min.js"></script>
+<script src="./js/process.js"></script>
+<script>
+var app = angular.module('myApp', []);
+var arr=[{ value: '0',text: '无消费贷'}, {value: '1',text: '有消费贷'}];
+var arr2=[{ value: '单位',text: '单位'}, {value: '个人',text: '个人'}];
+var arr3=[{ value: '0',text: '未满两年'}, {value: '1',text: '满两年'}];
+app.controller('siteCtrl', function($scope, $http ) {
+		var orderNo = GetQueryString("orderNo");   
+		var uid = GetQueryString("uid");   
+		var deviceId=  GetQueryString("deviceId");   
+		var enquiryId = GetQueryString("enquiryId");     //询价id
+		$scope.productCode = GetQueryString("productCode");  //交易类型
+		$http({
+			method: 'POST',
+			data: {
+				"enquiryId": enquiryId,
+				"orderNo": orderNo
+			},
+			headers:{"deviceId":deviceId,uid:uid},
+			url: "/credit/risk/enquiry/v/getEnquiryById"
+		}).success(function(data) {
+			$scope.enquiry = JSON.parse(localStorage.getItem('enquiry'));
+			if($scope.enquiry!=null){
+				localStorage.removeItem('enquiry');  //删除缓存数据
+			}else{
+				$scope.enquiry=data.data;
+				if($scope.enquiry!=null){
+					$("#jgShow").show();
+					$scope.elist=$scope.enquiry.enquiryReportList[0];
+					$scope.enquiry.createTime = $scope.elist.createTime;
+					$scope.enquiry.totalPrice = $scope.elist.totalPrice;
+					$scope.enquiry.netPrice = $scope.elist.netPrice;
+					$scope.enquiry.maxLoanPrice = $scope.elist.maxLoanPrice;
+				}else{
+					$scope.enquiry = new Object();
+				}
+			}
+			if($scope.enquiry!=null){
+				var bank=$scope.enquiry.consumerloans+"";
+				if(bank==1){
+					$("#cons").show();
+				}else{
+					$("#cons").hide();
+				}
+				for(var i=0; i<arr.length;i++){
+					   if(arr[i].value==bank){
+						    $(".sel").val(arr[i].text);
+					   }
+				};
+				var bank1=$scope.enquiry.obligee+"";
+				for(var i=0; i<arr2.length;i++){
+					   if(arr2[i].value==bank1){
+						    $(".sel2").val(arr2[i].text);
+					   }
+				};
+				var bank2=$scope.enquiry.range+"";
+				for(var i=0; i<arr3.length;i++){
+					   if(arr3[i].value==bank2){
+						    $(".sel3").val(arr3[i].text);
+					   }
+				};
+				
+			}
+		});
+		
+	//询价查询
+	$scope.queryEnquiry = function(event) {
+		if(!$scope.enquiry.buildingId) {
+			mui.alert("请选择楼栋");
+			return false;
+		}
+
+		if(!$scope.enquiry.roomId) {
+			mui.alert("请选择房号");
+			return false;
+		}
+
+		if(!$scope.enquiry.area) {
+			mui.alert("请选择面积");
+			return false;
+		}
+
+		if(!$scope.enquiry.registerPrice && $scope.enquiry.productCode=="02") {
+			mui.alert("请选择登记价格");
+			return false;
+		}
+		$scope.enquiry.consumerloans=$("input[name='consumerloans']").val();
+		$scope.enquiry.obligee=$("input[name='obligee']").val();
+		$scope.enquiry.range=$("input[name='range']").val();
+		if(!$scope.enquiry.transactionprice && $scope.enquiry.consumerloans == '1' && $scope.productCode == '02') {
+			mui.alert("请选择成交价格");
+			return false;
+		}
+		var params = {
+					"orderNo": orderNo,
+					"propertyId": $scope.enquiry.propertyId,
+					"propertyName": $scope.enquiry.propertyName,
+					"buildingId": $scope.enquiry.buildingId,
+					"buildingName": $scope.enquiry.buildingName,
+					"roomId": $scope.enquiry.roomId,
+					"roomName": $scope.enquiry.roomName,
+					"area": parseFloat($scope.enquiry.area),
+					"registerPrice": parseFloat($scope.enquiry.registerPrice),
+// 					"consumerloans": parseFloat($scope.enquiry.consumerloans),
+// 					"dealPrice": parseFloat(!$scope.enquiry.transactionprice ? 0 : $scope.enquiry.transactionprice),
+// 					"obligee": $scope.enquiry.obligee,
+// 					"range": $scope.enquiry.range,
+					"enquiryId": enquiryId
+				}
+		$(event.target).addClass("dis");
+		$(event.target).attr("disabled","disabled");
+		$(".sub-but").html("正在查询中...");
+		$http({
+			method: 'POST',
+			data: params,
+			headers:{"deviceId":deviceId,uid:uid},
+			url: "/credit/risk/enquiry/v/createEnquiry"
+		}).success(function(data) {
+			mui.alert(data.msg);
+			if(data.data!=null){
+				$scope.enquiry.enquiryId = data.data.enquiryid;
+				enquiryId = data.data.enquiryid;
+				showEnquiry(); //重新查询
+			}
+				$(event.target).removeClass("dis");
+				$(event.target).attr("disabled","false");
+				$(".sub-but").html("查询");
+			
+		});
+	}
+	//查询询价并替换
+	function showEnquiry() {
+		$http({
+			method: 'POST',
+			data: {
+				enquiryId: $scope.enquiry.enquiryId,
+				orderNo: orderNo
+			},
+			headers:{"deviceId":deviceId,uid:uid},
+			url: "/credit/risk/enquiry/v/getEnquiryById"
+		}).success(function(data) {
+			$scope.enquiry.createTime = data.data.createtime;
+			$scope.enquiry.totalPrice = data.data.totalPrice;
+			$scope.enquiry.netPrice = data.data.netPrice;
+			$scope.enquiry.maxLoanPrice = data.data.maxLoanPrice;
+			$("#jgShow").show();
+		});
+	}
+	
+	//localStorage存值永久有效
+	$scope.setItems = function(){
+		if($scope.enquiry!=null){
+		    var enquiry = {};
+		    //参数值
+		    enquiry.propertyId=$scope.enquiry.propertyId;
+		    enquiry.propertyName = $scope.enquiry.propertyName;
+		    enquiry.buildingId = $scope.enquiry.buildingId;
+		    enquiry.buildingName = $scope.enquiry.buildingName;
+		    enquiry.roomName = $scope.enquiry.roomName;
+		    enquiry.roomId = $scope.enquiry.roomId;
+		    enquiry.area =　$scope.enquiry.area;
+		    enquiry.registerPrice =$scope.enquiry.registerPrice;
+// 		    enquiry.consumerloans = $scope.enquiry.consumerloans;
+// 		    enquiry.transactionprice =$scope.enquiry.transactionprice;
+// 		    enquiry.obligee =$scope.enquiry.obligee;
+// 		    enquiry.range = $scope.enquiry.range;
+		    //地址栏参数值
+		    enquiry.uid = uid;
+		    enquiry.deviceId=deviceId;
+		    enquiry.enquiryId = enquiryId;
+		    enquiry.orderNo = orderNo;
+		    enquiry.productCode = $scope.productCode;
+		    //结果值
+		    enquiry.createtime = $scope.enquiry.createtime;
+			enquiry.totalPrice = $scope.enquiry.totalPrice;
+			enquiry.netPrice = $scope.enquiry.netPrice;
+			enquiry.maxLoanPrice = $scope.enquiry.maxLoanPrice;
+			
+		    localStorage.setItem('enquiry',JSON.stringify(enquiry));
+		}
+	    location.href="/appH5/search_wuye.html";
+	}
+});
+
+mui.init();
+mui.ready(function() {
+	  var userPicker = new mui.PopPicker();
+	  userPicker.setData(arr);
+	  $(".sel").on("click",function(){
+		var _this=$(this);
+	    userPicker.show(function(items) {
+			_this.val((items[0].text));
+			 $("input[name='consumerloans']").val((items[0].value));
+			 if((items[0].value)==1 || (items[0].value)=="1"){
+					$("#cons").show();
+				}else{
+					$("#cons").hide();
+				}
+		});
+	  });
+	  var userPicker2 = new mui.PopPicker();
+	  userPicker2.setData(arr2);
+	  $(".sel2").click(function(){
+	    var _this=$(this);
+	    userPicker2.show(function(items) {
+			_this.val((items[0].text));
+			 $("input[name='obligee']").val((items[0].value));
+		});
+      });
+	  var userPicker3 = new mui.PopPicker();
+	  userPicker3.setData(arr3);
+	  $(".sel3").click(function(){
+	    var _this=$(this);
+	    userPicker3.show(function(items) {
+			_this.val((items[0].text));
+			 $("input[name='range']").val((items[0].value));
+		});
+    }); 
+})
+
+</script>
+</body>
+</html>

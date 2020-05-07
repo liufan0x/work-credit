@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.huarong.RepaymentRegisterMapper" >
+<select id="getRepaymentRegister" parameterType="String" resultType="map">  
+         select * from  tbl_third_hr_repayment_register  where  orderNo=#{orderNo} order by id DESC limit 0,1
+    </select>
+	<!-- 添加回款计划表 -->
+	<insert id="saveRepaymentRegister" parameterType="Map">
+		INSERT INTO tbl_third_hr_repayment_register  (
+			borrowId,
+			batchNo,
+			repayDate,	
+			sendDate,
+			allAccount,
+			allNum,
+			confirmRepayDate,
+			orderNo,
+			orderHr,
+			status,
+			repaymentTime,
+			repaymentYestime,
+			repaymentAccount,
+			repaymentYesaccount,
+			lateDays,
+			lateInterest,
+			interest,
+			capital,
+			sysbAmt,
+			setlSysbAmt,
+			psFeeAmt,
+			setlFeeAmt,
+			setlCapital,
+			setlInterest,
+			setlLateInterest,
+			ppErInd,
+			psOdInd,
+			psIntRate,
+			psRemPrcp,
+			borrowStatus,
+			repaymentStatus,
+			isLastPeriod,
+			respStatus
+		)
+		VALUES
+		(
+			#{borrowId},
+			#{batchNo},
+			#{repayDate},
+			#{sendDate},
+			#{allAccount},
+			#{allNum},
+			#{confirmRepayDate},
+			#{orderNo},
+			#{order},
+			#{status},
+			#{repaymentTime},
+			#{repaymentYestime},
+			#{repaymentAccount},
+			#{repaymentYesaccount},
+			#{lateDays},
+			#{lateInterest},
+			#{interest},
+			#{capital},
+			#{sysbAmt},
+			#{setlSysbAmt},
+			#{psFeeAmt},
+			#{setlFeeAmt},
+			#{setlCapital},
+			#{setlInterest},
+			#{setlLateInterest},
+			#{ppErInd},
+			#{psOdInd},
+			#{psIntRate},
+			#{psRemPrcp},
+			#{borrowStatus},
+			#{repaymentStatus},
+			#{isLastPeriod},
+			#{respStatus}
+		)
+	</insert>
+	
+</mapper>

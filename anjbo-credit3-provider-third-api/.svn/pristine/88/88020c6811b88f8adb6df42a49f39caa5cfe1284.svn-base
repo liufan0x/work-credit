@@ -1,0 +1,320 @@
+package com.anjbo.ws.sgt;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.xml.ws.BindingProvider;
+
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import org.apache.logging.log4j.Logger;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.alibaba.fastjson.JSON;
+
+import com.anjbo.app.InfWsSearch;
+import com.anjbo.app.InfWsSearchService;
+import com.anjbo.common.Constants;
+import com.anjbo.common.RedisOperator;
+import com.anjbo.common.RespDataObject;
+import com.anjbo.common.RespHelper;
+import com.anjbo.creditapp.InfWsLogin;
+import com.anjbo.creditapp.InfWsLoginService;
+import com.anjbo.creditapp.LoginRequest;
+import com.anjbo.ws.InfWsProcess;
+import com.anjbo.ws.InfWsProcessService;
+
+/**
+ * 陕国投webservice接口调用帮助类
+ */
+public class SGTWsHelper {
+	private static final Logger LOG = org.apache.logging.log4j.LogManager.getLogger(SGTWsHelper.class);
+	
+
+	public static RespDataObject<Map<String, Object>> interfaceCall(@RequestBody Map<String, Object> params){
+		RespDataObject<Map<String, Object>> resp = new RespDataObject<Map<String, Object>>();
+		Map<String,Object> maps = new HashMap<String, Object>();
+		String token="";       //相应的token值
+		Map<String,Object> contents = null;
+		SimpleDateFormat dFormat = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
+		String date = dFormat.format(new Date());
+		String reqDate = date.substring(0,9);
+		String reqTime = date.substring(9,date.length());
+		
+		Set<String> keys = params.keySet();   
+		for(String key:keys){
+			System.out.println("传入参数key值："+key+" value值："+params.get(key));
+		}
+		int type=MapUtils.getIntValue(params,"type");
+		String txCode = MapUtils.getString(params,"txCode");
+		String reqSerial = MapUtils.getString(params,"reqSerial");
+		params.remove("type");
+		params.remove("txCode");
+		String jsonObject = net.sf.json.JSONObject.fromObject(params).toString();    
+		maps.put("txCode",txCode);
+		maps.put("reqDate",reqDate);
+		maps.put("reqTime",reqTime);
+		if (StringUtils.isBlank(reqSerial)) {
+			maps.put("reqSerial",getNum());
+		}else {
+		maps.put("reqSerial",reqSerial);
+		}
+		maps.put("jsonObject",jsonObject);
+		Set<String> key1 = maps.keySet();   
+	    for(String key:key1){
+	      System.out.println("给第三方参数key值："+key+" value值："+maps.get( key));
+	    }
+		
+		token =RedisOperator.showG("sgtLoginToken");
+//		if (!StringUtils.isNotEmpty(token)) {      
+				com.anjbo.creditapp.Response response = sLogin(maps);
+				contents = JSON.parseObject(response.getContent());    
+				token = MapUtils.getString(contents,"token");
+				RedisOperator.setString("sgtLoginToken", token);
+//		}
+		maps.put("token",token);
+		
+		if (!StringUtils.isNotEmpty(txCode)) {
+			resp.setMsg("请求接口编码为空");
+			return resp;
+		}
+		if (type==1) {                //请求
+			 resp = taskRequest(maps);
+			 System.out.println("进来了120请求来了");
+			if(resp.getCode().equals("9007")) {         
+				maps.remove(token);
+				 response = sLogin(maps);
+				contents = JSON.parseObject(response.getContent());
+				RedisOperator.setString("sgtLoginToken",MapUtils.getString(contents,"token"));
+				maps.put("token",MapUtils.getString(contents,"token"));
+				resp = taskRequest(maps);
+			}
+			Map<String, Object> map = resp.getData();
+			if (map==null) {
+				return resp;
+			}
+			if(!map.isEmpty()||map!=null) {
+			for(String key:map.keySet()){
+				System.out.println("返回参数key值："+key+" value值："+map.get(key));
+			}
+			System.out.println("返回参数code"+resp.getCode()+"返回参数msg"+resp.getMsg());
+		    if ("2011".equals(txCode)||"2012".equals(txCode)) {
+		    	if("01".equals(MapUtils.getString(map,"dealNo"))||"9999".equals(MapUtils.getString(map,"dealNo"))) {
+		    		RespHelper.setSuccessDataObject(resp, resp.getData());
+		    		return resp;
+		    	}else {
+		    		RespHelper.setFailDataObject(resp, null,MapUtils.getString(map,"dealDesc"));
+		    		return resp;
+		    	}
+		  }
+		  if ("2001".equals(txCode)||"2311".equals(txCode)||"2312".equals(txCode)) {    //资料推送、线上线下还款
+			List<Map> list=com.alibaba.fastjson.JSONObject.parseArray((MapUtils.getString(map,"list")),Map.class);
+			System.out.println("2001\2011\2312进来了,list数据打印01"+list);
+			if (list.size()<1) {
+				RespHelper.setSuccessDataObject(resp, resp.getData());
+				System.out.println("2001\2011\2312进来了,list数据打印02"+list);
+				return resp;
+			  }
+			 else {
+		    	RespHelper.setFailDataObject(resp,null,MapUtils.getString(map,"list"));
+		    	System.out.println("2001\2011\2312进来了,list数据打印03"+list);
+		    	return resp;
+			}
+		 }
+		 
+		}
+		}else if (type==2) {          //查询
+			resp = queryResult(maps);
+			if (resp.getCode().equals("9007")) {
+				maps.remove(token);
+				 response= sLogin(maps);
+				contents = JSON.parseObject(response.getContent());
+				RedisOperator.setString("sgtLoginToken",MapUtils.getString(contents,"token"));
+				maps.put("token",MapUtils.getString(contents,"token"));
+				resp = queryResult(maps);
+			}
+			Map<String, Object> map = resp.getData();
+			if (map==null) {
+				resp.setCode("FAIL");
+				return resp;
+			}
+			if(!map.isEmpty()||map!=null) {
+			for(String key:map.keySet()){
+				System.out.println("2102返回进来了1");
+				System.out.println("返回参数key值："+key+" value值："+map.get(key));
+			}
+			System.out.println("返回参数code"+resp.getCode()+"返回参数msg"+resp.getMsg());
+			if ("2102".equals(txCode)) {
+				String dealSts =(String) map.get("dealSts");
+				if ("7".equals(dealSts)||"8".equals(dealSts)) {
+					RespHelper.setSuccessDataObject(resp, resp.getData());
+					return resp;
+				}else {
+					resp.setCode("FAIL");
+					RespHelper.setFailDataObject(resp,map,(String) map.get("dealDesc"));
+					return resp;
+				}
+			}
+			 if ("2002".equals(txCode)) {
+					List<Map> list=com.alibaba.fastjson.JSONObject.parseArray((MapUtils.getString(map,"list")),Map.class);
+					String dealSts = MapUtils.getString(list.get(0),"dealSts");
+					if ("1".equals(dealSts)) {
+						RespHelper.setSuccessDataObject(resp, resp.getData());
+						return resp;
+					}else {
+						RespHelper.setFailDataObject(resp, null,MapUtils.getString(map,"list"));
+						return resp;
+					}
+			 }
+			 if ("2313".equals(txCode)) {
+					List<Map> list=com.alibaba.fastjson.JSONObject.parseArray((MapUtils.getString(map,"list")),Map.class);
+					Map<String,Object> maps2=new HashMap<String,Object>();
+					maps2.put("list",list);
+					if (list.size()>0) {
+						RespHelper.setSuccessDataObject(resp,maps2);
+					}else {
+						RespHelper.setFailRespStatus(null,"返回异常");
+					}
+				
+					return resp;
+			   }
+			 if ("2204".equals(txCode)) {
+					List<Map> list=com.alibaba.fastjson.JSONObject.parseArray((MapUtils.getString(map,"list")),Map.class);
+					String sts = MapUtils.getString(list.get(0),"sts");
+					if ("03".equals(sts)) {                            //处理成功
+						resp.setCode("SUCCESS");
+						RespHelper.setSuccessDataObject(resp, resp.getData());
+						return resp;
+					}else {
+						resp.setCode("FAIL");
+						RespHelper.setFailDataObject(resp, null,MapUtils.getString(list.get(0),"failCaus"));
+						return resp;
+					}
+			 }
+		}
+		}else {
+			resp.setMsg("请输入正确的操作");
+			return resp;
+		}
+		System.out.println("最后返回resp打印"+resp.getData());
+		return resp;
+	}
+	
+   public static RespDataObject<Map<String,Object>> taskRequest(Map<String,Object> map){      //任务请求
+	    RespDataObject<Map<String,Object>> respDataObject = new RespDataObject<Map<String,Object>>(); 
+	    try {
+	    	com.anjbo.ws.Request request = new com.anjbo.ws.Request();
+	    	request.setBrNo(Constants.SGT_WS_BRNO);               
+	    	request.setTxCode(MapUtils.getString(map,"txCode"));
+	    	request.setReqDate(MapUtils.getString(map,"reqDate"));
+	    	request.setReqTime(MapUtils.getString(map,"reqTime"));
+	    	request.setToken(MapUtils.getString(map,"token"));
+	    	request.setReqSerial(MapUtils.getString(map,"reqSerial"));
+	    	request.setContent(MapUtils.getString(map,"jsonObject"));
+	    	InfWsProcessService wsProcessService = new InfWsProcessService();
+	    	InfWsProcess ins = wsProcessService.getInfWsProcessPort();
+	    	((BindingProvider)ins).getRequestContext().put("javax.xml.ws.client.connectionTimeout",150000);
+	    	((BindingProvider)ins).getRequestContext().put("javax.xml.ws.client.receiveTimeout",150000);
+	    	System.out.println(ins);
+	    	com.anjbo.ws.Response response =  ins.process(request);
+	    	respDataObject.setCode(response.getRespCode());
+	    	respDataObject.setMsg(response.getRespDesc());
+	    	respDataObject.setData(com.alibaba.fastjson.JSON.parseObject(response.getContent()));
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
+	    return respDataObject;
+   } 
+   
+   public static RespDataObject<Map<String,Object>> queryResult(Map<String,Object> map){         //结果查询
+	   RespDataObject<Map<String,Object>> respDataObject = new RespDataObject<Map<String,Object>>();
+	  String txCode = MapUtils.getString(map,"txCode");
+	try {
+		    com.anjbo.app.Request request = new com.anjbo.app.Request();
+			request.setBrNo(Constants.SGT_WS_BRNO);
+			request.setTxCode(MapUtils.getString(map,"txCode"));
+			request.setReqDate(MapUtils.getString(map,"reqDate"));
+			request.setReqTime(MapUtils.getString(map,"reqTime"));
+			request.setToken(MapUtils.getString(map,"token"));
+			request.setReqSerial(MapUtils.getString(map,"reqSerial"));
+			request.setContent(MapUtils.getString(map,"jsonObject"));
+			InfWsSearchService  infWsSearchService = new InfWsSearchService();
+		    InfWsSearch searchs = infWsSearchService.getInfWsSearchPort();
+	      ((BindingProvider)searchs).getRequestContext().put("javax.xml.ws.client.connectionTimeout",150000);
+	      ((BindingProvider)searchs).getRequestContext().put("javax.xml.ws.client.receiveTimeout",150000);
+	  	System.out.println(searchs);
+		   com.anjbo.app.Response response = searchs.search(request);
+		   respDataObject.setCode(response.getRespCode());
+	       respDataObject.setMsg(response.getRespDesc());
+	      
+	       if ("2102".equals(txCode)) {
+	    	   List<Object> aa =  com.alibaba.fastjson.JSON.parseArray(response.getContent());
+	    	   if (null==aa) {
+	 	    	  return respDataObject;
+	 		   } else {
+	    	   //com.alibaba.fastjson.JSONObject.parseArray(response.getContent(),Map.class);
+	    		   Map<String,Object> dmMap = (Map<String, Object>) aa.get(0);
+	    		   respDataObject.setData(dmMap);
+	 		   }
+		}else {
+			 respDataObject.setData(JSON.parseObject(response.getContent()));
+		}
+		
+	}catch (Exception e) {
+	   		// TODO: handle exception
+	   		   e.printStackTrace();
+	       	}
+	   
+	   return respDataObject;
+   }
+   
+   public static com.anjbo.creditapp.Response sLogin(Map<String,Object> maps){
+	   com.anjbo.creditapp.Response response = new com.anjbo.creditapp.Response();
+	   try {
+		   String txCode="0001";
+		   Map<String,Object> map = new HashMap<String,Object>();
+		   map.put("brNo",Constants.SGT_WS_BRNO);
+		   map.put("userNo","0004");
+		   map.put("passWd","0004");
+		   String jsonObject = net.sf.json.JSONObject.fromObject(map).toString();
+		   
+		   LoginRequest request = new LoginRequest();
+		   request.setBrNo(Constants.SGT_WS_BRNO);
+		   request.setReqDate(MapUtils.getString(maps,"reqDate"));
+		   request.setReqTime(MapUtils.getString(maps,"reqTime"));
+		   request.setReqSerial(MapUtils.getString(maps,"reqSerial"));
+		   request.setTxCode(txCode);
+		   request.setContent(jsonObject);
+		   
+		   InfWsLoginService infWsLoginService = new InfWsLoginService();
+		   InfWsLogin login = infWsLoginService.getInfWsLoginPort();
+		   ((BindingProvider)login).getRequestContext().put("javax.xml.ws.client.connectionTimeout",150000);
+		   ((BindingProvider)login).getRequestContext().put("javax.xml.ws.client.receiveTimeout",150000);
+		   System.out.println(login);
+		   response = login.login(request);
+		   System.out.println("返回code"+response.getRespCode()+"\t返回desc"+response.getRespDesc()+"\t返回content"+response.getContent());
+	   } catch (Exception e) {
+		// TODO: handle exception
+		   e.printStackTrace();
+    	}
+	   return response;
+   }
+	
+	public static String getDate() {
+		SimpleDateFormat sfDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+		return sfDateFormat.format(new Date());
+	}
+	
+	public static String getNum() {                             //当前时分秒加上三位随机数
+		int xterm  = (int) ((Math.random()*900)+100);
+		return getDate()+xterm;
+	}
+	
+	
+	
+   }

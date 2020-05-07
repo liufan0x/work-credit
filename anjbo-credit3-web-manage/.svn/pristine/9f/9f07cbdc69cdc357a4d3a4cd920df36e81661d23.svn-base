@@ -1,0 +1,62 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<ul class="breadcrumb">
+				<li>
+					<a>订单管理 </a> <span class="divider"></span>
+				</li>
+				<li class="active">
+					订单列表
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	<!--row-->
+	<div class="row">
+		<div class="col-md-12"> 
+		    <form class="form-inline" style="margin-left:30px;">
+				<div class="form-group">
+					<label >客户姓名：</label>
+					<input type="text" class="form-control" ng-model="page.customerName">
+				</div>
+				<button type="submit" class="btn btn-default" ng-click="query()" style="margin-bottom:10px; margin-right:10px;">查询</button>
+			</form>
+		</div>
+	</div>
+	<!--row-->
+
+	<div class="row">
+		<div class="col-md-12">
+			<!--table-->
+			<table bs-table-control="fundList" id="table"></table>
+			<!--table end-->
+	    </div>
+	</div>
+</div>
+
+
+<div ng-show="false" id="editOrderId">
+	<div class="row panelW500">
+		<div class="col-md-12">
+			<form class="form-inline" name="orderForm" id="orderForm">
+				<div class="form-group">
+					<label>
+					      <span class="text-danger">*</span>
+						  <span class="tooltip-toggle" data-toggle="tooltip-toggle" title="" >订单状态：<span class="help"></span></span>
+					</label>
+					<span id="processId" ></span>
+				</div>	
+				<div class="form-group">
+					<label>
+					      <span class="text-danger">*</span>
+						  <span class="tooltip-toggle" data-toggle="tooltip-toggle" title="" >待处理人：<span class="help"></span></span>
+					</label>
+					<span id="currentHandlerUid" ></span>
+				</div>		
+			</form>
+		</div>
+	</div>
+</div>
+
+ 

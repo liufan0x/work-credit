@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.finance.ReceivableHasMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(lastUpdateTimeBegin)"> AND lastUpdateTime >= #{lastUpdateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(lastUpdateTimeEnd)"> AND lastUpdateTime &lt;= #{lastUpdateTimeEnd}</if>
+		-->
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<if test="null!=type and type>0"> AND `type`=#{type}</if>
+		<if test="null!=refund and refund>0"> AND `refund`=#{refund}</if>
+		<if test="null!=penaltyPayable and penaltyPayable>0"> AND `penaltyPayable`=#{penaltyPayable}</if>
+		<if test="null!=datediff and datediff>0"> AND `datediff`=#{datediff}</if>
+		<if test="null!=remark and ''!=remark"> AND `remark`=#{remark}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="ReceivableHasDto" resultType="ReceivableHasDto">    
+	SELECT `id`, `createTime`, `createUid`, `updateUid`, `lastUpdateTime`, `orderNo`, `type`, `refund`, `penaltyPayable`, `datediff`, `remark` 
+	FROM tbl_finance_receivable_has 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="ReceivableHasDto" resultType="ReceivableHasDto">
+	SELECT `id`, `createTime`, `createUid`, `updateUid`, `lastUpdateTime`, `orderNo`, `type`, `refund`, `penaltyPayable`, `datediff`, `remark`
+	FROM tbl_finance_receivable_has 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="ReceivableHasDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_finance_receivable_has 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="ReceivableHasDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_finance_receivable_has(
+		`createTime`,
+		`createUid`,
+		`updateUid`,
+		`lastUpdateTime`,
+		`orderNo`,
+		`type`,
+		`refund`,
+		`penaltyPayable`,
+		`datediff`,
+		`remark`
+	) VALUES(
+		now(),
+		#{createUid},
+		#{createUid},
+		#{lastUpdateTime},
+		#{orderNo},
+		#{type},
+		#{refund},
+		#{penaltyPayable},
+		#{datediff},
+		#{remark}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="ReceivableHasDto" >
+    DELETE FROM tbl_finance_receivable_has 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="ReceivableHasDto" >
+    UPDATE tbl_finance_receivable_has
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=lastUpdateTime">`lastUpdateTime`=#{lastUpdateTime},</if>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=type">`type`=#{type},</if>
+		<if test="null!=refund">`refund`=#{refund},</if>
+		<if test="null!=penaltyPayable">`penaltyPayable`=#{penaltyPayable},</if>
+		<if test="null!=datediff">`datediff`=#{datediff},</if>
+		<if test="null!=remark">`remark`=#{remark},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

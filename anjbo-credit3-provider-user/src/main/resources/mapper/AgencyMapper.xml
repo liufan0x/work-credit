@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.AgencyMapper">
+	<sql id="sqlwhereSearch">
+		<where>
+			<if test="null!=id and id>0"> AND `id`=#{id}</if>
+			<if test="null!=name and ''!=name"> AND `name` LIKE CONCAT('%', #{name}, '%')</if>
+			<if test="null!=simName and ''!=simName"> AND `simName`=#{simName}</if>
+			<if test="null!=type and type>0"> AND `type`=#{type}</if>
+			<if test="null!=chanlMan and ''!=chanlMan"> AND `chanlMan`=#{chanlMan}</if>
+			<if test="null!=contactMan and ''!=contactMan"> AND `contactMan`=#{contactMan}</if>
+			<if test="null!=contactTel and ''!=contactTel"> AND `contactTel`=#{contactTel}</if>
+			<if test="null!=manageAccount and ''!=manageAccount"> AND `manageAccount`=#{manageAccount}</if>
+			<if test="null!=managePass and ''!=managePass"> AND `managePass`=#{managePass}</if>
+			<if test="null!=status and status>=0"> AND `status`=#{status}</if>
+			<!-- <if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if> 
+				<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if> -->
+			<!-- <if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if> 
+				<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if> -->
+			<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+			<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+			<if test="null!=remark and ''!=remark"> AND `remark`=#{remark}</if>
+			<if test="null!=chargeStandard and chargeStandard>0"> AND `chargeStandard`=#{chargeStandard}</if>
+			<if test="null!=isBond and ''!=isBond"> AND `isBond`=#{isBond}</if>
+			<if
+				test="null!=proportionResponsibility and proportionResponsibility>0"> AND `proportionResponsibility`=#{proportionResponsibility}
+			</if>
+			<if test="null!=bond and bond>0"> AND `bond`=#{bond}</if>
+			<if test="null!=creditLimit and creditLimit>0"> AND `creditLimit`=#{creditLimit}</if>
+			<if test="null!=riskBearMultiple and riskBearMultiple>0"> AND `riskBearMultiple`=#{riskBearMultiple}</if>
+			<if test="null!=openCity and ''!=openCity"> AND `openCity` like CONCAT('%', #{openCity},'%') </if>
+			<if test="null!=surplusQuotaRemind and surplusQuotaRemind>0"> AND `surplusQuotaRemind`=#{surplusQuotaRemind}</if>
+			<if test="null!=surplusQuota and surplusQuota>0"> AND `surplusQuota`=#{surplusQuota}</if>
+			<!-- <if test="@Ognl@isNotEmpty(applyDateBegin)"> AND applyDate >= #{applyDateBegin}</if> 
+				<if test="@Ognl@isNotEmpty(applyDateEnd)"> AND applyDate &lt;= #{applyDateEnd}</if> -->
+			<if test="null!=expandManagerUid and ''!=expandManagerUid"> AND `expandManagerUid`=#{expandManagerUid}</if>
+			<if test="null!=acceptManagerUid and ''!=acceptManagerUid"> AND `acceptManagerUid`=#{acceptManagerUid}</if>
+
+			<if test="startSignDate!=null"><![CDATA[ and signDate >= #{startSignDate} ]]></if>
+			<if test="endSignDate!=null"><![CDATA[  and DATE_FORMAT(signDate,'%Y-%m-%d') <= DATE_FORMAT(#{endSignDate}, '%Y-%m-%d')]]></if>
+
+			<if test="null!=cooperativeModeId and cooperativeModeId>0"> AND `cooperativeModeId`=#{cooperativeModeId}</if>
+			<if test="null!=signStatus and ''!=signStatus"> AND `signStatus`=#{signStatus}</if>
+			<if test="null!=agencyType and ''!=agencyType"> AND `agencyType`=#{agencyType}</if>
+			<if test="null!=agencyCode and agencyCode>0"> AND `agencyCode`=#{agencyCode}</if>
+			<if test="null!=minBond and minBond>0"> AND `minBond`=#{minBond}</if>
+			<if test="null!=accountUid and ''!=accountUid"> AND `accountUid`=#{accountUid}</if>
+			<if test="null!=expandChiefUid and ''!=expandChiefUid"> AND `expandChiefUid`=#{expandChiefUid}</if>
+		</where>
+	</sql>
+
+
+	<!-- 获取实体 -->
+	<select id="find" parameterType="AgencyDto"
+		resultType="AgencyDto">
+		SELECT `id`, `name`, `simName`, `type`, `chanlMan`, `contactMan`,
+		`contactTel`, `manageAccount`, `managePass`, `status`, `createTime`,
+		`updateTime`, `createUid`, `updateUid`, `remark`, `chargeStandard`,
+		`isBond`, `proportionResponsibility`, `bond`, `creditLimit`,
+		`riskBearMultiple`, `openCity`, `surplusQuotaRemind`, `surplusQuota`,
+		`applyDate`, `expandManagerUid`, `acceptManagerUid`, `signDate`,
+		`cooperativeModeId`, `signStatus`, `agencyType`, `agencyCode`,
+		`minBond`, `accountUid`, `expandChiefUid`,`orderNo`
+		FROM tbl_customer_agency
+		<include refid="sqlwhereSearch" />
+	</select>
+
+	<!-- 查询 -->
+	<select id="search" parameterType="AgencyDto"
+		resultType="AgencyDto">
+		SELECT `id`, `name`, `simName`, `type`, `chanlMan`, `contactMan`,
+		`contactTel`, `manageAccount`, `managePass`, `status`, `createTime`,
+		`updateTime`, `createUid`, `updateUid`, `remark`, `chargeStandard`,
+		`isBond`, `proportionResponsibility`, `bond`, `creditLimit`,
+		`riskBearMultiple`, `openCity`, `surplusQuotaRemind`, `surplusQuota`,
+		`applyDate`, `expandManagerUid`, `acceptManagerUid`, `signDate`,
+		`cooperativeModeId`, `signStatus`, `agencyType`, `agencyCode`,
+		`minBond`, `accountUid`, `expandChiefUid`,`orderNo`
+		FROM tbl_customer_agency
+		<include refid="sqlwhereSearch" />
+
+		<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+	</select>
+
+	<!-- 查询 -->
+	<select id="count" parameterType="AgencyDto" resultType="int">
+		SELECT count(1)
+		FROM tbl_customer_agency
+		<include refid="sqlwhereSearch" />
+	</select>
+
+
+	<!-- 增删改 -->
+	<insert id="insert" parameterType="AgencyDto"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tbl_customer_agency(
+		`name`,
+		`simName`,
+		`type`,
+		`chanlMan`,
+		`contactMan`,
+		`contactTel`,
+		`manageAccount`,
+		`managePass`,
+		`status`,
+		`createTime`,
+		`updateTime`,
+		`createUid`,
+		`updateUid`,
+		`remark`,
+		`chargeStandard`,
+		`isBond`,
+		`proportionResponsibility`,
+		`bond`,
+		`creditLimit`,
+		`riskBearMultiple`,
+		`openCity`,
+		`surplusQuotaRemind`,
+		`surplusQuota`,
+		`applyDate`,
+		`expandManagerUid`,
+		`acceptManagerUid`,
+		`signDate`,
+		`cooperativeModeId`,
+		`signStatus`,
+		`agencyType`,
+		`agencyCode`,
+		`minBond`,
+		`accountUid`,
+		`expandChiefUid`,
+		`orderNo`
+		) VALUES(
+		#{name},
+		#{simName},
+		#{type},
+		#{chanlMan},
+		#{contactMan},
+		#{contactTel},
+		#{manageAccount},
+		#{managePass},
+		#{status},
+		now(),
+		now(),
+		#{createUid},
+		#{createUid},
+		#{remark},
+		#{chargeStandard},
+		#{isBond},
+		#{proportionResponsibility},
+		#{bond},
+		#{creditLimit},
+		#{riskBearMultiple},
+		#{openCity},
+		#{surplusQuotaRemind},
+		#{surplusQuota},
+		#{applyDate},
+		#{expandManagerUid},
+		#{acceptManagerUid},
+		#{signDate},
+		#{cooperativeModeId},
+		#{signStatus},
+		#{agencyType},
+		#{agencyCode},
+		#{minBond},
+		#{accountUid},
+		#{expandChiefUid},
+		#{orderNo}
+		)
+	</insert>
+
+
+	<delete id="delete" parameterType="AgencyDto">
+		DELETE FROM tbl_customer_agency
+		<include refid="sqlwhereSearch" />
+	</delete>
+
+	<update id="update" parameterType="AgencyDto">
+		UPDATE tbl_customer_agency
+		<set>
+			<if test="null!=name">`name`=#{name},</if>
+			<if test="null!=simName">`simName`=#{simName},</if>
+			<if test="null!=type">`type`=#{type},</if>
+			<if test="null!=chanlMan">`chanlMan`=#{chanlMan},</if>
+			<if test="null!=contactMan">`contactMan`=#{contactMan},</if>
+			<if test="null!=contactTel">`contactTel`=#{contactTel},</if>
+			<if test="null!=manageAccount">`manageAccount`=#{manageAccount},</if>
+			<if test="null!=managePass">`managePass`=#{managePass},</if>
+			<if test="null!=status">`status`=#{status},</if>
+			<if test="null!=createTime">`createTime`=now(),</if>
+			<if test="null!=updateTime">`updateTime`=now(),</if>
+			<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+			<if test="null!=remark">`remark`=#{remark},</if>
+			<if test="null!=chargeStandard">`chargeStandard`=#{chargeStandard},</if>
+			<if test="null!=isBond">`isBond`=#{isBond},</if>
+			<if test="null!=proportionResponsibility">`proportionResponsibility`=#{proportionResponsibility},
+			</if>
+			<if test="null!=bond">`bond`=#{bond},</if>
+			<if test="null!=creditLimit">`creditLimit`=#{creditLimit},</if>
+			<if test="null!=riskBearMultiple">`riskBearMultiple`=#{riskBearMultiple},</if>
+			<if test="null!=openCity">`openCity`=#{openCity},</if>
+			<if test="null!=surplusQuotaRemind">`surplusQuotaRemind`=#{surplusQuotaRemind},</if>
+			<if test="null!=surplusQuota">`surplusQuota`=#{surplusQuota},</if>
+			<if test="null!=applyDate">`applyDate`=#{applyDate},</if>
+			<if test="null!=expandManagerUid">`expandManagerUid`=#{expandManagerUid},</if>
+			<if test="null!=acceptManagerUid">`acceptManagerUid`=#{acceptManagerUid},</if>
+			<if test="null!=signDate">`signDate`=#{signDate},</if>
+			<if test="null!=cooperativeModeId">`cooperativeModeId`=#{cooperativeModeId},</if>
+			<if test="null!=signStatus">`signStatus`=#{signStatus},</if>
+			<if test="null!=agencyType">`agencyType`=#{agencyType},</if>
+			<if test="null!=agencyCode">`agencyCode`=#{agencyCode},</if>
+			<if test="null!=minBond">`minBond`=#{minBond},</if>
+			<if test="null!=accountUid">`accountUid`=#{accountUid},</if>
+			<if test="null!=expandChiefUid">`expandChiefUid`=#{expandChiefUid},</if>
+		</set>
+		WHERE ID=#{id}
+	</update>
+
+	<select id="selectMaxAgencyCode" resultType="java.lang.Integer">
+		SELECT
+		max(agencyCode) FROM tbl_customer_agency
+	</select>
+</mapper>

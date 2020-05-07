@@ -1,0 +1,49 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="breadcrumb">
+                <li>
+                    <a>要件管理</a>
+                    <span class="divider"></span>
+                </li>
+                <li class="active">审批设置</li>
+                <button type="button" class="btn btn-info detail-right-save fr" ng-click="goHref()" >添加</button>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <form class="form-inline" style="margin-bottom:20px;margin-left:30px; ">
+                <div class="form-group">
+                    <label>城市：</label>
+                    <select class="form-control" ng-model="page.city">
+                        <option value="" >全部</option>
+                        <option ng-repeat="city in cityList" value="{{city}}">{{city}}</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>审批类型：</label>
+                    <select class="form-control" ng-model="page.configType">
+                        <option value="" >全部</option>
+                        <option value="1">要件审批（非业务流程借出）</option>
+                        <option value="2">要件审批（财务申请）</option>
+                        <option value="3">要件审批（财务申请）</option>
+                        <option value="4">业务流程借出</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-default" ng-click="query()" style="margin-bottom:10px; margin-right:10px;">
+                    查询
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <table bs-table-control="boxList"  id="table"></table>
+        </div>
+    </div>
+</div>
+

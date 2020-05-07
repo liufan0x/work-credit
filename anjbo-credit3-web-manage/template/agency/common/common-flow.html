@@ -1,0 +1,50 @@
+<div class="detail-left">
+     <p class="detail-left-tit">订单状态</p>
+	 <div class="detail-left-nav">
+		  <div class="detail-left-nav-box" ng-repeat="orderFlow in orderFlowList">
+
+				<a ng-if="orderFlow.backReason==null || orderFlow.backReason==''" ng-click="addDetail(orderFlow.currentProcessId)" class="relative">
+					<div class="detail-left-circle" ng-bind="$index+1" style="color:#fff;text-align:center; line-height:13px;font-size:12px;background:#777;"></div>
+					<span ng-if="orderFlow.color!='red'" ng-bind="orderFlow.currentProcessName"></span>
+					<span class="text-danger" ng-if="orderFlow.color=='red'" ng-bind="orderFlow.currentProcessName"></span>
+					<span ng-if="orderFlow.currentProcessId!='wanjie'&&orderFlow.color!='red'">已完成 </span>
+				</a>
+				<span ng-if="orderFlow.backReason!=null  && orderFlow.backReason!='' && orderFlow.color!='red'" href="javascript:void(0)" class="relative text-warning"><div class="detail-left-circle"></div>订单已从【<span ng-bind="orderFlow.currentProcessName"></span>】退回给【<span ng-bind="orderFlow.nextProcessName"></span>】</span>
+				<span ng-if="orderFlow.backReason!=null  && orderFlow.backReason!='' && orderFlow.color=='red'" href="javascript:void(0)" class="relative text-warning text-danger"><div class="detail-left-circle text-danger"></div>订单已从【<span class="text-danger" ng-bind="orderFlow.currentProcessName"></span>】退回给【<span class="text-danger" ng-bind="orderFlow.nextProcessName"></span>】</span>
+				<p class="text-danger" ng-if="orderFlow.backReason!=null  && orderFlow.backReason!='' && orderFlow.color=='red'" ng-bind="'退回原因：'+orderFlow.backReason"></p>
+				<p ng-if="orderFlow.backReason!=null  && orderFlow.backReason!='' && orderFlow.color!='red'" ng-bind="'退回原因：'+orderFlow.backReason"></p>
+				<p class="text-muted" ng-if="orderFlow.currentProcessId!='wanjie' && orderFlow.color!='red'">操作人：<span ng-bind="orderFlow.handleName"></span></p>
+				<p class="text-muted text-danger" ng-if="orderFlow.currentProcessId!='wanjie' && orderFlow.color=='red'">操作人：<span ng-bind="orderFlow.handleName"></span></p>
+				<span ng-if="orderFlow.color!='red'" style="color:#777">操作时间：<span class="text-muted"  ng-bind="orderFlow.handleTime | date:'yyyy-MM-dd HH:mm'" ></span></span>
+				<span ng-if="orderFlow.color=='red'" style="color:#777">操作时间：<span class="text-muted text-danger"  ng-bind="orderFlow.handleTime | date:'yyyy-MM-dd HH:mm'" ></span></span>
+		  </div>
+		 <div class="detail-left-nav-box" ng-if="null!=lastOrderFlowList&&''!=lastOrderFlowList.nextProcessName">
+			 <a  ng-click="addDetail(lastOrderFlowList.nextProcessId)" class="relative">
+				 <div class="detail-left-circle" ng-bind="orderFlowList.length+1" style="color:#fff;text-align:center; line-height:13px;font-size:12px;background:#777;"></div>
+				 <font color="#CC0000"><span ng-bind="lastOrderFlowList.nextProcessName"></span></font>
+			 </a>
+		 </div>
+
+	 </div>
+	 <div class="showBtn" style="position: fixed;height: 50px;width: 10px;z-index: 1000;background: #333a47;left:290px;top: 450px;border-top-right-radius: 8px;border-bottom-right-radius: 8px;color: white;line-height: 50px; cursor:pointer"><</div>
+</div>
+
+<script>
+	$(function() {
+		$('div.showBtn').on('click', function() {
+			if($('div.detail-left').width() == 290) {
+				$('div.detail-left').animate({ width: '0px' });
+				$('div.showBtn').animate({ left: '0px' });
+				$('div.detail-right').animate({ left: '10px' },function(){
+					$('div.showBtn').html('>');
+				});
+			} else {
+				$('div.detail-left').animate({ width: '290px' });
+				$('div.showBtn').animate({ left: '290px' });
+				$('div.detail-right').animate({ left: '300px' },function(){
+					$('div.showBtn').html('<');
+				});
+			}
+		});
+	});
+</script>

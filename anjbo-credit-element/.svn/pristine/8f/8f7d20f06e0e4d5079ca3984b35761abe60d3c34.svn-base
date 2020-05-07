@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.XAuditFlowMapper">   
+     <select id="selectAuditFlowList" parameterType="java.util.Map" resultType="int">
+    	select count(*) from tbl_element_audit_flow WHERE orderNo=#{orderNo} and auditorUid=#{currentHandlerUid} and state=1;
+    </select>
+    
+    <select id="selectAuditFlowListByDbId" parameterType="java.util.Map" resultType="java.util.Map">
+    	select auditorName,remark,deliverTo,state from tbl_element_audit_flow WHERE dbId=#{dbId} order by auditLevel asc;
+    </select>
+    
+    
+</mapper>

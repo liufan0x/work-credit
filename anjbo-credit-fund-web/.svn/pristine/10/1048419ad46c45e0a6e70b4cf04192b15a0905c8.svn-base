@@ -1,0 +1,53 @@
+	<!--title-->
+	<div class="row">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;提单详情
+			<a style="display:inline-block;float:right;padding-right: 10px;" ui-sref="orderList" >返回上一步</a>
+			<div style="position:absolute;right:400px;top:0px;">
+				 <!--  <span id="elementFlag" ng-bind="elementFlag">是否已收到要件：是</span>
+				  <span><a id="elementInfo" ng-bind="elementInfo" ng-click="showDetail('elementEntrance');">要件详情</a></span> -->
+			</div>
+		</div>
+	</div>
+	<!--title end-->
+	<!--导航-->
+	    <div class="row">
+			<div class="col-md-12">
+				<ul class="nav nav-tabs">
+					<li ng-class="{'active':huarongTitle=='huarongOrderShow'}" >
+						<a ng-click="huarongTitle='huarongOrderShow'">借款信息</a>
+					</li>
+					<li ng-class="{'active':huarongTitle=='huarongKgAppointShow'}" >
+						<a ng-click="huarongTitle='huarongKgAppointShow'">
+							<span ng-if="fundId==31">业务信息</span>
+							<span ng-if="fundId!=31">客户信息</span>
+						</a>
+					</li>
+					<li ng-class="{'active':huarongTitle=='huarongKgIndivShow'}" >
+						<a ng-click="huarongTitle='huarongKgIndivShow'">
+							<span ng-if="fundId==31">借款人信息</span>
+							<span ng-if="fundId!=31">房产信息</span>
+						</a>
+					</li>
+					<li ng-class="{'active':huarongTitle=='huarongKgHouseShow'}" >
+						<a ng-click="huarongTitle='huarongKgHouseShow'">
+							<span ng-if="fundId==31">房产信息</span>
+							<span ng-if="fundId!=31">询价、查档、诉讼</span>
+						</a>
+					</li>
+					<li ng-class="{'active':huarongTitle=='huarongImageShow'}" >
+						<a ng-click="huarongTitle='huarongImageShow'">影像资料</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	<!--导航 end-->
+
+	<allocation-fund-huarong-order-detail	ng-show="huarongTitle=='huarongOrderShow'"></allocation-fund-huarong-order-detail>
+	<allocation-fund-huarong-appoint-detail	ng-show="huarongTitle=='huarongKgAppointShow'"></allocation-fund-huarong-appoint-detail>
+	<allocation-fund-huarong-indiv-detail	ng-show="huarongTitle=='huarongKgIndivShow'"></allocation-fund-huarong-indiv-detail>
+	<allocation-fund-huarong-house-detail	ng-show="huarongTitle=='huarongKgHouseShow'"></allocation-fund-huarong-house-detail>
+	<allocation-fund-huarong-businfo-detail	ng-show="huarongTitle=='huarongImageShow'"></allocation-fund-huarong-businfo-detail>
+	
+	<div ui-view="">
+		
+	</div>

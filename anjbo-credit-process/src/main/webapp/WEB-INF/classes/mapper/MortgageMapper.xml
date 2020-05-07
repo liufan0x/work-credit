@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.MortgageMapper">
+	
+	<select id="selectMortgage" parameterType="MortgageDto" resultType="MortgageDto">
+	   select id,`createUid`, `createTime`, `updateUid`, `orderNo`,mortgageTime, DATE_FORMAT(mortgageTime,'%Y-%m-%d') as mortgageTimeStr, 
+  			`mlandBureau`,mortgageStartTime, DATE_FORMAT(mortgageStartTime,'%Y-%m-%d') as `mortgageStartTimeStr`, mortgageEndTime,DATE_FORMAT(mortgageEndTime,'%Y-%m-%d') as `mortgageEndTimeStr`,
+   			`mlandBureauUid`, `remark`,mortgageImg,mlandBureauName,mlandBureauUserName,mortgageName
+ 		 from tbl_process_app_mortgage 
+	     where orderNo=#{orderNo}
+	</select>
+	
+	<insert id="addMortgage" parameterType="MortgageDto" >
+	   INSERT INTO `tbl_process_app_mortgage` (
+	    		`createUid`, `createTime`, `updateUid`, `orderNo`, `mortgageTime`, `mlandBureau`, `mortgageStartTime`, `mortgageEndTime`, `mlandBureauUid`, `remark`,
+	   			 `mortgageImg`,`mlandBureauName`,`mlandBureauUserName`,`mortgageName`
+	    ) VALUES (
+	     			#{createUid}, now(), #{updateUid}, #{orderNo}, #{mortgageTime}, #{mlandBureau}, #{mortgageStartTime}, #{mortgageEndTime}, #{mlandBureauUid}, #{remark},
+	    		 #{mortgageImg},#{mlandBureauName},#{mlandBureauUserName},#{mortgageName}
+	    )
+	</insert>
+	<update id="updateMortgage" parameterType="MortgageDto">
+	    update tbl_process_app_mortgage
+		set
+		    <if test="updateUid!= null and updateUid !='' " >
+        		updateUid = #{updateUid},
+      		</if>
+			<if test="mortgageTime != null  " >
+        		mortgageTime = #{mortgageTime},
+      		</if>
+			<if test="mlandBureau != null and mlandBureau !='' " >
+        		mlandBureau = #{mlandBureau},
+      		</if>
+      		<if test="mortgageStartTime != null  " >
+        		mortgageStartTime = #{mortgageStartTime},
+      		</if>
+      		<if test="mortgageEndTime != null " >
+        		mortgageEndTime = #{mortgageEndTime},
+      		</if>
+			<if test="mlandBureauUid != null and mlandBureauUid !='' " >
+        		mlandBureauUid = #{mlandBureauUid},
+      		</if>
+      		<if test="remark!= null and remark !='' " >
+	        	remark = #{remark},
+	      	</if>
+	      	<if test="mortgageImg!= null and mortgageImg !='' " >
+	        	mortgageImg = #{mortgageImg},
+	      	</if>
+	      	<if test="mlandBureauName != null and mlandBureauName !='' " >
+	        	mlandBureauName = #{mlandBureauName},
+	      	</if>
+	      	<if test="mlandBureauUserName !=null and mlandBureauUserName !='' " >
+	        	mlandBureauUserName = #{mlandBureauUserName},
+	      	</if>
+	      	<if test="mortgageName !=null and mortgageName !='' ">
+	      	    mortgageName=#{mortgageName},
+	      	</if>
+		   orderNo=#{orderNo}
+		where orderNo =#{orderNo}
+	</update>
+</mapper>

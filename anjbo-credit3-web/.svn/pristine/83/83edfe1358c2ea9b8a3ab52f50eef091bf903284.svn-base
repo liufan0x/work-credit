@@ -1,0 +1,106 @@
+<style>
+	.form-inline label {width: 183px;}
+</style>
+	<!--title-->
+	<div class="row">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;提单详情
+			<a style="display:inline-block;float:right;padding-right: 10px;" ui-sref="orderList" >返回上一步</a>
+		</div>
+	</div>
+	<!--title end-->
+
+
+	<!--
+    	作者：lic@anjbo.com
+    	时间：2017-08-31
+    	描述：标签
+    -->
+	<div class="row" ng-if="pageConfigDto.type == 1" >
+		<div class="col-md-12">
+			<ul class="nav nav-tabs">
+				<li ng-repeat="pageTabConfig in pageConfigDto.pageTabConfigDtos track by $index" ng-class="{'active':showView==pageTabConfig.title}" >
+					<a ng-click="changeView(pageTabConfig)" ng-bind="pageTabConfig.title"></a>
+				</li>
+				<li class="pull-right" ng-if="isConfigEdit">
+					<button type="button" ng-click="save()" class="btn btn-info detail-right-save" >保存</button>
+				</li>
+			</ul>
+		</div>
+	</div>
+	
+	<!--
+    	作者：lic@anjbo.com
+    	时间：2017-08-18
+    	描述：详情字段
+    -->
+	<form method="post" class="form-inline w165 detail-row">
+		<span ng-show="pageTabConfigDto.isShow" ng-bind-html="pageTabConfigDto.showText"></span>
+		
+		<enquiry-edit ng-if="pageTabConfigDto.title == '询价/查档/诉讼'"></enquiry-edit>
+		<businfo-edit ng-if="pageTabConfigDto.title == '影像资料'" ></businfo-edit>
+			
+		<div ng-repeat="pageTabRegionConfig in pageTabConfigDto.pageTabRegionConfigDtos" ng-show="!pageTabConfigDto.isShow && !((pageTabRegionConfig.title == '企业信息（非必填）' || pageTabRegionConfig.title == '股东信息（非必填）') && !isEnterprise )" >
+			<div class="col-md-12 detail-right-tit ">
+				&nbsp;&nbsp;<span ng-bind="pageTabRegionConfig.title"></span>
+				<span ng-if="$index==0" >&nbsp;&nbsp;<span ng-bind-html="pageTabConfigDto.remarks"></span></span>
+			</div>
+			<div ng-repeat="formList in pageTabRegionConfig.valueList">
+				<div ng-if="pageTabRegionConfig.type==2" class="col-md-12 danbao-tit">&nbsp;&nbsp; {{pageTabRegionConfig.title}}（<span class="num-box" ng-bind="$index+1"></span>）</div>
+				<form-list ng-repeat="m in formList" ng-if="!isConfigEdit">
+					
+					<div ng-if="m.type != 1000 && m.type != 1008 && m.title != '是否完成' && !m.isHide " ng-class="{'col-md-12 col-lg-12':m.col==3 , 'col-md-6 col-lg-8':m.col==2,'col-md-6 col-lg-4':m.col==1 }">
+						
+						<!-- 表单标题: -->
+						<label ng-if="m.type == 6 && !m.isHide" style="text-align:right; line-heigth:44px; position:absolute; letf:0;top:0;">
+							<span ng-bind="m.title + '：'"></span>
+						</label>
+						
+						<label ng-if="m.type != 6 && !m.isHide">
+							<span ng-bind="m.title + '：'"></span>
+						</label>
+						<!-- 单位 -->
+						
+						<type5 ng-if="m.type == 5 && !m.isHide ">
+							<span class="chakan-img gallerys">
+								<list ng-repeat="imgMap in m.dataList">
+									<span class="gallery-pic-img" title="{{imgMap}}" ng-show="$index==0"></span>
+								</list>
+								<span ng-if="m.dataList.length>0">({{m.dataList.length}})</span>
+								<span ng-if="m.dataList.length == 0">-</span>
+							</span>
+						</type5>
+						
+						<type6 ng-if="m.type == 6 && !m.isHide">
+							<textarea  ng-bind="m.value" class="remark-p remark-lhw-p textarea-lhw" readonly="true" style="margin-left:165px;"></textarea>
+						</type6>
+						<span ng-if></span>
+						
+						<span ng-if="m.type != 5 && m.type != 6 && m.type != 1000 && !m.isHide" ng-bind="m.value"></span>
+						
+						<span class="a-span" ng-if="!m.isHide" ng-bind="m.single"></span>
+						
+					</div>
+					<div ng-if="m.type != 1000 && m.type != 1008 && m.type != 6 && !m.isHide && m.title=='净值（扣全税）'" ng-class="{'col-md-12 col-lg-12':m.col==3 , 'col-md-6 col-lg-8':m.col==2,'col-md-6 col-lg-4':m.col==1 }">
+					     <label>
+							<span> &nbsp;&nbsp;</span>
+						</label>
+					</div>
+								
+					</special-type1000>
+					<div style="margin-left:565px;">
+					<special-type1008 ng-if="m.type==1008 && !m.isHide" >
+					
+					</special-type1008>
+					</div>
+				</form-list>
+				
+				<div ng-show="isConfigEdit" ng-include="'/template/order-common/form-list-common-edit.html'"></div>
+				
+				
+			</div>
+		</div>
+	</form>
+	
+	<div ui-view="">
+		
+	</div>

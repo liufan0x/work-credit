@@ -1,0 +1,7 @@
+{
+  "name": "subscribe-client", 
+  "version": "1.0.0",
+  "description": "连接MQ服务接口",
+  "title": "连接MQ服务接口",
+  "url" : "https://api.github.com/v1"
+}

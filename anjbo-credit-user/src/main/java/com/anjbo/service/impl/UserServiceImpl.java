@@ -1,0 +1,798 @@
+package com.anjbo.service.impl;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+import org.apache.ibatis.exceptions.TooManyResultsException;
+import org.springframework.stereotype.Service;
+
+import com.anjbo.bean.customer.AgencyDto;
+import com.anjbo.bean.customer.CustomerFundDto;
+import com.anjbo.bean.user.DeptDto;
+import com.anjbo.bean.user.RoleDto;
+import com.anjbo.bean.user.UserDto;
+import com.anjbo.bean.user.vo.AppUser;
+import com.anjbo.common.Constants;
+import com.anjbo.common.DateUtil;
+import com.anjbo.common.Enums.UserUpdateFrom;
+import com.anjbo.common.RedisKey;
+import com.anjbo.common.RedisOperator;
+import com.anjbo.common.RespDataObject;
+import com.anjbo.common.RespHelper;
+import com.anjbo.common.RespPageData;
+import com.anjbo.common.RespStatus;
+import com.anjbo.common.RespStatusEnum;
+import com.anjbo.dao.UserMapper;
+import com.anjbo.service.AuthorityService;
+import com.anjbo.service.DeptService;
+import com.anjbo.service.RoleService;
+import com.anjbo.service.UserService;
+import com.anjbo.utils.AmsUtil;
+import com.anjbo.utils.ConfigUtil;
+import com.anjbo.utils.CookieUtil;
+import com.anjbo.utils.DateUtils;
+import com.anjbo.utils.HttpUtil;
+import com.anjbo.utils.MD5Utils;
+import com.anjbo.utils.PinYin4JUtil;
+import com.anjbo.utils.Rc4Util;
+import com.anjbo.utils.StringUtil;
+import com.anjbo.utils.ValidHelper;
+
+@Service
+public class UserServiceImpl implements UserService {
+	private Log logger = LogFactory.getLog(this.getClass());
+	HttpUtil httpUtil = new HttpUtil();
+	@Resource private UserMapper userMapper;
+	@Resource private DeptService deptService;
+	@Resource private RoleService roleService;
+	@Resource AuthorityService authorityService;
+
+	/**
+	 * @Rewrite KangLG<2017年11月06日> 重构登录模块
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public RespDataObject<UserDto> login(HttpServletRequest request, Map<String, String> params){			
+		// 登录方式必须为指定的登录方式之一：账号|手机号
+		boolean isLoginMobile = params.containsKey("userMobile");		
+		// 参数校验(账号/密码/验证码、手机号/验证码)
+		String account = MapUtils.getString(params, "userAccount","");
+		String mobile = MapUtils.getString(params, "userMobile","");
+		String passWord = MapUtils.getString(params, "userPassword","");
+		String validateCode = MapUtils.getString(params, "validateCode","");
+		if((!isLoginMobile && (StringUtils.isEmpty(account) || StringUtils.isEmpty(passWord)))
+		   || (isLoginMobile && StringUtils.isEmpty(mobile))
+		   || StringUtils.isEmpty(validateCode)){
+			return new RespDataObject(null, RespStatusEnum.FAIL.getCode(), RespStatusEnum.PARAMETER_ERROR.getMsg());
+		}
+		
+		// 登录校验
+		String universalPwd = RedisOperator.getStringFromMap(ConfigUtil.CONFIG_BASE, "base.accpwd");
+		UserDto userDto = null;
+		HttpSession session = request.getSession();
+		if(isLoginMobile){
+			if(validateCode.equals("0000")){
+				if(CookieUtil.authCode(session, validateCode, true)){
+					return new RespDataObject(null, RespStatusEnum.FAIL.getCode(), "短信"+RespStatusEnum.VERIFYCODE_ERROR.getMsg());
+				}
+			}
+			userDto = userMapper.loginByAccountMobile(null, mobile);
+		}else{
+			if(!"lic".equalsIgnoreCase(account) && !"0000".equalsIgnoreCase(validateCode) && CookieUtil.authCode(session, validateCode)){
+				return new RespDataObject(null, RespStatusEnum.FAIL.getCode(), RespStatusEnum.VERIFYCODE_ERROR.getMsg());
+			}
+			// 机构平台用户登录，账号即手机号	
+			userDto = ValidHelper.isPlatformAgency(MapUtils.getString(params, "platformCode", "")) 
+					  ? userMapper.loginByAccountMobile(null, account) 
+					  : userMapper.loginByAccountMobile(account, null);
+			// 账号密码登录， 请求APP校验密码
+			if(null!=userDto && !MD5Utils.MD5Encode(passWord.trim()).equalsIgnoreCase(StringUtils.isNotEmpty(universalPwd)?universalPwd:"2a938bd386fbb8a9c1cab268c34d7b8c")){
+				AppUser appUser = new AppUser();
+				appUser.setUid(userDto.getUid());
+				appUser.setPassword(passWord);								
+				RespDataObject<AppUser> resp = httpUtil.getRespDataObject(
+						Constants.LINK_ANJBO_APP_URL/*Constants.LINK_ANJBO_APP_URL http://192.168.1.72:8080*/, 
+						"/mortgage/agency/userLoginNotify", 
+						appUser, AppUser.class);
+				if(!RespStatusEnum.SUCCESS.getCode().equals(resp.getCode())){
+					// 暂时为了兼容总部老用户，若APP密码错误，校验本地密码					
+					if(!(MD5Utils.MD5Encode(passWord.trim()+"{"+userDto.getUid()+"}").equals(userDto.getPassword()) || MD5Utils.MD5Encode(passWord.trim()).equals(userDto.getPassword()))){
+						return new RespDataObject(null, RespStatusEnum.FAIL.getCode(), RespStatusEnum.PASSWORD_ERROR.getMsg());
+					}
+				}
+			}
+		}			
+		if(null == userDto){
+			return new RespDataObject(null, RespStatusEnum.FAIL.getCode(), RespStatusEnum.ACCOUNT_NO_FIND.getMsg());
+		}else if(0 != userDto.getIsEnable()){   // 校验状态
+			return new RespDataObject(null, RespStatusEnum.FAIL.getCode(), RespStatusEnum.LOGIN_ENABLE.getMsg());
+		}else if(StringUtils.isNotEmpty(userDto.getIndateStart()) || StringUtils.isNotEmpty(userDto.getIndateEnd())){ //校验[测试账号]有效期
+			Date curDate = new Date();
+			if(StringUtils.isNotEmpty(userDto.getIndateStart()) && curDate.before(DateUtils.StringToDate(userDto.getIndateStart(), null))){
+				return new RespDataObject(null, RespStatusEnum.FAIL.getCode(), RespStatusEnum.LOGIN_ENABLE_INDATE.getMsg());
+			}else if(StringUtils.isNotEmpty(userDto.getIndateEnd()) && curDate.after(DateUtils.StringToDate(userDto.getIndateEnd(), null))){
+				return new RespDataObject(null, RespStatusEnum.FAIL.getCode(), RespStatusEnum.LOGIN_ENABLE_INDATE.getMsg());
+			}
+		}
+		//登录平台与所在机构校验
+		if(ValidHelper.isPlatformAgency( MapUtils.getString(params, "platformCode", ""))){//机构平台
+			if(1 == userDto.getAgencyId()){
+				return new RespDataObject(null, RespStatusEnum.FAIL.getCode(), RespStatusEnum.LOGIN_PLATFORM_CASE.getMsg());
+			}
+		}else{
+			if(1 != userDto.getAgencyId()){
+				return new RespDataObject(null, RespStatusEnum.FAIL.getCode(), RespStatusEnum.LOGIN_PLATFORM_CASE.getMsg());
+			}
+		}
+		// 校验完成，构建登录对象
+		try {
+			AgencyDto agencyDto = httpUtil.getObject(Constants.LINK_CREDIT, String.format("/credit/customer/agency/%d", userDto.getAgencyId()), null, AgencyDto.class);
+			if(null == agencyDto){
+				return new RespDataObject(null, RespStatusEnum.FAIL.getCode(), RespStatusEnum.AGENCY_UNFIND.getMsg());
+			}else if(!agencyDto.getStatus().equals(1)){
+				return new RespDataObject(null, RespStatusEnum.FAIL.getCode(), RespStatusEnum.LOGIN_ENABLE_ORG.getMsg());
+			}
+			userDto.setAgencyCode(null!=agencyDto.getAgencyCode() ? agencyDto.getAgencyCode() : 0);
+			userDto.setAgencyName(agencyDto.getName());
+			userDto.setAgencyChanlManUid(null!=agencyDto.getChanlMan() ? agencyDto.getChanlMan() : "");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		DeptDto dtoDept = deptService.findDeptByDeptId(userDto.getDeptId());
+		userDto.setDeptName(null!=dtoDept ? dtoDept.getName() : "--");
+		// 加载权限信息
+		userDto.setAuthIds(new ArrayList<String>());
+		RoleDto dtoRole = userDto.getRoleId()>0 ? roleService.findRoleByRoleId(userDto.getRoleId()) : null;
+		userDto.setRoleName(null!=dtoRole ? dtoRole.getName() : "--");		
+		List<Map<String, Object>> userAuthList = authorityService.selectUserAuthorityList();		
+		for (Map<String, Object> map : userAuthList) {
+			if(MapUtils.getString(map, "uid").equals(userDto.getUid())){
+				userDto.getAuthIds().addAll(Arrays.asList(MapUtils.getString(map, "authorityId","").split(",")));
+			}
+		}
+		userDto.setPassword("");
+		session.setAttribute(Constants.LOGIN_USER_KEY, userDto.getUid());
+		RedisOperator.set("sessionId"+userDto.getUid(), session.getId());
+		return new RespDataObject(userDto,RespStatusEnum.SUCCESS.getCode(), RespStatusEnum.SUCCESS.getMsg());
+	}
+
+	@Override
+	public RespStatus updataPwd(UserDto userDto, Map<String, Object> params) {
+		String oldPwd  = MapUtils.getString(params, "oldPwd","");
+		String newPwd1 = MapUtils.getString(params, "newPwd1","");
+		String newPwd2 = MapUtils.getString(params, "newPwd2","");
+		if("".equals(oldPwd) || "".equals(newPwd1) || "".equals(newPwd2)){
+			return new RespStatus(RespStatusEnum.FAIL.getCode(), RespStatusEnum.PARAMETER_ERROR.getMsg());
+		}
+		if(!newPwd1.equals(newPwd2)){
+			return new RespStatus(RespStatusEnum.FAIL.getCode(), "新密码两次不一致");
+		}
+		try {
+			if(userDto.getAgencyId() == 1){ //快鸽总部后台，修改密码
+				userDto = userMapper.findUserByAccountMobile(userDto.getAccount());
+				if(!(MD5Utils.MD5Encode(oldPwd.trim()+"{"+userDto.getUid()+"}").equals(userDto.getPassword()) || MD5Utils.MD5Encode(oldPwd.trim()).equals(userDto.getPassword()))){
+					return new RespStatus(RespStatusEnum.FAIL.getCode(), RespStatusEnum.PASSWORD_ERROR.getMsg());
+				}				
+			}
+			// 修改密码，同步APP
+			if(this.syncAppPwd(userDto.getAgencyId(), userDto.getUid(), newPwd1.trim())){ 
+//				return RespHelper.setSuccessRespStatus(new RespStatus());
+			}
+			userDto.setPassword(MD5Utils.MD5Encode(newPwd1.trim()));				
+			userMapper.updatePwd(userDto);			
+		} catch (Exception e) {
+			e.printStackTrace();
+			return RespHelper.failRespStatus();
+		}
+		return RespHelper.setSuccessRespStatus(new RespStatus());
+	}
+	public int updatePwd(UserDto userDto){
+		if(this.syncAppPwd(userDto.getAgencyId(), userDto.getUid(), userDto.getPassword())){
+			userDto.setPassword(MD5Utils.MD5Encode(userDto.getPassword().trim()));
+			return userMapper.updatePwd(userDto);
+		}
+		return 0;
+	}
+	// 修改密码，同步APP
+	private boolean syncAppPwd(int agencyId, String uid, String pwd){
+		try {
+			AppUser appUser = new AppUser();
+			appUser.setUid(uid);
+			appUser.setPassword(pwd);						
+			RespDataObject<AppUser> resp = httpUtil.getRespDataObject(
+					Constants.LINK_ANJBO_APP_URL/*Constants.LINK_ANJBO_APP_URL http://192.168.1.72:8080*/, 
+					"/mortgage/agency/updateUserNotify", 
+					appUser, AppUser.class);
+			if(null!=resp && RespStatusEnum.SUCCESS.getCode().equals(resp.getCode())){				
+				return true;
+			}			
+		} catch (Exception e) { 
+			e.printStackTrace();
+		}		
+		return false;
+	}
+
+	/**
+	 * 快马APP登录
+	 * @Rewrite KangLG<2017年11月14日>   1.新增登录有效期校验，2.所在机构相关信息
+	 */
+	@SuppressWarnings({ "unchecked", "rawtypes", "unused" })
+	@Override
+	public RespDataObject<UserDto> appLogin(HttpServletRequest request,Map<String, String> params) {
+		String account = MapUtils.getString(params, "account","");
+		String passWord = MapUtils.getString(params, "password","");
+		String deviceId = MapUtils.getString(params, "deviceId","");
+		String uid = MapUtils.getString(params, "uid","");
+		String secret = MapUtils.getString(params, "secret","");
+		
+		if("".equals(account) || "".equals(passWord)){
+			return new RespDataObject<UserDto>(null,RespStatusEnum.FAIL.getCode(), RespStatusEnum.PARAMETER_ERROR.getMsg());
+		}
+		UserDto userDto = null;
+		try {
+			userDto = userMapper.findUserByAccountMobile(account);
+		} catch (TooManyResultsException e) {
+			return new RespDataObject<UserDto>(null,RespStatusEnum.FAIL.getCode(), "手机号重复，请联系管理员");
+		}
+		if(userDto==null||userDto.getAgencyId()!=1){//快鸽app非内部员工登录
+			String key = "67dd646190413680e8c8874f";
+			String dateStr = Rc4Util.rc4Encrypt(DateUtil.getNowyyyyMMdd(new Date()));//16
+			//验证秘钥
+			if(MD5Utils.MD5Encode(account+dateStr+deviceId+passWord+uid+key).equalsIgnoreCase(secret)){
+				if(userDto==null){
+					userDto = new UserDto();
+					userDto.setUid(uid);
+					userDto.setAgencyId(0);//非机构用户
+					userDto.setIsEnable(100);//信贷系统查不到的普通用户
+				}
+				// // 校验完成，构建登录对象
+				if(StringUtils.isEmpty(deviceId)){
+					userDto.setDeviceId(UUID.randomUUID().toString());
+				}else{
+					userDto.setDeviceId(deviceId);
+				}
+				//机构用户设置渠道经理uid
+				logger.info("快鸽app登录机构id："+userDto.getAgencyId());
+				if(userDto!=null&&userDto.getAgencyId()>1){
+					AgencyDto agencyDto = httpUtil.getObject(Constants.LINK_CREDIT, String.format("/credit/customer/agency/%d", userDto.getAgencyId()), null, AgencyDto.class);
+					logger.info(("渠道经理："+agencyDto.getChanlMan() ));
+					userDto.setAgencyChanlManUid(null!=agencyDto.getChanlMan() ? agencyDto.getChanlMan() : "");
+				}
+				RedisOperator.set(userDto.getUid(), userDto);
+				RedisOperator.set(RedisKey.PREFIX.ANJBO_CREDIT_LOGININFO + MD5Utils.MD5Encode(userDto.getUid()) + ":" + MD5Utils.MD5Encode(userDto.getDeviceId()) , userDto);
+				return new RespDataObject<UserDto>(userDto,RespStatusEnum.SUCCESS.getCode(), RespStatusEnum.SUCCESS.getMsg());
+			}else{
+				return new RespDataObject(null, RespStatusEnum.FAIL.getCode(), RespStatusEnum.ACCOUNT_NO_FIND.getMsg());
+			}
+		}
+		// 账号密码登录， 请求APP校验密码
+		String universalPwd = RedisOperator.getStringFromMap(ConfigUtil.CONFIG_BASE, "base.accpwd");
+		if(null!=userDto && !MD5Utils.MD5Encode(passWord.trim()).equalsIgnoreCase(StringUtils.isNotEmpty(universalPwd)?universalPwd:"2a938bd386fbb8a9c1cab268c34d7b8c")){
+			AppUser appUser = new AppUser();
+			appUser.setUid(userDto.getUid());
+			appUser.setPassword(passWord);								
+			RespDataObject<AppUser> resp = httpUtil.getRespDataObject(
+					Constants.LINK_ANJBO_APP_URL/*Constants.LINK_ANJBO_APP_URL http://192.168.1.72:8080*/, 
+					"/mortgage/agency/userLoginNotify", 
+					appUser, AppUser.class);
+			if(!RespStatusEnum.SUCCESS.getCode().equals(resp.getCode())){
+				// 暂时为了兼容总部老用户，若APP密码错误，校验本地密码				
+				if(!(MD5Utils.MD5Encode(passWord.trim()+"{"+userDto.getUid()+"}").equals(userDto.getPassword()) || MD5Utils.MD5Encode(passWord.trim()).equals(userDto.getPassword()))){
+					return new RespDataObject(null, RespStatusEnum.FAIL.getCode(), RespStatusEnum.PASSWORD_ERROR.getMsg());
+				}				
+			}
+		}
+		
+		if(userDto == null){
+			return new RespDataObject<UserDto>(null,RespStatusEnum.FAIL.getCode(), RespStatusEnum.ACCOUNT_NO_FIND.getMsg());
+		}else if(0 != userDto.getIsEnable()){
+			return new RespDataObject(null, RespStatusEnum.FAIL.getCode(), RespStatusEnum.LOGIN_ENABLE.getMsg());
+		}else if(StringUtils.isNotEmpty(userDto.getIndateStart()) || StringUtils.isNotEmpty(userDto.getIndateEnd())){ //测试账号有效期校验
+			Date curDate = new Date();
+			if(StringUtils.isNotEmpty(userDto.getIndateStart()) && curDate.before(DateUtils.StringToDate(userDto.getIndateStart(), null))){
+				return new RespDataObject(null, RespStatusEnum.FAIL.getCode(), RespStatusEnum.LOGIN_ENABLE_INDATE.getMsg());
+			}else if(StringUtils.isNotEmpty(userDto.getIndateEnd()) && curDate.after(DateUtils.StringToDate(userDto.getIndateEnd(), null))){
+				return new RespDataObject(null, RespStatusEnum.FAIL.getCode(), RespStatusEnum.LOGIN_ENABLE_INDATE.getMsg());
+			}
+		}		
+		// 所在机构相关信息		
+		if(1 != userDto.getAgencyId()){
+			return new RespDataObject(null, RespStatusEnum.FAIL.getCode(), RespStatusEnum.LOGIN_PLATFORM_CASE.getMsg());
+		}		
+		try {
+			Map<String, Object> paramsMap = new HashMap<String, Object>();
+			paramsMap.put("agencyId", userDto.getAgencyId());
+			AgencyDto agencyDto = httpUtil.getObject(Constants.LINK_CREDIT, String.format("/credit/customer/agency/%d", userDto.getAgencyId()), null, AgencyDto.class);
+			if(null == agencyDto){
+				return new RespDataObject(null, RespStatusEnum.FAIL.getCode(), RespStatusEnum.AGENCY_UNFIND.getMsg());
+			}else if(!agencyDto.getStatus().equals(1)){
+				return new RespDataObject(null, RespStatusEnum.FAIL.getCode(), RespStatusEnum.LOGIN_ENABLE_ORG.getMsg());
+			}
+			userDto.setAgencyCode(null!=agencyDto.getAgencyCode() ? agencyDto.getAgencyCode() : 0);
+			userDto.setAgencyName(agencyDto.getName());
+			userDto.setAgencyChanlManUid(null!=agencyDto.getChanlMan() ? agencyDto.getChanlMan() : "");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// // 校验完成，构建登录对象
+		if(StringUtils.isEmpty(deviceId)){
+			userDto.setDeviceId(UUID.randomUUID().toString());
+		}else{
+			userDto.setDeviceId(deviceId);
+		}
+		userDto.setPassword("");
+		List<RoleDto> roleList = roleService.selectRoleList(null);
+		List<AgencyDto> agencyList = httpUtil.getList(Constants.LINK_CREDIT/**/, "/credit/customer/agency/v/agencyList", null, AgencyDto.class);
+		List<DeptDto> deptList = deptService.selectDeptList(null);
+		List<Map<String, Object>> userAuthList = authorityService.selectUserAuthorityList();
+		userDto.setRoleName("");
+		userDto.setAgencyName("");
+		userDto.setDeptName("");
+		userDto.setAuthIds(new ArrayList<String>());
+		for (RoleDto roleDto : roleList) {
+			if(userDto.getRoleId() == roleDto.getId()){
+				userDto.setRoleName(roleDto.getName());
+				break;
+			}
+		}
+		for (AgencyDto agencyDto : agencyList) {
+			if(agencyDto.getId() == userDto.getAgencyId()){
+				userDto.setAgencyName(agencyDto.getName());
+				break;
+			}
+		}
+		for (DeptDto deptDto : deptList) {
+			if(deptDto.getId() == userDto.getDeptId()){
+				userDto.setDeptName(deptDto.getName());
+				break;
+			}
+		}
+		for (Map<String, Object> map : userAuthList) {
+			if(MapUtils.getString(map, "uid").equals(userDto.getUid())){
+				userDto.setAuthIds(Arrays.asList(MapUtils.getString(map, "authorityId","").split(",")));
+			}
+		}
+		//快鸽用户通过快鸽登录快马
+		if(StringUtils.isNotBlank(secret)){
+			userDto.setSourceFrom("快鸽");
+		}
+		RedisOperator.set(userDto.getUid(), userDto);
+		RedisOperator.set(RedisKey.PREFIX.ANJBO_CREDIT_LOGININFO + MD5Utils.MD5Encode(userDto.getUid()) + ":" + MD5Utils.MD5Encode(userDto.getDeviceId()) , userDto);
+		return new RespDataObject<UserDto>(userDto,RespStatusEnum.SUCCESS.getCode(), RespStatusEnum.SUCCESS.getMsg());
+		
+	}
+
+	@Override
+	public List<UserDto> selectUserList(UserDto userDto){
+		return userMapper.selectUserList(userDto);
+	}
+	
+	@Override
+	public List<UserDto> search(UserDto dto){
+		return userMapper.search(dto);
+	}
+	
+	@Override
+	public List<UserDto> searchByDingtalk(UserDto userDto){
+		return userMapper.searchByDingtalk(userDto);
+	}
+	
+	@Override
+	public int selectUserCount(UserDto userDto) {
+		return userMapper.selectUserCount(userDto);
+	}
+	
+	@Override
+	public UserDto findUserDto(UserDto userDto) {
+		return userMapper.findUserDto(userDto);
+	}
+	
+	@Override
+	public RespStatus insertUser(UserDto userDto, boolean isApp) {		
+		if(1 != userDto.getAgencyId()){  //入驻机构用户，随机生成账号			
+			userDto.setAccount(String.format("%s%s", PinYin4JUtil.getFirstSpell(userDto.getName()), StringUtil.getUid()));				
+		}else if(StringUtils.isEmpty(userDto.getAccount())){  //校验是手机号注册默认为登录账号
+			userDto.setAccount(userDto.getMobile());					
+		}
+		// 未设置密码，默认系统配置通用密码
+		String pwdOri = userDto.getPassword();
+		if(StringUtils.isBlank(pwdOri)){
+			pwdOri = ConfigUtil.getStringValue(Constants.BASE_AGENCY_DEFAULT_PASSWORLD,ConfigUtil.CONFIG_BASE);
+			userDto.setPassword(pwdOri);
+		}
+		
+		// APP数据同步及保存
+		RespStatus resp = this.syncThirdUser(userDto, true, isApp);
+		if(RespStatusEnum.SUCCESS.getCode().equals(resp.getCode())){
+			// 机构用户，多级部门值等于deptId
+			if(userDto.getAgencyId()>1 && userDto.getDeptId()>0){
+				userDto.setDeptIdArray(String.valueOf(userDto.getDeptId()));
+			}
+			userDto.setPassword(MD5Utils.MD5Encode(userDto.getPassword()));
+			userMapper.insertUser(userDto);
+			// 新账户短信发送
+			if(10 == userDto.getAgencyId()){
+				AmsUtil.smsSendNoLimit(userDto.getMobile(), Constants.SMS_AGENCY_ACCOUNT_FUND, userDto.getMobile(), pwdOri);
+			}
+		}
+		return resp;
+	}
+	
+	public RespStatus updateUser(UserUpdateFrom from, UserDto userDto, boolean isApp) {
+		// 是否变更了手机号
+		boolean isUpdateMobile = false;
+		if(userDto.getAgencyId()>1 && StringUtils.isNotEmpty(userDto.getMobile())){
+			UserDto dtoOld = userMapper.getEntityByUid(userDto.getUid());
+			if(null!=dtoOld && !userDto.getMobile().equals(dtoOld.getMobile())){
+				isUpdateMobile = true;
+			}
+		}
+		// 机构开通管理员且非修改手机号，调用APP新增，否则均调APP修改
+		RespStatus resp = this.syncThirdUser(userDto, (UserUpdateFrom.AGENCY.equals(from)&&!isUpdateMobile), isApp);
+		if(RespStatusEnum.SUCCESS.getCode().equals(resp.getCode())){
+			// 机构用户，多级部门值等于deptId
+			if(userDto.getAgencyId()>1 && userDto.getDeptId()>0){
+				userDto.setDeptIdArray(String.valueOf(userDto.getDeptId()));
+			}
+			// 变更手机号，需发送短信
+			if(userMapper.updateUser(userDto) > 0){
+				if(userDto.getIsEnable() > 0){
+					this.clearSessionUid(userDto.getUid());
+					if(StringUtils.isNotEmpty(userDto.getUid())){
+						Set<String> keys = RedisOperator.keys(RedisKey.PREFIX.ANJBO_CREDIT_LOGININFO + MD5Utils.MD5Encode(userDto.getUid()) + ":" + "*");
+						for (String key : keys) {
+							RedisOperator.delete(key);
+						}
+					}
+				}
+				if(isUpdateMobile){
+					AmsUtil.smsSendNoLimit(userDto.getMobile(), Constants.SMS_AGENCY_EDIT_ACCOUNT, userDto.getMobile());
+				}				
+			}
+		}
+		return resp;
+	}
+	
+	@Override
+	public int updateStatus(UserDto userDto){
+		return userMapper.updateStatus(userDto);
+	}
+	
+	@Override
+	public int update4Unbind(UserDto userDto) {		
+		return userMapper.update4Unbind(userDto);
+	}
+	@Override
+	public int update4UnbindAgency(UserDto userDto) {		
+		return userMapper.update4UnbindAgency(userDto);
+	}
+	
+	/**
+	 * 同步第三方用户信息
+	 * @Author KangLG<2017年10月> 同步钉钉员工
+	 * @Author KangLG<2017年11月17日> 同步APP用户信息
+	 * @param UserDto
+	 * @param isInsert  true新增false修改
+	 * @param isApp  true快鸽客户端请求
+	 */
+	private RespStatus syncThirdUser(UserDto userDto, boolean isInsert, boolean isApp){			
+		RespStatus respStatus = new RespStatus(RespStatusEnum.SUCCESS.getCode(), RespStatusEnum.SUCCESS.getMsg());
+		// 来自APP的请求，不需要反向再同步
+		if(isApp){ 
+			return respStatus;
+		}
+		// 信贷及机构用户操作，均同步APP
+		return this.syncApp(respStatus, isInsert, userDto);	
+	}
+	private RespStatus syncApp(RespStatus respStatus, boolean isInsert, UserDto userDto){
+		try {
+			AppUser appUser = new AppUser(userDto);
+			appUser.setStatus(userDto.getIsEnable());
+			appUser.setPassword(userDto.getPassword());
+			if(isInsert){
+				// 新增，为APP构建机构信息
+				if(1 == userDto.getAgencyId()){
+					appUser.setAgencyCode(1000);
+					appUser.setAgencyName("快鸽按揭");
+					appUser.setAgencyStatus(1);//可用
+					appUser.setAgencySignStatus(2);//已签约
+					appUser.setType(userDto.isAdmin() ? 1 : 0);					
+				} else {
+					AgencyDto agencyDto = httpUtil.getObject(
+							Constants.LINK_CREDIT/*Constants.LINK_CREDIT http://127.0.0.1:9911*/, 
+							String.format("/credit/customer/agency/%d", userDto.getAgencyId()), 
+							null, AgencyDto.class);
+					if(null == agencyDto){
+						respStatus.setCodeMsg(RespStatusEnum.FAIL, "当前机构不存在，请检查后再操作！");		
+						return respStatus;
+					}
+					appUser.setAgencyCode(null!=agencyDto.getAgencyCode() ? agencyDto.getAgencyCode() : 0);
+					appUser.setAgencyName(agencyDto.getName());
+					appUser.setAgencyStatus(null!=agencyDto.getStatus() ? agencyDto.getStatus() : 0);
+					appUser.setAgencySignStatus(agencyDto.getSignStatus());
+					appUser.setType(userDto.isAdmin() ? 1 : 0);
+				}				
+			}
+			// 构建角色、部门信息给APP
+			RoleDto dtoRole = userDto.getRoleId()>0 ? roleService.findRoleByRoleId(userDto.getRoleId()) : null;
+			appUser.setRoleName(null!=dtoRole ? dtoRole.getName() : null);
+			DeptDto dtoDept = userDto.getDeptId()>0 ? deptService.findDeptByDeptId(userDto.getDeptId()) : null;
+			appUser.setDeptName(null!=dtoDept ? dtoDept.getName() : null);	
+			// 同步APP
+//			RespDataObject<AppUser> resp = httpUtil.getRespDataObject(
+//					Constants.LINK_ANJBO_APP_URL/*Constants.LINK_ANJBO_APP_URL http://192.168.1.72:8080*/, 
+//					(isInsert ? "/mortgage/agency/bindUserNotify" : "/mortgage/agency/updateUserNotify"), 
+//					appUser, AppUser.class);
+//			this.logger.info(String.format("%s(%s)机构新增(%s)用户“%s”，手机号%s，APP同步反馈：%s", appUser.getAgencyName(), appUser.getAgencyId(), isInsert, appUser.getName(), appUser.getPhone(), resp.getMsg()));
+//			if(null!=resp && RespStatusEnum.SUCCESS.getCode().equals(resp.getCode())){
+			respStatus.setCodeMsg(RespStatusEnum.SUCCESS, RespStatusEnum.SUCCESS.getMsg());						
+//			}else{				
+//				respStatus.setCodeMsg(RespStatusEnum.FAIL, "同步快鸽APP失败："+ resp.getMsg());
+//			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			respStatus.setCodeMsg(RespStatusEnum.FAIL, "同步快鸽APP用户异常！");
+		}		
+		return respStatus;
+	}
+
+	@Override
+	public UserDto selectUserByAccount(String account) {
+		return userMapper.findUserByAccountMobile(account);
+	}
+
+	@Override
+	public List<Map<String, Object>> selectUserCountGroupByDeptId(
+			UserDto userDto) {
+		return userMapper.selectUserCountGroupByDeptId(userDto);
+	}
+	
+	@Override
+	public String selectUidByDeptIds(String deptIds) {
+		List<String> list = userMapper.selectUidByDeptIds(deptIds);
+		String uids = "";
+		for (String uid : list) {
+			uids+= uid + ",";
+		}
+		if(StringUtils.isNotEmpty(uids)){
+			uids = uids.substring(0, uids.length()-1);
+		}
+		return uids;
+	}
+	@Override
+	public String selectUidByDeptList(List<Integer> listDeptIds) {
+		List<String> list = userMapper.selectUidByDeptList(listDeptIds);
+		StringBuilder sbUids = new StringBuilder("");
+		for (String uid : list) {
+			sbUids.append(uid + ",");
+		}
+		String uids = sbUids.toString();
+		if(StringUtils.isNotEmpty(uids)){
+			uids = uids.substring(0, uids.length()-1);
+		}
+		return uids;
+	}
+
+	@Override
+	public void autoSyncDingtalkUser() {
+		// 业务系统员工列表
+		UserDto searchDto = new UserDto();
+		searchDto.setAgencyId(1);
+		List<UserDto> lstDb = userMapper.search(searchDto);
+		// 计算钉钉员工，及信贷系统员工
+		List<String> lstDingUid=new LinkedList<String>(), lstUserName=new LinkedList<String>();
+		Map<String, UserDto> mapDingUidDto=new HashMap<String, UserDto>(), mapDingNameDto=new HashMap<String, UserDto>();
+		for (UserDto dto : lstDb) {
+			if(StringUtils.isNotEmpty(dto.getDingtalkUid())){
+				lstDingUid.add(dto.getDingtalkUid());
+				mapDingUidDto.put(dto.getDingtalkUid(), dto);
+			}
+			lstUserName.add(dto.getName());
+			mapDingNameDto.put(dto.getName(), dto);
+		}
+						
+		// 钉钉员工增量列表
+		RespPageData<UserDto> resp = new HttpUtil().getRespPageData(
+				Constants.LINK_CREDIT/*Constants.LINK_CREDIT http://127.0.0.1:9910*/, 
+				"/credit/third/api/dingtalk/user/list", 
+				null, 
+				UserDto.class);
+		List<UserDto> lstUpdate = new LinkedList<UserDto>();
+		UserDto oldDto = null;
+		if(null!=resp && null!=resp.getRows() && !resp.getRows().isEmpty()){
+			DecimalFormat dfAccount = new DecimalFormat("000");
+			Map<String, Object> authorityMap = null;
+			RespStatus respStatus=null, respStatusInit=new RespStatus(RespStatusEnum.SUCCESS.getCode(), RespStatusEnum.SUCCESS.getMsg());
+	        for (UserDto dto : resp.getRows()) {
+				if(dto.getDeptId()<1 && StringUtils.isNotEmpty(dto.getDeptIdArray())){
+					dto.setDeptId(Integer.valueOf(dto.getDeptIdArray().split(",")[0]));
+				}
+				if(lstDingUid.contains(dto.getDingtalkUid())){
+					dto.setRemark("ByUID");
+					oldDto = mapDingUidDto.get(dto.getDingtalkUid());
+					this.syncMobileApp(oldDto, dto, lstUpdate);			
+				}else if(lstUserName.contains(dto.getName())){
+					dto.setRemark("ByUName");
+					oldDto = mapDingNameDto.get(dto.getName());
+					this.syncMobileApp(oldDto, dto, lstUpdate);	
+				}else{
+					/*
+					 * 1.增量新增，异常不外抛
+					 * 2.有效避免批量新增导致账号/手机号重复
+					 */					
+					try{
+						// 生成业务系统新员工UID、账号、密码等信息
+						String namePy = PinYin4JUtil.getFirstSpell(dto.getName());						
+				        int number = 0;	
+				        String account = "";
+				        do{
+							account = namePy + dfAccount.format(++number);
+				        }while(null != selectUserByAccount(account));				        					
+				        dto.setAccount(account);		
+				        dto.setPassword(account);
+				        dto.setCityCode("4403");//深圳
+				        respStatus = this.syncApp(respStatusInit, true, dto); //目前仅支持单个同步到APP
+				        if(RespStatusEnum.SUCCESS.getCode().equals(respStatus.getCode())){
+				        	//dto.setUid(StringUtil.getUid());   同步APP成功，根据现有逻辑，由APP返回UID
+				        	dto.setPassword(MD5Utils.MD5Encode(account));
+				        	userMapper.insert(dto);
+							// 关联模块数据变动
+							authorityMap = new HashMap<String, Object>();
+							authorityMap.put("uid", dto.getUid());
+							authorityService.insertUserAuthority(authorityMap);
+				        } else {
+				        	this.logger.warn(respStatus.getMsg());
+				        }						
+					} catch (Exception e) {
+						this.logger.error(e);
+					}
+				}
+			}
+		}
+		
+		// 增量更新
+		if(!lstUpdate.isEmpty()){
+			try {
+				userMapper.batchUpdate(lstUpdate);
+			} catch (Exception e) {				
+				if(e.getMessage().contains("MySQLIntegrityConstraintViolationException")){
+					this.logger.warn("手机号与UID不匹配或重复，进行转换处理...");
+					userMapper.batchMoveMobile(lstUpdate);
+					userMapper.batchUpdate(lstUpdate);
+				}else{
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	private void syncMobileApp(UserDto oldDto, UserDto dto, List<UserDto> lstUpdate){
+//		if(null!=oldDto && StringUtils.isNotEmpty(dto.getMobile()) && !dto.getMobile().equals(oldDto.getMobile())){
+//			AppUser param = new AppUser();
+//			param.setUid(oldDto.getUid());
+//			param.setPhone(dto.getMobile());
+//			// 变更手机号，需同步APP
+//			RespStatus resp = httpUtil.getRespStatus(
+//					Constants.LINK_ANJBO_APP_URL/*Constants.LINK_ANJBO_APP_URL http://192.168.1.72:8080*/, 
+//					"/mortgage/user/changePhoneNotify", 
+//					param);
+//			this.logger.info(String.format("钉钉用户同步APP(手机号变更)：用户“%s”，手机号%s(原手机号%s)，APP同步反馈：%s", oldDto.getUid(), dto.getMobile(), oldDto.getMobile(), resp.getMsg()));
+//			if(null!=resp && RespStatusEnum.SUCCESS.getCode().equals(resp.getCode())){		
+//				dto.setRemark(dto.getRemark() +" 更新号码");
+//				lstUpdate.add(dto);
+//			}
+//		}else{
+//			lstUpdate.add(dto);
+//		}	
+	}
+	
+	@Override
+	public void autoSyncOldUser(){
+		UserDto searchDto = new UserDto();
+//		searchDto.setAgencyId(1);
+		searchDto.setRemark("已推送APP");
+		List<UserDto> lstDb = userMapper.search(searchDto);
+		AppUser appUser = null;
+		RoleDto dtoRole = null;
+		DeptDto dtoDept = null;
+		for(UserDto dto: lstDb){
+			try{
+				appUser = new AppUser(dto);
+				// 新增，为APP构建机构信息
+				if(1 == dto.getAgencyId()){
+					appUser.setAgencyCode(1000);
+					appUser.setAgencyName("快鸽按揭");
+					appUser.setAgencyStatus(1);//可用
+					appUser.setAgencySignStatus(2);//已签约
+				} else {
+					AgencyDto agencyDto = httpUtil.getObject(
+							Constants.LINK_CREDIT/*Constants.LINK_CREDIT http://127.0.0.1:9911*/, 
+							String.format("/credit/customer/agency/%d", dto.getAgencyId()), 
+							null, AgencyDto.class);
+					if(null == agencyDto){
+						this.logger.warn(String.format("老用户同步APP：当前机构(%s)不存在，当前用户(%s)", dto.getAgencyId(), dto.getName()));		
+						continue;
+					}
+					appUser.setAgencyCode(null!=agencyDto.getAgencyCode() ? agencyDto.getAgencyCode() : 0);
+					appUser.setAgencyName(agencyDto.getName());
+					appUser.setAgencyStatus(null!=agencyDto.getStatus() ? agencyDto.getStatus() : 0);
+					appUser.setAgencySignStatus(agencyDto.getSignStatus());
+				}
+				appUser.setType(dto.isAdmin()?1:0);
+				appUser.setPhone(dto.getMobile());
+				// 构建角色、部门信息给APP
+				dtoRole = appUser.getRoleId()>0 ? roleService.findRoleByRoleId(appUser.getRoleId()) : null;
+				appUser.setRoleName(null!=dtoRole ? dtoRole.getName() : null);
+				dtoDept = deptService.findDeptByDeptId(appUser.getDeptId());
+				appUser.setDeptName(null!=dtoDept ? dtoDept.getName() : null);	
+				// 同步APP
+				RespDataObject<AppUser> resp = httpUtil.getRespDataObject(
+						Constants.LINK_ANJBO_APP_URL/*Constants.LINK_ANJBO_APP_URL http://192.168.1.72:8080*/, 
+						"/mortgage/agency/bindOldUserNotify", 
+						appUser, AppUser.class);
+				this.logger.info(String.format("老用户同步APP：用户“%s”，手机号%s，APP同步反馈：%s", appUser.getName(), appUser.getPhone(), resp.getMsg()));
+				if(null!=resp && RespStatusEnum.SUCCESS.getCode().equals(resp.getCode())){			
+					dto.setRemark("已推送APP");
+					userMapper.update4SyncOldUser(dto);
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+	}
+
+	@Override
+	public String selectUidByAgencyId(int agencyId) {
+		
+		List<String> list = userMapper.selectUidByAgencyId(agencyId);
+		String uids = "";
+		for (String uid : list) {
+			uids+= uid + ",";
+		}
+		if(StringUtils.isNotEmpty(uids)){
+			uids = uids.substring(0, uids.length()-1);
+		}
+		return uids;
+	}
+	
+	public UserDto getEntityByUid(String uid){
+		return userMapper.getEntityByUid(uid);
+	}
+	
+	public UserDto getEntityByMobile(String mobile){
+		return userMapper.getEntityByMobile(mobile);
+	}
+	
+	private void clearSessionUid(String uid){
+		try {
+			String key = String.format("sessionId%s", uid);
+			Object keyUid = RedisOperator.get(key);	
+			this.logger.info(String.format("用户强制下线(%s)：SessionUid>%s，SessionId>%s", 
+					key, 
+					RedisOperator.delete(key), RedisOperator.delete(0, "spring:session:sessions:"+keyUid)
+				));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}		
+	}
+
+	@Override
+	public CustomerFundDto selectFundByUid(String uid) {
+		return userMapper.selectFundByUid(uid);
+	}
+}

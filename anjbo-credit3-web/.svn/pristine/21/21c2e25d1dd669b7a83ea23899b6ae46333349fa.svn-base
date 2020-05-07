@@ -1,0 +1,42 @@
+<style>
+    .form-inline.w112 label{width:112px;}
+    .form-inline.w154 label{width:154px;}
+    .form-inline.w154 .form-control{width:150px}
+</style>
+<form name="ordinaryAppointForm">
+<div>
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;快鸽提单信息--业务信息
+		<button type="button" ng-click="submitContract(3)" class="btn btn-info detail-right-save">保存</button>
+	</div>
+    <div class="row form-inline detail-row" style="padding:0 10px;" >
+        <div class="col-md-6 col-lg-6">
+            <label  style="width:154px;">借款金额:</label><input type="text" string-to-number name="loanAmt" ng-model="erongsuoOrder.loanAmount"  class="form-control" required/> 万元
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="ordinaryAppointForm.appointApplyAmt.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <label  style="width:154px;">借款期限:</label><input type="text" string-to-number name="loanTerm" ng-model="erongsuoOrder.borrowingDays"  class="form-control" required/>天
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="ordinaryAppointForm.appointApplyTnr.$error.required">必填</error>
+		    </span>
+        </div>
+        
+        <div class="col-md-6 col-lg-6">
+            <label  style="width:154px;">借款用途:</label><input type="text" string-to-number name="applyLoanPurpose" ng-model="ordinaryObj.applyLoanPurpose"  class="form-control" required/>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="ordinaryAppointForm.appointApplyTnr.$error.required">必填</error>
+		    </span>
+        </div>
+        
+        <div class="col-md-6 col-lg-6">
+            <label  style="width:154px;">借款人在e融所的注册账号:</label><input type="text" string-to-number name="borrowerAccount" ng-model="ordinaryObj.borrowerAccount"  class="form-control" required/>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="ordinaryAppointForm.appointApplyTnr.$error.required">必填</error>
+		    </span>
+        </div>
+        
+    </div>
+    
+</div>
+</form>

@@ -1,0 +1,552 @@
+<style>
+.form-inline.w150 label{width:150px;}
+</style>
+<form method="post" name="customerForm" id="customerForm" class="form-inline detail-row w150 customerfrom-supplement">
+	
+	<div class="col-md-12 detail-right-tit ">
+		&nbsp;&nbsp;  客户信息 
+		<button ng-click="submitCustomer()" type="button" class="btn btn-info detail-right-save">保存</button>
+	</div>
+
+	<div class="col-md-6 col-lg-4">
+		<label>客户姓名：</label>
+		<input type="text" class="form-control" name="customerName" ng-model="customer.customerName" required>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerName.$error.required">必填</error>
+		</span>
+	</div>
+		
+	<div class="col-md-6 col-lg-4">
+		<label>年龄：</label>
+		<select class="form-control"  name="customerAge" style="width:178px;" choice-dict-name="ageInfo" ng-model="customer.customerAge" required>
+			<option value="">请选择</option>
+		</select>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerAge.$error.required">必选</error>
+		</span>
+	</div>
+		
+	<div class="col-md-6 col-lg-4">
+		<label>性别：</label>
+		<select class="form-control" style="width:178px;" name="customerSex"  ng-model="customer.customerSex" required> 
+			<option value="">请选择</option> 
+			<option value="男">男</option> 
+			<option value="女">女</option>                   
+		</select>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerSex.$error.required">必选</error>
+		</span>
+	</div>
+		
+	<div class="col-md-6 col-lg-4"><label>证件类型：</label>
+		<select class="form-control" style="width:178px;" name="customerCardType" choice-dict-name="cardType" ng-model="customer.customerCardType" required>
+			<option value="">请选择</option>
+		</select>
+		<!--<span class="a-span">
+			<img  ng-repeat="img in idCardImg" style="width:178px;" ng-show="$index==0" title="{{img.url}}" src="/images//chakansfz.png"  class="a-box gallery-pic" >&nbsp;&nbsp;
+		</span>-->
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerCardType.$error.required">必选</error>
+		</span>
+	</div>
+		
+	<div class="col-md-6 col-lg-4"><label>证件号码：</label>
+		<input type="text" class="form-control" name="customerCardNumber" ng-model="customer.customerCardNumber" required>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerCardNumber.$error.required">必填</error>
+		</span>
+	</div>
+		
+	<div class="col-md-6 col-lg-4"><label>户籍：</label>
+		<select class="form-control" name="customerHouseholdRegister"  style="width:178px;" choice-dict-name="householdRegister" ng-model="customer.customerHouseholdRegister" required > 
+			<option value="">请选择</option>
+		</select>
+		<!--<span class="a-span" ng-if="residenceCardImg.length > 0">
+			<img title="{{img.url}}" ng-repeat="img in residenceCardImg" ng-show="$index==0" src="/images//chakanhkb.png"  class="gallery-pic">&nbsp;&nbsp;
+		</span>-->
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerHouseholdRegister.$error.required">必选</error>
+		</span>
+	</div>
+		
+	<div class="col-md-6 col-lg-4"><label>教育程度：</label>
+		<select class="form-control" name="customerCulture"  style="width:178px;" choice-dict-name="education" ng-model="customer.customerCulture" required>
+			<option value="">请选择</option>
+		</select>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerCulture.$error.required">必选</error>
+		</span>
+	</div>
+		
+	<div class="col-md-6 col-lg-4"><label>现单位工作时间：</label>
+		<select class="form-control" name="customerWorkTime" style="width:178px;"  choice-dict-name="worktime" ng-model="customer.customerWorkTime" required> 
+			<option value="">请选择</option>
+		</select>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerWorkTime.$error.required">必选</error>
+		</span>
+	</div>
+		
+	<div class="col-md-6 col-lg-4"><label>民族：</label>
+		<select class="form-control" name="customerNationsType" style="width:178px;"  choice-dict-name="nationInfo" ng-model="customer.customerNationsType" required>
+			<option value="">请选择</option>
+		</select>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerNationsType.$error.required">必选</error>
+		</span>
+	</div>
+		
+	<div class="col-md-12 col-lg-12"><label>职位：</label>
+		<select class="form-control" choice-dict-name="positionInfo" style="width:600px;"  name="customerPosition" ng-model="customer.customerPosition" required> 
+			<option value="">请选择</option>           
+		</select>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerPosition.$error.required">必选</error>
+		</span>
+	</div>
+		
+	<div class="col-md-12 col-lg-12"><label>职业/单位：</label>
+		<select class="form-control" choice-dict-name="unitType" style="width:600px;"  name="customerCompany" ng-model="customer.customerCompany" required> 
+			<option value="">请选择</option>
+		</select>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerCompany.$error.required">必选</error>
+		</span>
+	</div>
+		
+	<div class="col-md-6 col-lg-4">
+		<label>健康状况：</label>
+		<select class="form-control" choice-dict-name="customerBodiesState" style="width:178px;"  name="customerBodiesState" ng-model="customer.customerBodiesState" required> 
+			<option value="">请选择</option>
+		</select>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerBodiesState.$error.required">必选</error>
+		</span>
+	</div>
+
+	<div class="col-md-6 col-lg-4">
+		<label>婚姻状况：</label>
+		<select class="form-control" name="customerMarriageState" style="width:178px;" choice-dict-name="marriageState" ng-model="customer.customerMarriageState" required> 
+			<option value="">请选择</option>
+		</select>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerMarriageState.$error.required">必选</error>
+		</span>
+	</div>
+	<div class="col-md-6 col-lg-4" ng-if="customer.customerMarriageState!='已婚有子女' && customer.customerMarriageState!='已婚无子女'">
+		<label>&nbsp;</label>
+	</div>
+		
+	<div class="col-md-6 col-lg-4" ng-if="customer.customerMarriageState=='已婚有子女' || customer.customerMarriageState=='已婚无子女'">
+		<label>配偶姓名：</label>
+		<input type="text" class="form-control" name="customerWifeName" ng-disabled="all" ng-model="customer.customerWifeName" required>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerWifeName.$error.required">必填</error>
+		</span>
+	</div>
+	
+	<div class="col-md-6 col-lg-4" ng-if="customer.customerMarriageState=='已婚有子女' || customer.customerMarriageState=='已婚无子女'">
+		<label>配偶证件类型：</label>
+		<select class="form-control" style="width:178px;" name="customerWifeCardType" choice-dict-name="cardType" ng-model="customer.customerWifeCardType" required>
+			<option value="">请选择</option>
+		</select>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerWifeCardType.$error.required">必选</error>
+		</span>
+	</div>
+
+	<div class="col-md-6 col-lg-4" ng-if="customer.customerMarriageState=='已婚有子女' || customer.customerMarriageState=='已婚无子女'">
+		<label>配偶证件号码：</label>
+		<input type="text" class="form-control" name="customerWifeCardNumber" ng-model="customer.customerWifeCardNumber" required>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerWifeCardNumber.$error.required">必填</error>
+		</span>
+	</div>
+	
+	<div class="col-md-6 col-lg-4" ng-if="customer.customerMarriageState=='已婚有子女' || customer.customerMarriageState=='已婚无子女'">
+		<label>配偶手机号：</label>
+		<input type="text" class="form-control" name="customerWifePhone" ng-model="customer.customerWifePhone" required>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerWifePhone.$error.required">必填</error>
+		</span>
+	</div>
+	
+	<div class="col-md-6 col-lg-4" ng-if="customer.customerMarriageState=='已婚有子女' || customer.customerMarriageState=='已婚无子女'">
+		<label>配偶婚姻状况：</label>
+		<select class="form-control" name="customerWifeMarriageState" style="width:178px;" choice-dict-name="marriageState" ng-model="customer.customerWifeMarriageState" required> 
+			<option value="">请选择</option>
+		</select>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerWifeMarriageState.$error.required">必选</error>
+		</span>
+	</div>
+
+	<div class="col-md-12 col-lg-12" ng-if="customer.customerMarriageState=='已婚有子女' || customer.customerMarriageState=='已婚无子女'">
+		<label>配偶职位：</label>
+		<select class="form-control"  name="customerWifePosition" ng-disabled="all" style="width:600px;" choice-dict-name="wifePositionInfo" ng-model="customer.customerWifePosition" required> 
+			<option value="">请选择</option>
+		</select>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerWifePosition.$error.required">必选</error>
+		</span>
+	</div>
+		
+	<div class="col-md-12 col-lg-12" ng-if="customer.customerMarriageState=='已婚有子女' || customer.customerMarriageState=='已婚无子女'">
+		<label>配偶职业/单位：</label>
+		<select class="form-control" name="customerWifeCompany" ng-disabled="all" style="width:600px;" choice-dict-name="unitType" ng-model="customer.customerWifeCompany" required> 
+			<option value="">请选择</option>
+		</select>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerWifeCompany.$error.required">必选</error>
+		</span>
+	</div>
+	
+
+	<div class="col-md-6 col-lg-4">
+		<label>拥有汽车情况：</label>
+		<select class="form-control" name="customerCatInfo" style="width:178px;" choice-dict-name="customerCatInfo" ng-model="customer.customerCatInfo" required> 
+			<option value="">请选择</option>
+		</select>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerCatInfo.$error.required">必选</error>
+		</span>
+	</div>
+
+	<div class="col-md-6 col-lg-4"><label>个人年收入：</label>
+		<select class="form-control" name="customerAnnualIncome" style="width:178px;"  choice-dict-name="yearIncome" ng-model="customer.customerAnnualIncome" required> 
+	        	<option value="">请选择</option> 
+		</select>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerAnnualIncome.$error.required">必选</error>
+		</span>
+	</div>
+
+
+	<div class="col-md-6 col-lg-4">
+		<label>拥有房屋情况：</label>
+		<select class="form-control" name="customerHouseInfo" style="width:178px;"  choice-dict-name="houseValue" ng-model="customer.customerHouseInfo" required>
+			<option value="">请选择</option>
+		</select>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerHouseInfo.$error.required">必选</error>
+		</span>
+	</div>
+		
+		
+	<div class="col-md-6 col-lg-4"><label>家庭人均年收入：</label>
+		<select class="form-control" name="customerFamilyAverageAnnualIncome" style="width:178px;"  choice-dict-name="familyCapitaIncome" ng-model="customer.customerFamilyAverageAnnualIncome" required> 
+			<option value="">请选择</option>
+		</select>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerFamilyAverageAnnualIncome.$error.required">必选</error>
+		</span>
+	</div>
+		
+	<div class="col-md-6 col-lg-4"><label>收入还贷比：</label>
+		<select class="form-control" name="customerIncomeRepaymentProportion" style="width:178px;" choice-dict-name="equityRatio" ng-model="customer.customerIncomeRepaymentProportion" required> 
+			<option value="">请选择</option>
+		</select>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerIncomeRepaymentProportion.$error.required">必选</error>
+		</span>
+	</div>
+		
+	<div class="col-md-6 col-lg-4"><label>负债比率：</label>
+		<select class="form-control" name="customerLiabilitiesRatio" style="width:178px;" choice-dict-name="incomeLoanProportion" ng-model="customer.customerLiabilitiesRatio" required>
+			<option value="">请选择</option>
+		</select>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerLiabilitiesRatio.$error.required">必选</error>
+		</span>
+	</div>
+		
+	<div class="col-md-6 col-lg-4">
+		<label>保险：</label>
+		<select class="form-control" name="customerInsurance" style="width:178px;" choice-dict-name="customerInsurance" ng-model="customer.customerInsurance" required>
+			<option value="">请选择</option>
+		</select>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerInsurance.$error.required">必选</error>
+		</span>
+	</div>
+		
+	<div class="col-md-6 col-lg-4">
+		<label>产权比例：</label>
+		<input type="text"  class="form-control" name="customerPropertyRightProportion" ng-model="customer.customerPropertyRightProportion" required>
+		<span class="a-span">%</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerPropertyRightProportion.$invalid">必填（0-100）</error>
+		</span>
+	</div>
+	<div class="col-md-6 col-lg-4"><label>&nbsp;</label></div>
+		
+	<div class="col-md-6 col-lg-4"><label>风险偏好：</label>
+		<select class="form-control" name="customerPreference" style="width:178px;" choice-dict-name="customerPreference" ng-model="customer.customerPreference" required>
+			<option value="">请选择</option>
+		</select>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerPreference.$error.required">必选</error>
+		</span>
+	</div>
+		
+	<div class="col-md-6 col-lg-4"><label>人生阶段：</label>
+		<select class="form-control" name="customerStage" style="width:178px;" choice-dict-name="customerStage" ng-model="customer.customerStage" required>
+			<option value="">请选择</option>
+		</select>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerStage.$error.required">必选</error>
+		</span>
+	</div>
+		
+	<div class="col-md-6 col-lg-4">
+		<label  >半年月均信用卡透支：</label>
+		<select class="form-control" name="customerCreditCardOverdraft" style="width:178px;" choice-dict-name="customerCreditCardOverdraft" ng-model="customer.customerCreditCardOverdraft" required>
+			<option value="">请选择</option>
+		</select>
+		<span class="a-span">&nbsp;</span>
+		<span class="inputError" ng-show="isAudit">
+			<error class="text-danger" ng-show="customerForm.customerCreditCardOverdraft.$error.required">必选</error>
+		</span>
+	</div>
+</form>	
+
+<form method="post" name="customerGuaranteeForm" id="customerGuaranteeForm" class="form-inline detail-row w150">
+	<!-- 担保人信息 start -->
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;担保人信息
+		<button type="button" class="btn btn-info detail-right-save fr" ng-click="addDanBao()">+ 添加担保人信息</button>
+	</div>
+	
+	<danbaoren>
+	<div ng-repeat="obj in customer.customerGuaranteeDto">
+		<div class="col-md-12 danbao-tit">&nbsp;&nbsp;担保人信息（<span class="num-box" ng-bind="$index+1"></span>）
+			<span class="detail-trash text-danger" ng-click="deleteDanBao($index)">删除</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4">
+			<label>姓名：</label>
+			<span ng-bind="idea.guaranteeName"></span>
+			<input type="text" ng-disabled="all" class="form-control" name="guaranteeName{{$index}}" ng-model="obj.guaranteeName" required>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="customerGuaranteeForm.guaranteeName{{$index}}.$error.required">必填</error>
+			</span>
+		</div>
+
+		<div class="col-md-6 col-lg-4">
+			<label>手机号码：</label>
+			<input type="text" ng-disabled="all" class="form-control" maxlength="11" name="guaranteePhone{{$index}}" ng-model="obj.guaranteePhone" required>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="customerGuaranteeForm.guaranteePhone{{$index}}.$error.required">必填</error>
+			</span>
+		</div>
+
+		<div class="col-md-6 col-lg-4"><label>与借款人关系：</label>
+			<span ng-bind="idea.guaranteeRelationship"></span>
+				<select class="form-control" ng-disabled="all" name="guaranteeRelationship{{$index}}" style="width:178px;" choice-dict-name="relationship" ng-model="obj.guaranteeRelationship" required>
+					<option value="">请选择</option>
+				</select>
+				<span class="a-span">&nbsp;</span>
+				<span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="customerGuaranteeForm.guaranteeRelationship{{$index}}.$error.required">必选</error>
+				</span>
+		</div>
+
+		<div class="col-md-6 col-lg-4"><label>证件类型：</label>
+			<select class="form-control" ng-disabled="all" name="guaranteeCardType{{$index}}" style="width:178px;" choice-dict-name="cardType" ng-model="obj.guaranteeCardType" required>
+				<option value="">请选择</option>
+			</select>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="customerGuaranteeForm.guaranteeCardType{{$index}}.$error.required">必选</error>
+			</span>
+		</div>
+
+		<div class="col-md-6 col-lg-4"><label>证件号码：</label>
+			<input type="text"  ng-disabled="all" class="form-control" name="guaranteeCardNumber{{$index}}" ng-model="obj.guaranteeCardNumber" required>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="customerGuaranteeForm.guaranteeCardNumber{{$index}}.$error.required">必填</error>
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-4"><label>担保方式：</label>
+			<select class="form-control" ng-disabled="all" name="guaranteeType{{$index}}" style="width:178px;" choice-dict-name="guaranteeType" ng-model="obj.guaranteeType" required>
+				<option value="">请选择</option>
+			</select>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="customerGuaranteeForm.guaranteeType{{$index}}.$error.required">必选</error>
+			</span>
+		</div>
+
+		<div class="col-md-6 col-lg-4"><label>产权证类型：</label>
+			<select class="form-control" ng-disabled="all" name="guaranteePropertyType{{$index}}" style="width:178px;" choice-dict-name="guaranteePropertyType" ng-model="obj.guaranteePropertyType" required>
+				<option value="">请选择</option>
+			</select>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="customerGuaranteeForm.guaranteePropertyType{{$index}}.$error.required">必选</error>
+			</span>
+		</div>
+
+		<div class="col-md-6 col-lg-4"><label>建筑面积：</label>
+			<input type="text" ng-disabled="all" class="form-control" name="guaranteeAPropertyrchitectureSize{{$index}}" min="0" ng-model="obj.guaranteeAPropertyrchitectureSize" required>
+			<span class="a-span">㎡</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="customerGuaranteeForm.guaranteeAPropertyrchitectureSize{{$index}}.$error.required">必填</error>
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-4"><label>是否产权人：</label>
+			<select class="form-control" ng-disabled="all" name="guaranteeIsPropertyProple{{$index}}" style="width:178px;" ng-model="obj.guaranteeIsPropertyProple" required> 
+				<option value="">请选择</option>
+				<option value='是'>是</option> 
+				<option value='否'>否</option> 
+			</select>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="customerGuaranteeForm.guaranteeIsPropertyProple{{$index}}.$error.required">必选</error>
+			</span>
+		</div>
+	</div>
+	</danbaoren>
+	<!-- 担保人信息 end -->
+</form>
+
+<form method="post" name="customerBorrowerForm" id="customerBorrowerForm" class="form-inline detail-row w150">
+	<!-- 共同借款人信息 start -->
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;共同借款人信息
+		<button type="button" class="btn btn-info detail-right-save fr" ng-click="addBorrower()">+ 共同借款人信息</button>
+	</div>
+	<gongtongjiekuanren>
+	<div ng-repeat="obj in customer.customerBorrowerDto">
+		<div class="col-md-12 danbao-tit">&nbsp;&nbsp;共同借款人信息（<span class="num-box" ng-bind="$index+1"></span>）
+			<span class="detail-trash text-danger" ng-click="deleteBorrower($index)">删除</span>
+		</div>
+		<div class="col-md-6 col-lg-4"><label>姓名：</label>
+			<input type="text" ng-disabled="all" class="form-control" name="borrowerName{{$index}}" ng-model="obj.borrowerName" required>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="customerBorrowerForm.borrowerName{{$index}}.$error.required">必填</error>
+			</span>
+		</div>
+
+		<div class="col-md-6 col-lg-4"><label>手机号码：</label>
+			<input type="text" ng-disabled="all" class="form-control" maxlength="11" name="borrowerPhone{{$index}}" ng-model="obj.borrowerPhone" required>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="customerBorrowerForm.borrowerPhone{{$index}}.$error.required">必填</error>
+			</span>
+		</div>
+
+		<div class="col-md-6 col-lg-4"><label>&nbsp;</label></div>
+		
+		<div class="col-md-6 col-lg-4">
+			<label>证件类型：</label>
+			<select class="form-control" ng-disabled="all" name="borrowerCardType{{$index}}" style="width:178px;" choice-dict-name="cardType" ng-model="obj.borrowerCardType" required>
+				<option value="">请选择</option>
+			</select>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="customerBorrowerForm.borrowerCardType{{$index}}.$error.required">必选</error>
+			</span>
+		</div>
+
+		<div class="col-md-6 col-lg-4"><label>证件号码：</label>
+			<input type="text" ng-disabled="all" class="form-control" name="borrowerCardNumber{{$index}}" ng-model="obj.borrowerCardNumber" required>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="customerBorrowerForm.borrowerCardNumber{{$index}}.$error.required">必填</error>
+			</span>
+		</div>
+
+		<div class="col-md-6 col-lg-4"><label>婚姻状况：</label>
+			<select class="form-control" ng-disabled="all" name="borrowerMarriageState{{$index}}" style="width:178px;" choice-dict-name="marriageState" ng-model="obj.borrowerMarriageState" required>
+				<option value="">请选择</option>
+			</select>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="customerBorrowerForm.borrowerMarriageState{{$index}}.$error.required">必选</error>
+			</span>
+		</div>
+
+		<div class="col-md-6 col-lg-4" ng-if="obj.borrowerMarriageState == '已婚有子女' || obj.borrowerMarriageState == '已婚无子女' "><label>配偶姓名：</label>
+			<input type="text" class="form-control" ng-disabled="all" ng-model="obj.borrowerWifeName" name="borrowerWifeName{{$index}}" required>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="customerBorrowerForm.borrowerWifeName{{$index}}.$error.required">必填</error>
+			</span>
+		</div>
+
+		<div class="col-md-6 col-lg-4" ng-if="obj.borrowerMarriageState == '已婚有子女' || obj.borrowerMarriageState == '已婚无子女' " ><label>配偶证件类型：</label>
+			<select class="form-control" ng-disabled="all" name="borrowerWifeCardType{{$index}}" style="width:178px;" choice-dict-name="cardType" ng-model="obj.borrowerWifeCardType" required> 
+				<option value="">请选择</option> 
+			</select>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="customerBorrowerForm.borrowerWifeCardType{{$index}}.$error.required">必选</error>
+			</span>
+		</div>
+
+		<div class="col-md-6 col-lg-4" ng-if="obj.borrowerMarriageState == '已婚有子女' || obj.borrowerMarriageState == '已婚无子女' "><label>配偶证件号码：</label>
+			<input type="text" class="form-control" ng-disabled="all" ng-model="obj.borrowerWifeCardNumber" name="borrowerWifeCardNumber{{$index}}" required>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="customerBorrowerForm.borrowerWifeCardNumber{{$index}}.$error.required">必选</error>
+			</span>
+		</div>
+
+		<div class="col-md-6 col-lg-4"><label>与借款人关系：</label>
+			<select class="form-control" ng-disabled="all" name="borrowerRelationship{{$index}}" style="width:178px;" choice-dict-name="relationship" ng-model="obj.borrowerRelationship" required>
+				<option value="">请选择</option>
+			</select>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="customerBorrowerForm.borrowerRelationship{{$index}}.$error.required">必选</error>
+			</span>
+		</div>
+
+		<div class="col-md-6 col-lg-4">
+			<label>是否产权人：</label>
+			<select class="form-control" ng-disabled="all" style="width:178px;" name="borrowerIsPropertyProle{{$index}}" ng-model="obj.borrowerIsPropertyProle" required> 
+				<option value="">请选择</option>
+				<option value="是">是</option> 
+				<option value="否">否</option> 
+			</select>
+			<span class="a-span">&nbsp;</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="customerBorrowerForm.borrowerIsPropertyProle{{$index}}.$error.required">必选</error>
+			</span>
+		</div>
+	</div>
+	</gongtongjiekuanren>
+	<!-- 共同借款人信息 end -->
+
+	<div class="col-md-12 col-lg-12 relative">
+	    <label>&nbsp;</label>
+		<label style="position:absolute;top:0; left:0;">备注：</label>
+		<textarea class="form-control" ng-disabled="all" maxlength="3000" name='remark' ng-model="customer.remark" style="width:1000px;height:100px;"></textarea>
+	</div>
+</form>

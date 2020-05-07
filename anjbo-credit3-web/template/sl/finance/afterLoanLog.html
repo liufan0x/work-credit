@@ -1,0 +1,38 @@
+<div class="row" style="padding-top:20px;">
+	<div class="col-md-12">
+		<form class="form-inline search" style="margin-bottom:20px;margin-left:30px; ">
+			<div class="form-group">
+				<label>事件类型：</label>
+				<select class="form-control" ng-model="logPage.eventType" style="width: 100px;">
+					<option value="">全部</option>
+					<option ng-repeat="list in listEvent" value="{{list.eventType}}">{{list.eventTypeName}}</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label >操作时间：</label>
+				<input size="16" type="text" ng-disabled="all" ng-model="logPage.createStartTime" class="form-control form_date">-
+				<input size="16" type="text" ng-disabled="all" ng-model="logPage.createEndTime" class="form-control form_date">
+			</div>
+			<div class="form-group">
+				<label>操作人：</label>
+				<select class="form-control" ng-model="logPage.createUid" style="width: 100px;">
+					<option value="">全部</option>
+					<option ng-repeat="list in listOperate" value="{{list.createUid}}">{{list.createName}}</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label >搜索：</label>
+				<input type="text" class="form-control" ng-model="logPage.whereName">
+			</div>
+			<button type="submit" class="btn btn-default" ng-click="logQuery()" style="margin-bottom:10px; margin-right:10px;">查询
+			</button>
+		</form>
+	</div>
+
+</div>
+
+<div class="row">
+	<div class="col-md-12 bs-table">
+		<table bs-table-control="logList" data-show-export="false" id="tableLog" ></table>
+	</div>
+</div>

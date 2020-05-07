@@ -1,0 +1,71 @@
+<style>
+.w180 label{width:180px;}
+</style>
+<form class="form-inline w180" name="archiveAddForm" id="archiveAddForm">
+	<div class="row detail-row" style="margin-left:30px;">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;1.查档信息</div>
+		
+		<div class="col-md-4 col-lg-12"><label>产权证类型：</label>
+	    	<select class="form-control" name="estateType" style="width:220px;" choice-dict="propertyType" ng-model="archive.estateType" required>
+				<option value="">请选择</option>
+			</select>
+	    	<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="archiveAddForm.estateType.$error.required">必选</error>
+			</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-12"><label>房产证号：</label>
+			<input type="text" class="form-control" name="estateNo" style="width:178px;" ng-model="archive.estateNo" required >
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="archiveAddForm.estateNo.$error.required">必填</error>
+			</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-12"><label>姓名/身份证号：</label>
+			<input type="text" class="form-control" name="identityNo" style="width:178px;" ng-model="archive.identityNo" required >
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="archiveAddForm.identityNo.$error.required">必填</error>
+			</span>
+		</div>
+		
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;2.查档设置</div>
+		
+		<div class="col-md-12 col-lg-12"><label>查询开始时间-结束时间：</label>
+			<input size="16" type="text" style="width:178px;" name="startTime" ng-model="archive.startTime" class="form-control form_date" required>
+			-
+			<input size="16" type="text" style="width:178px;" name="endTime" id="form_datetime" ng-model="archive.endTime" class="form-control" required>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="archiveAddForm.startTime.$error.required||archiveAddForm.endTime.$error.required">必填</error>
+			</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-12"><label>查询频率：</label>
+			<input type="text" class="form-control" name="queryFrequency" style="width:178px;" ng-model="archive.queryFrequency" required >次/天
+			<span class="green-word">（一天最多查询五次）</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="archiveAddForm.queryFrequency.$error.required">必填</error>
+			</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-12"><label>短信通知：</label>
+			<input type="text" class="form-control" name="phone" style="width:178px;" ng-model="archive.phone" required >
+			<span class="green-word">（查询结果有变更后，系统会发短信通知您）</span>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="archiveAddForm.phone.$error.required">必填</error>
+			</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-12"><label>查询用途：</label>
+			<select class="form-control" name="queryUsage" style="width:220px;" ng-model="archive.queryUsage" style="width: 100px;" required>
+				<option value="">请选择</option>
+				<option ng-repeat="list in productdto" value="{{list.productCode}}">{{list.productName}}</option>
+			</select>
+			<span class="inputError" ng-show="isAudit">
+				<error class="text-danger" ng-show="archiveAddForm.queryUsage.$error.required">必填</error>
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-12">
+		<button type="button" ng-click="monitorArchiveAdd()" class="btn btn-info detail-right-save">创建任务</button>
+		</div>
+	</div>
+</form>

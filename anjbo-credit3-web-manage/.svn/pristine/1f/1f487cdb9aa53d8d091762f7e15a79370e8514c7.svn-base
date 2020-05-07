@@ -1,0 +1,102 @@
+<style>
+	.inp-boxx {
+		padding-left: 20px;
+		position: relative;
+		float: left;
+		line-height: 30px;
+	}
+	
+	input.inp-boxx {
+		margin-left: 20px;
+	}
+	
+	input.three-inp {
+		width: 70px !important;
+	}
+	
+	input.two-inp {
+		width: 100px !important;
+	}
+	
+	.blue-word {
+		color: #337AB7
+	}
+	
+	.red-word {
+		color: #FF0000
+	}
+</style>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<ul class="breadcrumb">
+				<li>工具管理 <span class="divider"></span></li>
+				<li class="active">套打合同</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="row" style="">
+		<div class="col-md-12" style="text-align:right; margin-bottom: 6px;">&nbsp;
+			<div class="btn-group">
+				<button type="button" class="btn btn-primary" ui-sref="contractFieldEdit">字段管理</button>
+				<button type="button" class="btn btn-primary" ng-click="addGroupShow()">添加分组</button>
+				<button type="button" class="btn btn-primary" ng-click="goContract()">添加合同</button>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-12" style="padding:0 40px;margin-top:10px;">
+		<table class="table table-bordered">
+			<thead>
+				<tr>
+					<th>合同名称</th>
+					<th>排序</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody ng-repeat="contractGroup in contractGroupList">
+				<tr style="background:rgba(250, 250, 250, 1);">
+					<td style="border:none !important;font-weight: bold;">
+						<span class="fl" ng-bind="contractGroup.name"></span>
+					</td>
+					<td colspan="2" style="border:none !important">
+						<span class="fr blue-word" style="cursor:pointer"  ng-click="addGroupShow(contractGroupList,$index)">编辑</span>
+						<span class="fr">&nbsp;&nbsp;&nbsp;</span>
+						<span class="fr red-word" style="cursor:pointer" ng-click="delGroupShow(contractGroup)">删除</span>
+					</td>
+				</tr>
+				<tr ng-repeat="contract in contractGroup.contractList">
+					<td>
+						<span class="fl" ng-bind="contract.name"></span>
+					</td>
+					<td>
+						<span ng-click="up(contractGroup.contractList,$index)" style="cursor:pointer" ng-if="contractGroup.contractList.length-1 != $index">下移</span>
+						<span ng-click="down(contractGroup.contractList,$index)" style="cursor:pointer" ng-if="0 != $index">上移</span>
+					</td>
+					<td style="align-content: center;">
+						<span class="blue-word" style="cursor:pointer"  ng-click="enableShow(contract)" ng-if="contract.isEnable == 0">启用</span>
+						<span class="red-word" style="cursor:pointer"  ng-click="enableShow(contract)" ng-if="contract.isEnable == 1">禁用</span>
+						<span >&nbsp;&nbsp;&nbsp;</span>
+						<span class=" red-word" style="cursor:pointer" ng-click="delContractShow(contract)">删除</span>
+						<span >&nbsp;&nbsp;&nbsp;</span>
+						<span class="blue-word" style="cursor:pointer"  ng-click="goContract(contract)">编辑</span>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div ng-show="false" id="groupEditId">
+	<div class="row">
+		<div class="col-md-14">
+			<form class="form-inline" id="frmGroup" name="frmGroup">
+				<div class="form-group">
+					<label><span class="text-warning">*</span>分组名称：</label>
+					<input type="text" class="form-control" name="name" ng-model="groupDto.name" required>
+					<span class="inputError" ng-show="isAudit"><error class="text-danger" ng-show="frmGroup.name.$error.required">必填</error></span>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

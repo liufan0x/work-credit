@@ -1,0 +1,89 @@
+<form class="form-inline w180" name="archiveAddForm" id="archiveAddForm">
+	<div class="row detail-row" >
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp; 查询资方审批状态</div>
+		<div class="col-md-6 col-lg-12"><label style="width: 190px;">查询开始时间-结束时间：</label>
+		  <span ng-bind="obj.startTimeStr"></span> - <span ng-bind="obj.endTimeStr"></span>
+		</div>
+		<div class="col-md-6 col-lg-12"><label>查询频率：</label>
+			<span ng-bind="obj.queryFrequency"></span>次/天
+		</div>
+		<div class="col-md-6 col-lg-12"><label>短信通知：</label>
+			<span  ng-bind="obj.phone"></span>
+		</div>
+		<div class="col-md-6 col-lg-12" >
+		  <label>资方审批结果：</label>
+          <div class="form-group" style="color:red;">
+               <span ng-if="obj.grantStatus == 111">待处理</span>
+               <span ng-if="obj.grantStatus == 997">审批通过</span>
+               <span ng-if="obj.grantStatus == 998">人工否决</span>
+               <span ng-if="obj.dealStatus == 992">审批打回</span>  
+		  </div>
+		</div>
+		<div class="col-md-6 col-lg-12" >
+		  <label>资方勾兑结果：</label>
+          <div class="form-group" style="color:red;">
+               <span ng-if="obj.grantStatus == 111">待处理</span>
+               <span ng-if="obj.grantStatus == 997">勾兑成功</span>
+               <span ng-if="obj.grantStatus == 998">勾兑否决</span> 
+		  </div>
+		</div>
+		<div class="col-md-6 col-lg-12"><label>放款时间：</label>
+			<span  ng-bind="obj.lendingTime|date:'yyyy-MM-dd HH:mm'"></span>
+		</div>
+		<div class="col-md-6 col-lg-12" ng-if="audit!=null && audit.id !='0' && hasFundList" >
+		   <label>推送信息：</label><a onclick="ab()">查看</a>
+		</div>
+		
+		
+		<!--备注-->
+		<div class="clear" style="width:100%;clear:both;height:1px;"></div>
+		<!-- <div class="relative">
+			<span style="width:178px" class="remark-span remark-lhw">备注：</span>
+			<textarea style="margin-left:181px" class="remark-p remark-lhw-p textarea-lhw" ng-bind="obj.remark" readonly="readonly"> </textarea>
+		</div> -->
+	<!--备注end-->
+	</div>
+</form>
+
+<!--推送start-->
+	<div class="lhw-alert-bg fktsShow"  style="display:none">
+		<div class="lhw-alert-box" style="width:1100px;">
+			<div class="lhw-alert-tit relative" >以下信息推送给资金方110<div class="lhw-x" ></div></div>
+				<div class="row">
+					<div class="col-md-12" style="padding-top:10px;">
+						<ul class="nav nav-tabs"><li><a href="javascript:void(0);">应还款计划</a></li></ul>
+					</div>
+				</div>
+				<div>
+				    <div class="row form-inline detail-row w147" style="padding:30px 10px; ">
+				        <div class="col-md-6 col-lg-6">
+				            <label>应还款时间: </label> <span ng-bind="audit.repaymentTime"></span>
+				        </div>
+				        <div class="col-md-6 col-lg-6">
+				            <label style="width: 190px;">期供金额（本金+利息）:</label>  <span ng-bind="audit.repaymentAccount"></span>&nbsp;元
+				        </div>
+				        <div class="col-md-6 col-lg-6">
+				            <label>应还利息:</label>  <span ng-bind="audit.interest"></span>&nbsp;元
+				        </div>
+				        <div class="col-md-6 col-lg-6">
+				            <label>应还本金:</label>  <span ng-bind="audit.capital"></span>&nbsp;元
+				        </div>
+				        <div class="col-md-6 col-lg-6">
+				            <label>剩余本金:</label>  <span ng-bind="audit.psRemPrcp"></span>&nbsp;元
+				        </div>
+				        <div class="col-md-6 col-lg-6">
+				            <label>贷款执行利率:</label>  <span ng-bind="audit.psIntRate"></span>&nbsp;%
+				        </div>
+				    </div>
+				</div>
+			</div>
+		</div>
+<!--推送end-->
+<script> 
+function ab(){	
+	$(".fktsShow").show();
+}
+$(".lhw-x").click(function(){
+	$(".fktsShow").hide();
+})
+</script>

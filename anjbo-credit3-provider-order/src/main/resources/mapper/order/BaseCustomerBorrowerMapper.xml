@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.order.BaseCustomerBorrowerMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<if test="null!=borrowerName and ''!=borrowerName"> AND `borrowerName`=#{borrowerName}</if>
+		<if test="null!=borrowerPhone and ''!=borrowerPhone"> AND `borrowerPhone`=#{borrowerPhone}</if>
+		<if test="null!=borrowerCardType and ''!=borrowerCardType"> AND `borrowerCardType`=#{borrowerCardType}</if>
+		<if test="null!=borrowerCardNumber and ''!=borrowerCardNumber"> AND `borrowerCardNumber`=#{borrowerCardNumber}</if>
+		<if test="null!=borrowerMarriageState and ''!=borrowerMarriageState"> AND `borrowerMarriageState`=#{borrowerMarriageState}</if>
+		<if test="null!=borrowerWifeName and ''!=borrowerWifeName"> AND `borrowerWifeName`=#{borrowerWifeName}</if>
+		<if test="null!=borrowerWifeCardType and ''!=borrowerWifeCardType"> AND `borrowerWifeCardType`=#{borrowerWifeCardType}</if>
+		<if test="null!=borrowerWifeCardNumber and ''!=borrowerWifeCardNumber"> AND `borrowerWifeCardNumber`=#{borrowerWifeCardNumber}</if>
+		<if test="null!=borrowerRelationship and ''!=borrowerRelationship"> AND `borrowerRelationship`=#{borrowerRelationship}</if>
+		<if test="null!=borrowerIsPropertyProle and ''!=borrowerIsPropertyProle"> AND `borrowerIsPropertyProle`=#{borrowerIsPropertyProle}</if>
+		<if test="null!=isFinish and isFinish>0"> AND `isFinish`=#{isFinish}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="BaseCustomerBorrowerDto" resultType="BaseCustomerBorrowerDto">    
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `borrowerName`, `borrowerPhone`, `borrowerCardType`, `borrowerCardNumber`, `borrowerMarriageState`, `borrowerWifeName`, `borrowerWifeCardType`, `borrowerWifeCardNumber`, `borrowerRelationship`, `borrowerIsPropertyProle`, `isFinish` 
+	FROM tbl_order_base_customer_borrower 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="BaseCustomerBorrowerDto" resultType="BaseCustomerBorrowerDto">
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `borrowerName`, `borrowerPhone`, `borrowerCardType`, `borrowerCardNumber`, `borrowerMarriageState`, `borrowerWifeName`, `borrowerWifeCardType`, `borrowerWifeCardNumber`, `borrowerRelationship`, `borrowerIsPropertyProle`, `isFinish`
+	FROM tbl_order_base_customer_borrower 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="BaseCustomerBorrowerDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_order_base_customer_borrower 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="BaseCustomerBorrowerDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_order_base_customer_borrower(
+		`createUid`,
+		`createTime`,
+		`updateUid`,
+		`updateTime`,
+		`orderNo`,
+		`borrowerName`,
+		`borrowerPhone`,
+		`borrowerCardType`,
+		`borrowerCardNumber`,
+		`borrowerMarriageState`,
+		`borrowerWifeName`,
+		`borrowerWifeCardType`,
+		`borrowerWifeCardNumber`,
+		`borrowerRelationship`,
+		`borrowerIsPropertyProle`,
+		`isFinish`
+	) VALUES(
+		#{createUid},
+		now(),
+		#{createUid},
+		now(),
+		#{orderNo},
+		#{borrowerName},
+		#{borrowerPhone},
+		#{borrowerCardType},
+		#{borrowerCardNumber},
+		#{borrowerMarriageState},
+		#{borrowerWifeName},
+		#{borrowerWifeCardType},
+		#{borrowerWifeCardNumber},
+		#{borrowerRelationship},
+		#{borrowerIsPropertyProle},
+		#{isFinish}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="BaseCustomerBorrowerDto" >
+    DELETE FROM tbl_order_base_customer_borrower 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="BaseCustomerBorrowerDto" >
+    UPDATE tbl_order_base_customer_borrower
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=borrowerName">`borrowerName`=#{borrowerName},</if>
+		<if test="null!=borrowerPhone">`borrowerPhone`=#{borrowerPhone},</if>
+		<if test="null!=borrowerCardType">`borrowerCardType`=#{borrowerCardType},</if>
+		<if test="null!=borrowerCardNumber">`borrowerCardNumber`=#{borrowerCardNumber},</if>
+		<if test="null!=borrowerMarriageState">`borrowerMarriageState`=#{borrowerMarriageState},</if>
+		<if test="null!=borrowerWifeName">`borrowerWifeName`=#{borrowerWifeName},</if>
+		<if test="null!=borrowerWifeCardType">`borrowerWifeCardType`=#{borrowerWifeCardType},</if>
+		<if test="null!=borrowerWifeCardNumber">`borrowerWifeCardNumber`=#{borrowerWifeCardNumber},</if>
+		<if test="null!=borrowerRelationship">`borrowerRelationship`=#{borrowerRelationship},</if>
+		<if test="null!=borrowerIsPropertyProle">`borrowerIsPropertyProle`=#{borrowerIsPropertyProle},</if>
+		<if test="null!=isFinish">`isFinish`=#{isFinish},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

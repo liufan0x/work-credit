@@ -1,0 +1,98 @@
+<div class="row yunnan-update-file">
+    <div class="col-md-12">
+        <table class="table table-hover table-bordered">
+            <thead>
+            <tr>
+                <th>资料名称</th>
+                <th>说明</th>
+                <th>文档数</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody >
+                <tr ng-repeat="(key,value) in kgErongsuoImg">
+                    <td ng-bind="value.name"></td>
+                    <td ng-bind="value.name"></td>
+                    <td ng-bing="value.img.length">
+                      {{value.img.length}}
+                    </td>
+                    <td>
+                        <span class="caozuo red-word" ng-show="isImgEdit" id="shang">   
+                             <span ng-if="value.img.length == 0">                                           
+                             <a data-fancybox="iframe" data-src="/plugins/uploadify/upload_image.html?returnFun=yunnanUpdateFile"  
+                           ng-click="yunnanCheck(value.typeId,key);" data-type="iframe" href="javascript:void(0);">
+                                                                                         上传
+                              </a>
+                              </span>  
+                            <span ng-if="value.img.length > 0&&value.typeId!='10181'&& value.typeId!='101810'">                                                 <!-- ng-show="value.img.length == 0" -->
+                             <a data-fancybox="iframe" data-src="/plugins/uploadify/upload_image.html?returnFun=yunnanUpdateFile"  
+                           ng-click="yunnanCheck(value.typeId,key);" data-type="iframe" href="javascript:void(0);">
+                                                                                         上传
+                              </a>
+                              </span>
+                            
+                              
+                        </span>
+                                                                                                           <!-- ng-show="value.img.length>0&& value.img[0].isPlus!=1" -->
+                        <span class="caozuo red-word"  ng-show="isImgEdit" >
+                        <a ng-click="delYunnanImgShow(value.img);" ng-show="value.img.length>0">删除</a>
+                        </span>
+                        
+                        <span class="caozuo chakan-img gallerys" ng-show="value.img.length>0">
+                             <img  title="查看图片"  ng-repeat="imgMap in value.img" src="{{imgMap.url}}" class="gallery-pic"  alt="查看图片" ng-show="!imgMap.isPdf && $index==0" hieght="30" width="30"> 
+                            <a href="{{imgMap.url}}" ng-repeat="imgMap in value.img" target="_blank" class="gallery-pic"  hieght="30" ng-if="imgMap.isPdf" width="30"> 查看合同</a>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="lhw-alert-but" ng-show="isImgEdit">
+    <button type="button" class="btn btn-primary lhw-alert-cancel" ng-click="yunnanImgs()">单推影像资料</button>
+</div>
+
+<div class="lhw-alert-bg2" ng-show="isDelYunnanImgShow">
+	<div class="lhw-alert-box" style="width:480px;">
+		<div class="lhw-alert-tit">请选择要删除的图片</div>
+		<div>
+			<span>全选/反选:
+				<input type='checkbox' ng-click="selectYunnanAllImg()" ng-checked="allYunnanCheck">
+			</span>
+			<div class="row form-inline detail-row" style="padding:0 10px;">
+				<div class="tan-pic">
+					<div class="tan-pic-box" ng-repeat="img in imgYunnanObject">
+						<label>
+							<img src="{{img.url}}" style="width: 120px;height:120px">
+							<div class="squaredFour">
+								<input type="checkbox" ng-model="img.check" ng-click="checkImg(imgYunnanObject)">
+								<span></span>
+							</div>
+						</label>
+					</div>
+					<div class="clear"></div>
+				</div>
+			</div>
+		</div>
+		<div class="lhw-alert-but">
+			<button type="button" class="btn btn-primary" style="margin-right:80px;" ng-click="delYunnanImg()">确定</button>
+			<button type="button" class="btn btn-danger lhw-alert-cancel" ng-click="delYunnanImgCancel()">取消</button>
+		</div>
+	</div>
+</div>
+
+<script>
+function yunnanUpdateFile(url, b, c) {
+	if("" == url) {
+		return;
+	}
+	var index = url.lastIndexOf(",");
+	if(index > -1) {
+		url = url.substring(0, url.length - 1);
+	}
+	var arr = url.split(",");
+	var scope = angular.element('.yunnan-update-file').scope();
+	scope.yunnanImgSave(arr);
+	scope.$apply();
+}
+</script>

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.process.AppForensicsMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<if test="null!=licenseRever and ''!=licenseRever"> AND `licenseRever`=#{licenseRever}</if>
+		<if test="null!=licenseReverUid and ''!=licenseReverUid"> AND `licenseReverUid`=#{licenseReverUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(licenseRevTimeBegin)"> AND licenseRevTime >= #{licenseRevTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(licenseRevTimeEnd)"> AND licenseRevTime &lt;= #{licenseRevTimeEnd}</if>
+		-->
+		<if test="null!=licenseRevBank and licenseRevBank>0"> AND `licenseRevBank`=#{licenseRevBank}</if>
+		<if test="null!=licenseRevBankSub and licenseRevBankSub>0"> AND `licenseRevBankSub`=#{licenseRevBankSub}</if>
+		<if test="null!=licenseRevBankName and ''!=licenseRevBankName"> AND `licenseRevBankName`=#{licenseRevBankName}</if>
+		<if test="null!=licenseRevBankSubName and ''!=licenseRevBankSubName"> AND `licenseRevBankSubName`=#{licenseRevBankSubName}</if>
+		<if test="null!=licenseRevStartTime and ''!=licenseRevStartTime"> AND `licenseRevStartTime`=#{licenseRevStartTime}</if>
+		<if test="null!=licenseRevEndTime and ''!=licenseRevEndTime"> AND `licenseRevEndTime`=#{licenseRevEndTime}</if>
+		<if test="null!=forensiceImg and ''!=forensiceImg"> AND `forensiceImg`=#{forensiceImg}</if>
+		<if test="null!=remark and ''!=remark"> AND `remark`=#{remark}</if>
+		<if test="null!=isLicenseRevBank and isLicenseRevBank>0"> AND `isLicenseRevBank`=#{isLicenseRevBank}</if>
+		<if test="null!=licenseRevAddress and ''!=licenseRevAddress"> AND `licenseRevAddress`=#{licenseRevAddress}</if>
+		<if test="null!=flandBureau and ''!=flandBureau"> AND `flandBureau`=#{flandBureau}</if>
+		<if test="null!=flandBureauName and ''!=flandBureauName"> AND `flandBureauName`=#{flandBureauName}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="AppForensicsDto" resultType="AppForensicsDto">    
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `licenseRever`, `licenseReverUid`, `licenseRevTime`, `licenseRevBank`, `licenseRevBankSub`, `licenseRevBankName`, `licenseRevBankSubName`, `licenseRevStartTime`, `licenseRevEndTime`, `forensiceImg`, `remark`, `isLicenseRevBank`, `licenseRevAddress`, `flandBureau`, `flandBureauName` 
+	FROM tbl_process_app_forensics 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="AppForensicsDto" resultType="AppForensicsDto">
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `licenseRever`, `licenseReverUid`, `licenseRevTime`, `licenseRevBank`, `licenseRevBankSub`, `licenseRevBankName`, `licenseRevBankSubName`, `licenseRevStartTime`, `licenseRevEndTime`, `forensiceImg`, `remark`, `isLicenseRevBank`, `licenseRevAddress`, `flandBureau`, `flandBureauName`
+	FROM tbl_process_app_forensics 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="AppForensicsDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_process_app_forensics 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="AppForensicsDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_process_app_forensics(
+		`createUid`,
+		`createTime`,
+		`updateUid`,
+		`updateTime`,
+		`orderNo`,
+		`licenseRever`,
+		`licenseReverUid`,
+		`licenseRevTime`,
+		`licenseRevBank`,
+		`licenseRevBankSub`,
+		`licenseRevBankName`,
+		`licenseRevBankSubName`,
+		`licenseRevStartTime`,
+		`licenseRevEndTime`,
+		`forensiceImg`,
+		`remark`,
+		`isLicenseRevBank`,
+		`licenseRevAddress`,
+		`flandBureau`,
+		`flandBureauName`
+	) VALUES(
+		#{createUid},
+		now(),
+		#{createUid},
+		now(),
+		#{orderNo},
+		#{licenseRever},
+		#{licenseReverUid},
+		#{licenseRevTime},
+		#{licenseRevBank},
+		#{licenseRevBankSub},
+		#{licenseRevBankName},
+		#{licenseRevBankSubName},
+		#{licenseRevStartTime},
+		#{licenseRevEndTime},
+		#{forensiceImg},
+		#{remark},
+		#{isLicenseRevBank},
+		#{licenseRevAddress},
+		#{flandBureau},
+		#{flandBureauName}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="AppForensicsDto" >
+    DELETE FROM tbl_process_app_forensics 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="AppForensicsDto" >
+    UPDATE tbl_process_app_forensics
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=licenseRever">`licenseRever`=#{licenseRever},</if>
+		<if test="null!=licenseReverUid">`licenseReverUid`=#{licenseReverUid},</if>
+		<if test="null!=licenseRevTime">`licenseRevTime`=#{licenseRevTime},</if>
+		<if test="null!=licenseRevBank">`licenseRevBank`=#{licenseRevBank},</if>
+		<if test="null!=licenseRevBankSub">`licenseRevBankSub`=#{licenseRevBankSub},</if>
+		<if test="null!=licenseRevBankName">`licenseRevBankName`=#{licenseRevBankName},</if>
+		<if test="null!=licenseRevBankSubName">`licenseRevBankSubName`=#{licenseRevBankSubName},</if>
+		<if test="null!=licenseRevStartTime">`licenseRevStartTime`=#{licenseRevStartTime},</if>
+		<if test="null!=licenseRevEndTime">`licenseRevEndTime`=#{licenseRevEndTime},</if>
+		<if test="null!=forensiceImg">`forensiceImg`=#{forensiceImg},</if>
+		<if test="null!=remark">`remark`=#{remark},</if>
+		<if test="null!=isLicenseRevBank">`isLicenseRevBank`=#{isLicenseRevBank},</if>
+		<if test="null!=licenseRevAddress">`licenseRevAddress`=#{licenseRevAddress},</if>
+		<if test="null!=flandBureau">`flandBureau`=#{flandBureau},</if>
+		<if test="null!=flandBureauName">`flandBureauName`=#{flandBureauName},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

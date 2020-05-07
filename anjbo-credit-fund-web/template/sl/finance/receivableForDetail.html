@@ -1,0 +1,70 @@
+<style>
+	.w150 label {
+		width: 150px;
+		line-height: 37px;
+	}
+</style>
+<div class="container-fluid" id="receivableFor">
+	<!--标题-->
+	<div class="row">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;回款信息
+			<a ng-show="!isEdit" style="display:inline-block;float:right;padding-right: 10px;" ui-sref="orderList">返回上一步</a>
+			<span ng-show="isEdit" class="detail-trash2 text-danger" ng-click="deleteDetail('receivable-for-detail')">隐藏</span>
+			<div style="position:absolute;right:400px;top:0px;">
+				 <!--  <span id="elementFlag" ng-bind="elementFlag">是否已收到要件：是</span>
+				  <span><a id="elementInfo" ng-bind="elementInfo" ng-click="showDetail('elementEntrance');">要件详情</a></span> -->
+			</div>
+		</div>
+	</div>
+	<!--标题 end-->
+	<div class="row detail-row form-inline w150">
+		<div class="col-md-6 col-lg-4">
+			<label>估计还款时间: </label> <span ng-bind="huaRong.repaymentTime"></span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>已经还款时间:</label> <span ng-bind="huaRong.repaymentYestime"></span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>期供金额:</label> <span ng-bind="huaRong.repaymentAccount"></span>&nbsp;元
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>实还金额:</label> <span ng-bind="huaRong.repaymentYesaccount"></span>&nbsp;元
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>逾期天数:</label> <span ng-bind="huaRong.lateDays"></span>&nbsp;天
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>逾期利息:</label> <span ng-bind="huaRong.lateInterest"></span>&nbsp;元
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>应还利息:</label> <span ng-bind="huaRong.interest"></span>&nbsp;元
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>应还本金:</label> <span ng-bind="huaRong.capital"></span>&nbsp;元
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>已还本金:</label> <span ng-bind="huaRong.setlCapital"></span>&nbsp;元
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>已还利息:</label> <span ng-bind="huaRong.setlInterest"></span>&nbsp;元
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>已还罚息:</label> <span ng-bind="huaRong.setlLateInterest"></span>&nbsp;元
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>贷款执行利率:</label> <span ng-bind="huaRong.psIntRate"></span>&nbsp;%
+		</div>
+	</div>
+</div>
+<script>
+	function ab1() {
+		$(".hktsShow1").show();
+	}
+
+	function laa(a) {
+		$.openPhotoGallery($(a).next("img"));
+	}
+	$(".lhw-x1").click(function() {
+		$(".hktsShow1").hide();
+	})
+</script>

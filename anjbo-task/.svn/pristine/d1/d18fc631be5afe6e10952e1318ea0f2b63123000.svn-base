@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.fc.order.LendingStatisticsMapper">
+	<select id="selectLendingOrders" parameterType="java.util.Map" resultType="OrderLendingStatistics"> 
+		SELECT
+			t1.orderNo,
+			t1.customerName,
+			t1.borrowingAmount,
+			t1.borrowingDay,
+			t1.cityCode,
+			t1.cityName,
+			t1.branchCompany,
+			t1.channelManagerUid,
+			t1.channelManagerName,
+			t1.productCode,
+			t1.productName,
+			t1.lendingTime,
+			t1.borrowingAmount AS lendingAmount,
+			t2.receivableInterestMoney AS interest,
+		 t3.penaltyReal AS fine,
+		 t4.serviceCharge,
+		 t10.rebateMoney as fRebateMoney,
+		 t11.rebateMoney,
+		 t4.customsPoundage,
+		 t4.otherPoundage,
+		 t4.rate,
+		 t4.overdueRate,
+		 t1.source,
+		 t1.cooperativeAgencyId,
+		 t1.cooperativeAgencyName,
+		 t1.acceptMemberUid,
+		 t1.acceptMemberName,
+		 t1.customerType,
+		 t6.business,
+		 date_format(t1.planPaymentTime, '%Y-%m-%d') as planPaymentTime,
+		 date_format(t7.payMentAmountDate, '%Y-%m-%d') as payMentAmountDate,
+		 t8.datediff,
+		 date_format(t9.interestTime, '%Y-%m-%d') as interestTime,
+		 date_format(t10.payTime, '%Y-%m-%d') as payTime,
+		 date_format(t11.rebateTime, '%Y-%m-%d') as rebateTime,
+		 t4.oldLoanBankName,
+		 t12. NAME AS oldLoanBankSubName,
+		 t4.loanBankName,
+		 t13. NAME AS loanBankSubName
+		FROM
+			`anjbo-server-order`.tbl_order_list_base t1
+		LEFT JOIN (
+			SELECT
+				*
+			FROM
+				`anjbo-server-finance`.tbl_finance_lending_harvest
+			ORDER BY
+				createTime DESC
+		) t2 ON t1.orderNo = t2.orderNo
+		LEFT JOIN `anjbo-server-finance`.tbl_finance_receivable_pay t3 ON t1.orderNo = t3.orderNo
+		LEFT JOIN `anjbo-server-order`.tbl_order_base_borrow t4 ON t1.orderNo = t4.orderNo
+		LEFT JOIN `anjbo-server-order`.tbl_order_flow t5 ON t5.orderNo = t1.orderNo
+		LEFT JOIN `anjbo-server-risk`.tbl_risk_audit_first t6 ON t6.orderNo = t1.orderNo
+		LEFT JOIN (
+			SELECT
+				orderNo,
+				max(payMentAmountDate) AS payMentAmountDate
+			FROM
+				`anjbo-server-order`.tbl_finance_receivable_for
+			GROUP BY
+				orderNo
+		) t7 ON t7.orderNo = t1.orderNo
+		LEFT JOIN `anjbo-server-finance`.tbl_finance_receivable_has t8 ON t8.orderNo = t1.orderNo
+		LEFT JOIN `anjbo-server-finance`.tbl_finance_lending_interest t9 ON t9.orderNo = t1.orderNo
+		LEFT JOIN `anjbo-server-finance`.tbl_finance_receivable_pay t10 ON t10.orderNo = t1.orderNo
+		LEFT JOIN `anjbo-server-finance`.tbl_finance_rebate t11 ON t11.orderNo = t1.orderNo
+		LEFT JOIN `anjbo-server-common`.tbl_common_bank_sub t12 ON t12.id = t4.oldLoanBankSubNameId
+		LEFT JOIN `anjbo-server-common`.tbl_common_bank_sub t13 ON t13.id = t4.loanSubBankNameId
+		WHERE
+			t5.handleTime BETWEEN #{lendingStartTime}
+		AND #{lendingEndTime}
+		AND (t5.currentProcessId = 'lending' or t5.currentProcessId ='backExpenses' 
+			or t5.currentProcessId ='isBackExpenses' or t5.currentProcessId ='isLendingHarvest' 
+			or t5.currentProcessId ='receivableFor' or t5.currentProcessId ='receivableForEnd' 
+			or t5.currentProcessId ='pay' or t5.currentProcessId ='rebate' or t5.currentProcessId ='wanjie')
+		AND t1.lendingTime IS NOT NULL
+		AND t1.productCode != '04'
+		AND t1.state != '已关闭'
+		GROUP BY
+			t1.orderNo
+		ORDER BY
+			lendingTime;
+
+
+	</select>
+	
+	<insert id="batchInsertLendingOrders" parameterType="java.util.List">
+		REPLACE into `anjbo-server-order`.tbl_order_lending_statistics(
+			createTime,orderNo,customerName,borrowingAmount,borrowingDay,cityCode,cityName
+			,branchCompany,channelManagerUid,channelManagerName,productCode,productName,lendingTime
+			,lendingAmount,interest,fine,serviceCharge,income,rebateMoney,customsPoundage,otherPoundage,rate,overdueRate
+			,source,cooperativeAgencyId,cooperativeAgencyName,acceptMemberUid,acceptMemberName,customerType,business
+			,planPaymentTime,payMentAmountDate,datediff,interestTime,payTime,rebateTime,oldLoanBankAndSub,newLoanBankAndSub
+		)values 
+		<foreach collection="list" index="index" item="item" separator=",">
+			(now(), #{item.orderNo}, #{item.customerName}, 
+			 #{item.borrowingAmount}, #{item.borrowingDay}, #{item.cityCode}, #{item.cityName}, #{item.branchCompany}, #{item.channelManagerUid}, 
+			 #{item.channelManagerName}, #{item.productCode}, #{item.productName}, #{item.lendingTime}, #{item.lendingAmount}, #{item.interest}, 
+			 #{item.fine}, #{item.serviceCharge}, #{item.income}, #{item.rebateMoney}, #{item.customsPoundage}, #{item.otherPoundage},
+			 #{item.rate}, #{item.overdueRate}, #{item.source}, #{item.cooperativeAgencyId}, #{item.cooperativeAgencyName}, #{item.acceptMemberUid},
+			 #{item.acceptMemberName},#{item.customerType}, #{item.business}, #{item.planPaymentTime}, #{item.payMentAmountDate}, #{item.datediff},
+			 #{item.interestTime}, #{item.payTime}, #{item.rebateTime}, #{item.oldLoanBankAndSub}, #{item.newLoanBankAndSub})
+		</foreach>
+	</insert>
+ 	
+</mapper>

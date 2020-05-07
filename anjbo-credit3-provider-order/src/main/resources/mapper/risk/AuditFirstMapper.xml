@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.risk.AuditFirstMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(auditTimeBegin)"> AND auditTime >= #{auditTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(auditTimeEnd)"> AND auditTime &lt;= #{auditTimeEnd}</if>
+		-->
+		<if test="null!=remark and ''!=remark"> AND `remark`=#{remark}</if>
+		<if test="null!=auditStatus and auditStatus>0"> AND `auditStatus`=#{auditStatus}</if>
+		<if test="null!=isShow and isShow>0"> AND `isShow`=#{isShow}</if>
+		<if test="null!=handleUid and ''!=handleUid"> AND `handleUid`=#{handleUid}</if>
+		<if test="null!=productName and ''!=productName"> AND `productName`=#{productName}</if>
+		<if test="null!=loanAmount and loanAmount>0"> AND `loanAmount`=#{loanAmount}</if>
+		<if test="null!=debtRatio and debtRatio>0"> AND `debtRatio`=#{debtRatio}</if>
+		<if test="null!=loanPoportion and loanPoportion>0"> AND `loanPoportion`=#{loanPoportion}</if>
+		<if test="null!=productLoanPoportion and productLoanPoportion>0"> AND `productLoanPoportion`=#{productLoanPoportion}</if>
+		<if test="null!=propertyOwner and ''!=propertyOwner"> AND `propertyOwner`=#{propertyOwner}</if>
+		<if test="null!=propertyName and ''!=propertyName"> AND `propertyName`=#{propertyName}</if>
+		<if test="null!=area and ''!=area"> AND `area`=#{area}</if>
+		<if test="null!=assessment and assessment>0"> AND `assessment`=#{assessment}</if>
+		<if test="null!=mortgageSituation and ''!=mortgageSituation"> AND `mortgageSituation`=#{mortgageSituation}</if>
+		<if test="null!=addressOld and ''!=addressOld"> AND `addressOld`=#{addressOld}</if>
+		<if test="null!=amountOld and amountOld>0"> AND `amountOld`=#{amountOld}</if>
+		<if test="null!=addressNew and ''!=addressNew"> AND `addressNew`=#{addressNew}</if>
+		<if test="null!=amountNew and amountNew>0"> AND `amountNew`=#{amountNew}</if>
+		<if test="null!=monthNum and monthNum>0"> AND `monthNum`=#{monthNum}</if>
+		<if test="null!=yearNum and yearNum>0"> AND `yearNum`=#{yearNum}</if>
+		<if test="null!=business and business>0"> AND `business`=#{business}</if>
+		<if test="null!=sunMoney and sunMoney>0"> AND `sunMoney`=#{sunMoney}</if>
+		<if test="null!=loanName and ''!=loanName"> AND `loanName`=#{loanName}</if>
+		<if test="null!=loanAccount and ''!=loanAccount"> AND `loanAccount`=#{loanAccount}</if>
+		<if test="null!=loanBankId and loanBankId>0"> AND `loanBankId`=#{loanBankId}</if>
+		<if test="null!=loanBankName and ''!=loanBankName"> AND `loanBankName`=#{loanBankName}</if>
+		<if test="null!=loanBankSubId and loanBankSubId>0"> AND `loanBankSubId`=#{loanBankSubId}</if>
+		<if test="null!=loanBankSubName and ''!=loanBankSubName"> AND `loanBankSubName`=#{loanBankSubName}</if>
+		<if test="null!=paymentName and ''!=paymentName"> AND `paymentName`=#{paymentName}</if>
+		<if test="null!=paymentAccount and ''!=paymentAccount"> AND `paymentAccount`=#{paymentAccount}</if>
+		<if test="null!=paymentBankId and paymentBankId>0"> AND `paymentBankId`=#{paymentBankId}</if>
+		<if test="null!=paymentBankName and ''!=paymentBankName"> AND `paymentBankName`=#{paymentBankName}</if>
+		<if test="null!=paymentBankSubId and paymentBankSubId>0"> AND `paymentBankSubId`=#{paymentBankSubId}</if>
+		<if test="null!=paymentBankSubName and ''!=paymentBankSubName"> AND `paymentBankSubName`=#{paymentBankSubName}</if>
+		<if test="null!=rate and rate>0"> AND `rate`=#{rate}</if>
+		<if test="null!=overdueRate and overdueRate>0"> AND `overdueRate`=#{overdueRate}</if>
+		<if test="null!=other and ''!=other"> AND `other`=#{other}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="AuditFirstDto" resultType="AuditFirstDto">    
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `auditTime`, `remark`, `auditStatus`, `isShow`, `handleUid`, `productName`, `loanAmount`, `debtRatio`, `loanPoportion`, `productLoanPoportion`, `propertyOwner`, `propertyName`, `area`, `assessment`, `mortgageSituation`, `addressOld`, `amountOld`, `addressNew`, `amountNew`, `monthNum`, `yearNum`, `business`, `sunMoney`, `loanName`, `loanAccount`, `loanBankId`, `loanBankName`, `loanBankSubId`, `loanBankSubName`, `paymentName`, `paymentAccount`, `paymentBankId`, `paymentBankName`, `paymentBankSubId`, `paymentBankSubName`, `rate`, `overdueRate`, `other` 
+	FROM tbl_risk_audit_first 
+	<include refid="sqlwhereSearch"/>
+  </select>
+  
+  <select id="detail" parameterType="java.lang.String" resultType="AuditFirstDto">
+   	SELECT
+   		*
+   	FROM tbl_risk_audit_first where orderNo=#{orderNo} ORDER BY createTime DESC LIMIT 1;
+   </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="AuditFirstDto" resultType="AuditFirstDto">
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `auditTime`, `remark`, `auditStatus`, `isShow`, `handleUid`, `productName`, `loanAmount`, `debtRatio`, `loanPoportion`, `productLoanPoportion`, `propertyOwner`, `propertyName`, `area`, `assessment`, `mortgageSituation`, `addressOld`, `amountOld`, `addressNew`, `amountNew`, `monthNum`, `yearNum`, `business`, `sunMoney`, `loanName`, `loanAccount`, `loanBankId`, `loanBankName`, `loanBankSubId`, `loanBankSubName`, `paymentName`, `paymentAccount`, `paymentBankId`, `paymentBankName`, `paymentBankSubId`, `paymentBankSubName`, `rate`, `overdueRate`, `other`
+	FROM tbl_risk_audit_first 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="AuditFirstDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_risk_audit_first 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="AuditFirstDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_risk_audit_first(
+		`createUid`,
+		`createTime`,
+		`updateUid`,
+		`updateTime`,
+		`orderNo`,
+		`auditTime`,
+		`remark`,
+		`auditStatus`,
+		`isShow`,
+		`handleUid`,
+		`productName`,
+		`loanAmount`,
+		`debtRatio`,
+		`loanPoportion`,
+		`productLoanPoportion`,
+		`propertyOwner`,
+		`propertyName`,
+		`area`,
+		`assessment`,
+		`mortgageSituation`,
+		`addressOld`,
+		`amountOld`,
+		`addressNew`,
+		`amountNew`,
+		`monthNum`,
+		`yearNum`,
+		`business`,
+		`sunMoney`,
+		`loanName`,
+		`loanAccount`,
+		`loanBankId`,
+		`loanBankName`,
+		`loanBankSubId`,
+		`loanBankSubName`,
+		`paymentName`,
+		`paymentAccount`,
+		`paymentBankId`,
+		`paymentBankName`,
+		`paymentBankSubId`,
+		`paymentBankSubName`,
+		`rate`,
+		`overdueRate`,
+		`other`
+	) VALUES(
+		#{createUid},
+		now(),
+		#{createUid},
+		now(),
+		#{orderNo},
+		#{auditTime},
+		#{remark},
+		#{auditStatus},
+		#{isShow},
+		#{handleUid},
+		#{productName},
+		#{loanAmount},
+		#{debtRatio},
+		#{loanPoportion},
+		#{productLoanPoportion},
+		#{propertyOwner},
+		#{propertyName},
+		#{area},
+		#{assessment},
+		#{mortgageSituation},
+		#{addressOld},
+		#{amountOld},
+		#{addressNew},
+		#{amountNew},
+		#{monthNum},
+		#{yearNum},
+		#{business},
+		#{sunMoney},
+		#{loanName},
+		#{loanAccount},
+		#{loanBankId},
+		#{loanBankName},
+		#{loanBankSubId},
+		#{loanBankSubName},
+		#{paymentName},
+		#{paymentAccount},
+		#{paymentBankId},
+		#{paymentBankName},
+		#{paymentBankSubId},
+		#{paymentBankSubName},
+		#{rate},
+		#{overdueRate},
+		#{other}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="AuditFirstDto" >
+    DELETE FROM tbl_risk_audit_first 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="AuditFirstDto" >
+    UPDATE tbl_risk_audit_first
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=auditTime">`auditTime`=#{auditTime},</if>
+		<if test="null!=remark">`remark`=#{remark},</if>
+		<if test="null!=auditStatus">`auditStatus`=#{auditStatus},</if>
+		<if test="null!=isShow">`isShow`=#{isShow},</if>
+		<if test="null!=handleUid">`handleUid`=#{handleUid},</if>
+		<if test="null!=productName">`productName`=#{productName},</if>
+		<if test="null!=loanAmount">`loanAmount`=#{loanAmount},</if>
+		<if test="null!=debtRatio">`debtRatio`=#{debtRatio},</if>
+		<if test="null!=loanPoportion">`loanPoportion`=#{loanPoportion},</if>
+		<if test="null!=productLoanPoportion">`productLoanPoportion`=#{productLoanPoportion},</if>
+		<if test="null!=propertyOwner">`propertyOwner`=#{propertyOwner},</if>
+		<if test="null!=propertyName">`propertyName`=#{propertyName},</if>
+		<if test="null!=area">`area`=#{area},</if>
+		<if test="null!=assessment">`assessment`=#{assessment},</if>
+		<if test="null!=mortgageSituation">`mortgageSituation`=#{mortgageSituation},</if>
+		<if test="null!=addressOld">`addressOld`=#{addressOld},</if>
+		<if test="null!=amountOld">`amountOld`=#{amountOld},</if>
+		<if test="null!=addressNew">`addressNew`=#{addressNew},</if>
+		<if test="null!=amountNew">`amountNew`=#{amountNew},</if>
+		<if test="null!=monthNum">`monthNum`=#{monthNum},</if>
+		<if test="null!=yearNum">`yearNum`=#{yearNum},</if>
+		<if test="null!=business">`business`=#{business},</if>
+		<if test="null!=sunMoney">`sunMoney`=#{sunMoney},</if>
+		<if test="null!=loanName">`loanName`=#{loanName},</if>
+		<if test="null!=loanAccount">`loanAccount`=#{loanAccount},</if>
+		<if test="null!=loanBankId">`loanBankId`=#{loanBankId},</if>
+		<if test="null!=loanBankName">`loanBankName`=#{loanBankName},</if>
+		<if test="null!=loanBankSubId">`loanBankSubId`=#{loanBankSubId},</if>
+		<if test="null!=loanBankSubName">`loanBankSubName`=#{loanBankSubName},</if>
+		<if test="null!=paymentName">`paymentName`=#{paymentName},</if>
+		<if test="null!=paymentAccount">`paymentAccount`=#{paymentAccount},</if>
+		<if test="null!=paymentBankId">`paymentBankId`=#{paymentBankId},</if>
+		<if test="null!=paymentBankName">`paymentBankName`=#{paymentBankName},</if>
+		<if test="null!=paymentBankSubId">`paymentBankSubId`=#{paymentBankSubId},</if>
+		<if test="null!=paymentBankSubName">`paymentBankSubName`=#{paymentBankSubName},</if>
+		<if test="null!=rate">`rate`=#{rate},</if>
+		<if test="null!=overdueRate">`overdueRate`=#{overdueRate},</if>
+		<if test="null!=other">`other`=#{other},</if>
+	</set>
+	WHERE orderNo=#{orderNo}
+  </update>
+    
+    <delete id="delFirstForeclosure" parameterType="java.lang.String">
+       delete from tbl_risk_audit_first_foreclosure where orderNo=#{0}
+    </delete>
+    <insert id="addFirstForeclosure" parameterType="AuditFirstForeclosureDto">
+      INSERT INTO `tbl_risk_audit_first_foreclosure` (
+        `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `loanAccountType`, `loanName`, `loanAccount`, `loanBankId`, `loanBankName`, `loanBankSubId`, `loanBankSubName`
+      ) VALUES (
+        #{createUid}, now(), #{updateUid}, now(), #{orderNo}, #{loanAccountType}, #{loanName}, #{loanAccount}, #{loanBankId}, #{loanBankName}, #{loanBankSubId}, #{loanBankSubName}
+      );
+    </insert>	
+    <delete id="delFirstPayment" parameterType="java.lang.String">
+       delete from tbl_risk_audit_first_payment where orderNo=#{0}
+    </delete>
+    <insert id="addFirstPayment" parameterType="AuditFirstPaymentDto">
+      INSERT INTO `tbl_risk_audit_first_payment` (
+      `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `paymentAccountType`, `paymentName`, `paymentAccount`, `paymentBankId`, `paymentBankName`, `paymentBankSubId`, `paymentBankSubName`
+      ) VALUES (
+       #{createUid}, now(), #{updateUid}, now(), #{orderNo}, #{paymentAccountType}, #{paymentName}, #{paymentAccount}, #{paymentBankId}, #{paymentBankName}, #{paymentBankSubId}, #{paymentBankSubName}
+      );
+    </insert>
+    <!-- 初审 出/回款start -->
+    <select id="findforeclosureList" parameterType="java.lang.String" resultType="AuditFirstForeclosureDto">
+       select * from tbl_risk_audit_first_foreclosure where orderNo= #{0}
+    </select>
+    <select id="findPaymentList" parameterType="java.lang.String" resultType="AuditFirstPaymentDto">
+      select * from tbl_risk_audit_first_payment where orderNo=#{0}
+    </select>
+    <!-- 初审 出/回款end -->
+</mapper>

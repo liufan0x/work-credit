@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.OrderBaseReceivableForMapper" >
+	<!-- 添加订单计划回款信息 -->
+	<insert id="saveOrderBaseReceivableFor" parameterType="OrderBaseReceivableForDto">
+		INSERT INTO tbl_order_base_receivable_for (
+			createUid,
+			createTime,
+			orderNo,
+			payMentAmountDate,
+			payMentAmount
+		)
+		VALUES
+		(
+			#{createUid},
+			now(),
+			#{orderNo},
+			#{payMentAmountDateStr},
+			#{payMentAmount}
+		)
+	</insert>
+	
+	<!-- 修改订单计划回款信息 -->
+	<update id="updateOrderReceivableFor" parameterType="OrderBaseReceivableForDto">
+	  	UPDATE tbl_order_base_receivable_for 
+	  	<set>
+	  		<if test="createUid != null and createUid != ''">
+	  			createUid = #{createUid},
+	  		</if>
+	  		<if test="updateUid != null and updateUid != ''">
+	  			updateUid = #{updateUid},
+	  		</if>
+	  		<if test="payMentAmountDateStr != null and payMentAmountDateStr != ''">
+	  			payMentAmountDate = #{payMentAmountDateStr},
+	  		</if>
+	  		<if test="payMentAmount != null and payMentAmount > 0">
+	  			payMentAmount = #{payMentAmount},
+	  		</if>
+	  		updateTime = now()
+	  	</set>
+	  	WHERE id = #{id}
+  	</update>
+	<!-- 查询订单计划回款信息 -->
+	<select id="selectOrderReceivableForByOrderNo" parameterType="java.lang.String" resultType="OrderBaseReceivableForDto">
+  		select 
+  			id,
+  			createUid,
+			createTime,
+			updateUid,
+			updateTime,
+			orderNo,
+			payMentAmountDate,
+			DATE_FORMAT(payMentAmountDate,'%Y-%m-%d') as payMentAmountDateStr,
+			payMentAmount
+  		from tbl_order_base_receivable_for where orderNo=#{orderNo} order by id asc
+    </select>
+    
+    <!-- 删除指定orderNo的回款信息 3.0-->
+   <delete id="deleteReceivableFor" parameterType="string">
+  	 DELETE FROM tbl_order_base_receivable_for WHERE orderNo=#{orderNo}
+   </delete>
+</mapper>

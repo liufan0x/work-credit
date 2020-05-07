@@ -1,0 +1,123 @@
+<style>
+	.audit-line {
+		width: 100%;
+		clear: both;
+		height: 5px;
+	}
+	
+	.audit-add-but {
+		width: 100px;
+		text-align: center;
+		cursor: pointer;
+		line-height: 28px;
+		height: 28px;
+		border-radius: 4px;
+		color: #f9f9fb;
+		font-size: 13px;
+		display: inline-block;
+		background-color: #3479b7;
+		margin-left: 25px;
+	}
+	
+	.audi-x {
+		display: inline-block;
+		width: 24px;
+		height: 24px;
+		line-height: 24px;
+		text-align: center;
+		color: red;
+		border-radius: 50%;
+		border: 1px solid red;
+		cursor: pointer;
+	}
+</style>
+<div class="container-fluid">
+	<place-order-detail></place-order-detail>
+	<div id="viewRow">
+	</div>
+	<!--表格-->
+	<div class="row">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;分配资金方信息</div>
+		<div class="col-md-12">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>资金方代号</th>
+						<th>账户余额(万元)</th>
+						<th>放款金额</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="obj in dataList">
+						<td>
+							<label ng-bind="obj.fundDesc"></label>
+						</td>
+						<td>
+							<label ng-if="obj.fundCode!='114'&&obj.fundCode!='115'&&obj.fundCode!='1000'">-</label>
+							<label ng-if="obj.fundCode=='114'">
+								<span style="color:red"> 一期: {{ynAccoumt.Balance}}</span>
+								<a href="javascript:void(0)" ng-click="yunNanAccoumt(obj.fundCode,1)">刷新</a>
+							</label>
+							<label ng-if="obj.fundCode=='115'">
+								<span style="color:red">二期：{{ynAccoumt.Balance}}</span>
+								<a href="javascript:void(0)" ng-click="yunNanAccoumt(obj.fundCode,1)">刷新</a>
+							</label>
+							<label ng-if="obj.fundCode=='1000'">
+								<span style="color:red">陕国投：{{sgtAccoumts.acctBal/10000}}</span>
+								<a href="javascript:void(0)" ng-click="sgtAccoumt(1)">刷新</a>
+							</label>
+						</td>
+						<td>
+							<div class="form-inline">
+								<label>放款金额：</label>
+								<span ng-bind="obj.loanAmount"></span>万
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;推送资方信息</div>
+		<div class="col-md-12">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th>资金方代号</th>
+						<th>推送状态</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="obj in dataList" ng-show="obj.fundCode!='001'">
+						<td>
+							<label ng-bind="obj.fundDesc"></label>
+						</td>
+						<td ng-show="obj.fundCode=='114' || obj.fundCode=='115'">
+							<span ng-bind="ynStatus.pushStatus.msg"></span>
+							<a href="javascript:void(0)" ng-init="yunnanRefresh()" ng-click="yunnanRefresh(true)">刷新</a>
+						</td>
+						<td ng-show="obj.fundCode=='110'">
+							<span ng-bind="huarongMsg?huarongMsg:'待资料推送'"></span>
+							<a href="javascript:void(0)" ng-init="huarongRefresh1()" ng-click="huarongRefresh1(true)">刷新</a>
+						</td>
+						<td ng-show="obj.fundCode!='114'&&obj.fundCode!='115'&&obj.fundCode!='110'">
+							{{pushstatus}}
+						</td>
+						<td>
+							<a href="javascript:void(0)" ng-click="uploadInfo(obj.fundCode,obj)">资料推送</a>
+							<a href="javascript:void(0)" ng-show="(obj.fundCode=='114' || obj.fundCode=='115') && (ynStatus.pushStatus.msg != '推送失败' && ynStatus.pushStatus.msg != '待推送资料' )" ng-click="getContractFile()">合同下载</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="form-group">
+			<textarea class="form-control" rows="5" ng-model="remark" id="remark" placeholder="如有特殊说明，请在此处备注（非必填）" />
+		</div>
+		<div class="col-md-12">
+			<button type="button" class="btn btn-primary" ng-click="toFinance();">提交</button>
+			<button type="button" class="btn btn-warning" ng-show="!orderIsBack" ng-click="backToSubmit()">退回</button>
+		</div>
+	</div>
+	<!--表格end-->
+</div>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.FddMortgageStorageMapper">
+	
+	<select id="findByStorage" parameterType="java.lang.String" resultType="FddMortgageStorageDto">
+	   select *, DATE_FORMAT(collateralTime,'%Y-%m-%d') as collateralTimeStr 
+	    from tbl_process_app_fdd_mortgage_storage  where orderNo=#{0} order by createTime desc  limit 1;
+	</select>
+	
+	<insert id="addStorage" parameterType="FddMortgageStorageDto" >
+	   INSERT INTO `anjbo-server-process`.`tbl_process_app_fdd_mortgage_storage` (
+	     `createUid`, `createTime`, `updateUid`, `updateTime`, `orderNo`, `region`, `housePropertyType`, `houseName`, `housePropertyNumber`, `collateralTime`, `collateralUid`, `remark`
+	   ) VALUES (
+	      #{createUid}, now(), #{updateUid}, now(), #{orderNo}, #{region}, #{housePropertyType}, #{houseName}, #{housePropertyNumber}, #{collateralTime}, #{collateralUid}, #{remark}
+	   );
+	</insert>
+	<update id="updStorage" parameterType="FddMortgageStorageDto">
+	   update `anjbo-server-process`.`tbl_process_app_fdd_mortgage_storage` 
+	     <set>
+		    <if test="updateUid!= null and updateUid !='' " >
+        		updateUid = #{updateUid},
+      		</if>
+      		<if test="region != null and region !='' " >
+        		region = #{region},
+      		</if>
+			<if test="housePropertyType != null and housePropertyType !='' " >
+        		housePropertyType = #{housePropertyType},
+      		</if>
+      		<if test="houseName != null and houseName !='' " >
+        		houseName = #{houseName},
+      		</if>
+      		<if test="housePropertyNumber != null and housePropertyNumber !='' " >
+        		housePropertyNumber = #{housePropertyNumber},
+      		</if>
+      		<if test="collateralTime != null  " >
+        		collateralTime = #{collateralTime},
+      		</if>
+      		<if test="collateralUid!=null and collateralUid!=''">
+      		    collateralUid = #{collateralUid},
+      		</if>
+      		<if test="remark!= null and remark !='' " >
+	        	remark = #{remark},
+	      	</if>
+	      </set>
+		where orderNo = #{orderNo}
+	</update>
+</mapper>

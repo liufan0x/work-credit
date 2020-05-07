@@ -1,0 +1,40 @@
+<!--推送应还款计划start-->
+<div class="lhw-alert-bg" ng-if="isPush">
+	<div class="lhw-alert-box" style="width:1100px;">
+		<div class="lhw-alert-tit relative">以下信息推送给资金方114
+			<div class="lhw-x" ng-click="yunnanRepaymentPlanDtoCancel()"></div>
+		</div>
+		<div>
+			<div class="row">
+				<div class="col-md-12" style="padding-top:10px;">
+					<ul class="nav nav-tabs">
+						<li ng-class="{'active':title=='forShow'}">
+							<a href="javascript:void(0);" ng-click="title='forShow'">应还款计划</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div>
+				<div class="row form-inline detail-row w147" style="padding:30px 10px; ">
+					<div class="col-md-6 col-lg-6">
+						<label>计划还款时间:</label> <input type="text" readonly ng-model="yunnanRepaymentPlanDto.repayDate" class="form-control form_dateu" />
+					</div>
+					<div class="col-md-6 col-lg-6">
+						<label>借款期限:</label> <input type="text" ng-model="yunnanRepaymentPlanDto.borrowingDays" class="form-control" />天
+					</div>
+					<div class="col-md-6 col-lg-6">
+						<label>计划还款本金:</label> <input type="text" ng-model="yunnanRepaymentPlanDto.repayPrincipal" class="form-control" />元
+					</div>
+					<div class="col-md-6 col-lg-6">
+						<label>计划还款利息:</label> <input type="text" ng-model="yunnanRepaymentPlanDto.repayProfit" class="form-control" />元
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="lhw-alert-but">
+			<button type="button" class="btn btn-primary lhw-alert-ok1" ng-click="yunnanRepaymentPlanDtoSubmit()" style="margin-right:80px;">提交并发送应还款计划</button>
+			<button type="button" class="btn btn-danger lhw-alert-cancel1" ng-click="yunnanRepaymentPlanDtoCancel()">该订单不发送应还款计划</button>
+		</div>
+	</div>
+</div>
+<!--推送end-->

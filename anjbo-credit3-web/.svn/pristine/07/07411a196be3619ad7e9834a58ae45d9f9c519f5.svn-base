@@ -1,0 +1,36 @@
+<style>
+    .form-inline.w112 label{width:112px;}
+    .form-inline.w154 label{width:154px;}
+    .form-inline.w154 .form-control{width:150px}
+</style>
+<form name="yntrustAppointForm">
+    <div class="row form-inline detail-row" style="padding:0 10px;">
+        <div class="col-md-6 col-lg-6 ">
+            <label  style="width:154px;">借款人姓名: </label> <span ng-bind="ynObj.shortName"></span>
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <label  style="width:154px;">证件类型:</label> <span ng-bind="ynObj.cardTypeName"></span>
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <label  style="width:154px;">证件号:</label> <span ng-bind="ynObj.iDCardNo"></span>
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <label  style="width:154px;">手机号:</label> <span ng-bind="ynObj.telephoneNo"></span>
+        </div>
+       <div class="col-md-6 col-lg-6">
+            <label  style="width:154px;">婚姻状况:</label> <span ng-bind="ynObj.maritalStatusName"></span>
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <label  style="width:154px;">职业分类:</label> <span ng-bind="ynObj.jobTypeName"></span>
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <label  style="width:154px;">现居住城市:</label> <span ng-bind="ynObj.cityName"></span>
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <label  style="width:154px;">角色分类:</label> <span ng-bind="ynObj.roleTypeName"></span>
+        </div>
+        <div class="col-md-6 col-lg-6">
+            <label  style="width:154px;">期数: </label> <span ng-bind="ynObj.ynProductName"></span>
+        </div>
+    </div>
+</form>

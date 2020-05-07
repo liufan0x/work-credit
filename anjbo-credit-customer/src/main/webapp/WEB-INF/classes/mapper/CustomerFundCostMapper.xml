@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+<mapper namespace="com.anjbo.dao.CustomerFundCostMapper">	
+	<!-- where条件引用sql-->
+	<sql id="customerFundCostWhereSQL">
+		<where>
+	       		<if test="fundId != null and fundId > 0">
+					and `fundId` = #{fundId}
+				</if>
+	       		<if test="productId != null and productId > 0">
+					and `productId` = #{productId}
+				</if>
+	       		<if test="dayRate != null and dayRate > 0">
+					and `dayRate` = #{dayRate}
+				</if>
+	       		<if test="overdueRate != null and overdueRate > 0">
+					and `overdueRate` = #{overdueRate}
+				</if>
+	       		<if test="overdueRateHas != null and overdueRateHas > 0">
+					and `overdueRateHas` = #{overdueRateHas}
+				</if>
+	       		<if test="riskProvision != null and riskProvision > 0">
+					and `riskProvision` = #{riskProvision}
+				</if>
+	       		<if test="riskProvisionHas != null and riskProvisionHas > 0">
+					and `riskProvisionHas` = #{riskProvisionHas}
+				</if>
+	       		<if test="discountHas != null and discountHas > 0">
+					and `discountHas` = #{discountHas}
+				</if>
+	       		<if test="createTime != null">
+					and `createTime` = #{createTime}
+				</if>
+	       		<if test="updateTime != null">
+					and `updateTime` = #{updateTime}
+				</if>
+	       		<if test="createUid != null and createUid != ''">
+					and `createUid` = #{createUid}
+				</if>
+	       		<if test="updateUid != null and updateUid != ''">
+					and `updateUid` = #{updateUid}
+				</if>
+	       		<if test="remark != null and remark != ''">
+					and `remark` = #{remark}
+				</if>
+		</where>
+	</sql>
+	<!-- 获取合作资金方业务产品列表-->
+	<select id="selectCustomerFundCostList" parameterType="customerFundCostDto" resultType="customerFundCostDto">
+		select * from tbl_customer_fund_cost
+		<include refid="customerFundCostWhereSQL" />
+		order by createTime desc 
+		<if test="pageSize>0">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	
+	<!-- 获取合作资金方业务产品总数-->
+	<select id="selectCustomerFundCostCount" parameterType="customerFundCostDto" resultType="int">
+		select count(*) from tbl_customer_fund_cost
+		<include refid="customerFundCostWhereSQL" />
+	</select>	
+		
+	<!-- 新增合作资金方业务产品-->
+	<insert id="addCustomerFundCost" parameterType="customerFundCostDto" >
+		<selectKey resultType="int" keyProperty="id">
+			select
+			last_insert_id()
+		</selectKey>
+		insert	into tbl_customer_fund_cost(
+			<trim suffixOverrides=",">
+				<if test="fundId != null">`fundId`,</if>
+				<if test="productId != null">`productId`,</if>
+				<if test="dayRate != null">`dayRate`,</if>
+				<if test="overdueRate != null">`overdueRate`,</if>
+				<if test="overdueRateHas != null">`overdueRateHas`,</if>
+				<if test="riskProvision != null">`riskProvision`,</if>
+				<if test="riskProvisionHas != null">`riskProvisionHas`,</if>
+				<if test="discountHas != null">`discountHas`,</if>
+				<if test="createTime != null">`createTime`,</if>
+				<if test="updateTime != null">`updateTime`,</if>
+				<if test="createUid != null">`createUid`,</if>
+				<if test="updateUid != null">`updateUid`,</if>
+				<if test="remark != null">`remark`,</if>
+			</trim>
+		)
+		values(	
+			<trim suffixOverrides=",">
+				<if test="fundId != null">#{fundId},</if>
+				<if test="productId != null">#{productId},</if>
+				<if test="dayRate != null">#{dayRate},</if>
+				<if test="overdueRate != null">#{overdueRate},</if>
+				<if test="overdueRateHas != null">#{overdueRateHas},</if>
+				<if test="riskProvision != null">#{riskProvision},</if>
+				<if test="riskProvisionHas != null">#{riskProvisionHas},</if>
+				<if test="discountHas != null">#{discountHas},</if>
+				<if test="createTime != null">#{createTime},</if>
+				<if test="updateTime != null">#{updateTime},</if>
+				<if test="createUid != null">#{createUid},</if>
+				<if test="updateUid != null">#{updateUid},</if>
+				<if test="remark != null">#{remark},</if>
+			</trim>
+		)
+	</insert>
+	
+	<!-- 修改合作资金方业务产品-->
+	<update id="updateCustomerFundCost" parameterType="customerFundCostDto" >
+	 update tbl_customer_fund_cost
+	<set> 
+			<trim suffixOverrides=",">
+				<if test="fundId != null">`fundId` = #{fundId},</if>
+				<if test="productId != null">`productId` = #{productId},</if>
+				<if test="dayRate != null">`dayRate` = #{dayRate},</if>
+				<if test="overdueRate != null">`overdueRate` = #{overdueRate},</if>
+				<if test="overdueRateHas != null">`overdueRateHas` = #{overdueRateHas},</if>
+				<if test="riskProvision != null">`riskProvision` = #{riskProvision},</if>
+				<if test="riskProvisionHas != null">`riskProvisionHas` = #{riskProvisionHas},</if>
+				<if test="discountHas != null">`discountHas` = #{discountHas},</if>
+				<if test="createTime != null">`createTime` = #{createTime},</if>
+				<if test="updateTime != null">`updateTime` = #{updateTime},</if>
+				<if test="createUid != null">`createUid` = #{createUid},</if>
+				<if test="updateUid != null">`updateUid` = #{updateUid},</if>
+				<if test="remark != null">`remark` = #{remark},</if>
+			</trim>
+	</set> 
+	 where id = #{id}
+	</update>
+
+	<!-- 根据ID删除合作资金方业务产品-->
+    <delete id="deleteCustomerFundCostById" parameterType="int">
+		delete	from tbl_customer_fund_cost where id = #{0}
+    </delete>
+
+	<!-- 根据ID查询合作资金方业务产品 -->
+	
+	<select id="selectCustomerFundCostById" parameterType="int" resultType="customerFundCostDto">
+		select	* from tbl_customer_fund_cost where id = #{0}
+	</select>
+	
+	<select id="selectCustomerFundCostByFundId" parameterType="customerFundCostDto" resultType="customerFundCostDto">
+	select	* from tbl_customer_fund_cost where fundId = #{fundId} and productId = #{productId}
+	</select>
+	
+</mapper>

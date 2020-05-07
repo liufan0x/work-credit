@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.cm.AssessResultMapper" >
+  
+  <insert id="addAssessResult" parameterType="map" >
+    insert into tbl_cm_assess_result (
+	      orderNo, 
+	      houseUse, 
+	      totalAmount, 
+	      netDeedTax, 
+	      netAllTax, 
+	      result, 
+	      reason
+      ) values (
+      	  #{orderNo}, 
+	      #{houseUse}, 
+	      #{totalAmount}, 
+	      #{netDeedTax}, 
+	      #{netAllTax}, 
+	      #{result}, 
+	      #{reason}
+      )
+  </insert>
+  <select id="selectAssessResultList" parameterType="java.lang.String" resultType="AssessResultDto">
+  	select * from tbl_cm_order_assess_result
+ 	<if test="orderNo!=null and orderNo!=''">
+ 		where orderNo=#{orderNo}
+ 	</if>
+ 	order by orderNo,createTime
+  </select>
+</mapper>

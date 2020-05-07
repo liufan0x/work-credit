@@ -1,0 +1,37 @@
+<div class="container-fluid" id="lendingPay">
+	<!--标题-->
+	<div class="row">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;付利息信息
+			<a ng-show="!isEdit" style="display:inline-block;float:right;padding-right: 10px;" ui-sref="orderList" >返回上一步</a>
+			<span ng-show="isEdit" class="detail-trash2 text-danger" ng-click="deleteDetail('lending-pay-detail')" >隐藏</span>
+			<div style="position:absolute;right:400px;top:0px;">
+				  <!-- <span id="elementFlag" ng-bind="elementFlag">是否已收到要件：是</span>
+				  <span><a id="elementInfo" ng-bind="elementInfo" ng-click="showDetail('elementEntrance');">要件详情</a></span> -->
+			</div>
+		</div>
+	</div>
+	<!--标题 end-->
+	<div class="row detail-row detail-lhw" >
+		<div class="col-md-6 col-lg-4"><label>应付利息：</label><span ng-bind="obj.payInterestMoney"></span> 元</div>
+		<div class="col-md-6 col-lg-4"><label>付利息时间：</label><span ng-bind="obj.payTime| date:'yyyy-MM-dd' "></span>
+<!-- 		<span ng-if="obj.payImg!='' && obj.payImg!=null"><a ng-repeat="img in obj.imgs" href="{{img}}" target="付利息图片" >图片.jpg &nbsp;</a></span> -->
+		<!--图片 放大插件-->
+			 <span class=" gallerys" ng-if="obj.payImg!='' && obj.payImg!=null">
+			    <a class="view-pic" onclick="laa(this)">查看图片</a>
+				<img ng-repeat="img in obj.imgs" src="{{img}}"   class="detail-img gallery-pic" style="display:none">
+			</span>
+			<!--图片end--> 
+		</div>
+	</div>
+	<!--备注-->
+	<!-- <div class="row relative" ng-if="obj.remark!='' && obj.remark!=null">
+		<span class="remark-span remark-lhw">备注：</span>
+		<textarea class="remark-p remark-lhw-p textarea-lhw" ng-bind="obj.remark" readonly="readonly"  > </textarea>
+	</div> -->
+	<!--备注end-->
+</div>
+<script> 
+ function laa(a){  
+	$.openPhotoGallery($(a).next("img"));
+}
+</script>

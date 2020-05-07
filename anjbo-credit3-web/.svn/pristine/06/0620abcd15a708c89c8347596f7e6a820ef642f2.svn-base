@@ -1,0 +1,72 @@
+<div class="container-fluid">
+	
+	<place-order-detail></place-order-detail>
+
+	<div id="viewRow">
+		
+	</div>
+	
+	<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;财务制单</div>
+	
+	<div class="row detail-row form-inline" ng-if="order.productCode!='04'">
+		<br/>
+		<div class="col-md-12" >
+			<span>云南信托账户余额：一期：<span ng-bind="balance" style="color: red;"></span>万元&nbsp; 二期：<span ng-bind="secondBalance" style="color: red;"></span>万元&nbsp;<a ng-click="queryTrustAccount(1)">刷新</a></span>
+		</div>
+	</div>
+	<div class="row detail-row form-inline" ng-if="order.productCode=='04'">
+		<div class="col-md-6 col-lg-4"><label>客户姓名：</label><span ng-bind="borrowInfo.custName"></span></div>
+		<div class="col-md-6 col-lg-4"><label>借款期限：</label><span ng-bind="contractInfo.termLoan"></span> 期</div>
+		<div class="col-md-6 col-lg-4"><label>放款金额：</label><span ng-bind="contractInfo.pactAmt"></span> 万元</div>
+		<div class="col-md-6 col-lg-4"><label>放款银行：</label><span ng-bind="applyLoanInfo.lendingBank"></span></div>
+		<div class="col-md-6 col-lg-4"><label>放款支行：</label><span ng-bind="applyLoanInfo.lendingBankSub"></span></div>
+		<div class="col-md-6 col-lg-4"><label>放款卡账号：</label><span ng-bind="applyLoanInfo.bankAccount"></span></div>
+		<div class="col-md-6 col-lg-4"><label>放款卡户名：</label><span ng-bind="applyLoanInfo.bankName"></span></div>
+		<div class="col-md-6 col-lg-4">
+			<label>账号类型：</label>
+			<select class="form-control" name="customerType" style="width:178px;" ng-model="order.customerType" required> 
+				<option value="1" ng-selected="order.customerType==1">个人借记卡账户</option>
+	    		<option value="2" ng-selected="order.customerType==2">企业账户</option>
+	    	</select>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>放款卡照片：</label>
+			<span class=" gallerys" ng-if="applyLoanInfo.payAccountImg!='' && applyLoanInfo.payAccountImg!=null">
+			    <a class="view-pic" onclick="laa(this)">查看图片</a>
+				<img ng-repeat="img in applyLoanInfo.ckimgs" src="{{img}}"   class="detail-img gallery-pic" style="display:none">
+			 </span>
+			 <span class=" gallerys" ng-if="applyLoanInfo.payAccountImg=='' || applyLoanInfo.payAccountImg==null">暂无图片</span>
+		</div>
+		<div class="col-md-6 col-lg-4"><label>账户用途：</label><span>放款账户</span></div>
+		<div class="col-md-6 col-lg-4">
+			<label>证件类型：</label>
+			<select class="form-control sel" name="idType" ng-model="borrowInfo.idType" ng-options="x.id as x.name for x in idTypeA" disabled="disabled">
+				<option value="">请选择</option>
+			</select>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>证件号码：</label>
+			<span ng-bind="borrowInfo.idNo"></span>
+		</div>
+		<div class="col-md-6 col-lg-4"><label>银行预留手机号：</label><span ng-bind="borrowInfo.phoneNo"></span></div>
+		
+		<div class="col-md-6 col-lg-4"><label>信托账户余额：</label><span style="color: red;" ng-bind="sgtAccoumts.acctBal/10000"></span> 万元<a ng-click="sgtAccoumt(1)">刷新</a></div>
+	</div>
+	
+	<div class="row">
+		<div class="form-group">
+			<textarea class="form-control" rows="5" ng-model="obj1.remark" placeholder="如有特殊说明，请在此处备注（非必填）"/>
+		</div>
+		<div class="col-md-12">
+		    <button type="button" class="btn btn-primary" ng-click="submit()">提交</button>
+			<button type="button" class="btn btn-warning"  ng-click="showBack()">退回</button>
+		</div>
+	</div>
+	
+</div>
+
+<script> 
+ function laa(a){  
+	$.openPhotoGallery($(a).next("img"));
+}
+</script>

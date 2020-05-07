@@ -1,0 +1,31 @@
+<div class="container-fluid" id="mortgage">
+	<!--标题-->
+	<div class="row">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;抵押信息
+			<a ng-show="!isEdit" style="display:inline-block;float:right;padding-right: 10px;" ui-sref="orderList" >返回上一步</a>
+			<span ng-show="isEdit" class="detail-trash2 text-danger" ng-if="productCode=='04'" ng-click="deleteDetail('fdd-mortgage-detail')" >隐藏</span>
+			<span ng-show="isEdit" class="detail-trash2 text-danger" ng-if="productCode!='04'" ng-click="deleteDetail('mortgage-detail')" >隐藏</span>
+			<div style="position:absolute;right:400px;top:0px;">
+			  <span id="elementFlag" ng-bind="elementFlag">是否已收到要件：是</span>
+			  <span><a id="elementInfo" ng-bind="elementInfo" ng-click="showDetail('elementEntrance');">要件详情</a></span>
+			</div>
+		</div>
+	</div>
+	<!--标题 end-->
+	<div class="row detail-row detail-lhw" >
+		<div class="col-md-6 col-lg-4"><label>抵押日期：</label><span ng-bind="obj.mortgageTime | date:'yyyy-MM-dd' "> </div>
+		<div class="col-md-6 col-lg-4"><label>国土局：</label><span ng-bind="obj.mlandBureauName"></span></div>
+		<div ng-if="productCode=='04'" class="col-md-6 col-lg-4"><label>抵押机构名称：</label><span ng-bind="obj.mortgageName"></span></div>
+	</div>
+	<!--备注-->
+	<div class="row relative" ng-if="obj.remark!='' && obj.remark!=null">
+		<span class="remark-span remark-lhw" style="line-height:30px;">备注：</span>
+		<textarea class="remark-textarea remark-lhw-p textarea-lhw" ng-bind="obj.remark" readonly="readonly" style="margin-left: 150px;" > </textarea>
+	</div>
+	<!--备注end-->
+ 	<!--图片 放大插件-->
+	<div class="row gallerys">
+		<img ng-repeat="img in obj.imgs" ng-src="{{img}}" width="150" height="150" class="detail-img gallery-pic">
+	</div>
+	<!--图片end-->
+</div>

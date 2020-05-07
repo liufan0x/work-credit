@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.OrderBusinfoTypeMapper" >
+
+	<select id="getParentBusInfoTypes" parameterType="java.util.Map" resultType="java.util.Map" >
+	  select * from 
+	  tbl_order_businfo_type 
+	  WHERE pid&lt;1
+	  <if test="productCode != null and productCode != ''">
+	  	and productCode=#{productCode}
+	  </if>
+	  <!-- 只展示畅贷面签资料 -->
+	  <if test="isChangLoan != null and isChangLoan == 1">
+	  	and (id=60000 or id=60300)
+	  </if>
+    </select> 
+    <select id="searchByProductCode" resultType="java.util.Map" >
+	  select productCode, pid, id, name, isMust from 
+	  tbl_order_businfo_type 
+	  WHERE productCode=#{productCode}
+    </select>
+    
+    <select id="getSonBusInfoTypes" parameterType="java.util.Map" resultType="java.util.Map" >
+	SELECT
+		bt.*,count(b.orderNo) docCount
+	FROM
+		tbl_order_businfo_type bt
+	LEFT JOIN 
+	tbl_order_businfo b
+	ON bt.id = b.typeId AND b.orderNo=#{orderNo}
+	WHERE
+		1 = 1
+ 	<if test="productCode != null and productCode != ''">
+  		and productCode=#{productCode}
+    </if>
+	GROUP BY bt.id 
+  </select>
+  
+  <select id="getAllType" parameterType="java.util.Map" resultType="java.util.Map" >
+  	select * from tbl_order_businfo_type
+  	where 1=1 
+  	and pid >0 and productCode = (select productCode from tbl_order_businfo_type where id=#{typeId}) 
+  </select>
+  
+  <!-- 带二维码资料上传分类 -->
+	<select id="getAllBusType" resultType="Map">
+		select id,name,pid,remark,isFaceInfo
+		from 
+			tbl_fc_order_businfo_type
+		where 
+			isFaceInfo =1 and pid &gt;-1
+	</select>
+	<!-- 查询影像资料子类型 -->
+	<select id="getSonType" resultType="Map" parameterType="java.util.Map">
+		SELECT * FROM tbl_order_businfo_type t WHERE t.id in (${typeId})
+	</select>
+	
+	<!-- 查询订单提交审核前需要上传的影像资料类型数 -->
+	<select id="mustBusInfoCount" resultType="int" parameterType="Map">
+		select count(1) from tbl_order_businfo_type 
+		where isMust = 1 
+		<if test="auditSort != null and auditSort == 1">
+			and pid!=10000 and pid!=20000 and pid!=60000 and pid!=70000 and pid!=80000
+		</if>
+		<if test="notarizationType != null and notarizationType == '不公证'">
+			and id != 70008
+		</if>
+		and productCode = #{productCode}
+	</select>
+	
+	<!-- 查询面签需要上传的影像资料类型数 -->
+	<select id="mustFaceBusInfoCount" resultType="int" parameterType="Map">
+		select count(1) from tbl_order_businfo_type 
+		where 
+			productCode = ${productCode} and isMust = 1
+		<if test="productCode != null and productCode == '01'">
+			and pid = 10000
+		</if>
+		<if test="productCode != null and productCode == '02'">
+			and pid = 20000
+		</if>
+		<if test="productCode != null and productCode == '03'">
+			and pid = 60000
+		</if>
+		<if test="productCode != null and productCode == '04'">
+			and pid = 70000 and id != 70008
+		</if>
+	</select>
+</mapper>

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.sgtong.SgtongMortgagorInformationMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<if test="null!=gcustName and ''!=gcustName"> AND `gcustName`=#{gcustName}</if>
+		<if test="null!=gcustIdtype and ''!=gcustIdtype"> AND `gcustIdtype`=#{gcustIdtype}</if>
+		<if test="null!=gcustIdno and ''!=gcustIdno"> AND `gcustIdno`=#{gcustIdno}</if>
+		<if test="null!=gworkType and ''!=gworkType"> AND `gworkType`=#{gworkType}</if>
+		<if test="null!=gtype and ''!=gtype"> AND `gtype`=#{gtype}</if>
+		<if test="null!=gname and ''!=gname"> AND `gname`=#{gname}</if>
+		<if test="null!=gvalue and ''!=gvalue"> AND `gvalue`=#{gvalue}</if>
+		<if test="null!=glicno and ''!=glicno"> AND `glicno`=#{glicno}</if>
+		<if test="null!=glicType and ''!=glicType"> AND `glicType`=#{glicType}</if>
+		<if test="null!=gbegBal and ''!=gbegBal"> AND `gbegBal`=#{gbegBal}</if>
+		<if test="null!=gsmType and ''!=gsmType"> AND `gsmType`=#{gsmType}</if>
+		<if test="null!=ifCar and ifCar>0"> AND `ifCar`=#{ifCar}</if>
+		<if test="null!=ifCarCred and ifCarCred>0"> AND `ifCarCred`=#{ifCarCred}</if>
+		<if test="null!=ifRoom and ifRoom>0"> AND `ifRoom`=#{ifRoom}</if>
+		<if test="null!=ifMort and ifMort>0"> AND `ifMort`=#{ifMort}</if>
+		<if test="null!=ifCard and ifCard>0"> AND `ifCard`=#{ifCard}</if>
+		<if test="null!=cardAmt and ''!=cardAmt"> AND `cardAmt`=#{cardAmt}</if>
+		<if test="null!=ifApp and ifApp>0"> AND `ifApp`=#{ifApp}</if>
+		<if test="null!=ifPact and ifPact>0"> AND `ifPact`=#{ifPact}</if>
+		<if test="null!=ifId and ifId>0"> AND `ifId`=#{ifId}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="SgtongMortgagorInformationDto" resultType="SgtongMortgagorInformationDto">    
+	SELECT `id`, `orderNo`, `gcustName`, `gcustIdtype`, `gcustIdno`, `gworkType`, `gtype`, `gname`, `gvalue`, `glicno`, `glicType`, `gbegBal`, `gsmType`, `ifCar`, `ifCarCred`, `ifRoom`, `ifMort`, `ifCard`, `cardAmt`, `ifApp`, `ifPact`, `ifId` 
+	FROM tbl_third_sgtong_mortgagor_information 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="SgtongMortgagorInformationDto" resultType="SgtongMortgagorInformationDto">
+	SELECT `id`, `orderNo`, `gcustName`, `gcustIdtype`, `gcustIdno`, `gworkType`, `gtype`, `gname`, `gvalue`, `glicno`, `glicType`, `gbegBal`, `gsmType`, `ifCar`, `ifCarCred`, `ifRoom`, `ifMort`, `ifCard`, `cardAmt`, `ifApp`, `ifPact`, `ifId`
+	FROM tbl_third_sgtong_mortgagor_information 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="SgtongMortgagorInformationDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_third_sgtong_mortgagor_information 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="SgtongMortgagorInformationDto" useGeneratedKeys="true" keyProperty="id">
+   
+    <selectKey keyProperty="count" resultType="int" order="BEFORE">
+    select count(1) from tbl_third_sgtong_mortgagor_information where `orderNo`=#{orderNo}
+  </selectKey>
+  <if test="count > 0">
+    UPDATE tbl_third_sgtong_mortgagor_information
+	<set>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=gcustName">`gcustName`=#{gcustName},</if>
+		<if test="null!=gcustIdtype">`gcustIdtype`=#{gcustIdtype},</if>
+		<if test="null!=gcustIdno">`gcustIdno`=#{gcustIdno},</if>
+		<if test="null!=gworkType">`gworkType`=#{gworkType},</if>
+		<if test="null!=gtype">`gtype`=#{gtype},</if>
+		<if test="null!=gname">`gname`=#{gname},</if>
+		<if test="null!=gvalue">`gvalue`=#{gvalue},</if>
+		<if test="null!=glicno">`glicno`=#{glicno},</if>
+		<if test="null!=glicType">`glicType`=#{glicType},</if>
+		<if test="null!=gbegBal">`gbegBal`=#{gbegBal},</if>
+		<if test="null!=gsmType">`gsmType`=#{gsmType},</if>
+		<if test="null!=ifCar">`ifCar`=#{ifCar},</if>
+		<if test="null!=ifCarCred">`ifCarCred`=#{ifCarCred},</if>
+		<if test="null!=ifRoom">`ifRoom`=#{ifRoom},</if>
+		<if test="null!=ifMort">`ifMort`=#{ifMort},</if>
+		<if test="null!=ifCard">`ifCard`=#{ifCard},</if>
+		<if test="null!=cardAmt">`cardAmt`=#{cardAmt},</if>
+		<if test="null!=ifApp">`ifApp`=#{ifApp},</if>
+		<if test="null!=ifPact">`ifPact`=#{ifPact},</if>
+		<if test="null!=ifId">`ifId`=#{ifId},</if>
+	</set>
+	WHERE `orderNo`=#{orderNo}
+  </if>
+  <if test="count==0">
+   INSERT INTO tbl_third_sgtong_mortgagor_information(
+		`orderNo`,
+		`gcustName`,
+		`gcustIdtype`,
+		`gcustIdno`,
+		`gworkType`,
+		`gtype`,
+		`gname`,
+		`gvalue`,
+		`glicno`,
+		`glicType`,
+		`gbegBal`,
+		`gsmType`,
+		`ifCar`,
+		`ifCarCred`,
+		`ifRoom`,
+		`ifMort`,
+		`ifCard`,
+		`cardAmt`,
+		`ifApp`,
+		`ifPact`,
+		`ifId`
+	) VALUES(
+		#{orderNo},
+		#{gcustName},
+		#{gcustIdtype},
+		#{gcustIdno},
+		#{gworkType},
+		#{gtype},
+		#{gname},
+		#{gvalue},
+		#{glicno},
+		#{glicType},
+		#{gbegBal},
+		#{gsmType},
+		#{ifCar},
+		#{ifCarCred},
+		#{ifRoom},
+		#{ifMort},
+		#{ifCard},
+		#{cardAmt},
+		#{ifApp},
+		#{ifPact},
+		#{ifId}
+	)	
+  </if>
+   
+   
+   
+ 
+  </insert>
+
+
+  <delete id="delete" parameterType="SgtongMortgagorInformationDto" >
+    DELETE FROM tbl_third_sgtong_mortgagor_information 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="SgtongMortgagorInformationDto" >
+    UPDATE tbl_third_sgtong_mortgagor_information
+	<set>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=gcustName">`gcustName`=#{gcustName},</if>
+		<if test="null!=gcustIdtype">`gcustIdtype`=#{gcustIdtype},</if>
+		<if test="null!=gcustIdno">`gcustIdno`=#{gcustIdno},</if>
+		<if test="null!=gworkType">`gworkType`=#{gworkType},</if>
+		<if test="null!=gtype">`gtype`=#{gtype},</if>
+		<if test="null!=gname">`gname`=#{gname},</if>
+		<if test="null!=gvalue">`gvalue`=#{gvalue},</if>
+		<if test="null!=glicno">`glicno`=#{glicno},</if>
+		<if test="null!=glicType">`glicType`=#{glicType},</if>
+		<if test="null!=gbegBal">`gbegBal`=#{gbegBal},</if>
+		<if test="null!=gsmType">`gsmType`=#{gsmType},</if>
+		<if test="null!=ifCar">`ifCar`=#{ifCar},</if>
+		<if test="null!=ifCarCred">`ifCarCred`=#{ifCarCred},</if>
+		<if test="null!=ifRoom">`ifRoom`=#{ifRoom},</if>
+		<if test="null!=ifMort">`ifMort`=#{ifMort},</if>
+		<if test="null!=ifCard">`ifCard`=#{ifCard},</if>
+		<if test="null!=cardAmt">`cardAmt`=#{cardAmt},</if>
+		<if test="null!=ifApp">`ifApp`=#{ifApp},</if>
+		<if test="null!=ifPact">`ifPact`=#{ifPact},</if>
+		<if test="null!=ifId">`ifId`=#{ifId},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

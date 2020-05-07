@@ -1,0 +1,70 @@
+<style>
+.w180 label{width:180px;}
+</style>
+<form class="form-inline w180" name="archiveAddForm" id="archiveAddForm">
+	<div class="row detail-row" >
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;1.查档信息</div>
+		
+		<div class="col-md-6 col-lg-4"><label>产权证类型：</label>
+			<span ng-if="archive.estateType==0">房地产权证书</span><span ng-if="archive.estateType==1">不动产权证书(粤{{archive.yearNo}})</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>房产证号：</label>
+			<span ng-bind="archive.estateNo"></span>
+		</div>
+		
+		<div class="col-md-6 col-lg-4"><label>姓名/身份证号：</label>
+			<span ng-bind="archive.identityNo"></span>
+		</div>
+		
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;2.查档设置
+				 <button ng-if="flag2 && meunAuth.indexOf('auth19auth')>=0" type="button" ng-click="edit()" class="btn btn-info detail-right-save">修改</button>
+				 <button ng-if="flag && meunAuth.indexOf('auth19auth')>=0" type="button" ng-click="save()" class="btn btn-info detail-right-save">保存</button>
+				</div>
+		
+		<div class="col-md-6 col-lg-12"><label>查询开始时间-结束时间：</label>
+			<span ng-if="flag2"><span ng-bind="archive.startTime"></span> - <span ng-bind="archive.endTime"></span></span>
+			<span ng-if="flag">
+			<input size="16" type="text" name="startTime" ng-model="archive.startTime" class="form-control form_date">
+					-
+			<input size="16" type="text" name="endTime" ng-model="archive.endTime" class="form-control form_date">
+			</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-12"><label>查询频率：</label>
+			<span ng-if="flag2" ng-bind="archive.queryFrequency"></span>
+			<input type="text" class="form-control" style="width:178px;" ng-if="flag"  ng-model="archive.queryFrequency">次/天
+			<span class="green-word">（一天最多查询五次）</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-12"><label>短信通知：</label>
+			<span ng-if="flag2" ng-bind="archive.phone"></span>
+			<input type="text" class="form-control" style="width:178px;" ng-if="flag"  ng-model="archive.phone">
+			<span class="green-word">（查询结果有变更后，系统会发短信通知您）</span>
+		</div>
+		
+		<div class="col-md-6 col-lg-12"><label>查询用途：</label>
+			<span ng-if="flag2" ng-bind="archive.queryUsageStr"></span>
+			<span ng-show="flag">
+                    <select class="form-control" name="queryUsage" style="width:220px;" ng-model="archive.queryUsage" style="width: 100px;">
+						<option ng-repeat="list in productdto" value="{{list.productCode}}">{{list.productName}}</option>
+					</select>
+					<span class="inputError" ng-show="isAudit">
+						<error ng-show="archiveAddForm.queryUsage.$error.required">必填</error>
+					</span>
+		 	</span>
+		 	
+		</div>
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;3.查档结果</div>
+		
+		<div class="col-md-12 col-lg-12"> 
+			<span ng-if="message.length==0">&nbsp;&nbsp;暂无查询结果</span>
+			<span ng-repeat="e in message">
+		            <p style="line-height:35px;color:#FF9900;">&nbsp;&nbsp;查询时间：{{e.time}}   此结果来自深圳市房地产信息系统</p>
+			        <p>&nbsp;&nbsp;{{e.cont}}</p>
+			        <p>&nbsp;</p>
+		         </span>
+		</div>
+		
+	</div>
+</form>

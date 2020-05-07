@@ -1,0 +1,69 @@
+define(function(require, exports, module){
+
+	exports.extend = function(app){  
+		
+		app.constant('menuList', [
+			//添加机构
+			{templateUrl:"/template/organizationAdd.html", state:"organizationAdd", ctrl:"organizationAddCtrl" , js:"/script/organizationAdd.js" },
+			//编辑节点
+			{templateUrl:"/template/nodeEdit.html", state:"nodeEdit", ctrl:"nodeEditCtrl" , js:"/script/nodeEdit.js" },
+			//添加资金方
+			{templateUrl:"/template/fundAdd.html", state:"fundAdd", ctrl:"fundAddCtrl" , js:"/script/fundAdd.js" },
+			//添加用户
+			{templateUrl:"/template/userAdd.html", state:"userAdd", ctrl:"userAddCtrl" , js:"/script/userAdd.js" },
+			//用户列表
+			{templateUrl:"/template/userList.html", state:"userList", ctrl:"userListCtrl" , js:"/script/userList.js" },
+			//订单列表
+			{templateUrl:"/template/sl/order/orderList.html", state:"orderList", ctrl:"orderListCtrl" , js:"/script/sl/order/orderList.js" },
+			//订单详情
+			{templateUrl:"/template/sl/order/orderDetail.html", state:"orderDetail",  ctrl:"orderDetailCtrl", js:"/script/sl/order/orderDetail.js" ,params:{"orderNo":"0","view":""}},
+			//订单编辑
+			{templateUrl:"/template/sl/order/orderEdit.html", state:"orderEdit",  ctrl:"orderEditCtrl", js:"/script/sl/order/orderEdit.js" ,params:{"orderNo":"0"}},
+			//公证编辑
+			{templateUrl:"/template/sl/process/notarizationEdit.html", state:"orderEdit.notarizationEdit",  ctrl:"notarizationEditCtrl", js:"/script/sl/process/notarizationEdit.js" ,params:{"orderNo":"0"}},
+			//面签编辑
+			{templateUrl:"/template/sl/process/facesignEdit.html", state:"orderEdit.facesignEdit",  ctrl:"facesignEditCtrl", js:"/script/sl/process/facesignEdit.js" ,params:{"orderNo":"0"}},
+			//经理审批编辑
+			{templateUrl:"/template/sl/process/managerAuditEdit.html", state:"orderEdit.managerAuditEdit", ctrl:"managerAuditEditCtrl", js:"/script/sl/process/managerAuditEdit.js" ,params:{"orderNo":"0"}},
+			//风控初审编辑
+			{templateUrl:"/template/sl/risk/auditFirstEdit.html", state:"orderEdit.auditFirstEdit",  ctrl:"auditFirstEditCtrl", js:"/script/sl/risk/auditFirstEdit.js" ,params:{"orderNo":"0"}},
+			//风控终审编辑
+			{templateUrl:"/template/sl/risk/auditFinalEdit.html", state:"orderEdit.auditFinalEdit",  ctrl:"auditFinalEditCtrl", js:"/script/sl/risk/auditFinalEdit.js" ,params:{"orderNo":"0"}},
+			//首席风险官编辑
+			{templateUrl:"/template/sl/risk/auditOfficerEdit.html", state:"orderEdit.auditOfficerEdit",  ctrl:"auditOfficerEditCtrl", js:"/script/sl/risk/auditOfficerEdit.js" ,params:{"orderNo":"0"}},
+			//分配资金方编辑
+			{templateUrl:"/template/sl/risk/allocationFundEdit.html", state:"orderEdit.allocationFundEdit",  ctrl:"allocationFundEditCtrl", js:"/script/sl/risk/allocationFundEdit.js" ,params:{"orderNo":"0"}},
+			//指派还款专员编辑
+			{templateUrl:"/template/sl/process/repaymentMemberEdit.html", state:"orderEdit.repaymentMemberEdit",  ctrl:"repaymentMemberEditCtrl", js:"/script/sl/process/repaymentMemberEdit.js" ,params:{"orderNo":"0"}},
+			//要件校验信息编辑
+			{templateUrl:"/template/sl/element/elementEdit.html", state:"orderEdit.elementEdit",  ctrl:"elementEditCtrl", js:"/script/sl/element/elementEdit.js" ,params:{"orderNo":"0"}},
+			//收利息信息编辑
+			{templateUrl:"/template/sl/finance/lendingHarvestEdit.html", state:"orderEdit.lendingHarvestEdit",  ctrl:"lendingHarvestEditCtrl", js:"/script/sl/finance/lendingHarvestEdit.js" ,params:{"orderNo":"0"}},
+			//付利息信息编辑
+			{templateUrl:"/template/sl/finance/lendingPayEdit.html", state:"orderEdit.lendingPayEdit",  ctrl:"lendingPayEditCtrl", js:"/script/sl/finance/lendingPayEdit.js" ,params:{"orderNo":"0"}},
+			//发放款指令信息编辑
+			{templateUrl:"/template/sl/finance/lendingInstructionsEdit.html", state:"orderEdit.lendingInstructionsEdit",  ctrl:"lendingInstructionsEditCtrl", js:"/script/sl/finance/lendingInstructionsEdit.js" ,params:{"orderNo":"0"}},
+			//放款信息编辑
+			{templateUrl:"/template/sl/finance/lendingEdit.html", state:"orderEdit.lendingEdit",  ctrl:"lendingEditCtrl", js:"/script/sl/finance/lendingEdit.js" ,params:{"orderNo":"0"}},
+			//回款（首期）编辑
+			{templateUrl:"/template/sl/finance/receivableForEdit.html", state:"orderEdit.receivableForEdit",  ctrl:"receivableForEditCtrl", js:"/script/sl/finance/receivableForEdit.js" ,params:{"orderNo":"0"}},
+			//回款（首期）编辑
+			{templateUrl:"/template/sl/finance/receivableForsEdit.html", state:"orderEdit.receivableForsEdit",  ctrl:"receivableForsEditCtrl", js:"/script/sl/finance/receivableForsEdit.js" ,params:{"orderNo":"0"}},
+			//要件退还编辑
+			{templateUrl:"/template/sl/element/elementReturnEdit.html", state:"orderEdit.elementReturnEdit",  ctrl:"elementReturnEditCtrl", js:"/script/sl/element/elementReturnEdit.js" ,params:{"orderNo":"0"}},
+			
+
+
+
+	
+
+			{templateUrl:"/template/detail_index.html", state:"detailIndex",  ctrl:"detailIndexCtrl", js:"/script/detail_index.js" ,params:{"orderNo":"0"}},
+			{templateUrl:"/template/detail.html", state:"detailIndex.detail", ctrl:"detailCtrl", js:"/script/detail.js" ,params:{"orderNo":"0"}},
+			{templateUrl:"/template/apply.html", state:"detailIndex.apply", ctrl:"applyCtrl" , js:"/script/apply.js" },
+		    {templateUrl:"/template/list.html", state:"list", ctrl:"listCtrl" , js:"/script/list.js" },
+				 {templateUrl:"/template/permission.html", state:"permission", ctrl:"permissionCtrl" , js:"/script/permission.js" }
+		]);
+		
+	};
+
+});

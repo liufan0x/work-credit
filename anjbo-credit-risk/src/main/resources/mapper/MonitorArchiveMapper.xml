@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.MonitorArchiveMapper">
+    
+	<insert id="insertMonitorArchive" parameterType="MonitorArchiveDto" >
+		insert into
+		tbl_risk_monitor_archive
+		(
+		createUid,
+		type,
+		agencyId,
+		estateType,
+		<if test="yearNo != null and yearNo != ''">
+			yearNo,
+		</if>
+		<if test="orderNo != null and orderNo != ''">
+			orderNo,
+		</if>
+		estateNo,
+		identityNo,
+		createTime,
+		startTime,
+		endTime,
+		queryFrequency,
+		queryUsage,
+		phone,
+		archiveId,
+		message,
+		propertyStatus
+		)
+		values
+		(
+		#{createUid},
+		#{type},
+		#{agencyId},
+		#{estateType},
+		<if test="yearNo != null and yearNo != ''">
+			#{yearNo},
+		</if>
+		<if test="orderNo != null and orderNo != ''">
+			#{orderNo},
+		</if>
+		#{estateNo},
+		#{identityNo},
+		now(),
+		#{startTime},
+		#{endTime},
+		#{queryFrequency},
+		#{queryUsage},
+		#{phone},
+		#{archiveId},
+		#{message},
+		#{propertyStatus}
+		)
+		ON DUPLICATE KEY UPDATE
+		phone = #{phone},
+		 updateTime=now()
+	</insert>
+	 <!-- 更新监控任务 -->
+	<update id="updateMonitorArchive" parameterType="MonitorArchiveDto" >
+		update tbl_risk_monitor_archive
+		<set>
+			<if test="startTime != null" >
+				startTime = #{startTime},
+			</if>
+			<if test="endTime != null" >
+				endTime = #{endTime},
+			</if>
+			<if test="queryFrequency != null" >
+				queryFrequency = #{queryFrequency},
+			</if>
+			<if test="queryUsage != null" >
+				queryUsage = #{queryUsage},
+			</if>
+			<if test="phone != null" >
+				phone = #{phone},
+			</if>
+			<if test="message!=null and message!=''">
+				message = #{message},
+			</if>
+		</set>
+		where 
+			archiveId=#{archiveId}
+		<if test="orderNo != null" >
+			and orderNo=#{orderNo}
+		</if>
+	</update>
+	<select id="selectArchiveList" parameterType="MonitorArchiveDto" resultType="MonitorArchiveDto">
+	    select m.*,date_format(startTime ,'%Y-%m-%d') as startTimeStr,date_format(endTime ,'%Y-%m-%d') as endTimeStr from tbl_risk_monitor_archive as m
+	    where 1=1
+	    <if test="agencyId!=null and agencyId!=1" >
+			  and (m.agencyId = #{agencyId} or m.createUid=#{createUid})  
+		</if>
+		<if test="startTime!=null and startTime!=''">
+			<![CDATA[ and m.updateTime >= #{startTime} ]]>
+		</if>
+		<if test="endTime!=null and endTime!=''">
+			<![CDATA[  and DATE_FORMAT(m.updateTime,'%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')]]>
+		</if>
+	    <if test="identityNo!=null and identityNo!=''">
+	       and m.identityNo = #{identityNo}
+	    </if>
+	    <if test="estateNo!=null and estateNo!=''">
+	       and m.estateNo=#{estateNo}
+	    </if>
+	    <if test="type!=null and type >0">
+	      and m.type=#{type}
+	    </if>
+	    <if test="queryUsage!=null and queryUsage >0">
+	      and m.queryUsage=#{queryUsage}
+	    </if>
+	    <if test="queryFrequency!=null and queryFrequency>0">
+	     and  m.queryFrequency=#{queryFrequency}
+	    </if>
+	    <if test="estateType!=null">
+	        and  m.estateType=#{estateType}
+	    </if>
+	    <if test="yearNo!=null">
+	       and m.yearNo=#{yearNo}
+	    </if>
+	    order by 1=1
+	    <if test="updateTimeOrderBy!=null and updateTimeOrderBy!=''">
+			 ,m.updateTime ${updateTimeOrderBy}
+		</if>
+	    ,createTime desc
+	    limit #{start},#{pageSize}
+	</select>
+	<select id="selectArchiveCount" parameterType="MonitorArchiveDto" resultType="java.lang.Integer">
+	   select count(*) from tbl_risk_monitor_archive as m
+	    where 1=1
+	    <if test="agencyId!=null and agencyId!=1" >
+			  and (m.agencyId = #{agencyId} or m.createUid=#{createUid})  
+		</if>
+		<if test="startTime!=null and startTime!=''">
+			<![CDATA[ and m.updateTime >= #{startTime} ]]>
+		</if>
+		<if test="endTime!=null and endTime!=''">
+			<![CDATA[  and DATE_FORMAT(m.updateTime,'%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')]]>
+		</if>
+	    <if test="identityNo!=null and identityNo!=''">
+	       and m.identityNo = #{identityNo}
+	    </if>
+	    <if test="estateNo!=null and estateNo!=''">
+	       and m.estateNo=#{estateNo}
+	    </if>
+	    <if test="type!=null and type >0">
+	      and m.type=#{type}
+	    </if>
+	    <if test="queryUsage!=null and queryUsage>0">
+	      and m.queryUsage=#{queryUsage}
+	    </if>
+	    <if test="queryFrequency!=null and queryFrequency>0">
+	     and  m.queryFrequency=#{queryFrequency}
+	    </if>
+	    <if test="estateType!=null">
+	        and  m.estateType=#{estateType}
+	    </if>
+	    <if test="yearNo!=null">
+	       and m.yearNo=#{yearNo}
+	    </if>
+	</select>
+    <select id="findBymonitor" parameterType="MonitorArchiveDto" resultType="MonitorArchiveDto">
+         select *,date_format(startTime ,'%Y-%m-%d') as startTimeStr,date_format(endTime ,'%Y-%m-%d') as endTimeStr,date_format(updateTime ,'%Y-%m-%d %H:%i:%S') as updateTimeStr
+          from tbl_risk_monitor_archive where id=#{id}  order by createTime desc limit 1
+    </select>
+	
+	<!-- 删除监控 -->
+	<delete id="deleteMonitorArchiveById" parameterType="MonitorArchiveDto" >
+		delete from tbl_risk_monitor_archive where id = #{id}
+	</delete>
+	
+	<!-- 根据查档id查询房产监控 -->
+	<select id="selectArchiveByArchiveId" parameterType="MonitorArchiveDto" resultType="MonitorArchiveDto">
+	  SELECT 
+	   	*
+	   FROM tbl_risk_monitor_archive WHERE archiveId = #{archiveId} order by createTime desc LIMIT 1
+	</select>
+</mapper>

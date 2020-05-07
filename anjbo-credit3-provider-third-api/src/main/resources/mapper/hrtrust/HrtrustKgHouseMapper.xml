@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.hrtrust.HrtrustKgHouseMapper">
+
+	<select id="getKgHouse" parameterType="String" resultType="map">
+		select * from tbl_third_hrtrust_kg_house where orderNo=#{orderNo}
+		order by id DESC limit 0,1
+	</select>
+
+     <update id="updateMap" parameterType="java.util.Map">
+        update tbl_third_hrtrust_kg_house
+        <set>
+            <if test="applSeq != null and applSeq!=''">
+                applSeq = #{applSeq},
+            </if>
+
+            <if test="owner != null and owner!=''">
+                owner = #{owner},
+            </if>
+            <if test="houseAddress != null and houseAddress!=''">
+                houseAddress = #{houseAddress},
+            </if>
+            <if test="builtArea != null and builtArea!=''">
+                builtArea = #{builtArea},
+            </if>
+            <if test="totalAssessment != null and totalAssessment !=''">
+                totalAssessment = #{totalAssessment},
+            </if> 
+            <if test="worthAssessment != null and worthAssessment !=''">
+                worthAssessment = #{worthAssessment},
+            </if> 
+            <if test="firstHouseLoan != null and firstHouseLoan !=''">
+                firstHouseLoan = #{firstHouseLoan},
+            </if>
+             <if test="consult !=null and consult !=''">
+                consult = #{consult},
+            </if>
+             <if test="respStatus !=null and respStatus !=''">
+                respStatus = #{respStatus},
+            </if>
+             <if test="remark !=null and remark !=''">
+                remark = #{remark},
+            </if> 
+            <if test="orderId !=null and orderId !=''">
+                orderId = #{orderId},
+            </if>
+             <if test="houseNo !=null and houseNo !=''">
+                houseNo = #{houseNo},
+            </if>
+        </set>
+        where orderNo = #{orderNo}
+    </update>
+ 
+	<!-- 添加房产信息 -->
+	<insert id="saveKgHouse" parameterType="Map">
+		INSERT INTO
+		tbl_third_hrtrust_kg_house (
+		applSeq,
+		orderNo,
+		owner,
+		houseAddress,
+		builtArea,
+		houseNo,
+		totalAssessment,
+		worthAssessment,
+		firstHouseLoan,
+		consult,
+		respStatus,
+		remark
+		)
+		VALUES
+		(
+		#{applSeq},
+		#{orderNo},
+		#{owner},
+		#{houseAddress},
+		#{builtArea},
+		#{houseNo},
+		#{totalAssessment},
+		#{worthAssessment},
+		#{firstHouseLoan},
+		#{consult},
+		#{respStatus},
+		#{remark}
+		)
+	</insert>
+
+</mapper>

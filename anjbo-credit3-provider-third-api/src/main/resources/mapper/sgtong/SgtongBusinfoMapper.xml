@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.sgtong.SgtongBusinfoMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+		<if test="null!=typeId and typeId>0"> AND `typeId`=#{typeId}</if>
+		<if test="null!=url and ''!=url"> AND `url`=#{url}</if>
+		<if test="null!=type and ''!=type"> AND `type`=#{type}</if>
+		<if test="null!=isPlus and isPlus>0"> AND `isPlus`=#{isPlus}</if>
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<if test="null!=isDelete and isDelete>0"> AND `isDelete`=#{isDelete}</if>
+		<if test="null!=sgtProductCode and ''!=sgtProductCode"> AND `sgtProductCode`=#{sgtProductCode}</if>
+		<if test="null!=sgtProductName and ''!=sgtProductName"> AND `sgtProductName`=#{sgtProductName}</if>
+		<if test="null!=batchNo and ''!=batchNo"> AND `batchNo`=#{batchNo}</if>
+		<if test="null!=prePactNo and ''!=prePactNo"> AND `prePactNo`=#{prePactNo}</if>
+		<if test="null!=pushStatus and ''!=pushStatus"> AND `pushStatus`=#{pushStatus}</if>
+		
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="SgtongBusinfoDto" resultType="SgtongBusinfoDto">    
+	SELECT `id`, `createUid`, `createTime`, `updateTime`, `orderNo`, `typeId`, `url`, `type`, `isPlus`, `updateUid`, `isDelete`, `sgtProductCode`, `sgtProductName` , `batchNo`, `prePactNo`,pushStatus 
+	FROM tbl_third_sgtong_businfo 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="SgtongBusinfoDto" resultType="SgtongBusinfoDto">
+	SELECT `id`, `createUid`, `createTime`, `updateTime`, `orderNo`, `typeId`, `url`, `type`, `isPlus`, `updateUid`, `isDelete`, `sgtProductCode`, `sgtProductName`, `batchNo`, `prePactNo` ,pushStatus
+	FROM tbl_third_sgtong_businfo 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="SgtongBusinfoDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_third_sgtong_businfo 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="SgtongBusinfoDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_third_sgtong_businfo(
+		`createUid`,
+		`createTime`,
+		`updateTime`,
+		`orderNo`,
+		`typeId`,
+		`url`,
+		`type`,
+		`isPlus`,
+		`updateUid`,
+		`isDelete`,
+		`sgtProductCode`,
+		`sgtProductName`, `batchNo`, `prePactNo` ,pushStatus
+	) VALUES(
+		#{createUid},
+		now(),
+		now(),
+		#{orderNo},
+		#{typeId},
+		#{url},
+		#{type},
+		#{isPlus},
+		#{createUid},
+		2,
+		#{sgtProductCode},
+		#{sgtProductName},
+		#{batchNo},
+		#{prePactNo},
+		#{pushStatus}
+		
+	)	
+  </insert>
+
+    <insert id="batchInsertImg" parameterType="java.util.List">
+        INSERT INTO tbl_third_sgtong_businfo
+        (
+        `createUid`,
+		`createTime`,
+		`updateTime`,
+		`orderNo`,
+		`typeId`,
+		`url`,
+		`type`,
+		`isPlus`,
+		`updateUid`,
+		`isDelete`,
+		`sgtProductCode`,
+		`sgtProductName`,
+		`batchNo`,
+		`prePactNo`,pushStatus
+        )
+        VALUES
+        <foreach collection="list" separator="," item="obj" close="" open="">
+            (
+    #{obj.createUid},
+		now(),
+		now(),
+		#{obj.orderNo},
+		#{obj.typeId},
+		#{obj.url},
+		#{obj.type},
+		#{obj.isPlus},
+		#{obj.createUid},
+		2,
+		#{obj.sgtProductCode},
+		#{obj.sgtProductName},
+		#{obj.batchNo},
+		#{obj.prePactNo},
+		#{obj.pushStatus}
+            )
+        </foreach>
+    </insert>
+
+
+
+  <delete id="delete" parameterType="SgtongBusinfoDto" >
+    DELETE FROM tbl_third_sgtong_businfo 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="SgtongBusinfoDto" >
+    UPDATE tbl_third_sgtong_businfo
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+		<if test="null!=typeId">`typeId`=#{typeId},</if>
+		<if test="null!=url">`url`=#{url},</if>
+		<if test="null!=type">`type`=#{type},</if>
+		<if test="null!=isPlus">`isPlus`=#{isPlus},</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=isDelete">`isDelete`=#{isDelete},</if>
+		<if test="null!=sgtProductCode">`sgtProductCode`=#{sgtProductCode},</if>
+		<if test="null!=sgtProductName">`sgtProductName`=#{sgtProductName},</if>
+			<if test="null!=batchNo">`batchNo`=#{batchNo},</if>
+		<if test="null!=prePactNo">`prePactNo`=#{prePactNo},</if>
+		<if test="null!=pushStatus">`pushStatus`=#{pushStatus},</if>
+	</set>
+	 WHERE id IN (${id})
+  </update>
+    
+</mapper>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.ProductBaseMapper">
+	
+	<select id="selectProductBaseList" resultType="ProductDto" parameterType="ProductDto">
+		select * from tbl_product_base where 1 = 1
+		<if test="cityCode != null and cityCode != ''">
+			and cityCode = #{cityCode} 
+		</if>
+		<if test="productName != null and productName != ''">
+			and productName like CONCAT('%',#{productName},'%')
+		</if>
+		<if test="start!=null">
+			limit #{start},#{pageSize}
+		</if>
+	</select>
+	
+	<select id="selectProductBaseCount" resultType="int" parameterType="ProductDto">
+		select count(1) from tbl_product_base where 1 = 1
+		<if test="cityCode != null and cityCode != ''">
+			and cityCode = #{cityCode} 
+		</if>
+		<if test="productName != null and productName != ''">
+			and productName like CONCAT('%',#{productName},'%')
+		</if>
+	</select>
+	
+	<select id="findproductDto" resultType="ProductDto" parameterType="ProductDto">
+		select * from tbl_product_base where id = #{id}  
+	</select>
+	
+	<select id="selectProductBase" resultType="ProductDto" parameterType="ProductDto">
+		select * from tbl_product_base where id != #{id} and productName = #{productName} and cityCode = #{cityCode} 
+	</select>
+	
+	<update id="updateProductBase" parameterType="ProductDto">
+		update tbl_product_base set productName = #{productName} , productDescribe = #{productDescribe} where id = #{id} 
+	</update>
+	
+</mapper>

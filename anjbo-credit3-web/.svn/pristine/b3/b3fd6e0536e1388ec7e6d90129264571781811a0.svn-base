@@ -1,0 +1,162 @@
+body{
+  font-family: "Microsoft YaHei","宋体"; 
+  font-size:14px;
+ max-width:640px;
+}
+li{list-style:none;}
+input{
+  font-family: "Microsoft YaHei","宋体"; 
+  font-size:14px;
+}
+input[type="tel"],input[type="number"],input[type="text"],input[type="buttuon"],input[type="checkbox"]{
+-webkit-appearance:none;
+appearance:none;
+outline:none;
+-webkit-tap-highlight-color:rgba(0,0,0,0);
+
+}
+p,body,ul,li{ padding:0; margin:0; }
+a{ color:#000; text-decoration:none; cursor:pointer;} 
+.clear{width:100%; clear:both; height:1px; }
+
+#insert{width:100%;height:50px;background-color:#fff;  }
+.fen-box{width:95%; height:50px; margin:0 auto; }
+.logo-box2{width:30px; height:30px; padding:10px; float:left;}
+.logo2-box{height:34px; padding:8px; float:left;}
+.logo2-box p{ line-height:17px; font-size:13px; color:#737575; }
+.logo-box2 img{width:100%; }
+.download-box{
+  width:60px; 
+  height:30px; 
+  padding:10px; 
+  float:right; 
+  }
+.download-box a{
+  display:block;   
+  text-align:center; 
+  text-decoration:none; 
+  height:28px; 
+  font-size:12px; 
+  color:#0fbcd2; 
+  line-height:28px; 
+  border:1px solid #0fbcd2; 
+  border-radius:5px;
+  width:100%; 
+  }
+.red-word{
+  color:#ff1200;
+}
+.blue-word{
+  color:#48ade5;
+}
+
+.green-word{
+  color:#40b20d;
+}
+.purple-word{
+  color:#ab68fd;
+}
+.pink-word{
+  color:#eb4797;
+}
+.lhw-alert-bg,.tan-box{
+  position:fixed;
+  top:0;
+  left:0;
+  right:0;
+  bottom:0;
+  width:100%;
+  z-index:99;
+  background:rgba(0,0,0,0.3);
+}
+.lhw-alert-box,.tan-div{
+  width:82%;
+  background:#fff;
+  position:absolute;
+  top:25%;
+  left:9%;
+}
+.lhw-alert-line{
+  width:100%;
+  height:1px;
+  background:#d0d0d0;
+}
+.lhw-alert-tit{
+  width:85%;
+  margin:0 auto;
+  line-height:25px;
+  padding:20px 0;
+  text-align:center;
+  color:#4d4d4d;
+  font-size:15px;
+
+}
+.lhw-alert-ok{
+  width:100%;
+  text-align:center;
+  line-height:45px;
+  color:#4bb2cc;
+  font-size:16px;
+}
+.tan-tit{
+  line-height:35px;
+  color:#4d4d4d;
+  text-align:center;
+  margin-top:20px;
+  font-size:16px;
+}
+.tan-tip{
+ line-height:30px;
+ color:#eb2b03;
+ text-align:center;
+  font-size:14px;
+}
+.tan-num{
+  width:90px;
+  background:#d2d2d2;
+  height:40px;
+  margin:10px auto;
+}
+.refresh{
+ display:block;
+ float:right;
+ margin:10px;
+ width:20px;
+}
+.tan-inp{
+  display:block;
+  width:30px;
+  height:30px;
+  float:left;
+  border:1px solid #d0d0d0;
+  border-radius:3px;
+  text-align:center;
+  margin:5px;
+}
+.tan-inp-box{
+  width:170px;
+  margin:0 auto;
+  height:50px;
+}
+.top-com{
+  width:100%;
+  clear:both;
+  background:#fff;
+  position:fixed;
+  top:0;
+  z-index:55;
+}
+.loading{
+  position:fixed;
+  top:0;
+  left:0;
+  bottom:0;
+  right:0;
+  width:100%;
+  background:rgba(0,0,0,0.2);
+  z-index:9999;
+}
+.loading img{
+  display:block;
+  margin:50% auto;
+}

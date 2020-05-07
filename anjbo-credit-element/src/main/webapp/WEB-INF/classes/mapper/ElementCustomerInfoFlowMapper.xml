@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.ElementCustomerInfoFlowMapper">
+
+    <insert id="insertElementCustomerInfoFlow" parameterType="Map" useGeneratedKeys ="true" keyProperty="id">
+       	INSERT INTO tbl_element_customer_info_flow (
+	       	orderNo,
+	       	createTime,
+	       	createUid,
+	       	createName,
+			customerName,
+			channelManagerUid,
+			channelManagerName,
+			acceptMemberUid,
+			acceptMemberName,
+			cityCode,
+			cityName,
+			creditType,
+			borrowingAmount,
+			borrowingDay,
+			editReason,
+			accessFlowId,
+			flowType
+			)
+		VALUES
+			(
+			#{orderNo},
+			now(),
+			#{createUid},
+			#{createName},
+			#{customerName},
+			#{channelManagerUid},
+			#{channelManagerName},
+			#{acceptMemberUid},
+			#{acceptMemberName},
+			#{cityCode},
+			#{cityName},
+			#{creditType},
+			#{borrowingAmount},
+			#{borrowingDay},
+			#{editReason},
+			#{accessFlowId},
+			#{flowType}
+			)
+    </insert>
+    
+     <select id="selectElementCustomerInfoFlow" resultType="java.util.Map" parameterType="java.util.Map">
+    	select * from tbl_element_customer_info_flow where orderNo =#{orderNo} and accessFlowId= #{accessFlowId} and flowType= #{flowType}
+    	
+    </select>
+    
+    <!-- <delete id="deleteFormOrderNo" parameterType="java.lang.String">
+    	delete from  tbl_element_customer_info_flow where orderNo=#{orderNo}
+    </delete> -->
+    
+    
+    
+</mapper>

@@ -1,0 +1,128 @@
+<form ng-show="YN_HKXXTitle == 'HKXX'" style="padding:20px 50px" class="form-inline ng-pristine ng-invalid ng-invalid-required ng-valid-min" name="orderForm">
+	<div class="row form-inline detail-row w147" style="padding:30px 10px; ">
+		<div class="col-md-6 col-lg-4">
+			<label><span class="text-warning">*</span>预计还款时间: </label>
+			<input type="text" disabled ng-model="YNHKInfo.repayDate" class="form-control form_datetimeu" />
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label><span class="text-warning">*</span>实际还款时间:</label>
+			<input type="text" readonly ng-disabled="!(ynStatus.repaymentStatus.msg=='待推送回款计划'  || ynStatus.repaymentStatus.msg=='检验失败')" ng-model="YNHKInfo.realityPayDate" class="form-control form_date" />
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label><span class="text-warning">*</span>应还本金总计:</label>
+			<input type="number" disabled required min="0" name="repayPrincipal" ng-model="YNHKInfo.repayPrincipal" class="form-control" />元
+			<span style="color:red" ng-show="yunNanForm.repayPrincipal.$dirty && yunNanForm.repayPrincipal.$invalid">
+				<span ng-show="yunNanForm.repayPrincipal.$error.required">必填</span>
+			</span>
+		</div>
+
+		<div class="col-md-6 col-lg-4">
+			<label><span class="text-warning">*</span>已还本金总计:</label>
+			<input type="number" ng-disabled="!(ynStatus.repaymentStatus.msg=='待推送回款计划'  || ynStatus.repaymentStatus.msg=='检验失败')" required min="0" name="givePayPrincipal" ng-model="YNHKInfo.givePayPrincipal" class="form-control" />元
+			<span class="inputError">
+				<error class="text-danger" ng-show="yunNanForm.givePayPrincipal.$invalid">必填</error>
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label><span class="text-warning">*</span>应还利息总计:</label>
+			<input type="number" disabled required min="0" name="repayProfit" ng-model="YNHKInfo.repayProfit" class="form-control" />元
+			<span class="inputError">
+				<error class="text-danger" ng-show="yunNanForm.repayProfit. $invalid">必填</error>
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label><span class="text-warning">*</span>已还利息总计:</label>
+			<input type="number" ng-disabled="!(ynStatus.repaymentStatus.msg=='待推送回款计划'  || ynStatus.repaymentStatus.msg=='检验失败')" required min="0" name="givePayProfit" ng-model="YNHKInfo.givePayProfit" class="form-control" />元
+			<span class="inputError">
+				<error class="text-danger" ng-show="yunNanForm.givePayProfit.$invalid">必填</error>
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label><span class="text-warning">*</span>借款期限:</label>
+			<input type="number" disabled required min="0" name="borrowingDays" ng-model="YNHKInfo.borrowingDays" class="form-control" />天
+			<span class="inputError">
+				<error class="text-danger" ng-show="yunNanForm.borrowingDays.$invalid">必填</error>
+			</span>
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>逾期天数:</label>
+			<input ng-disabled="!(ynStatus.repaymentStatus.msg=='待推送回款计划'  || ynStatus.repaymentStatus.msg=='检验失败')" type="number" min="0" ng-model="YNHKInfo.lateDay" class="form-control" />天
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>逾期罚息:</label>
+			<input ng-disabled="!(ynStatus.repaymentStatus.msg=='待推送回款计划'  || ynStatus.repaymentStatus.msg=='检验失败')" type="number" min="0" readonly ng-model="YNHKInfo.penaltyFee" class="form-control" />元
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>逾期违约金:</label>
+			<input ng-disabled="!(ynStatus.repaymentStatus.msg=='待推送回款计划'  || ynStatus.repaymentStatus.msg=='检验失败')" type="number" min="0" ng-model="YNHKInfo.latePenalty" class="form-control" />元
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>逾期服务费:</label>
+			<input ng-disabled="!(ynStatus.repaymentStatus.msg=='待推送回款计划'  || ynStatus.repaymentStatus.msg=='检验失败')" type="number" min="0" ng-model="YNHKInfo.lateFee" class="form-control" />元
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>逾期其它费用:</label>
+			<input ng-disabled="!(ynStatus.repaymentStatus.msg=='待推送回款计划'  || ynStatus.repaymentStatus.msg=='检验失败')" type="number" min="0" ng-model="YNHKInfo.lateOtherCost" class="form-control" />元
+		</div>
+		<div class="col-md-6 col-lg-4">
+			<label>逾期费用总计:</label>
+			<span ng-bind="YNHKInfo.overDueFee"></span>元
+		</div>
+		<div class="col-md-6 col-lg-8">
+			<label>还款方式:</label>
+			<select ng-disabled="!(ynStatus.repaymentStatus.msg=='待推送回款计划'  || ynStatus.repaymentStatus.msg=='检验失败')" class="form-control" ng-model="YNHKInfo.dictPaymentMethod" ng-init="YNHKInfo.dictPaymentMethod='2001@委托转付'" style="width:180px">
+				<!--<option value="@请选择">请选择</option>-->
+				<option value="1000@线上代扣">线上代扣</option>
+				<option value="2001@委托转付">委托转付</option>
+				<option value="2002@商户担保">商户担保</option>
+				<option value="2003@回购">回购</option>
+				<option value="2004@差额划拨">差额划拨</option>
+				<option value="2005@代偿">代偿</option>
+				<option value="3001@主动付款">主动付款</option>
+				<option value="3002@他人代偿">他人代偿</option>
+				<option value="4001@商户代扣">商户代扣</option>
+				<option value="5001@线上代扣-快捷支付">线上代扣-快捷支付</option>
+				<option value="6001@线上代扣-在线支付">线上代扣-在线支付</option>
+			</select>
+		</div>
+	</div>
+</form>
+
+<script type="text/javascript">
+	function delZijinPic(a) {
+		$(".processuUpdImg").find("img").each(function() {
+			if($(this).attr("src") == a) {
+				$(this).remove();
+			}
+		})
+		var returnPic = "";
+		$(".processuUpdImg").find("img").each(function() {
+			returnPic += returnPic + $(this).attr("src") + ",";
+		})
+		$("#img").val(returnPic.substring(0, returnPic.length - 1));
+		var img = $("#img").val();
+		if(img == '') {
+			$(".processuUpdImg").hide()
+		}
+	}
+
+	function returnDatafinance(url, smallUrl, name) {
+		console.log()
+		var img = $("#img").val();
+		if(url != '') {
+			url = url.substring(0, url.length - 1);
+			var  urls =  new  Array();
+			var urls = url.split(",");
+			var h = "";
+			for(var i = 0; i < urls.length; i++) {
+				h += "<img src='" + urls[i] + "' class='gallery-pic dhzlpics' style='display:none;'>";
+			}
+			$(".processuUpdImg").append(h);
+			if(img != '') {
+				url = img + "," + url;
+			}
+			$("#img").val(url);
+			$(".processuUpdImg").show();
+		}
+	}
+</script>

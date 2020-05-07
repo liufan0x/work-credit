@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.hrtrust.HrtrustBusinfoMapper">
+
+	<select id="getFileApply" parameterType="String"
+		resultType="map">
+		select * from tbl_third_hrtrust_businfo where orderNo = #{orderNo}
+	</select>
+
+	<select id="searchFilePaths" parameterType="String"
+		resultType="string">
+		SELECT filePath FROM tbl_third_hrtrust_businfo WHERE
+		orderNo = #{orderNo}
+	</select>
+
+	<!-- 快鸽提单信息,业务信息 -->
+	<insert id="saveFileApply" parameterType="List">
+		INSERT INTO tbl_third_hrtrust_businfo (
+		respStatus,
+		applSeq,
+		orderNo,
+		docFileType,
+		addTime,
+		filePath,
+		`index`
+		)
+		VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+		(
+		#{item.respStatus},
+		#{item.applSeq},
+		#{item.orderNo},
+		#{item.docFileType},
+		#{item.addtime},
+		#{item.filePath},
+		#{item.index}
+		)
+		</foreach>
+	</insert>
+
+</mapper>

@@ -1,0 +1,97 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<ul class="breadcrumb relative">
+				<li>
+					<a>提放管理</a>
+					<span class="divider"></span>
+				</li>
+				<li class="active">保单录入</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12"> 
+		<form class="form-inline search" style="margin-bottom:20px;margin-left:30px; ">
+	    
+		<label>客户姓名：</label>
+		<input id="customerName" type="text" class="form-control" name="customerName" ng-model="platformDto.customerName" required>
+		
+		<label>证件类型:</label>
+		<select id="idCardType" class="form-control" name="idCardType" ng-model="platformDto.idCardType" required style="width:150px;">
+				<!-- <option value="">请选择</option>  -->
+				<option value="CER">二代身份证</option>
+		</select>
+	 
+	    <label>证件号码：</label>
+		<input id="idCardNumber" type="text"   class="form-control" name="idCardNumber" ng-model="platformDto.idCardNumber" required>
+			
+			
+			<span class="a-span">&nbsp;</span>
+	            <label id="count">0</label> 
+	            <span class="caozuo">
+                            <a data-fancybox="iframe" ng-click="setType(sType.id)" data-src="/plugins/uploadify/upload_image.html?returnFun=returnDatapt"
+                                data-type="iframe" href="javascript:;">点此上传电子保单(必传，仅支持.pdf文件)</a>
+                        </span> &nbsp;&nbsp;&nbsp;
+                        <span class="caozuo red-word">
+                            <a href="javascript:void(0)" onclick="huarongDelImg()" id="dzDel" style="display: none;">删除</a>
+                        </span>&nbsp;&nbsp;&nbsp;
+                        <!-- <span class="caozuo red-word">
+                            <a id="hrSel" href="platformDto.insuranceFile" style="display: none;">查看</a>
+                        </span>&nbsp;&nbsp;&nbsp; -->
+                        </span> &nbsp;&nbsp;&nbsp;
+                        <input type="hidden" id="huarongImg">
+                        <input type="hidden" id="huarongImg1">
+	                    <input type="hidden" id="huarongImg2">
+	    <button type="button" ng-click="showSave()" class="btn btn-info detail-right-save"  >保存</button>
+			</form>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+    var arr3 = new Array(3);
+	function returnDatapt(url, smallUrl, name) {
+		var count = $("#count").text();
+			$("#dzDel").show();
+			$("#hrSel").show();
+			$("#hisShow").show();
+			if (url != '') {
+				url = url.substring(0, url.length - 1);
+				var urls = url.split(",");
+				for(var i=0;i<urls.length;i++){
+				$("#hrSel").attr("href", urls[i]);
+				$("#hrSel").attr("target", "_blank");
+		     }
+				if($("#huarongImg").val()==""){
+					$("#huarongImg").val(urls);
+				}else{
+					var ss1=$("#huarongImg").val();
+					$("#huarongImg").val(ss1+","+urls);
+				}
+			$("#huarongImg1").val($("#count").text());
+				 if(count!=0){
+					$("#count").text(parseInt($("#huarongImg1").val()) + parseInt(urls.length));
+					$("#huarongImg1").val($("#count").text());
+				}else{
+					$("#count").text(urls.length);
+				} 
+			}
+	}
+
+	function huarongDelImg() {
+			if (confirm("确认删除吗")) {
+				$("#dzDel").hide();
+				$("#hrSel").hide();
+				$("#count").text("0");
+				$("#huarongImg").val("");
+				$("#huarongImg1").val("");
+				$("#hrSel").removeAttr("href");
+				$("#hrSel").removeAttr("target");
+				alert("删除成功");
+			}
+			$("#hisShow").hide();
+		
+	}
+	
+</script>

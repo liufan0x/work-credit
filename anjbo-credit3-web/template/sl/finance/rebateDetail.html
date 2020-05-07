@@ -1,0 +1,29 @@
+<div class="container-fluid" id="pay">
+	<!--标题-->
+	<div class="row">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;返佣信息</div>
+	</div>
+	<!--标题 end-->
+	<div class="row detail-row detail-lhw">
+		<div class="col-md-6 col-lg-4"><label>返佣金额</label><span ng-bind="obj.rebateMoney"></span> 元</div>
+		<div class="col-md-6 col-lg-4"><label>返佣时间</label>
+			<span ng-bind="obj.rebateTime"></span>
+			<!--图片 放大插件-->
+			<div class="row gallerys">
+				<img src="{{img}}" width="150" height="150" ng-if="img != ''" class="detail-img gallery-pic" ng-repeat="img in obj.imgs">
+			</div>
+			<!--图片end-->
+		</div>
+	</div>
+	<!--备注-->
+	<div class="row relative" ng-if="obj.remark!='' && obj.remark!=null">
+		<span class="remark-span remark-lhw">备注：</span>
+		<textarea class="remark-p remark-lhw-p textarea-lhw" ng-bind="obj.remark" readonly="readonly"> </textarea>
+	</div>
+	<!--备注end-->
+</div>
+<script>
+	function laa(a) {
+		$.openPhotoGallery($(a).next("img"));
+	}
+</script>

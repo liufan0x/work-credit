@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.tools.TransferPriceMapper">
+	<!-- 新增过户价/税费 -->
+	<insert id="addTransferPrice" parameterType="TransferPrice">
+		<selectKey resultType="int" keyProperty="id">
+			select
+			last_insert_id()
+		</selectKey>
+		insert into
+		tbl_tools_transfer_price_base(
+			uid,
+			type,
+			obligee,
+			identityNo,
+			unitName,
+			estateType,
+			estateNo,
+			area,
+			`range`,
+			regPrice,
+			residenceType,
+			onlyHouse,
+			firstHouse,
+			transferPrice,
+			tax,
+			result,
+			`status`,
+			source,
+			incomeTax,
+			incomeTaxHs,
+			landTax,
+			salesTax,
+			deedTax,
+			tranFees,
+			regFees,
+			pledgeRegFees,
+			stamp,
+			applique,
+			createTime,
+			device,
+			version,
+			szArea,
+			withinArea,
+			cityBuildTax,
+			educationFees,
+			placeEducationFees,
+			year,
+			transferPriceBank,
+			taxBank,
+			isCalcT,
+			incomeTaxBank,
+			incomeTaxHsBank,
+			landTaxBank,
+			salesTaxBank,
+			deedTaxBank,
+			tranFeesBank,
+			regFeesBank,
+			pledgeRegFeesBank,
+			stampBank,
+			appliqueBank,
+			cityBuildTaxBank,
+			educationFeesBank,
+			placeEducationFeesBank
+		)values(
+			#{uid},
+			#{type},
+			#{obligee},
+			#{identityNo},
+			#{unitName},
+			#{estateType},
+			#{estateNo},
+			#{area},
+			#{range},
+			#{regPrice},
+			#{residenceType},
+			#{onlyHouse},
+			#{firstHouse},
+			#{transferPrice},
+			#{tax},
+			#{result},
+			#{status},
+			#{source},
+			#{incomeTax},
+			#{incomeTaxHs},
+			#{landTax},
+			#{salesTax},
+			#{deedTax},
+			#{tranFees},
+			#{regFees},
+			#{pledgeRegFees},
+			#{stamp},
+			#{applique},
+			now(),
+			#{device},
+			#{version},
+			#{szArea},
+			#{withinArea},
+			#{cityBuildTax},
+			#{educationFees},
+			#{placeEducationFees},
+			#{year},
+			#{transferPriceBank},
+			#{taxBank},
+			#{isCalcT},
+			#{incomeTaxBank},
+			#{incomeTaxHsBank},
+			#{landTaxBank},
+			#{salesTaxBank},
+			#{deedTaxBank},
+			#{tranFeesBank},
+			#{regFeesBank},
+			#{pledgeRegFeesBank},
+			#{stampBank},
+			#{appliqueBank},
+			#{cityBuildTaxBank},
+			#{educationFeesBank},
+			#{placeEducationFeesBank}
+		)
+	</insert>
+	<!-- 更新税费 -->
+	<update id="updateTax" parameterType="TransferPrice">
+		update tbl_tools_transfer_price_base set
+			`range`=#{range},
+			regPrice=#{regPrice},
+			residenceType=#{residenceType},
+			onlyHouse=#{onlyHouse},
+			firstHouse=#{firstHouse},
+			tax=#{tax},
+			`status`=#{status},
+			incomeTax=#{incomeTax},
+			incomeTaxHs=#{incomeTaxHs},
+			landTax=#{landTax},
+			salesTax=#{salesTax},
+			deedTax=#{deedTax},
+			tranFees=#{tranFees},
+			regFees=#{regFees},
+			pledgeRegFees=#{pledgeRegFees},
+			stamp=#{stamp},
+			applique=#{applique},
+			szArea = #{szArea},
+			withinArea = #{withinArea},
+			cityBuildTax = #{cityBuildTax},
+			educationFees = #{educationFees},
+			placeEducationFees = #{placeEducationFees},
+			transferPriceBank = #{transferPriceBank},
+			taxBank = #{taxBank},
+			isCalcT = #{isCalcT},
+			incomeTaxBank = #{incomeTaxBank},
+			incomeTaxHsBank = #{incomeTaxHsBank},
+			landTaxBank = #{landTaxBank},
+			salesTaxBank = #{salesTaxBank},
+			deedTaxBank = #{deedTaxBank},
+			tranFeesBank = #{tranFeesBank},
+			regFeesBank = #{regFeesBank},
+			pledgeRegFeesBank = #{pledgeRegFeesBank},
+			stampBank = #{stampBank},
+			appliqueBank = #{appliqueBank},
+			cityBuildTaxBank = #{cityBuildTaxBank},
+			educationFeesBank = #{educationFeesBank},
+			placeEducationFeesBank = #{placeEducationFeesBank}
+		where id=#{id}
+	</update>
+	<!-- 分页查询过户价/税费 -->
+	<select id="selectTransferPricePage" parameterType="TransferPrice" resultType="TransferPrice">
+		select *,DATE_FORMAT(createTime,'%Y-%m-%d %H:%i') createTimeStr from tbl_tools_transfer_price_base
+		where uid=#{uid}
+		<if test="identityNo != null and identityNo != ''">AND identityNo LIKE CONCAT('%',#{identityNo},'%')</if>
+		<if test="estateNo != null and estateNo != ''">AND estateNo LIKE CONCAT('%',#{estateNo},'%')</if>
+		order by createTime desc
+		limit #{start},#{pagesize}
+	</select>
+	<!-- 分页查询过户价/税费总记录数 -->
+	<select id="selectTransferPricePageCount" parameterType="TransferPrice" resultType="int">
+		select count(*) from tbl_tools_transfer_price_base
+		where uid=#{uid}
+		<if test="identityNo != null and identityNo != ''">AND identityNo LIKE CONCAT('%',#{identityNo},'%')</if>
+		<if test="estateNo != null and estateNo != ''">AND estateNo LIKE CONCAT('%',#{estateNo},'%')</if>
+	</select>
+	<!-- 查询过户价/税费详情 -->
+	<select id="selectTransferPrice" parameterType="int" resultType="TransferPrice">
+		select * from tbl_tools_transfer_price_base where id=#{0}
+	</select>
+	
+	<!-- 三价合一计算 -->
+	<insert id="addTransferPriceBank" parameterType="TransferPrice">
+		<selectKey resultType="int" keyProperty="id">
+			select
+			last_insert_id()
+		</selectKey>
+		insert into
+		tbl_tools_transfer_price_base(
+			uid,
+			type,
+			obligee,
+			identityNo,
+			unitName,
+			estateType,
+			estateNo,
+			area,
+			`range`,
+			regPrice,
+			residenceType,
+			onlyHouse,
+			firstHouse,
+			transferPriceBank,
+			taxBank,
+			`status`,
+			source,
+			isCalcT,
+			incomeTaxBank,
+			incomeTaxHsBank,
+			landTaxBank,
+			salesTaxBank,
+			deedTaxBank,
+			tranFeesBank,
+			regFeesBank,
+			pledgeRegFeesBank,
+			stampBank,
+			appliqueBank,
+			createTime,
+			device,
+			version,
+			szArea,
+			withinArea,
+			cityBuildTaxBank,
+			educationFeesBank,
+			placeEducationFeesBank,
+			year
+		)values(
+			#{uid},
+			#{type},
+			#{obligee},
+			#{identityNo},
+			#{unitName},
+			#{estateType},
+			#{estateNo},
+			#{area},
+			#{range},
+			#{regPrice},
+			#{residenceType},
+			#{onlyHouse},
+			#{firstHouse},
+			#{transferPrice},
+			#{tax},
+			#{status},
+			#{source},
+			#{isCalcT},
+			#{incomeTax},
+			#{incomeTaxHs},
+			#{landTax},
+			#{salesTax},
+			#{deedTax},
+			#{tranFees},
+			#{regFees},
+			#{pledgeRegFees},
+			#{stamp},
+			#{applique},
+			now(),
+			#{device},
+			#{version},
+			#{szArea},
+			#{withinArea},
+			#{cityBuildTax},
+			#{educationFees},
+			#{placeEducationFees},
+			#{year}
+		)
+	</insert>
+</mapper>

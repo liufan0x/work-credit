@@ -1,0 +1,9 @@
+<form class="form-inline"  >
+	<div class="form-group">
+		<span class="text-danger">*</span>{{cancelTile}}的原因&nbsp;
+	</div>
+	<textarea ng-model="backReason" class="form-control" rows="5" cols="45" placeholder="请输入您{{cancelTile}}的原因,方便相关人员了解"/>
+	<div class="form-group" ng-if="beCareful">
+		<span><font color="gray" ng-bind="beCareful"></font></span>
+	</div>
+</form>

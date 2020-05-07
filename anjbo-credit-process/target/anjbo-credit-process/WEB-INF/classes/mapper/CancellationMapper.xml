@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.CancellationMapper">
+	<!-- 关联查询过户 -->
+	<select id="selectCancellation" parameterType="CancellationDto" resultType="CancellationDto">
+	   select c.*,DATE_FORMAT(c.cancelTime,'%Y-%m-%d') as cancelTimeStr,DATE_FORMAT(c.cancelStartTime,'%Y-%m-%d') as cancelStartTimeStr,DATE_FORMAT(c.cancelEndTime,'%Y-%m-%d') as cancelEndTimeStr,
+	   DATE_FORMAT(t.transferTime,'%Y-%m-%d') as transferTimeStr,
+	   t.transferTime,t.tlandBureauName,t.tlandBureauUserName ,t.tlandBureau,t.tlandBureauUid
+	   from tbl_process_app_cancellation c
+	   left join tbl_process_app_transfer t on t.orderNo=c.orderNo
+	   where c.orderNo=#{orderNo}
+	   order by t.updateTime desc
+	   limit 1
+	</select>
+	
+	<insert id="addCancellation" parameterType="CancellationDto" >
+	    INSERT INTO `tbl_process_app_cancellation` (
+	    `createUid`, `createTime`, `updateUid`, `orderNo`,`cancelImg`,  `remark`, `cancelTime`,`clandBureau`,clandBureauName,`clandBureauUid`,clandBureauUserName,`cancelStartTime`,`cancelEndTime`
+	    ) VALUES (
+	     #{createUid}, now(), #{updateUid}, #{orderNo},  #{cancelImg},  #{remark}, #{cancelTime},#{clandBureau},#{clandBureauName},#{clandBureauUid},#{clandBureauUserName},#{cancelStartTime},#{cancelEndTime}
+	    )
+	</insert>
+	<!-- 关联查询抵押 -->
+	<select id="selectCancellationByMortgage"  parameterType="CancellationDto" resultType="CancellationDto">
+	   select c.*,DATE_FORMAT(c.cancelTime,'%Y-%m-%d') as cancelTimeStr,DATE_FORMAT(c.cancelStartTime,'%Y-%m-%d') as cancelStartTimeStr,DATE_FORMAT(c.cancelEndTime,'%Y-%m-%d') as cancelEndTimeStr,
+	   DATE_FORMAT(m.mortgageTime,'%Y-%m-%d') as transferTimeStr,
+	   m.mortgageTime as transferTime,m.mlandBureauName as tlandBureauName,m.mlandBureauUserName as tlandBureauUserName,m.mlandBureau as tlandBureau,m.mlandBureauUid as tlandBureauUid
+	   from tbl_process_app_cancellation c
+	   left join tbl_process_app_mortgage m on m.orderNo=c.orderNo
+	   where c.orderNo=#{orderNo}
+	   order by m.updateTime desc
+	   limit 1
+	</select>
+	
+	<update id="updateCancellation" parameterType="CancellationDto">
+	     update tbl_process_app_cancellation
+		set
+		    <if test="updateUid!= null and updateUid !='' " >
+        		updateUid = #{updateUid},
+      		</if>
+			<if test="cancelTime != null" >
+        		cancelTime = #{cancelTime},
+      		</if>
+      		<if test="cancelImg !=null and cancelImg != ''">
+      		    cancelImg=#{cancelImg},
+      		</if>
+			<if test="clandBureau != null and clandBureau !='' " >
+        		clandBureau = #{clandBureau},
+      		</if>
+      		<if test="clandBureauName != null and clandBureauName !='' " >
+        		clandBureauName = #{clandBureauName},
+      		</if>
+      		<if test="clandBureauUserName != null and clandBureauUserName !='' " >
+        		clandBureauUserName = #{clandBureauUserName},
+      		</if>
+      		<if test="clandBureauUid != null and clandBureauUid !='' " >
+        		clandBureauUid = #{clandBureauUid},
+      		</if>
+      		<if test="cancelStartTime != null  " >
+        		cancelStartTime = #{cancelStartTime},
+      		</if>
+      		<if test="cancelEndTime != null " >
+        		cancelEndTime = #{cancelEndTime},
+      		</if>
+      		<if test="remark!= null and remark !='' " >
+	        		remark = #{remark},
+	      	</if>
+	      	orderNo=#{orderNo}
+		  where orderNo=#{orderNo}
+	</update>
+</mapper>

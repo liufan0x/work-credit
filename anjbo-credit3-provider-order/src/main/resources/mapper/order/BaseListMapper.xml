@@ -1,0 +1,422 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.order.BaseListMapper">
+	<sql id="sqlwhereSearch">
+		<where>
+			<if test="null!=id and ''!=id"> AND `id`=#{id}</if>
+			<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+			<!-- <if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if> 
+				<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if> -->
+			<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+			<!-- <if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if> 
+				<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if> -->
+			<if test="null!=agencyId and agencyId>0"> AND `agencyId`=#{agencyId}</if>
+			<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+			<if test="null!=cityCode and ''!=cityCode"> AND `cityCode`=#{cityCode}</if>
+			<if test="null!=cityName and ''!=cityName"> AND `cityName`=#{cityName}</if>
+			<if test="null!=branchCompany and ''!=branchCompany"> AND `branchCompany`=#{branchCompany}</if>
+			<if test="null!=productCode and ''!=productCode"> AND `productCode`=#{productCode}</if>
+			<if test="null!=productName and ''!=productName"> AND `productName`=#{productName}</if>
+			<if test="null!=contractNo and ''!=contractNo"> AND `contractNo`=#{contractNo}</if>
+			<if test="null!=customerName and ''!=customerName"> AND `customerName`=#{customerName}</if>
+			<if test="null!=borrowingAmount and borrowingAmount>0"> AND `borrowingAmount`=#{borrowingAmount}</if>
+			<if test="null!=borrowingDay and borrowingDay>0"> AND `borrowingDay`=#{borrowingDay}</if>
+			<if test="null!=cooperativeAgencyId and cooperativeAgencyId>0"> AND `cooperativeAgencyId`=#{cooperativeAgencyId}</if>
+			<if
+				test="null!=cooperativeAgencyName and ''!=cooperativeAgencyName"> AND `cooperativeAgencyName`=#{cooperativeAgencyName}</if>
+			<if test="null!=channelManagerUid and ''!=channelManagerUid"> AND `channelManagerUid`=#{channelManagerUid}</if>
+			<if test="null!=channelManagerName and ''!=channelManagerName"> AND `channelManagerName`=#{channelManagerName}</if>
+			<if test="null!=acceptMemberUid and ''!=acceptMemberUid"> AND `acceptMemberUid`=#{acceptMemberUid}</if>
+			<if test="null!=acceptMemberName and ''!=acceptMemberName"> AND `acceptMemberName`=#{acceptMemberName}</if>
+			<!-- <if test="@Ognl@isNotEmpty(planPaymentTimeBegin)"> AND planPaymentTime 
+				>= #{planPaymentTimeBegin}</if> <if test="@Ognl@isNotEmpty(planPaymentTimeEnd)"> 
+				AND planPaymentTime &lt;= #{planPaymentTimeEnd}</if> -->
+			<!-- <if test="@Ognl@isNotEmpty(lendingTimeBegin)"> AND lendingTime >= 
+				#{lendingTimeBegin}</if> <if test="@Ognl@isNotEmpty(lendingTimeEnd)"> AND 
+				lendingTime &lt;= #{lendingTimeEnd}</if> -->
+			<if test="null!=previousHandler and ''!=previousHandler"> AND `previousHandler`=#{previousHandler}</if>
+			<if test="null!=previousHandlerUid and ''!=previousHandlerUid"> AND `previousHandlerUid`=#{previousHandlerUid}</if>
+			<!-- <if test="@Ognl@isNotEmpty(previousHandleTimeBegin)"> AND previousHandleTime 
+				>= #{previousHandleTimeBegin}</if> <if test="@Ognl@isNotEmpty(previousHandleTimeEnd)"> 
+				AND previousHandleTime &lt;= #{previousHandleTimeEnd}</if> -->
+			<if test="null!=state and ''!=state"> AND `state`=#{state}</if>
+			<if test="null!=currentHandlerUid and ''!=currentHandlerUid"> AND `currentHandlerUid`=#{currentHandlerUid}</if>
+			<if test="null!=currentHandler and ''!=currentHandler"> AND `currentHandler`=#{currentHandler}</if>
+			<if test="null!=processId and ''!=processId"> AND `processId`=#{processId}</if>
+			<if test="null!=source and ''!=source"> AND `source`=#{source}</if>
+			<if test="null!=notarialUid and ''!=notarialUid"> AND `notarialUid`=#{notarialUid}</if>
+			<if test="null!=facesignUid and ''!=facesignUid"> AND `facesignUid`=#{facesignUid}</if>
+			<if test="null!=appShowValue1 and ''!=appShowValue1"> AND `appShowValue1`=#{appShowValue1}</if>
+			<if test="null!=appShowValue2 and ''!=appShowValue2"> AND `appShowValue2`=#{appShowValue2}</if>
+			<if test="null!=relationOrderNo and ''!=relationOrderNo"> AND `relationOrderNo`=#{relationOrderNo}</if>
+			<if test="null!=foreclosureTimeStr and ''!=foreclosureTimeStr"> AND `foreclosureTimeStr`=#{foreclosureTimeStr}</if>
+			<if test="null!=isFace and ''!=isFace"> AND `isFace`=#{isFace}</if>
+			<if test="null!=receptionManagerUid and ''!=receptionManagerUid"> AND `receptionManagerUid`=#{receptionManagerUid}</if>
+			<if test="null!=customerType and customerType>0"> AND `customerType`=#{customerType}</if>
+			<if test="null!=isRelationOrder and ''!=isRelationOrder"> AND `isRelationOrder`=#{isRelationOrder}</if>
+			<if test="null!=auditSort and auditSort>0"> AND `auditSort`=#{auditSort}</if>
+			<if test="null!=distributionOrderUid and ''!=distributionOrderUid"> AND `distributionOrderUid`=#{distributionOrderUid}</if>
+			<!-- <if test="@Ognl@isNotEmpty(financeOutLoanTimeBegin)"> AND financeOutLoanTime 
+				>= #{financeOutLoanTimeBegin}</if> <if test="@Ognl@isNotEmpty(financeOutLoanTimeEnd)"> 
+				AND financeOutLoanTime &lt;= #{financeOutLoanTimeEnd}</if> -->
+		</where>
+	</sql>
+
+
+	<!-- 获取实体 -->
+	<select id="find" parameterType="BaseListDto"
+		resultType="BaseListDto">
+		SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`,
+		`agencyId`, `orderNo`, `cityCode`, `cityName`, `branchCompany`,
+		`productCode`, `productName`, `contractNo`, `customerName`,
+		`borrowingAmount`, `borrowingDay`, `cooperativeAgencyId`,
+		`cooperativeAgencyName`, `channelManagerUid`, `channelManagerName`,
+		`acceptMemberUid`, `acceptMemberName`, `planPaymentTime`,
+		`lendingTime`, `previousHandler`, `previousHandlerUid`,
+		`previousHandleTime`, `state`, `currentHandlerUid`, `currentHandler`,
+		`processId`, `source`, `notarialUid`, `facesignUid`, `appShowValue1`,
+		`appShowValue2`, `relationOrderNo`, `foreclosureTimeStr`, `isFace`,
+		`receptionManagerUid`, `customerType`, `isRelationOrder`, `auditSort`,
+		`distributionOrderUid`, `financeOutLoanTime`
+		FROM tbl_order_list_base
+		<include refid="sqlwhereSearch" />
+	</select>
+	
+	<!-- 获取实体 -->
+	<select id="findOne" parameterType="BaseListDto"
+		resultType="BaseListDto">
+		SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`,
+		`agencyId`, `orderNo`, `cityCode`, `cityName`, `branchCompany`,
+		`productCode`, `productName`, `contractNo`, `customerName`,
+		`borrowingAmount`, `borrowingDay`, `cooperativeAgencyId`,
+		`cooperativeAgencyName`, `channelManagerUid`, `channelManagerName`,
+		`acceptMemberUid`, `acceptMemberName`, `planPaymentTime`,
+		`lendingTime`, `previousHandler`, `previousHandlerUid`,
+		`previousHandleTime`, `state`, `currentHandlerUid`, `currentHandler`,
+		`processId`, `source`, `notarialUid`, `facesignUid`, `appShowValue1`,
+		`appShowValue2`, `relationOrderNo`, `foreclosureTimeStr`, `isFace`,
+		`receptionManagerUid`, `customerType`, `isRelationOrder`, `auditSort`,
+		`distributionOrderUid`, `financeOutLoanTime`
+		FROM tbl_order_list_base where orderNo = #{orderNo}
+	</select>
+
+	<!-- 查询 -->
+	<select id="search" parameterType="BaseListDto"
+		resultType="BaseListDto">
+		SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`,
+		`agencyId`, `orderNo`, `cityCode`, `cityName`, `branchCompany`,
+		`productCode`, `productName`, `contractNo`, `customerName`,
+		`borrowingAmount`, `borrowingDay`, `cooperativeAgencyId`,
+		`cooperativeAgencyName`, `channelManagerUid`, `channelManagerName`,
+		`acceptMemberUid`, `acceptMemberName`, `planPaymentTime`,
+		`lendingTime`, `previousHandler`, `previousHandlerUid`,
+		`previousHandleTime`, `state`, `currentHandlerUid`, `currentHandler`,
+		`processId`, `source`, `notarialUid`, `facesignUid`, `appShowValue1`,
+		`appShowValue2`, `relationOrderNo`, `foreclosureTimeStr`, `isFace`,
+		`receptionManagerUid`, `customerType`, `isRelationOrder`, `auditSort`,
+		`distributionOrderUid`, `financeOutLoanTime`
+		FROM tbl_order_list_base
+		<include refid="sqlwhereSearch" />
+		<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+	</select>
+
+	<select id="selectDetail" parameterType="string"
+		resultType="BaseListDto">
+		select `id`, `createUid`, `createTime`, `updateUid`,
+		`updateTime`, `agencyId`, `orderNo`, `cityCode`, `cityName`,
+		`branchCompany`, `productCode`, `productName`, `contractNo`,
+		`customerName`, `borrowingAmount`, `borrowingDay`,
+		`cooperativeAgencyId`, `cooperativeAgencyName`, `channelManagerUid`,
+		`channelManagerName`, `acceptMemberUid`, `acceptMemberName`,
+		`planPaymentTime`, `lendingTime`, `previousHandler`,
+		`previousHandlerUid`, `previousHandleTime`, `state`,
+		`currentHandlerUid`, `currentHandler`, `processId`, `source`,
+		`notarialUid`, `facesignUid`, `appShowValue1`, `appShowValue2`,
+		`relationOrderNo`, `foreclosureTimeStr`, `isFace`,
+		`receptionManagerUid`, `customerType`, `isRelationOrder`, `auditSort`,
+		`distributionOrderUid`, `financeOutLoanTime`
+		from tbl_order_list_base
+		where
+		orderNo = #{orderNo} limit 1
+	</select>
+
+	<!-- 查询 -->
+	<select id="count" parameterType="BaseListDto" resultType="int">
+		SELECT count(1)
+		FROM tbl_order_list_base
+		<include refid="sqlwhereSearch" />
+	</select>
+
+
+	<!-- 增删改 -->
+	<insert id="insert" parameterType="BaseListDto"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tbl_order_list_base(
+		`createUid`,
+		`createTime`,
+		`updateUid`,
+		`updateTime`,
+		`agencyId`,
+		`orderNo`,
+		`cityCode`,
+		`cityName`,
+		`branchCompany`,
+		`productCode`,
+		`productName`,
+		`contractNo`,
+		`customerName`,
+		`borrowingAmount`,
+		`borrowingDay`,
+		`cooperativeAgencyId`,
+		`cooperativeAgencyName`,
+		`channelManagerUid`,
+		`channelManagerName`,
+		`acceptMemberUid`,
+		`acceptMemberName`,
+		`planPaymentTime`,
+		`lendingTime`,
+		`previousHandler`,
+		`previousHandlerUid`,
+		`previousHandleTime`,
+		`state`,
+		`currentHandlerUid`,
+		`currentHandler`,
+		`processId`,
+		`source`,
+		`notarialUid`,
+		`facesignUid`,
+		`appShowValue1`,
+		`appShowValue2`,
+		`relationOrderNo`,
+		`foreclosureTimeStr`,
+		`isFace`,
+		`receptionManagerUid`,
+		`customerType`,
+		`isRelationOrder`,
+		`auditSort`,
+		`distributionOrderUid`,
+		`financeOutLoanTime`
+		) VALUES(
+		#{createUid},
+		now(),
+		#{createUid},
+		now(),
+		#{agencyId},
+		#{orderNo},
+		#{cityCode},
+		#{cityName},
+		#{branchCompany},
+		#{productCode},
+		#{productName},
+		#{contractNo},
+		#{customerName},
+		#{borrowingAmount},
+		#{borrowingDay},
+		#{cooperativeAgencyId},
+		#{cooperativeAgencyName},
+		#{channelManagerUid},
+		#{channelManagerName},
+		#{acceptMemberUid},
+		#{acceptMemberName},
+		#{planPaymentTime},
+		#{lendingTime},
+		#{previousHandler},
+		#{previousHandlerUid},
+		#{previousHandleTime},
+		#{state},
+		#{currentHandlerUid},
+		#{currentHandler},
+		#{processId},
+		#{source},
+		#{notarialUid},
+		#{facesignUid},
+		#{appShowValue1},
+		#{appShowValue2},
+		#{relationOrderNo},
+		#{foreclosureTimeStr},
+		#{isFace},
+		#{receptionManagerUid},
+		#{customerType},
+		#{isRelationOrder},
+		#{auditSort},
+		#{distributionOrderUid},
+		#{financeOutLoanTime}
+		)
+	</insert>
+
+
+	<delete id="delete" parameterType="BaseListDto">
+		DELETE FROM tbl_order_list_base
+		<include refid="sqlwhereSearch" />
+	</delete>
+
+	<update id="update" parameterType="BaseListDto">
+		UPDATE tbl_order_list_base
+		<set>
+			<if test="null!=createTime">`createTime`=now(),</if>
+			<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+			<if test="null!=updateTime">`updateTime`=now(),</if>
+			<if test="null!=agencyId">`agencyId`=#{agencyId},</if>
+			<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+			<if test="null!=cityCode">`cityCode`=#{cityCode},</if>
+			<if test="null!=cityName">`cityName`=#{cityName},</if>
+			<if test="null!=branchCompany">`branchCompany`=#{branchCompany},</if>
+			<if test="null!=productCode">`productCode`=#{productCode},</if>
+			<if test="null!=productName">`productName`=#{productName},</if>
+			<if test="null!=contractNo">`contractNo`=#{contractNo},</if>
+			<if test="null!=customerName">`customerName`=#{customerName},</if>
+			<if test="null!=borrowingAmount">`borrowingAmount`=#{borrowingAmount},</if>
+			<if test="null!=borrowingDay">`borrowingDay`=#{borrowingDay},</if>
+			<if test="null!=cooperativeAgencyId">`cooperativeAgencyId`=#{cooperativeAgencyId},</if>
+			<if test="null!=cooperativeAgencyName">`cooperativeAgencyName`=#{cooperativeAgencyName},</if>
+			<if test="null!=channelManagerUid">`channelManagerUid`=#{channelManagerUid},</if>
+			<if test="null!=channelManagerName">`channelManagerName`=#{channelManagerName},</if>
+			<if test="null!=acceptMemberUid">`acceptMemberUid`=#{acceptMemberUid},</if>
+			<if test="null!=acceptMemberName">`acceptMemberName`=#{acceptMemberName},</if>
+			<if test="null!=planPaymentTime">`planPaymentTime`=#{planPaymentTime},</if>
+			<if test="null!=lendingTime">`lendingTime`=#{lendingTime},</if>
+			<if test="null!=previousHandler">`previousHandler`=#{previousHandler},</if>
+			<if test="null!=previousHandlerUid">`previousHandlerUid`=#{previousHandlerUid},</if>
+			<if test="null!=previousHandleTime">`previousHandleTime`=#{previousHandleTime},</if>
+			<if test="null!=state">`state`=#{state},</if>
+			<if test="null!=currentHandlerUid">`currentHandlerUid`=#{currentHandlerUid},</if>
+			<if test="null!=currentHandler">`currentHandler`=#{currentHandler},</if>
+			<if test="null!=processId">`processId`=#{processId},</if>
+			<if test="null!=source">`source`=#{source},</if>
+			<if test="null!=notarialUid">`notarialUid`=#{notarialUid},</if>
+			<if test="null!=facesignUid">`facesignUid`=#{facesignUid},</if>
+			<if test="null!=appShowValue1">`appShowValue1`=#{appShowValue1},</if>
+			<if test="null!=appShowValue2">`appShowValue2`=#{appShowValue2},</if>
+			<if test="null!=relationOrderNo">`relationOrderNo`=#{relationOrderNo},</if>
+			<if test="null!=foreclosureTimeStr">`foreclosureTimeStr`=#{foreclosureTimeStr},</if>
+			<if test="null!=isFace">`isFace`=#{isFace},</if>
+			<if test="null!=receptionManagerUid">`receptionManagerUid`=#{receptionManagerUid},</if>
+			<if test="null!=customerType and customerType>0">`customerType`=#{customerType},</if>
+			<if test="null!=isRelationOrder">`isRelationOrder`=#{isRelationOrder},</if>
+			<if test="null!=auditSort">`auditSort`=#{auditSort},</if>
+			<if test="null!=distributionOrderUid">`distributionOrderUid`=#{distributionOrderUid},</if>
+			<if test="null!=financeOutLoanTime">`financeOutLoanTime`=#{financeOutLoanTime},</if>
+		</set>
+		WHERE orderNo=#{orderNo}
+	</update>
+
+
+	<select id="searchPageListCount" parameterType="BaseListDto" resultType="int">
+		select count(1) from tbl_order_list_base where 
+		<include refid="selectOrderWhere"/>
+	</select>
+	
+	<select id="searchPageList" parameterType="BaseListDto"
+		resultType="BaseListDto">
+		SELECT ou.orderNo AS isUp, olb.* FROM (
+		select * from
+		tbl_order_list_base where
+		<include refid="selectOrderWhere" />
+		) AS olb
+		LEFT JOIN tbl_order_up ou ON (ou.orderNo=olb.orderNo AND
+		ou.createUid=#{updateUid})
+		ORDER BY ou.createTime DESC
+		<if test="sortName !=null and sortName !=''">,${sortName} ${sortOrder}</if>
+		<if
+			test="(sortName ==null or sortName =='') and (type == 0 or type ==3) ">,(case when currentHandlerUid =#{updateUid} then 1 ELSE 4 END),previousHandleTime desc
+		</if>
+		limit #{start},#{pageSize}
+	</select>
+
+	<sql id="selectOrderWhere">
+		state != '已关闭'
+		<if test="type == 0">
+			<if test="currentHandlerUid != null and currentHandlerUid != '' ">
+				and (
+				
+				currentHandlerUid in (${currentHandlerUid})
+				
+				or previousHandlerUid = #{updateUid} 
+
+				or acceptMemberUid in (${currentHandlerUid})
+
+				or channelManagerUid in (${currentHandlerUid})
+
+				<if test="orderNo != '' and orderNo != null">
+					or orderNo in (${orderNo})
+				</if>
+				)
+			</if>
+		</if>
+		<if test="type == 1">
+			and orderNo in (${orderNo})
+		</if>
+		<if test="type == 2">
+		   and currentHandlerUid = #{currentHandlerUid}
+		</if>
+		<if test="customerName !=null and customerName != ''">
+			and customerName like CONCAT('%',#{customerName},'%')
+		</if>
+		<if test="cityCode !=null and cityCode!=''">
+			and cityCode = #{cityCode}
+		</if>
+		<if test="productCode != null and  productCode != '' ">
+			and productCode = #{productCode}
+		</if>
+		<if test="state !=null and state != '' ">
+			and `state` = #{state}
+		</if>
+		<if test="agencyId !=null and agencyId !=''">
+			and agencyId = #{agencyId}
+		</if>
+		<if test="cooperativeAgencyId !=null and cooperativeAgencyId !=''">
+			and cooperativeAgencyId = #{cooperativeAgencyId}
+		</if>
+		<if test="channelManagerUid !=null and channelManagerUid !=''">
+			and channelManagerUid = #{channelManagerUid}
+		</if>
+		<if test="acceptMemberUid !=null and acceptMemberUid !=''">
+			and acceptMemberUid = #{acceptMemberUid}
+		</if>
+		<if test="createTimeStart !=null and createTimeStart !=''">
+			and  <![CDATA[ createTime >= #{createTimeStart} ]]>
+		</if>
+		<if test="createTimeEnd !=null and createTimeEnd !=''">
+			and  <![CDATA[ createTime <= #{createTimeEnd} ]]>
+		</if>
+		<if test="lendingTimeStart !=null and lendingTimeStart !=''">
+			and  <![CDATA[ lendingTime >= #{lendingTimeStart} ]]>
+		</if>
+		<if test="lendingTimeEnd !=null and lendingTimeEnd !=''">
+			and  <![CDATA[ lendingTime <= #{lendingTimeEnd} ]]>
+		</if>
+		<if test="branchCompany !=null and branchCompany !=''">
+			and branchCompany = #{branchCompany}
+		</if>
+		<if test="searchName !=null and searchName !=''">
+			and (channelManagerName like CONCAT('%',#{searchName},'%')
+			or customerName like CONCAT('%',#{searchName},'%') or
+			acceptMemberName like CONCAT('%',#{searchName},'%'))
+		</if>
+		<if test="customerType!=null and customerType!=0"> and customerType=#{customerType}</if>
+		
+	</sql>
+	
+	<!-- 查询新建合同可关联的订单 -->
+	<select id="selectAbleRelationOrder" parameterType="BaseListDto" resultType="BaseListDto" >
+		SELECT cityCode, productCode,customerName,orderNo,borrowingAmount,borrowingDay
+		FROM tbl_order_list_base olb
+		where productCode!='04' 
+		AND customerName=#{customerName}	
+		and olb.state != '已关闭'
+		<if test="currentHandlerUid != null and currentHandlerUid != '' ">
+		and 
+			(currentHandlerUid in (${currentHandlerUid}) or previousHandlerUid = #{updateUid} or notarialUid in (${currentHandlerUid}) or facesignUid in (${currentHandlerUid})
+			 
+			 or acceptMemberUid in  (${currentHandlerUid}) 
+			 
+			 or channelManagerUid in (${currentHandlerUid}) 
+			 
+			<if test="orderNo != '' and orderNo != null">
+			 or orderNo in (${orderNo})
+			</if>
+			  )
+		</if>	
+	</select>
+
+</mapper>

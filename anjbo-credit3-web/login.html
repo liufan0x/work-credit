@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="Keywords" content="">
+<meta name="Description" content="">
+<link rel="shortcut icon" href="images/icon.png" />
+<link href="css/login.css" rel="stylesheet" type="text/css" />
+<title>登录 - 快鸽按揭信贷业务系统</title>
+</head>
+<body ng-app="anjboApp" ng-controller="login" >
+     <div class="main-box">
+        <div class="login-left">
+		     <p>1. 建议使用Google浏览器操作；<br>
+2. 如有版本更新，我们会第一时间在系统公告中说明更新内容；<br>
+3. 快马金服APP与信贷业务系统账号通用，如忘记密码请联系管理员；<br>
+4. 以下为快马金服APP安装二维码（长期有效）；</p>
+             <img src="images/erweima.png" class="login-img">
+		</div>
+		<form name="loginForm">
+		<div class="login-box">
+			<div class="login-in">				
+				<p class="login-tit"><img src="images/logo.png" class="logo-img"><span>快鸽按揭信贷业务系统</span></p>
+				<div id="loginSwitch0">
+					<div class="inp-box" style="margin-top:15px;">
+						<span class="icon-box user"></span> <input type="text" AUTOCOMPLETE="off" ng-keyup="myKeyup($event)" required placeholder="请输入您的登录账号" name="userAccount" ng-model="userAccount" class="inp" style="top: 125px;">
+					</div>
+					<div class="inp-box">
+						<span class="icon-box password"></span> <input type="password" AUTOCOMPLETE="off" ng-keyup="myKeyup($event)" required placeholder="请输入密码" name="userPassword" ng-model="userPassword" class="inp" style="top: 206px;">
+					</div>
+					<div class="yanzheng-box">
+						<div class="inp-box2">
+							<input type="text" maxLength="4" AUTOCOMPLETE="off" ng-keyup="myKeyup($event)" required placeholder="请输入验证码" name="validateCode" ng-model="validateCode" class="inp2" style="top: 286px; width: 80px;">
+						</div>
+						<img ng-src="{{validateCodeUrl}}" class="inp-img" ng-click="changeValidateCode();">
+					</div>
+					<div class="login-switch">
+						<a ng-click="loginSwitch($event, 0)">手机号登录</a>
+					</div>
+				</div>
+				<div id="loginSwitch1" style="display: none;">
+					<div class="inp-box" style="margin-top:15px;">
+						<span class="icon-box user"></span> <input type="text" AUTOCOMPLETE="off" ng-keyup="myKeyup($event)" required ng-pattern="/^1[0-9]{10}$/" placeholder="请输入手机号" name="userMobile" ng-model="userMobile" class="inp" style="top: 125px;">
+					</div>
+					<div class="yanzheng-box">
+						<div class="inp-box2">
+							<input type="text" maxLength="4" AUTOCOMPLETE="off" ng-keyup="myKeyup($event)" required placeholder="验证码" name="validateCodeToSms" ng-model="validateCodeToSms" class="inp2" style="top: 286px; width: 80px;">
+						</div>
+						<img ng-src="{{validateCodeUrl}}" class="inp-img" ng-click="changeValidateCode();" style="margin-left: 13px;">
+					</div>
+					<div class="yanzheng-box">
+						<div class="inp-box2">
+							<input type="text" maxLength="4" AUTOCOMPLETE="off" ng-keyup="myKeyup($event)" required placeholder="短信验证码" name="validateCodeSms" ng-model="validateCodeSms" class="inp2" style="top: 286px; width: 80px;">
+						</div>
+						<a ng-click="changeValidateCodeSMS($event)" id="sendSMSCode" ng-class="{true:'dis',false:''}[isdis]">获取短信验证码</a>
+					</div>
+					<div class="login-switch">
+						<a ng-click="loginSwitch($event, 1)">账号密码登录</a>
+					</div>
+				</div>
+				<a class="login-but" ng-click="login()">登&nbsp;录</a>
+				<div class="error">
+					<error class="errorG0" ng-show="loginForm.userAccount.$error.required&&loginForm.userAccount.$dirty" ng-init="userAccountError='用户名不能为空；'" ng-bind="userAccountError"></error>
+					<error class="errorG0" ng-show="loginForm.userPassword.$error.required&&loginForm.userPassword.$dirty" ng-init="userPasswordError='密码不能为空；'" ng-bind="userPasswordError"></error>
+					<error class="errorG0" ng-show="loginForm.validateCode.$error.required&&loginForm.validateCode.$dirty" ng-init="validateCodeError='验证码不能为空；'" ng-bind="validateCodeError"></error>
+					<error class="errorG1" ng-show="loginForm.userMobile.$error&&loginForm.userMobile.$dirty&&loginForm.userMobile.$invalid" ng-init="userMobileError='请输入有效的手机号码；'" ng-bind="userMobileError"></error>
+					<error class="errorG1" ng-show="loginForm.validateCodeToSms.$error.required&&loginForm.validateCodeToSms.$dirty" ng-init="validateCodeToSmsError='验证码不能为空；'" ng-bind="validateCodeToSmsError"></error>
+					<error class="errorG1" ng-show="loginForm.validateCodeSms.$error.required&&loginForm.validateCodeSms.$dirty" ng-init="validateCodeSmsError='验证码不能为空；'" ng-bind="validateCodeSmsError"></error>
+					<error ng-show="errorTxt"ng-bind="errorTxt"></error>
+				</div>
+			</div>
+		</div>
+	</form>
+	</div>
+    
+	<div class="bottom-box">网络经营许可证：粤ICP备15063626号-1 Copyright © 2016 anjbo.com 版权所有</div>
+</body>
+<script type="text/javascript" src="script/common/jquery.min.js"></script>
+<script type="text/javascript" src="script/common/angular.min.js"></script>
+<script type="text/javascript" src="script/common/angular-cookies.min.js"></script>
+<script type="text/javascript" src="script/login.js"></script>
+</html>

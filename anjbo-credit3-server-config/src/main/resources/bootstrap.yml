@@ -1,0 +1,31 @@
+eureka:  
+  client:
+    service-url:
+      defaultZone: http://server-eureka001:60100/eureka/
+      
+server:
+  port: 60110
+      
+spring:
+  profiles:
+    active: dev
+  application:
+    name: anjbo-credit3-server-config
+  cloud:
+    config:
+      profile: ${spring.profiles.active}
+      label: master
+      name: ${spring.application.name},anjbo-credit3-common
+      server:
+        git:
+          uri: https://gitee.com/anjbo/config-repo
+          search-paths: '{profile}'
+          username: lic@anjbo.com
+          password: lican123
+          
+logging:  
+  path: /data/logs/anjbo-credit3
+  file: anjbo-credit3-server-config.log
+  level: 
+    root: INFO
+    com.anjbo: INFO

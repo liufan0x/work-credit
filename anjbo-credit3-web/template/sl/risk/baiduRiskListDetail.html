@@ -1,0 +1,46 @@
+<style>
+	.w180 label {
+		width: 180px;
+	}
+</style>
+<form class="form-inline w180" name="archiveAddForm" id="archiveAddForm">
+	<div class="row detail-row">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;1.客户信息</div>
+
+		<div class="col-md-6 col-lg-4"><label>姓名：</label>
+			<span ng-bind="baiduRiskListDto.name"></span>
+		</div>
+
+		<div class="col-md-6 col-lg-4"><label>身份证号：</label>
+			<span ng-bind="baiduRiskListDto.identity"></span>
+		</div>
+
+		<div class="col-md-6 col-lg-4"><label>手机号码：</label>
+			<span ng-bind="baiduRiskListDto.phone"></span>
+		</div>
+
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;2.查询结果
+		</div>
+
+		<div class="col-md-6 col-lg-12"><label>查询时间：</label>
+			<span ng-bind="baiduRiskListDto.createTime | date:'yyyy-MM-dd HH:mm:ss'"></span>
+		</div>
+
+		<div class="col-md-6 col-lg-12"><label>风险名单等级：</label>
+			<span ng-if="baiduRiskListDto.blackLevel==null || baiduRiskListDto.blackLevel==''">无</span>
+			<span ng-if="baiduRiskListDto.blackLevel!=null && baiduRiskListDto.blackLevel!=''">{{baiduRiskListDto.blackLevel}}</span>
+		</div>
+
+		<div class="col-md-6 col-lg-12"><label>风险名单原因：</label>
+			<span ng-if="baiduRiskListDto.blackReason == null || baiduRiskListDto.blackReason == ''">无</span>
+			<span ng-if="baiduRiskListDto.blackReason!=null && baiduRiskListDto.blackReason != ''">{{baiduRiskListDto.blackReason}}</span>
+		</div>
+
+		<div class="col-md-6 col-lg-12"><label style="text-align:right; line-heigth:44px; position:absolute; letf:0;top:0;">风险名单详情：</label>
+			<textarea ng-if="baiduRiskListDto.blackDetails==null || baiduRiskListDto.blackDetails==''" class="remark-p remark-lhw-p textarea-lhw" style="margin-left:170px;" readonly="readonly"> 无
+			</textarea>
+			<textarea ng-if="baiduRiskListDto.blackDetails!=null && baiduRiskListDto.blackDetails!=''" ng-bind="baiduRiskListDto.blackDetails" class="remark-p remark-lhw-p textarea-lhw" style="margin-left:170px;" readonly="readonly">
+			</textarea>
+		</div>
+	</div>
+</form>

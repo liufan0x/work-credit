@@ -1,0 +1,136 @@
+<style>
+.w180 label{width:180px;}
+</style>
+<div class="container-fluid">
+	<place-order-detail></place-order-detail>
+	<div id="viewRow">
+		
+	</div>
+<form class="form-inline w180" name="archiveAddForm" id="archiveAddForm">
+   <!-- 融安审批 -->
+	<div class="row detail-row" ng-if="isHuaRongShow">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp; 查询资方审批状态
+		      <span ng-if="obj.dealStatus != 997 && obj.dealStatus != 998">
+				<button ng-if="flag2" type="button" ng-click="edit()" class="btn btn-info detail-right-save">修改</button>
+				<button ng-if="flag" type="button" ng-click="save()" class="btn btn-info detail-right-save">保存</button>
+			  </span>	
+		</div>
+		<div class="col-md-6 col-lg-12"><label>查询开始时间-结束时间：</label>
+		   <span ng-if="flag2"><span ng-bind="obj.startTime"></span> - <span ng-bind="obj.endTime"></span></span>
+		   <span ng-if="flag">
+		    <input size="16" type="text" name="startTime" ng-model="obj.startTime" readonly class="form-control form_date">
+					-
+			<input size="16" type="text" name="endTime" ng-model="obj.endTime" readonly class="form-control form_date">
+		   </span>	
+		</div>
+		<div class="col-md-6 col-lg-12"><label>查询频率：</label>
+			<span ng-if="flag2"><span ng-bind="obj.queryFrequency"></span>次/天</span>
+			<span ng-if="flag"><input type="text" class="form-control" style="width:178px;"  ng-model="obj.queryFrequency" maxlength="2"  onkeyup="value=value.replace(/[^\d]/g,'')">次/天</span>
+		</div>
+		<div class="col-md-6 col-lg-12"><label>短信通知：</label>
+			<span ng-if="flag2"><span  ng-bind="obj.phone"></span></span>
+			<span ng-if="flag"><input type="text" class="form-control" style="width:178px;"   ng-model="obj.phone" maxlength="11" onkeyup="value=value.replace(/[^\d]/g,'')"></span>
+			<span class="green-word">（查询结果有变更后，系统会发短信通知您）</span>
+		</div>
+		
+		
+		<!--备注-->
+		<div class="clear" style="width:100%;clear:both;height:1px;"></div>
+		<div class="relative">
+			<span style="width:178px" class="remark-span remark-lhw">备注：</span>
+			 <span ng-if="flag2"><textarea style="margin-left:181px"  class="remark-p remark-lhw-p textarea-lhw" ng-bind="obj.remark" readonly="readonly"  > </textarea></span>
+		   <span ng-if="flag"> <textarea style="width:600px; margin-left:180px;" ng-model="obj.remark" class="form-control" rows="5" style="width:500px" placeholder="如有特殊说明，请在此处备注（非必填）"/></span>
+		
+		</div>
+	<!--备注end-->
+		<div class="col-md-6 col-lg-12"  ng-if="flag2 && obj.id>0">
+		  <label>资方审批结果：</label>
+          <div class="form-group" style="color:red;">
+               <span ng-if="obj.dealStatus == 111">待处理</span>
+               <span ng-if="obj.dealStatus == 997">审批通过</span>
+               <span ng-if="obj.dealStatus == 998">人工否决</span> 
+               <span ng-if="obj.dealStatus == 992">审批打回</span> 
+		  </div>
+		  <div class="col-md-6 col-lg-12" ng-if="obj.dealStatus == 992 && obj.dealOpinion != null"><label>审批打回原因：</label>
+				<span  ng-bind="obj.dealOpinion"></span>
+		  </div>
+		</div>
+<!-- 		<div class="col-md-6 col-lg-12" ng-if="flag2 && obj.id>0"> -->
+<!-- 		  <label>资方勾兑结果：</label> -->
+<!--           <div class="form-group" style="color:red;"> -->
+<!--                <span ng-if="obj.grantStatus == 111">待处理</span> -->
+<!--                <span ng-if="obj.grantStatus == 997">勾兑成功</span> -->
+<!--                <span ng-if="obj.grantStatus == 998">勾兑否决</span>  -->
+<!-- 		  </div> -->
+<!-- 		  <div class="col-md-6 col-lg-12" ng-if="obj.lendingTime"><label>放款时间：</label> -->
+<!-- 				<span  ng-bind="obj.lendingTime|date:'yyyy-MM-dd HH:mm'"></span> -->
+<!-- 		  </div> -->
+<!-- 		</div> -->
+		<div class="col-md-12">
+		    <button style="margin-left:60px;" type="button" class="btn btn-primary" ng-click="toFinance()">提交</button> 
+<!-- 		<button  ng-if="obj.grantStatus == 997" style="margin-left:60px;" type="button" class="btn btn-primary" ng-click="submit()">推送应还款计划</button> -->
+			<button style="margin-left:60px;"  ng-show="!orderIsBack" type="button" class="btn btn-warning" ng-click="showBack()">退回</button>
+		</div>
+	</div>
+	<!-- 非融安审批 -->
+	<div class="row detail-row" ng-if="!isHuaRongShow">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;资金审批</div>
+		<div class="row">
+			<!--备注-->
+				<div class="form-group">
+			<textarea class="form-control" ng-model="obj.remark" rows="5" style="width:700px" placeholder="请在此处输入审批意见（必填）"/>
+		</div>
+			<!--备注end-->
+			<div class="col-md-12">
+			<button type="button" class="btn btn-primary" ng-click="saveFundAudit()">审批通过</button>
+			<button type="button" class="btn btn-warning" ng-click="showBack()">退回</button>
+		</div>
+		</div>
+	</div>
+	
+	<!--推送应还款计划start-->
+	<div class="lhw-alert-bg"  ng-show="rongAnhkShow" >
+		<div class="lhw-alert-box" style="width:1100px;">
+			<div class="lhw-alert-tit relative" >以下信息推送给资金方110<div class="lhw-x" ng-click="rongAnhkShow=false;forShow=true;"></div></div>
+			<div>
+				<div class="row">
+					<div class="col-md-12" style="padding-top:10px;">
+						<ul class="nav nav-tabs">
+							<li ng-class="{'active':title=='forShow'}">
+								<a href="javascript:void(0);" ng-click="title='forShow'">应还款计划</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div>
+				    <div class="row form-inline detail-row w147" style="padding:30px 10px; ">
+				        <div class="col-md-6 col-lg-6">
+				            <label>应还款时间: </label> <input type="text"  readonly ng-model="audit.repaymentTime" class="form-control form_dateu"/>
+				        </div>
+				        <div class="col-md-6 col-lg-6">
+				            <label>期供金额（本金+利息）:</label> <input type="text"  ng-model="audit.repaymentAccount" class="form-control"/>元
+				        </div>
+				        <div class="col-md-6 col-lg-6">
+				            <label>应还利息:</label> <input type="text"  ng-model="audit.interest" class="form-control"/>元
+				        </div>
+				        <div class="col-md-6 col-lg-6">
+				            <label>应还本金:</label> <input type="text"  ng-model="audit.capital" class="form-control"/>元
+				        </div>
+				        <div class="col-md-6 col-lg-6">
+				            <label>剩余本金:</label> <input type="text"  ng-model="audit.psRemPrcp" class="form-control"/>元
+				        </div>
+				        <div class="col-md-6 col-lg-6">
+				            <label>贷款执行利率:</label> <input type="text"  ng-model="audit.psIntRate" class="form-control"/>%
+				        </div>
+				    </div>
+				</div>
+			</div>
+			<div class="lhw-alert-but">
+				<button type="button" class="btn btn-primary lhw-alert-ok1" ng-click="auditSubmit(1)" style="margin-right:80px;">提交并发送应还款计划</button>
+				<button type="button" class="btn btn-danger lhw-alert-cancel1" ng-click="auditSubmit(0)">该订单不发送应还款计划</button>
+			</div>
+		</div>
+	</div>
+	<!--推送end-->
+</form>
+</div>

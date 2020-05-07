@@ -1,0 +1,77 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<ul class="breadcrumb">
+				<li>
+					<a>风险名单</a>
+					<span class="divider"></span>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12"> 
+			<form class="form-inline" style="margin-bottom:20px;margin-left:30px; ">
+				<div class="form-group">
+					<label>姓名：</label>
+					<input type="text" class="form-control" ng-model="page.name">
+				</div>
+				<div class="form-group">
+					<label>身份证号：</label>
+					<input type="text" class="form-control" ng-model="page.identity">
+				</div>
+				<div class="form-group">
+					<label>手机号码：</label>
+					<input type="text" class="form-control" ng-model="page.phone">
+				</div>
+				<button type="submit" class="btn btn-default" ng-click="query()" style="margin-bottom:10px; margin-right:10px;">
+					查询
+				</button>
+				<button type="submit" class="btn btn-primary " ng-click="showBaiduRiskList()" style="margin-bottom:10px; margin-right:10px; ">
+					新增风险名单
+				</button>
+			</form>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<table bs-table-control="baiduRiskList"  id="table"></table>
+		</div>
+	</div>
+</div>
+
+
+
+<div ng-show="false" id="riskListId">
+	<div class="row">
+		<div class="col-md-12">
+			<form class="form-inline" name="baiduRiskListForm" id="baiduRiskListForm">
+				<div class="form-group">
+					<label><span class="text-danger">*</span>姓名：</label>
+					<input type="text" class="form-control" style="width: 200px;" name="name" ng-model="baiduRiskListDto.name" required >
+					<span class="inputError" ng-show="isAudit">
+						<error class="text-danger" ng-show="baiduRiskListForm.name.$error.required">必填</error>
+					</span>
+				</div>
+				<div class="form-group">
+					<label><span class="text-danger">*</span>身份证号：</label>
+					<input type="text" class="form-control" style="width: 200px;" name="identity" ng-model="baiduRiskListDto.identity" required >
+					<span class="inputError" ng-show="isAudit">
+						<error class="text-danger" ng-show="baiduRiskListForm.identity.$error.required">必填</error>
+					</span>
+				</div>
+				<div class="form-group">
+					<label><span class="text-danger">*</span>手机号码：</label>
+					<input type="text" class="form-control" style="width: 200px;" name="phone" ng-model="baiduRiskListDto.phone"  required>
+					<span class="inputError" ng-show="isAudit">
+						<error class="text-danger" ng-show="baiduRiskListForm.phone.$error.required">必填</error>
+					</span>
+				</div>
+				
+			</form>
+		</div>
+	</div>
+</div>
+ 
+

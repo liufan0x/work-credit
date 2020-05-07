@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.fc.monitor.MonitorArchiveMapper">
+    
+    <!-- 查档有变更时，更新房产监控 -->
+	<update id="updateMonitorArchive" parameterType="MonitorArchiveDto" >
+		update tbl_risk_monitor_archive
+		<set>
+			<if test="message != null" >
+				message=#{message},
+			</if>
+			<if test="propertyStatus != null" >
+				propertyStatus=#{propertyStatus},
+			</if>
+			<if test="changeRecord != null" >
+				changeRecord=#{changeRecord},
+			</if>
+			updateTime=now()
+		</set>
+		where archiveId=#{archiveId}
+	</update>
+	
+	<!-- 查询所有的房产监控加入定时器 -->
+	<select id="selectArchiveList" parameterType="MonitorArchiveDto" resultType="MonitorArchiveDto">
+	   select id,startTime,endTime,queryFrequency,phone,archiveId,estateNo,identityNo from tbl_risk_monitor_archive
+	</select>
+	
+	<!-- 查询所有的房产监控加入定时器 -->
+	<select id="selectArchiveByArchiveId" parameterType="MonitorArchiveDto" resultType="MonitorArchiveDto">
+	   select id,propertyStatus,message,changeRecord,queryFrequency,orderNo,startTime,endTime,phone,archiveId,estateNo,identityNo,estateType,type,yearNo from tbl_risk_monitor_archive where archiveId = #{archiveId} order by createTime desc limit 1
+	</select>
+
+</mapper>

@@ -1,0 +1,43 @@
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<ul class="breadcrumb">
+				<li>
+					<a>流程审批配置</a>
+					<span class="divider"></span>
+				</li>
+				<li>
+					<a>表单列表</a>
+					<span class="divider"></span>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-md-12"> 
+			<form class="form-inline" style="margin-bottom:20px;margin-left:30px; ">				
+				<div class="form-group">
+					<label>审批流来源：</label>
+					<select class="form-control" ng-model="page.bpmsFrom" style="width: 220px;" >
+						<option value="">请选择</option>
+						<option value="orderDoc">订单要件特批</option>
+					</select>
+				</div>
+				
+				<div class="form-group">
+					<label>表单参数：</label>
+					<input type="text" class="form-control" ng-model="page.formComponent">
+				</div>
+				
+				<button type="submit" class="btn btn-default" ng-click="query()" style="margin-bottom:10px; margin-right:10px;">查询	</button>
+			</form>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-12">
+			<table bs-table-control="dataList"  id="table"></table>
+		</div>
+	</div>
+</div>
+

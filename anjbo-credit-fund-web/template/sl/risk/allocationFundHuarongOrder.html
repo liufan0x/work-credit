@@ -1,0 +1,140 @@
+<style>
+    .form-inline.w112 label{width:112px;}
+    .form-inline.w154 label{width:154px;}
+    .form-inline.w154 .form-control{width:150px}
+</style>
+
+<form name="huarongAppointForm">
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;申请预约信息</div>
+    <div class="row form-inline detail-row" style="padding:0 10px;">
+        <div class="col-md-6 col-lg-4 ">
+            <label>申请人姓名: </label> <input type="text" name="appointCustName" ng-model="appoint.custName" class="form-control" required/>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongAppointForm.appointCustName.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>证件类型:</label>
+            <select class="form-control"name="appointIdType" choice-dict-name="hrIdType" ng-disabled="all" ng-model="appoint.idType" required style="width:150px;">
+                <option value="">请选择</option>
+            </select>
+             <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongAppointForm.appointIdType.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>证件号:</label> <input type="text" name="appointIdNo" ng-model="appoint.idNo" class="form-control" required/>
+             <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongAppointForm.appointIdNo.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>手机号:</label> <input type="text" name="appointMobile" ng-model="appoint.mobile"  class="form-control" required/>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongAppointForm.appointMobile.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>还款方式:</label>
+            <select class="form-control" name="appointMtdCde" choice-dict-name="hrMtdCde" ng-disabled="all" ng-model="appoint.mtdCde" required style="width:150px;">
+                <option value="">请选择</option>
+            </select>
+             <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongAppointForm.appointMtdCde.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>贷款申请金额:</label><input type="text" string-to-number name="appointApplyAmt" ng-model="appoint.applyAmt"  class="form-control" required/> 万元
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongAppointForm.appointApplyAmt.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>申请期限:</label><input type="text" string-to-number name="appointApplyTnr" ng-model="appoint.applyTnr"  class="form-control" required/><span ng-bind="appoint.applyTnrUnit"></span>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongAppointForm.appointApplyTnr.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>借款利率:</label><input type="text" string-to-number name="appointApr" ng-model="appoint.apr"  class="form-control" required/>&nbsp;%/天
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongAppointForm.appointApr.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>借款用途:</label>
+            <select class="form-control" name="appointUse" choice-dict-name="hrUse" ng-disabled="all" ng-model="appoint.useHr" required style="width:150px;">
+                <option value="">请选择</option>
+            </select>
+             <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongAppointForm.appointUse.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>借款期限单位:</label>
+            <select class="form-control" name="appointApplyTnrUnit" choice-dict-name="hrApplyTnrUnit" ng-disabled="all" ng-model="appoint.applyTnrUnit" required style="width:150px;">
+                <option value="">请选择</option>
+            </select>
+             <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongAppointForm.appointUse.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>审批通过金额:</label><input type="text" string-to-number name="appointApprvAmt" ng-model="appoint.apprvAmt"  class="form-control" required/> 万元
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongAppointForm.appointApprvAmt.$error.required">必填</error>
+		    </span>
+        </div>
+    </div>
+</div>
+
+
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;申请人信息</div>
+    <div class="row form-inline detail-row w112" style="padding:0 10px;">
+        <div class="col-md-6 col-lg-4">
+            <label>申请人证件号: </label> <input type="text"  ng-model="applAppt.idNo" name="applApptIdNo" class="form-control" required/>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongAppointForm.applApptIdNo.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>申请人证件类型: </label>
+            <select class="form-control" name="applApptIdType" choice-dict-name="hrIdType" ng-disabled="all" ng-model="applAppt.idType" required style="width:150px;">
+                <option value="">请选择</option>
+            </select>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongAppointForm.applApptIdType.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>申请人名称: </label> <input type="text" ng-model="applAppt.custName " name="applApptCustName" class="form-control" required/>
+             <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongAppointForm.applApptCustName.$error.required">必填</error>
+		    </span>
+        </div>
+    </div>
+</div>
+
+<div>
+    <div class="col-md-12 detail-right-tit">&nbsp;&nbsp;申请人详细信息</div>
+    <div class="row form-inline detail-row" style="padding:0 10px;">
+        <div class="col-md-6 col-lg-4">
+            <label>姓名: </label> <input type="text" name="apptIndivCustName" ng-model="apptIndiv.custName" class="form-control" required/>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongAppointForm.apptIndivCustName.$error.required">必填</error>
+		    </span>
+        </div>
+        <div class="col-md-6 col-lg-4">
+            <label>教育程度: </label>
+            <select class="form-control" name="apptIndivIndivEdt" choice-dict-name="hrIndivEdt"  ng-model="apptIndiv.indivEdt" required style="width:150px;">
+                <option value="">请选择</option>
+            </select>
+            <span class="inputError" ng-show="isAudit">
+					<error class="text-danger" ng-show="huarongAppointForm.apptIndivIndivEdt.$error.required">必填</error>
+		     </span>
+        </div>
+    </div>
+</div>
+</form>

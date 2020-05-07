@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.RiskAuditMapper">
+	<sql id="riskAuditTotal">
+		SELECT
+		obase.cityName,
+		sum(if(of.returnType like '%补充资料%',1,0)) as addInformation,
+		sum(if(of.returnType like '%拒单%',1,0)) as refusal,
+		sum(if(of.returnType like '%系统修改%',1,0)) as modifySys,
+		sum(if(of.returnType like '%其他%',1,0)) as other
+		FROM tbl_order_flow of
+		INNER JOIN tbl_order_list_base obase
+		ON of.orderNo=obase.orderNo
+		WHERE of.currentProcessId = #{auditType}
+		<choose>
+			<when test="startTime!='' and endTime!=''">
+				AND of.createTime BETWEEN #{startTime} AND #{endTime}
+			</when>
+			<otherwise>
+				<if test="createTime==1 and createTime!=''">
+					<![CDATA[   and DATEDIFF(of.createTime,NOW())=-1 ]]> 
+				</if>
+				<if test="createTime==2 and createTime!=''">
+					 and  YEARWEEK(date_format(of.createTime,'%Y-%m-%d')) = YEARWEEK(now())-1
+				</if>
+				<if test="createTime==3 and createTime!=''">
+					and PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format( of.createTime, '%Y%m' ) ) =1
+				</if>
+				<if test="createTime==4 and createTime!=''">
+					and date_format(of.createTime, '%Y%m') = date_format(CURDATE() , '%Y%m')
+				</if>
+			</otherwise>
+		</choose>
+		<if test="productCode!=''and productCode!=null ">
+			AND obase.productCode=#{productCode}
+		</if>
+		<if test="cityCode!='' and cityCode!=null">
+			AND obase.cityCode=#{cityCode}
+		</if>
+		GROUP BY obase.cityCode
+	</sql>
+   <select id="findByCity" resultType="DictDto">
+       select * from tbl_common_dict where type="cityList" ORDER BY sort asc
+   </select>
+   <select id="findByFistCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+     	SELECT COUNT(DISTINCT f.orderNo) from tbl_order_list_base b
+			LEFT JOIN tbl_order_flow f on f.orderNo=b.orderNo
+			WHERE f.currentProcessId ='auditFirst' and f.orderNo is not null and b.productCode != "04"
+	      <if test="cityCode != null and cityCode != '' "> and b.cityCode=#{cityCode}</if>
+	      <if test="productCode != null and productCode !='' ">and b.productCode=#{productCode} </if>
+	      <if test="startTime !=null and startTime !='' "> <![CDATA[  and DATE_FORMAT(f.createTime,'%Y-%m-%d') >= DATE_FORMAT(#{startTime}, '%Y-%m-%d')]]> </if>
+	      <if test="endTime !=null and endTime != '' "> <![CDATA[  and DATE_FORMAT(f.createTime,'%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')]]> </if>
+	   	  <if test="createTime !=null and (createTime==1 or createTime== '1')"><![CDATA[   and DATEDIFF(f.createTime,NOW())=-1 ]]> </if>
+	   	  <if test="createTime !=null and (createTime==2 or createTime== '2')"> and  YEARWEEK(date_format(f.createTime,'%Y-%m-%d')) = YEARWEEK(now())-1 </if>
+	   	  <if test="createTime !=null and (createTime==3 or createTime== '3')"> and PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format( f.createTime, '%Y%m' ) ) =1 </if>
+	   	  <if test="createTime !=null and (createTime==4 or createTime== '4')"> and date_format(f.createTime, '%Y%m') = date_format(CURDATE() , '%Y%m')</if>
+   </select>
+   <select id="findByFinalCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+      		SELECT COUNT(DISTINCT f.orderNo) from tbl_order_list_base b	
+			LEFT JOIN tbl_order_flow f on f.orderNo=b.orderNo
+			WHERE f.currentProcessId ='auditFinal' and f.orderNo is not null and b.productCode != "04"
+      <if test="cityCode != null and cityCode != '' "> and b.cityCode=#{cityCode}</if>
+      <if test="productCode != null and productCode !='' ">and b.productCode=#{productCode} </if>
+      <if test="startTime !=null and startTime !='' "> <![CDATA[  and DATE_FORMAT(f.createTime,'%Y-%m-%d') >= DATE_FORMAT(#{startTime}, '%Y-%m-%d')]]> </if>
+      <if test="endTime !=null and endTime != '' "> <![CDATA[  and DATE_FORMAT(f.createTime,'%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')]]> </if>
+   	  <if test="createTime !=null and (createTime==1 or createTime== '1')"><![CDATA[  and DATEDIFF(f.createTime,NOW())=-1 ]]> </if>
+   	  <if test="createTime !=null and (createTime==2 or createTime== '2')"> and  YEARWEEK(date_format(f.createTime,'%Y-%m-%d')) = YEARWEEK(now())-1 </if>
+   	  <if test="createTime !=null and (createTime==3 or createTime== '3')"> and PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format( f.createTime, '%Y%m' ) ) =1 </if>
+   	  <if test="createTime !=null and (createTime==4 or createTime== '4')"> and date_format(f.createTime, '%Y%m') = date_format(CURDATE() , '%Y%m')</if>
+   </select>
+   <select id="findByOfficerCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+     	 SELECT COUNT(DISTINCT f.orderNo) from tbl_order_list_base b
+			LEFT JOIN tbl_order_flow f on f.orderNo=b.orderNo
+			WHERE f.currentProcessId ='auditOfficer' and f.orderNo is not null and b.productCode != "04"
+      <if test="cityCode != null and cityCode != '' "> and b.cityCode=#{cityCode}</if>
+      <if test="productCode != null and productCode !='' ">and b.productCode=#{productCode} </if>
+      <if test="startTime !=null and startTime !='' "> <![CDATA[  and DATE_FORMAT(f.createTime,'%Y-%m-%d') >= DATE_FORMAT(#{startTime}, '%Y-%m-%d')]]> </if>
+      <if test="endTime !=null and endTime != '' "> <![CDATA[  and DATE_FORMAT(f.createTime,'%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')]]> </if>
+   	  <if test="createTime !=null and (createTime==1 or createTime== '1')"><![CDATA[  and DATEDIFF(f.createTime,NOW())=-1 ]]> </if>
+   	  <if test="createTime !=null and (createTime==2 or createTime== '2')"> and  YEARWEEK(date_format(f.createTime,'%Y-%m-%d')) = YEARWEEK(now())-1 </if>
+   	  <if test="createTime !=null and (createTime==3 or createTime== '3')"> and PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format( f.createTime, '%Y%m' ) ) =1 </if>
+   	  <if test="createTime !=null and (createTime==4 or createTime== '4')"> and date_format(f.createTime, '%Y%m') = date_format(CURDATE() , '%Y%m')</if>
+   </select>
+   <select id="findByAuditCount" parameterType="java.util.Map" resultType="java.lang.String">
+        SELECT DISTINCT f.orderNo from tbl_order_list_base b
+		LEFT JOIN tbl_order_flow f on f.orderNo=b.orderNo
+		WHERE 
+		f.currentProcessId in('auditFirst','auditFinal','auditOfficer','auditReview')
+		and f.nextProcessId = 'allocationFund'
+		and b.productCode != "04"
+	  <if test="cityCode != null and cityCode != '' "> and b.cityCode=#{cityCode}</if>
+      <if test="productCode != null and productCode !='' ">and b.productCode=#{productCode} </if>
+      <if test="startTime !=null and startTime !='' "> <![CDATA[  and DATE_FORMAT(f.createTime,'%Y-%m-%d') >= DATE_FORMAT(#{startTime}, '%Y-%m-%d')]]> </if>
+      <if test="endTime !=null and endTime != '' "> <![CDATA[  and DATE_FORMAT(f.createTime,'%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')]]> </if>
+   	  <if test="createTime !=null and (createTime==1 or createTime== '1')"><![CDATA[ and DATEDIFF(f.createTime,NOW())=-1]]> </if>
+   	  <if test="createTime !=null and (createTime==2 or createTime== '2')"> and  YEARWEEK(date_format(f.createTime,'%Y-%m-%d')) = YEARWEEK(now())-1 </if>
+   	  <if test="createTime !=null and (createTime==3 or createTime== '3')"> and PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format( f.createTime, '%Y%m' ) ) =1 </if>
+   	  <if test="createTime !=null and (createTime==4 or createTime== '4')"> and date_format(f.createTime, '%Y%m') = date_format(CURDATE() , '%Y%m')</if>
+		ORDER BY f.createTime desc
+   </select>
+
+   <select id="findByBackCount"  parameterType="java.util.Map" resultType="java.lang.String">
+        SELECT DISTINCT f.orderNo from tbl_order_list_base b
+		LEFT JOIN tbl_order_flow f on f.orderNo=b.orderNo
+		WHERE  f.backReason !='' and (f.currentProcessId ='auditFirst' or f.currentProcessId ='auditFinal' or f.currentProcessId ='auditOfficer' )
+   		 and b.productCode != "04"
+   	  <if test="cityCode != null and cityCode != '' "> and b.cityCode=#{cityCode}</if>
+      <if test="productCode != null and productCode !='' ">and b.productCode=#{productCode} </if>
+      <if test="startTime !=null and startTime !='' "> <![CDATA[  and DATE_FORMAT(f.createTime,'%Y-%m-%d') >= DATE_FORMAT(#{startTime}, '%Y-%m-%d')]]> </if>
+      <if test="endTime !=null and endTime != '' "> <![CDATA[  and DATE_FORMAT(f.createTime,'%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')]]> </if>
+   	  <if test="createTime !=null and (createTime==1 or createTime== '1')"><![CDATA[ and DATEDIFF(f.createTime,NOW())=-1 ]]> </if>
+   	  <if test="createTime !=null and (createTime==2 or createTime== '2')"> and  YEARWEEK(date_format(f.createTime,'%Y-%m-%d')) = YEARWEEK(now())-1 </if>
+   	  <if test="createTime !=null and (createTime==3 or createTime== '3')"> and PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format( f.createTime, '%Y%m' ) ) =1 </if>
+   	  <if test="createTime !=null and (createTime==4 or createTime== '4')"> and date_format(f.createTime, '%Y%m') = date_format(CURDATE() , '%Y%m')</if>
+   </select>
+   <select id="findByCloseCount"  parameterType="java.util.Map" resultType="java.lang.String">
+        SELECT DISTINCT f.orderNo from tbl_order_list_base b
+		LEFT JOIN tbl_order_flow f on f.orderNo=b.orderNo
+		WHERE b.state='订单已停止' and  f.nextProcessId ='auditOfficer'  and b.productCode != "04"
+		 <if test="cityCode != null and cityCode != '' "> and b.cityCode=#{cityCode}</if>
+      <if test="productCode != null and productCode !='' ">and b.productCode=#{productCode} </if>
+      <if test="startTime !=null and startTime !='' "> <![CDATA[  and DATE_FORMAT(f.createTime,'%Y-%m-%d') >= DATE_FORMAT(#{startTime}, '%Y-%m-%d')]]> </if>
+      <if test="endTime !=null and endTime != '' "> <![CDATA[  and DATE_FORMAT(f.createTime,'%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')]]> </if>
+   	  <if test="createTime !=null and (createTime==1 or createTime== '1')"><![CDATA[  and DATEDIFF(f.createTime,NOW())=-1]]> </if>
+   	  <if test="createTime !=null and (createTime==2 or createTime== '2')"> and  YEARWEEK(date_format(f.createTime,'%Y-%m-%d')) = YEARWEEK(now())-1 </if>
+   	  <if test="createTime !=null and (createTime==3 or createTime== '3')"> and PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format( f.createTime, '%Y%m' ) ) =1 </if>
+   	  <if test="createTime !=null and (createTime==4 or createTime== '4')"> and date_format(f.createTime, '%Y%m') = date_format(CURDATE() , '%Y%m')</if>
+   </select>
+   
+    <select id="findByFistCountAll" parameterType="java.util.Map" resultType="java.util.Map">
+   		
+		  SELECT f.orderNo,f.currentProcessId ,COUNT(DISTINCT f.orderNo) as count,b.cityCode
+		  from  tbl_order_flow f
+		  LEFT JOIN tbl_order_list_base b ON b.orderNo = f.orderNo 
+		  WHERE f.currentProcessId ='auditFirst' and b.orderNo is not null and b.productCode != "04"  
+	      <if test="productCode != null and productCode !='' "> and b.productCode=#{productCode} </if>
+	      <if test="startTime !=null and startTime !='' "> <![CDATA[  and DATE_FORMAT(f.createTime,'%Y-%m-%d') >= DATE_FORMAT(#{startTime}, '%Y-%m-%d')]]> </if>
+	      <if test="endTime !=null and endTime != '' "> <![CDATA[  and DATE_FORMAT(f.createTime,'%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')]]> </if>
+	   	  <if test="createTime !=null and (createTime==1 or createTime== '1')"><![CDATA[   and DATEDIFF(f.createTime,NOW())=-1 ]]> </if>
+	   	  <if test="createTime !=null and (createTime==2 or createTime== '2')"> and  YEARWEEK(date_format(f.createTime,'%Y-%m-%d')) = YEARWEEK(now())-1 </if>
+	   	  <if test="createTime !=null and (createTime==3 or createTime== '3')"> and PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format( f.createTime, '%Y%m' ) ) =1 </if>
+	   	  <if test="createTime !=null and (createTime==4 or createTime== '4')"> and date_format(f.createTime, '%Y%m') = date_format(CURDATE() , '%Y%m')</if>
+		  GROUP BY  b.cityCode
+		
+   </select>
+   <select id="findByFinalCountAll" parameterType="java.util.Map" resultType="java.util.Map">
+   	
+		  SELECT f.orderNo,f.currentProcessId ,COUNT(DISTINCT f.orderNo) as count,b.cityCode
+		  from  tbl_order_flow f
+		  LEFT JOIN tbl_order_list_base b ON b.orderNo = f.orderNo 
+		  WHERE f.currentProcessId ='auditFinal' and b.orderNo is not null and b.productCode != "04"  
+	      <if test="productCode != null and productCode !='' "> and b.productCode=#{productCode} </if>
+	      <if test="startTime !=null and startTime !='' "> <![CDATA[  and DATE_FORMAT(f.createTime,'%Y-%m-%d') >= DATE_FORMAT(#{startTime}, '%Y-%m-%d')]]> </if>
+	      <if test="endTime !=null and endTime != '' "> <![CDATA[  and DATE_FORMAT(f.createTime,'%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')]]> </if>
+	   	  <if test="createTime !=null and (createTime==1 or createTime== '1')"><![CDATA[   and DATEDIFF(f.createTime,NOW())=-1 ]]> </if>
+	   	  <if test="createTime !=null and (createTime==2 or createTime== '2')"> and  YEARWEEK(date_format(f.createTime,'%Y-%m-%d')) = YEARWEEK(now())-1 </if>
+	   	  <if test="createTime !=null and (createTime==3 or createTime== '3')"> and PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format( f.createTime, '%Y%m' ) ) =1 </if>
+	   	  <if test="createTime !=null and (createTime==4 or createTime== '4')"> and date_format(f.createTime, '%Y%m') = date_format(CURDATE() , '%Y%m')</if>
+		  GROUP BY  b.cityCode
+		
+   </select>
+   <select id="findByOfficerCountAll" parameterType="java.util.Map" resultType="java.util.Map">
+   		
+		  SELECT f.orderNo,f.currentProcessId ,COUNT(DISTINCT f.orderNo) as count,b.cityCode
+		  from  tbl_order_flow f
+		  LEFT JOIN tbl_order_list_base b ON b.orderNo = f.orderNo 
+		  WHERE f.currentProcessId ='auditOfficer' and b.orderNo is not null and b.productCode != "04"  
+	      <if test="productCode != null and productCode !='' "> and b.productCode=#{productCode} </if>
+	      <if test="startTime !=null and startTime !='' "> <![CDATA[  and DATE_FORMAT(f.createTime,'%Y-%m-%d') >= DATE_FORMAT(#{startTime}, '%Y-%m-%d')]]> </if>
+	      <if test="endTime !=null and endTime != '' "> <![CDATA[  and DATE_FORMAT(f.createTime,'%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')]]> </if>
+	   	  <if test="createTime !=null and (createTime==1 or createTime== '1')"><![CDATA[   and DATEDIFF(f.createTime,NOW())=-1 ]]> </if>
+	   	  <if test="createTime !=null and (createTime==2 or createTime== '2')"> and  YEARWEEK(date_format(f.createTime,'%Y-%m-%d')) = YEARWEEK(now())-1 </if>
+	   	  <if test="createTime !=null and (createTime==3 or createTime== '3')"> and PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format( f.createTime, '%Y%m' ) ) =1 </if>
+	   	  <if test="createTime !=null and (createTime==4 or createTime== '4')"> and date_format(f.createTime, '%Y%m') = date_format(CURDATE() , '%Y%m')</if>
+		  GROUP BY  b.cityCode
+		
+   </select>
+   <select id="findByAuditCountAll"  parameterType="java.util.Map" resultType="java.util.Map">
+   		
+		  SELECT  COUNT(DISTINCT f.orderNo) AS count ,b.cityCode from tbl_order_list_base b
+		LEFT JOIN tbl_order_flow f on f.orderNo=b.orderNo
+		WHERE 
+		f.currentProcessId in('auditFirst','auditFinal','auditOfficer','auditReview')
+		and f.nextProcessId = 'allocationFund'		
+		and b.productCode != "04"
+	      <if test="productCode != null and productCode !='' "> and b.productCode=#{productCode} </if>
+	      <if test="startTime !=null and startTime !='' "> <![CDATA[  and DATE_FORMAT(f.createTime,'%Y-%m-%d') >= DATE_FORMAT(#{startTime}, '%Y-%m-%d')]]> </if>
+	      <if test="endTime !=null and endTime != '' "> <![CDATA[  and DATE_FORMAT(f.createTime,'%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')]]> </if>
+	   	  <if test="createTime !=null and (createTime==1 or createTime== '1')"><![CDATA[   and DATEDIFF(f.createTime,NOW())=-1 ]]> </if>
+	   	  <if test="createTime !=null and (createTime==2 or createTime== '2')"> and  YEARWEEK(date_format(f.createTime,'%Y-%m-%d')) = YEARWEEK(now())-1 </if>
+	   	  <if test="createTime !=null and (createTime==3 or createTime== '3')"> and PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format( f.createTime, '%Y%m' ) ) =1 </if>
+	   	  <if test="createTime !=null and (createTime==4 or createTime== '4')"> and date_format(f.createTime, '%Y%m') = date_format(CURDATE() , '%Y%m')</if>
+		  GROUP BY  b.cityCode
+			
+   </select>
+   <select id="findByBackCountAll" parameterType="java.util.Map" resultType="java.util.Map">
+      
+		  SELECT  COUNT(DISTINCT f.orderNo) AS count, b.cityCode  from tbl_order_list_base b
+		LEFT JOIN tbl_order_flow f on f.orderNo=b.orderNo
+		WHERE  f.backReason !='' and (f.currentProcessId ='auditFirst' or f.currentProcessId ='auditFinal' or f.currentProcessId ='auditOfficer' )
+   		 and b.productCode != "04"
+	      <if test="productCode != null and productCode !='' "> and b.productCode=#{productCode} </if>
+	      <if test="startTime !=null and startTime !='' "> <![CDATA[  and DATE_FORMAT(f.createTime,'%Y-%m-%d') >= DATE_FORMAT(#{startTime}, '%Y-%m-%d')]]> </if>
+	      <if test="endTime !=null and endTime != '' "> <![CDATA[  and DATE_FORMAT(f.createTime,'%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')]]> </if>
+	   	  <if test="createTime !=null and (createTime==1 or createTime== '1')"><![CDATA[   and DATEDIFF(f.createTime,NOW())=-1 ]]> </if>
+	   	  <if test="createTime !=null and (createTime==2 or createTime== '2')"> and  YEARWEEK(date_format(f.createTime,'%Y-%m-%d')) = YEARWEEK(now())-1 </if>
+	   	  <if test="createTime !=null and (createTime==3 or createTime== '3')"> and PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format( f.createTime, '%Y%m' ) ) =1 </if>
+	   	  <if test="createTime !=null and (createTime==4 or createTime== '4')"> and date_format(f.createTime, '%Y%m') = date_format(CURDATE() , '%Y%m')</if>
+		  GROUP BY  b.cityCode
+		
+   </select>
+   <select id="findByCloseCountAll" parameterType="java.util.Map" resultType="java.util.Map">
+   		
+		  SELECT COUNT(DISTINCT f.orderNo) AS count, b.cityCode from tbl_order_list_base b
+		LEFT JOIN tbl_order_flow f on f.orderNo=b.orderNo
+		WHERE b.state='订单已停止' and  f.nextProcessId ='auditOfficer'  and b.productCode != "04"
+	      <if test="productCode != null and productCode !='' "> and b.productCode=#{productCode} </if>
+	      <if test="startTime !=null and startTime !='' "> <![CDATA[  and DATE_FORMAT(f.createTime,'%Y-%m-%d') >= DATE_FORMAT(#{startTime}, '%Y-%m-%d')]]> </if>
+	      <if test="endTime !=null and endTime != '' "> <![CDATA[  and DATE_FORMAT(f.createTime,'%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')]]> </if>
+	   	  <if test="createTime !=null and (createTime==1 or createTime== '1')"><![CDATA[   and DATEDIFF(f.createTime,NOW())=-1 ]]> </if>
+	   	  <if test="createTime !=null and (createTime==2 or createTime== '2')"> and  YEARWEEK(date_format(f.createTime,'%Y-%m-%d')) = YEARWEEK(now())-1 </if>
+	   	  <if test="createTime !=null and (createTime==3 or createTime== '3')"> and PERIOD_DIFF( date_format( now( ) , '%Y%m' ) , date_format( f.createTime, '%Y%m' ) ) =1 </if>
+	   	  <if test="createTime !=null and (createTime==4 or createTime== '4')"> and date_format(f.createTime, '%Y%m') = date_format(CURDATE() , '%Y%m')</if>
+		  GROUP BY  b.cityCode
+		
+   </select>
+	<select id="queryRiskAuditRateByAuditId" parameterType="map" resultType="com.anjbo.bean.RiskAuditVo">
+	  SELECT
+        cityName,
+        IFNULL(addInformation, 0) AS addInformation,
+        IFNULL(refusal, 0) AS refusal,
+        IFNULL(modifySys, 0) AS modifySys,
+        IFNULL(other, 0) AS other
+		FROM (
+		<if test="cityCode=='' or cityCode==null">
+			SELECT
+			'总计' as cityName,
+			IF(SUM(a.addInformation)=null,0,SUM(a.addInformation)) as addInformation,
+			IF(SUM(a.refusal)=null,0,SUM(a.refusal)) as refusal,
+			IF(SUM(a.modifySys)=null,0,SUM(a.modifySys)) as modifySys,
+			IF(SUM(a.other)=null,0,SUM(a.other)) as other
+			FROM (
+			<include refid="riskAuditTotal"/>
+			)AS a
+            UNION
+		</if>
+		(<include refid="riskAuditTotal"/>)
+		) AS auditRiskRate
+		<if test="cityCode=='' or cityCode==null">
+			UNION
+			SELECT g.cityName,'0','0','0','0' FROM tbl_order_list_base g
+			WHERE cityName NOT IN(
+				SELECT cityName FROM (<include refid="riskAuditTotal"/>)b
+			)
+			GROUP BY cityCode
+		</if>
+
+	</select>
+</mapper>

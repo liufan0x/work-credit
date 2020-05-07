@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.app.estatedeal.XiaMenDealDataMapper">
+
+
+    <insert id="insertXiaMenOneHandDataBatch" parameterType="java.util.List">
+        INSERT INTO `anjbo-app`.`tbl_app_task_dealdata_xiamen_data`
+        (`areaName`, `houseNum`, `totalNum`, `startDate`, `endDate`)
+        VALUES
+        <foreach collection="list" item="dto" index="index" separator=",">
+            (
+            #{dto.areaName},
+            #{dto.houseNum},
+            #{dto.totalNum},
+            #{dto.startDate,jdbcType=DATE},
+            #{dto.endDate,jdbcType=DATE}
+            )
+        </foreach>
+    </insert>
+    <insert id="insertXMDataBatch">
+        INSERT INTO `anjbo-app`.`tbl_app_task_dealdata_xiamen_data` (`totalNum`, `type`, `date`)
+        VALUES
+        <foreach collection="list" item="dto" index="index" separator=",">
+            (
+            #{dto.totalNum},
+            #{dto.type},
+            #{dto.date,jdbcType=DATE}
+            )
+        </foreach>
+    </insert>
+
+    <delete id="deleteXiaMenOneHandDataByDate">
+        delete from `tbl_app_task_dealdata_xiamen_data` where `startDate`=#{0,jdbcType=DATE} and `endDate`=#{1,jdbcType=DATE}
+    </delete>
+    <delete id="deleteXMDataByDateType" parameterType="com.anjbo.bean.estatedeal.XMDealDto">
+        DELETE from tbl_app_task_dealdata_xiamen_data where `type`=#{type} and `date`=#{date,jdbcType=DATE}
+    </delete>
+
+
+</mapper>

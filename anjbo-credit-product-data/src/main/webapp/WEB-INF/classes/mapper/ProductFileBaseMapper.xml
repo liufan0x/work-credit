@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.ProductFileBaseMapper">
+
+    <insert id="insertFile" parameterType="java.util.Map">
+        INSERT INTO ${tblDataName}
+        (createUid,createTime,orderNo,tblName,url,`type`,`name`,`size`)
+        VALUES
+        (#{createUid},now(),#{orderNo},#{tblName},#{url},#{type},#{name},#{size})
+    </insert>
+
+    <insert id="batchFile" parameterType="java.util.List">
+        <foreach collection="list" item="obj" separator=";">
+            INSERT INTO ${obj.tblDataName}
+            (createUid,createTime,orderNo,tblName,url,`type`,`name`,`size`)
+            VALUES
+            (#{obj.createUid},now(),#{obj.orderNo},#{obj.tblName},#{obj.url},#{obj.type},#{obj.name},#{obj.size})
+        </foreach>
+    </insert>
+
+    <select id="listFile" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        *
+        FROM ${tblDataName}
+        WHERE 1=1
+        <if test="tblName!=null and tblName!=''">
+            AND tblName = #{tblName}
+        </if>
+        AND  orderNo = #{orderNo}
+    </select>
+    <select id="listFileByIds" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        *
+        FROM ${tblDataName}
+        WHERE id IN (${ids})
+    </select>
+
+    <delete id="deleteFileById" parameterType="java.util.Map">
+        DELETE FROM ${tblDataName} WHERE id IN (${ids})
+    </delete>
+
+    <delete id="deleteFileByOrderNoAndTblName" parameterType="java.util.Map">
+        DELETE FROM ${tblDataName} WHERE orderNo=#{orderNo}
+        <if test="tblName!=null and tblName!=''">
+            AND tblName=#{tblName}
+        </if>
+    </delete>
+
+</mapper>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.hrtrust.HrtrustKgAppointMapper">
+	<select id="getKgAppoint" parameterType="String"
+		resultType="map">
+		select * from tbl_third_hrtrust_kg_appoint where
+		orderNo=#{orderNo} order by
+		id DESC limit 0,1
+	</select>
+
+   <update id="updateMap" parameterType="java.util.Map">
+        update tbl_third_hrtrust_kg_appoint
+        <set>
+            <if test="applSeq != null and applSeq!=''">
+                applSeq = #{applSeq},
+            </if>
+
+            <if test="businessType != null and businessType!=''">
+                businessType = #{businessType},
+            </if>
+            <if test="custName != null and custName!=''">
+                custName = #{custName},
+            </if>
+            <if test="loanAmount != null and loanAmount!=''">
+                loanAmount = #{loanAmount},
+            </if>
+            <if test="term!= null and term!=''">
+                term = #{term},
+            </if>
+            <if test="rate != null and rate!=''">
+                rate = #{rate},
+            </if>
+            <if test="overdueTate != null and overdueTate!='' ">
+                overdueTate = #{overdueTate},
+            </if>
+            <if test="yOriLenAmount != null and yOriLenAmount!=''">
+                yOriLenAmount = #{yOriLenAmount},
+            </if>
+            <if test="yLoanBalance != null and yLoanBalance!=''">
+                yLoanBalance = #{yLoanBalance},
+            </if>
+            <if test="yIsBank != null and yIsBank!=''">
+                yIsBank = #{yIsBank},
+            </if>
+            <if test="yOriBank != null and yOriBank!=''">
+                yOriBank = #{yOriBank},
+            </if>
+            <if test="xLoanAmount != null and xLoanAmount!=''">
+                xLoanAmount = #{xLoanAmount},
+            </if>
+            <if test="xIsBank != null and xIsBank!=''">
+                xIsBank = #{xIsBank},
+            </if>
+            <if test="xLoanBank != null and xLoanBank!=''">
+                xLoanBank = #{xLoanBank},
+            </if>
+            <if test="fAccountType != null and fAccountType!=''">
+                fAccountType = #{fAccountType},
+            </if>
+            <if test="fOpenBank != null and fOpenBank!=''">
+                fOpenBank = #{fOpenBank},
+            </if>
+             <if test="fOpenName != null and fOpenName!=''">
+                fOpenName = #{fOpenName}, 
+            </if>
+             <if test="fAccountNum != null and fAccountNum!=''">
+                fAccountNum = #{fAccountNum}, 
+            </if>
+             <if test="fCaacNo != null and fCaacNo!=''">
+                fCaacNo = #{fCaacNo}, 
+            </if>
+             <if test="hAccountType != null and hAccountType!=''">
+                hAccountType = #{hAccountType}, 
+            </if>
+             <if test="hOpenBank != null and hOpenBank!=''">
+                hOpenBank = #{hOpenBank}, 
+            </if>
+             <if test="hOpenName != null and hOpenName!=''">
+                hOpenName = #{hOpenName}, 
+            </if>
+             <if test="hAccountNum != null and hAccountNum!=''">
+                hAccountNum = #{hAccountNum}, 
+            </if>
+             <if test="hCaacNo != null and hCaacNo!=''">
+                hCaacNo = #{hCaacNo}, 
+            </if>
+             <if test="respStatus != null and respStatus!=''">
+                respStatus = #{respStatus}, 
+            </if>
+        </set>
+        where orderNo = #{orderNo}
+    </update>
+
+	<!-- 快鸽提单信息,业务信息 -->
+	<insert id="saveKgAppoint" parameterType="Map">
+		INSERT INTO
+		tbl_third_hrtrust_kg_appoint (
+		applSeq,
+		orderNo,
+		businessType,
+		custName,
+		loanAmount,
+		term,
+		rate,
+		overdueTate,
+		yOriLenAmount,
+		yLoanBalance,
+		yIsBank,
+		yOriBank,
+		xLoanAmount,
+		xIsBank,
+		xLoanBank,
+		fAccountType,
+		fOpenBank,
+		fOpenName,
+		fAccountNum,
+		fCaacNo,
+		hAccountType,
+		hOpenBank,
+		hOpenName,
+		hAccountNum,
+		hCaacNo
+		)
+		VALUES
+		(
+		#{applSeq},
+		#{orderNo},
+		#{businessType},
+		#{custName},
+		#{loanAmount},
+		#{term},
+		#{rate},
+		#{overdueTate},
+		#{yOriLenAmount},
+		#{yLoanBalance},
+		#{yIsBank},
+		#{yOriBank},
+		#{xLoanAmount},
+		#{xIsBank},
+		#{xLoanBank},
+		#{fAccountType},
+		#{fOpenBank},
+		#{fOpenName},
+		#{fAccountNum},
+		#{fCaacNo},
+		#{hAccountType},
+		#{hOpenBank},
+		#{hOpenName},
+		#{hAccountNum},
+		#{hCaacNo}
+		)
+	</insert>
+
+</mapper>

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.contract.ContractListRecordMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and ''!=id"> AND `id`=#{id}</if>
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if>
+		-->
+		<if test="null!=contractListId"> AND `contractListId`=#{contractListId}</if>
+		<if test="null!=type and type>0"> AND `type`=#{type}</if>
+		<if test="null!=contractNames and ''!=contractNames"> AND `contractNames`=#{contractNames}</if>
+		<if test="null!=filePath and ''!=filePath"> AND `filePath`=#{filePath}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="ContractListRecordDto" resultType="ContractListRecordDto">    
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `contractListId`, `type`, `contractNames`, `filePath` 
+	FROM tbl_common_contract_list_record 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="ContractListRecordDto" resultType="ContractListRecordDto">
+	SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`, `contractListId`, `type`, `contractNames`, `filePath`
+	FROM tbl_common_contract_list_record 
+	<include refid="sqlwhereSearch"/>
+	order by `createTime` desc
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="ContractListRecordDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_common_contract_list_record 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="ContractListRecordDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_common_contract_list_record(
+		`createUid`,
+		`createTime`,
+		`updateUid`,
+		`updateTime`,
+		`contractListId`,
+		`type`,
+		`contractNames`,
+		`filePath`
+	) VALUES(
+		#{createUid},
+		now(),
+		#{createUid},
+		now(),
+		#{contractListId},
+		#{type},
+		#{contractNames},
+		#{filePath}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="ContractListRecordDto" >
+    DELETE FROM tbl_common_contract_list_record 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="ContractListRecordDto" >
+    UPDATE tbl_common_contract_list_record
+	<set>
+		<if test="null!=createTime">`createTime`=now(),</if>
+		<if test="null!=updateUid">`updateUid`=#{updateUid},</if>
+		<if test="null!=updateTime">`updateTime`=now(),</if>
+		<if test="null!=contractListId">`contractListId`=#{contractListId},</if>
+		<if test="null!=type">`type`=#{type},</if>
+		<if test="null!=contractNames">`contractNames`=#{contractNames},</if>
+		<if test="null!=filePath">`filePath`=#{filePath},</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

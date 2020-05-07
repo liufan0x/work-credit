@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.BaiduRiskListMapper">
+    
+	<insert id="insertBaiduRiskList" parameterType="BaiduRiskListDto" >
+		insert into
+		tbl_risk_baidu_risklist
+		(
+		createUid,
+		createTime,
+		<if test="orderNo != null and orderNo != ''">
+		orderNo,
+		</if>
+		name,
+		identity,
+		phone,
+		blackLevel,
+		blackReason,
+		blackDetails
+		)
+		values
+		(
+		#{createUid},
+		now(),
+		<if test="orderNo != null and orderNo != ''">
+			#{orderNo},
+		</if>
+		#{name},
+		#{identity},
+		#{phone},
+		#{blackLevel},
+		#{blackReason},
+		#{blackDetails}
+		)
+		ON DUPLICATE KEY UPDATE
+		phone = #{phone},
+		 updateTime=now()
+	</insert>
+	
+	<select id="selectBaiduRiskList" parameterType="BaiduRiskListDto" resultType="BaiduRiskListDto">
+	    select m.* from tbl_risk_baidu_risklist as m
+	    where 1=1
+	    <if test=" name != null and name != '' ">
+	        and  m.name=#{name}
+	    </if>
+	    <if test=" identity != null and identity != '' ">
+	        and  m.identity=#{identity}
+	    </if>
+	    <if test=" phone != null and phone != '' ">
+	        and  m.phone=#{phone}
+	    </if>
+	    order by createTime desc
+	    limit #{start},#{pageSize}
+	</select>
+	
+	<select id="selectBaiduRiskListCount" parameterType="BaiduRiskListDto" resultType="java.lang.Integer">
+	   select count(*) from tbl_risk_baidu_risklist as m
+	    where 1=1
+	    <if test=" name != null and name != '' ">
+	        and  m.name=#{name}
+	    </if>
+	    <if test=" identity != null and identity != '' ">
+	        and  m.identity=#{identity}
+	    </if>
+	    <if test=" phone != null and phone != '' ">
+	        and  m.phone=#{phone}
+	    </if>
+	</select>
+    <select id="getBaiduRiskById" parameterType="BaiduRiskListDto" resultType="BaiduRiskListDto">
+         select *,date_format(createTime ,'%Y-%m-%d : %H:%i:%s') as createTimeStr
+          from tbl_risk_baidu_risklist where id=#{id}  order by createTime desc limit 1
+    </select>
+	
+	<!-- 删除监控 -->
+	<delete id="deleteBaiduRiskById" parameterType="BaiduRiskListDto" >
+		delete from tbl_risk_baidu_risklist where id = #{id}
+	</delete>
+	
+</mapper>

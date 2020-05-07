@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.icbc.ThirdIcbcQpdMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=accNo   and ''!=accNo"> accNo=#{accNo}</if>
+		<if test="null!=accName and ''!=accName"> AND accName  like CONCAT('%',#{accName},'%')</if>
+		<if test="null!=recipAccNo and ''!=recipAccNo"> AND recipAccNo=#{recipAccNo}</if>
+		<if test="null!=recipName  and ''!=recipName"> AND recipName like CONCAT('%',#{recipName},'%')</if>
+	</where>
+  </sql>
+    
+  <!-- 查询 -->
+  <select id="search" parameterType="ThirdIcbcQpdDto" resultType="ThirdIcbcQpdDto">
+	SELECT id, transCode, accNo, accName, currType, drcrf, vouhNo, amount, recipBkNo, recipAccNo, recipName, summary, useCN, postScript, ref, busCode, oref, enSummary, busType, cvouhType, addInfo, timeStamp, repReserved3, repReserved4, createUid, createTime, updateUid, updateTime
+	FROM tbl_third_icbc_qpd 
+	<include refid="sqlwhereSearch"/>
+  </select>
+  
+  <!-- 获取实体 -->
+  <select id="getEntity" parameterType="long" resultType="ThirdIcbcQpdDto">    
+	SELECT id, transCode, accNo, accName, currType, drcrf, vouhNo, amount, recipBkNo, recipAccNo, recipName, summary, useCN, postScript, ref, busCode, oref, enSummary, busType, cvouhType, addInfo, timeStamp, repReserved3, repReserved4, createUid, createTime, updateUid, updateTime 
+	FROM tbl_third_icbc_qpd 
+	WHERE ID=#{id}
+  </select>
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="ThirdIcbcQpdDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_third_icbc_qpd(
+		<if test="null!=transCode">transCode,</if>
+		<if test="null!=accNo">accNo,</if>
+		<if test="null!=accName">accName,</if>
+		<if test="null!=currType">currType,</if>
+		<if test="null!=drcrf">drcrf,</if>
+		<if test="null!=vouhNo">vouhNo,</if>
+		<if test="null!=amount">amount,</if>
+		<if test="null!=recipBkNo">recipBkNo,</if>
+		<if test="null!=recipAccNo">recipAccNo,</if>
+		<if test="null!=recipName">recipName,</if>
+		<if test="null!=summary">summary,</if>
+		<if test="null!=useCN">useCN,</if>
+		<if test="null!=postScript">postScript,</if>
+		<if test="null!=ref">ref,</if>
+		<if test="null!=busCode">busCode,</if>
+		<if test="null!=oref">oref,</if>
+		<if test="null!=enSummary">enSummary,</if>
+		<if test="null!=busType">busType,</if>
+		<if test="null!=cvouhType">cvouhType,</if>
+		<if test="null!=addInfo">addInfo,</if>
+		<if test="null!=timeStamp">timeStamp,</if>
+		<if test="null!=repReserved3">repReserved3,</if>
+		<if test="null!=repReserved4">repReserved4,</if>
+		createTime
+	) VALUES(
+		<if test="null!=transCode">#{transCode},</if>
+		<if test="null!=accNo">#{accNo},</if>
+		<if test="null!=accName">#{accName},</if>
+		<if test="null!=currType">#{currType},</if>
+		<if test="null!=drcrf">#{drcrf},</if>
+		<if test="null!=vouhNo">#{vouhNo},</if>
+		<if test="null!=amount">#{amount},</if>
+		<if test="null!=recipBkNo">#{recipBkNo},</if>
+		<if test="null!=recipAccNo">#{recipAccNo},</if>
+		<if test="null!=recipName">#{recipName},</if>
+		<if test="null!=summary">#{summary},</if>
+		<if test="null!=useCN">#{useCN},</if>
+		<if test="null!=postScript">#{postScript},</if>
+		<if test="null!=ref">#{ref},</if>
+		<if test="null!=busCode">#{busCode},</if>
+		<if test="null!=oref">#{oref},</if>
+		<if test="null!=enSummary">#{enSummary},</if>
+		<if test="null!=busType">#{busType},</if>
+		<if test="null!=cvouhType">#{cvouhType},</if>
+		<if test="null!=addInfo">#{addInfo},</if>
+		<if test="null!=timeStamp">#{timeStamp},</if>
+		<if test="null!=repReserved3">#{repReserved3},</if>
+		<if test="null!=repReserved4">#{repReserved4},</if>
+		NOW()
+	)	
+  </insert>
+  
+  <update id="update" parameterType="ThirdIcbcQpdDto" >
+    UPDATE tbl_third_icbc_qpd
+	<set>
+		<if test="null!=transCode">transCode=#{transCode},</if>
+		<if test="null!=accNo">accNo=#{accNo},</if>
+		<if test="null!=accName">accName=#{accName},</if>
+		<if test="null!=currType">currType=#{currType},</if>
+		<if test="null!=drcrf">drcrf=#{drcrf},</if>
+		<if test="null!=vouhNo">vouhNo=#{vouhNo},</if>
+		<if test="null!=amount">amount=#{amount},</if>
+		<if test="null!=recipBkNo">recipBkNo=#{recipBkNo},</if>
+		<if test="null!=recipAccNo">recipAccNo=#{recipAccNo},</if>
+		<if test="null!=recipName">recipName=#{recipName},</if>
+		<if test="null!=summary">summary=#{summary},</if>
+		<if test="null!=useCN">useCN=#{useCN},</if>
+		<if test="null!=postScript">postScript=#{postScript},</if>
+		<if test="null!=ref">ref=#{ref},</if>
+		<if test="null!=busCode">busCode=#{busCode},</if>
+		<if test="null!=oref">oref=#{oref},</if>
+		<if test="null!=enSummary">enSummary=#{enSummary},</if>
+		<if test="null!=busType">busType=#{busType},</if>
+		<if test="null!=cvouhType">cvouhType=#{cvouhType},</if>
+		<if test="null!=addInfo">addInfo=#{addInfo},</if>
+		<if test="null!=timeStamp">timeStamp=#{timeStamp},</if>
+		<if test="null!=repReserved3">repReserved3=#{repReserved3},</if>
+		<if test="null!=repReserved4">repReserved4=#{repReserved4},</if>
+		updateTime=NOW()
+	</set>
+    WHERE ID=#{id}
+  </update>
+
+  <delete id="delete" parameterType="long" >
+    DELETE FROM tbl_third_icbc_qpd WHERE ID=#{id}
+  </delete>
+    
+</mapper>

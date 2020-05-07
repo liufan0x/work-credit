@@ -1,0 +1,6 @@
+D:\anjbo-credit3\anjbo-credit3-server-api-gateway\src\main\java\com\anjbo\BootApplication.java
+D:\anjbo-credit3\anjbo-credit3-server-api-gateway\src\main\java\com\anjbo\controller\ApidocController.java
+D:\anjbo-credit3\anjbo-credit3-server-api-gateway\src\main\java\com\anjbo\filter\AccessFilter.java
+D:\anjbo-credit3\anjbo-credit3-server-api-gateway\src\main\java\com\anjbo\config\LocalConfiguration.java
+D:\anjbo-credit3\anjbo-credit3-server-api-gateway\src\main\java\com\anjbo\config\RedisHttpSessionConfiguration.java
+D:\anjbo-credit3\anjbo-credit3-server-api-gateway\src\main\java\com\anjbo\config\domain\ZuulRoute.java

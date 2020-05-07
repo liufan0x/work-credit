@@ -1,0 +1,28 @@
+<div class="lhw-alert-bg" ng-show="detailFileShow" style="z-index: 2">
+    <div class="lhw-alert-box" >
+        <div class="lhw-alert-tit" style="line-height:40px">附件预览</div>
+        <div style="padding:10px;height:300px;overflow-y:auto;">
+            <div class="row form-inline detail-row" style="padding:0 10px;">
+                <div class="tan-pic">
+                    <table class="table">
+                        <tbody>
+                        <tr ng-repeat="f in detailFiles">
+
+                            <td class="caozuo chakan-img gallerys" style="text-align: left">
+                                <span><a href="{{f.url}}" ng-bind="f.name" target="_blank"></a></span>&nbsp;&nbsp;
+                                <span><a href="{{f.url}}" download  target="_blank" ng-if="downloadFile">下载</a></span>&nbsp;&nbsp;
+                                <span ng-show="f.fileType.indexOf('image')>=0" class="gallery-pic-img" title="{{f.url}}"></span>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="clear"></div>
+                </div>
+            </div>
+        </div>
+        <div class="lhw-alert-but" style="height:63px;line-height:40px;">
+            <button type="button" class="btn btn-primary lhw-alert-cancel" ng-click="detailFileShow=false">关闭</button>
+        </div>
+    </div>
+</div>
+

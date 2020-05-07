@@ -1,0 +1,49 @@
+	<!--title-->
+	<!--title end-->
+
+	<div class="row">
+			<div class="col-md-12">
+				<ul class="nav nav-tabs">
+					<li ng-class="{'active':huarongTitle=='huarongOrderShow'}" >
+						<a ng-click="huarongTitle='huarongOrderShow'">借款信息</a>
+					</li>
+					<li ng-class="{'active':huarongTitle=='huarongKgAppointShow'}" >
+						<a ng-click="huarongTitle='huarongKgAppointShow'">
+							<span ng-if="fundId==31">业务信息</span>
+							<span ng-if="fundId!=31">客户信息</span>
+						</a>
+					</li>
+					<li ng-class="{'active':huarongTitle=='huarongKgIndivShow'}" >
+						<a ng-click="huarongTitle='huarongKgIndivShow'">
+							<span ng-if="fundId==31">借款人信息</span>
+							<span ng-if="fundId!=31">房产信息</span>
+						</a>
+					</li>
+					<li ng-class="{'active':huarongTitle=='huarongKgHouseShow'}" >
+						<a ng-click="huarongTitle='huarongKgHouseShow'">
+							<span ng-if="fundId==31">房产信息</span>
+							<span ng-if="fundId!=31">询价、查档、诉讼</span>
+						</a>
+					</li>
+					<li ng-class="{'active':huarongTitle=='huarongImageShow'}" >
+						<a ng-click="huarongTitle='huarongImageShow'">影像资料</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	<!--导航 end-->
+
+	<allocation-fund-huarong-order-detail	ng-show="huarongTitle=='huarongOrderShow'"></allocation-fund-huarong-order-detail>
+	<allocation-fund-huarong-appoint-detail	ng-show="huarongTitle=='huarongKgAppointShow'"></allocation-fund-huarong-appoint-detail>
+	<allocation-fund-huarong-indiv-detail	ng-show="huarongTitle=='huarongKgIndivShow'"></allocation-fund-huarong-indiv-detail>
+	<allocation-fund-huarong-house-detail	ng-show="huarongTitle=='huarongKgHouseShow'"></allocation-fund-huarong-house-detail>
+	<allocation-fund-huarong-businfo-detail	ng-show="huarongTitle=='huarongImageShow'"></allocation-fund-huarong-businfo-detail>
+	
+	<div ui-view="">
+		
+	</div>
+	<div style="width:100%;clear:both;height:1px;"></div>
+	<place-element-box-detail></place-element-box-detail>
+	<script>
+	
+	</script>

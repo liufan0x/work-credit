@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.huarong.BorrowRepaymentMapper" >
+
+<select id="getBorrowRepayment" parameterType="String" resultType="map">  
+         select * from  tbl_third_hr_borrow_repayment  where  orderNo=#{orderNo} order by id DESC limit 0,1
+    </select>
+	<!-- 添加应还款计划表 -->
+	<insert id="saveBorrowRepaymentMapper" parameterType="Map">
+		INSERT INTO tbl_third_hr_borrow_repayment  (
+			borrowId,
+			batchNo,
+			sendDate,	
+			allAccount,
+			allNums,
+			orderNo,
+			orderHr,
+			repaymentTime,
+			repaymentAccount,
+			interest,
+			capital,
+			sysbAmt,
+			psFeeAmt,
+			psRemPrcp,
+			psIntRate,
+			respStatus
+			
+		)
+		VALUES
+		(
+			#{borrowId},
+			#{batch_no},
+			#{sendDate},
+			#{allAccount},
+			#{allNums},
+			#{orderNo},
+			#{order},
+			#{repaymentTime},
+			#{repaymentAccount},
+			#{interest},
+			#{capital},
+			#{sysbAmt},
+			#{psFeeAmt},
+			#{psRemPrcp},
+			#{psIntRate},	
+			#{respStatus}	
+		)
+	</insert>
+	
+</mapper>

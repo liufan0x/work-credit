@@ -1,0 +1,19 @@
+<div class="container-fluid" id="statement">
+	<!--标题-->
+	<div class="row">
+		<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;财务制单
+			<a ng-show="!isEdit" style="display:inline-block;float:right;padding-right: 10px;" ui-sref="orderList" >返回上一步</a>
+			<span ng-show="isEdit" class="detail-trash2 text-danger" ng-click="deleteDetail('financial-statement-detail')" >隐藏</span>
+		</div>
+	</div>
+	<!--标题 end-->
+	<div class="row detail-row detail-lhw" >
+		<div class="col-md-6 col-lg-4"><label>财务制单时间：</label><span ng-bind="obj.createTime | date:'yyyy-MM-dd' "></div>
+	</div>
+	<div class="row relative" ng-if="obj.remark!='' && obj.remark!=null">
+		<span class="remark-span remark-lhw">备注：</span>
+		<textarea class="remark-p remark-lhw-p textarea-lhw"  readonly="readonly" ng-bind="obj.remark"  > </textarea>
+	</div>
+	<!--备注end-->
+	 
+</div>

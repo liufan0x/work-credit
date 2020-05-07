@@ -1,0 +1,48 @@
+<div class="row">
+	<div class="col-md-12">
+		<form class="form-inline search" style="margin-bottom:20px;margin-left:30px; ">
+			<div class="form-group" ng-repeat="condition in conditionList">
+				<label ng-bind="condition.title + '：'"></label>
+
+				<type ng-if="condition.type==1">
+					<select ng-if="condition.key=='processId'" select2 class="form-control" style="width: 180px;" ng-model="condition.value">
+						<option value="">全部</option>
+						<option ng-repeat="state in stateList" value="{{state.processId}}">{{state.processName}}</option>
+					</select>
+					<select ng-if="condition.key=='channelManagerUid'" select2 class="form-control" style="width: 180px;" ng-model="condition.value">
+						<option value="">全部</option>
+						<option ng-repeat="u in channelManagerList" value="{{u.uid}}">{{u.name}}</option>
+					</select>
+					<select ng-if="condition.key=='investigationManagerUid'" select2 class="form-control" style="width: 180px;" ng-model="condition.value">
+						<option value="">全部</option>
+						<option ng-repeat="u in investigationList" value="{{u.uid}}">{{u.name}}</option>
+					</select>
+				</type>
+
+				<type ng-if="condition.type==2">
+					<input type="text" class="form-control" ng-model="condition.value">
+				</type>
+				<type ng-if="condition.type==4">
+					<input type="text" class="form-control form_date" ng-model="condition.startValue">-
+					<input type="text" class="form-control form_date" ng-model="condition.endValue">
+				</type>
+				<type ng-if="condition.type==5">
+					<select ng-if="condition.key=='applyCity'" class="form-control" style="width: 180px;" ng-model="condition.value">
+						<option value="">全部</option>
+						<option ng-repeat="state in orderCitys" value="{{state.code}}">{{state.name}}</option>
+					</select>
+				</type>
+			</div>
+
+			<button type="submit" class="btn btn-primary icon-search" ng-click="query()" style="margin-bottom:10px; margin-right:10px;">查询</button>
+
+			<button type="submit" class="btn btn-primary icon-repeat" ui-sref="waitSignAgency" ui-sref-opts="{reload:'waitSignAgency'}" style="margin-bottom:10px; margin-right:10px;">重置</button>
+		</form>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-md-12 bs-table">
+		<table bs-table-control="pageList" data-show-export="false" id="table"></table>
+	</div>
+</div>

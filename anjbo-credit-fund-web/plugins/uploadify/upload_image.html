@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+	<head>
+ 		<meta charset="UTF-8" />
+		<meta name="Keywords" content="" />
+		<meta name="Description" content="" />
+		<link rel="shortcut icon" href="images/icon.png" />
+		<meta http-equiv=X-UA-Compatible content="IE=edge,chrome=1"/>
+
+
+<link rel="stylesheet" type="text/css" href="uploadify.css">
+<script type="text/javascript" src="jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="jquery.uploadify.min.js"></script>
+<style type="text/css">
+ul li { list-style:none;}
+body, p { margin:0; padding:0;}
+.xc_box { width:203px; height:51px; position:absolute; left:50%; top:40%; margin-left:-101px; margin-top:-25px;}
+.xc_box a {width:203px; height:51px; background:url(xz_01.gif) no-repeat left top; display:block; text-indent:-9999px;}
+.xc_box a:hover, .xc_close a:hover {opacity:0.8;}
+.xc_warp { width:100%; overflow:hidden;}
+.xc_warp ul { height:400px; overflow:auto;}
+.xc_warp ul li { width:150px; height:150px; border:1px solid #e1e1e1; background:#fff; margin:10px 0 0 10px; overflow:hidden; float:left; position:relative;}
+.xc_warp ul li img { width:150px; max-height:120px; display:block;}
+.xc_warp ul li p { font-size:12px; padding-left:10px; line-height:30px;}
+.xc_close { width:16px; height:16px; position:absolute; bottom:10px; right:10px; display:none;}
+.xc_close a { width:16px; height:16px; background:url(uploadify-cancel.png) no-repeat; text-indent:-999px; display:block;}
+.xc_warp ul li:hover .xc_close { display:block;}
+.xc_warp ul li p em { width:100px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; float:left; font-size:12px;font-style: normal;}
+.xc_bottpmwarp { width:100%; padding:10px 0; overflow:hidden; background:#f3f3f3; height:41px; position:absolute; bottom:0; left:0;}
+.xcbotton_01 { width:153px; height:41px; display:block; background:url(xz_03.gif) no-repeat; float:left; margin:0 0px 0 10px; text-indent:-9999px; }
+.xcbotton_01:hover {opacity:0.8;}
+.xcbotton_02 { width:100px; height:39px; display:block; float:left; margin:0 0px 0 10px; line-height:39px; font-family:"微软雅黑";
+ font-size:14px; color:#7b766b; text-decoration: none; border:1px solid #cbcbcb; background:#eaeaea; text-align:center; opacity:0.6;}
+.xcbotton_02:hover {opacity:1;}
+.xcbotton_03 { width:83px; height:41px; display:block; background:url(xz_04.gif) no-repeat; float:right; margin:0 10px 0 0;line-height:39px; font-family:"微软雅黑";
+ font-size:14px; color:#fff; text-decoration: none;  text-align:center;}
+.xcbotton_03:hover {opacity:0.8;}
+.xc_warp ul li p span {  color:#53b3e9; float:right; padding-right:10px;}
+.uploadify-progress { width:100%; height:25px; position:absolute; left:0; bottom:0;}
+.uploadify-progress-bar { height:25px; background:#06b527;opacity:0.6;text-align: center;}
+.uploadify-progress-bar .data{height:25px;}
+.xc_imgbox { position:relative;}
+</style>
+<script type="text/javascript">
+function getUrlParam(name) {
+                    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                    var r = window.location.search.substr(1).match(reg);
+                    if (r != null) return unescape(r[2]); return null;
+     }
+$(function(){
+	 
+	  
+
+	$("#uploadify").uploadify({
+		'formData'  : {'path':'fc-img'},
+        'auto'           : true, 
+        'swf'            : 'uploadify.swf',  
+        'uploader'       : 'http://fs.anjbo.com/fs/img/upload',
+        'queueID'        : 'fileQueue',
+        'itemTemplate' : '<li id="$\{fileID}" class="uploadify-queue-item"><div class="xc_imgbox"><img src="xz_05.gif" /><div class="uploadify-progress"><div class="uploadify-progress-bar" style="width:1%;"><span class="data"></span></div></div></div><p><em>$\{fileName}</em>($\{fileSize})</p><div class="xc_close"><a href="javascript:$(\'#$\{instanceID}\').uploadify(\'cancel\', \'$\{fileID}\')">关闭</a></div></li>',
+        'width'     : '150',
+        'height'    : '150',
+        'buttonImage':'xz_02.gif',
+        'fileTypeDesc'   : '选择图片',
+        'fileTypeExts'   : '*.jpg;*.gif;*.png;*.bmp;*jpeg;*.JPG;*.GIF;*.PNG;*.BMP;*JPEG',
+        'multi'          : true,
+        'fileSizeLimit' : '15MB',
+        'fileObjName' : 'file',  
+        'method' : 'post',
+        'removeCompleted':false,
+        'onFallback':function(){    
+            alert("您未安装FLASH控件，无法上传图片！请安装FLASH控件后再试。");
+			$("#fileButton").append('<p>点<a href="//www.adobe.com/go/getflash?spm=a2h0j.8191423.movie_player.5~5~5~8~A" target="_blank" data-spm-anchor-id="a2h0j.8191423.movie_player.5~5~5~8~A">这里</a>安装flash</p>');  
+        },'onUploadSuccess' : function(file, data, response){//单个文件上传成功触发  
+            $("#"+file.id+" img").attr("src",jQuery.parseJSON(data).thumbnail_url);
+            $("#"+file.id+" img").attr("img_url",jQuery.parseJSON(data).url); 
+            $("#"+file.id+" img").attr("thumbnail_url",jQuery.parseJSON(data).thumbnail_url);     
+            $('#' + file.id).find('.uploadify-progress').remove();    
+        }
+    });
+	
+});
+	
+function saveImg(){
+	var img = "";
+	var simg = "";
+	var name = "";
+	$("#fileQueue img").each(function(){
+	    img_name = $(this).parent().next().find("em").text();
+		img_url = $(this).attr("img_url");
+		simg_url = $(this).attr("thumbnail_url");
+		if(img_url != null && img_url != "" && img_name!=""){
+			img = img + img_url +",";
+			simg = simg + simg_url +",";
+			name = name +img_name +"," ;
+		}
+
+	});
+	 if(getUrlParam('returnFun')){
+		 
+	      var returnFun=getUrlParam('returnFun')+"";
+		 
+		   var ss="parent."+returnFun+"('"+img+"','"+simg+"','"+name+"')";
+		   eval(ss);
+		   //parent.funb(img, simg,name);
+		   
+		   
+	 }else{
+	parent.returnData(img,simg,name);
+	
+	 }
+	 parent.jQuery.fancybox.close();
+}
+ 
+</script>
+</head>
+
+<body style="width:800px; height:500px; ">
+<div style="width:800px; height:500px; background:#f9f9f9; position:relative;">
+	<!--
+	<div class="xc_box">
+		<input type="file" id="uploadify" name="myFile">
+	</div>-->
+	<div class="xc_warp">
+		<ul id="fileQueue">
+	     	 <li id="fileButton"><a href="#"><input type="file" id="uploadify" name="myFile"></a></li>
+	    </ul>
+	</div>
+	<div class="xc_bottpmwarp">
+		<!-- <a href="javascript:$('#uploadify').uploadify('upload','*');" class="xcbotton_01">开始上传</a> --><a href="javascript:$('#uploadify').uploadify('cancel','*');" class="xcbotton_02" style="display:none;">取消上传</a><a href="javascript:saveImg();" class="xcbotton_03">确&nbsp;认</a>
+	</div>
+</div>
+</body>
+</html>

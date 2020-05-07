@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.anjbo.dao.EleAccessMapper">
+    <!--要件管理 数量-->
+    <select id="selectElementAccessCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+        COUNT(1)
+        FROM
+        tbl_element_access_flow t1
+        LEFT JOIN tbl_element_list t2 ON t1.orderNo = t2.orderNo
+        <where>
+            <if test="currentHandlerUid != null and currentHandlerUid != '' ">
+                (
+                t2.currentHandlerUid in (${currentHandlerUid})
+                or t2.previousHandlerUid = #{updateUid}
+                or t2.notarialUid in (${currentHandlerUid})
+                or t2.facesignUid in (${currentHandlerUid})
+                or t2.acceptMemberUid in  (${currentHandlerUid})
+                or t2.channelManagerUid in (${currentHandlerUid})
+                <if test="orderNo != '' and orderNo != null">
+                    or t2.orderNo in (${orderNo})
+                </if>
+                )
+            </if>
+            <if test="city!='' and city !=null ">
+                AND t2.cityName = #{city}
+            </if>
+            <if test='orderType=="3"'>
+                AND t2.orderType = 3
+            </if>
+            <if test='orderType=="1"'>
+                AND (t2.orderType = 1 or t2.orderType = 2)
+            </if>
+            <if test="customerName!='' and customerName !=null ">
+                AND t2.customerName like CONCAT('%',#{customerName},'%')
+            </if>
+            <if test="applierName!='' and applierName !=null ">
+                AND t1.applierName like CONCAT('%',#{applierName},'%')
+            </if>
+            <if test="orderStatus!='' and orderStatus !=null ">
+                AND t2.orderStatus = #{orderStatus}
+            </if>
+            <if test="boxNo!='' and boxNo !=null ">
+                AND t2.boxNo like CONCAT('%',#{boxNo},'%')
+            </if>
+            <if test="startTime!='' and startTime !=null ">
+                AND <![CDATA[ DATE_FORMAT(t1.operationTime, '%Y-%m-%d') >= #{startTime} ]]>
+            </if>
+            <if test="endTime!='' and endTime !=null ">
+                AND <![CDATA[ DATE_FORMAT(t1.operationTime, '%Y-%m-%d') <= #{endTime} ]]>
+            </if>
+        </where>
+    </select>
+            <!--要件管理 列表-->
+    <select id="selectElementAccessList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        t1.id,
+        t1.orderNo,
+        t2.cityName,
+        t2.orderType,
+        t2.boxNo,
+        t2.customerName,
+        t1.elementSet,
+        t1.currentBoxElementSet,
+        t1.operationType,
+        t1.currentHandler,
+        t1.applierName,
+        t2.orderStatus,
+        t1.operationTime
+        FROM
+        tbl_element_access_flow t1
+        LEFT JOIN tbl_element_list t2 ON t1.orderNo = t2.orderNo
+        <where>
+            <if test="currentHandlerUid != null and currentHandlerUid != '' ">
+                (
+                t2.currentHandlerUid in (${currentHandlerUid})
+                or t2.previousHandlerUid = #{updateUid}
+                or t2.notarialUid in (${currentHandlerUid})
+                or t2.facesignUid in (${currentHandlerUid})
+                or t2.acceptMemberUid in  (${currentHandlerUid})
+                or t2.channelManagerUid in (${currentHandlerUid})
+                <if test="orderNo != '' and orderNo != null">
+                    or t2.orderNo in (${orderNo})
+                </if>
+                )
+            </if>
+            <if test="city!='' and city !=null ">
+                AND t2.cityName = #{city}
+            </if>
+            <if test='orderType=="3"'>
+                AND t2.orderType = 3
+            </if>
+            <if test='orderType=="1"'>
+                AND (t2.orderType = 1 or t2.orderType = 2)
+            </if>
+            <if test="customerName!='' and customerName !=null ">
+                AND t2.customerName like CONCAT('%',#{customerName},'%')
+            </if>
+            <if test="applierName!='' and applierName !=null ">
+                AND t1.applierName like CONCAT('%',#{applierName},'%')
+            </if>
+            <if test="orderStatus!='' and orderStatus !=null ">
+                AND t2.orderStatus = #{orderStatus}
+            </if>
+            <if test="boxNo!='' and boxNo !=null ">
+                AND t2.boxNo like CONCAT('%',#{boxNo},'%')
+            </if>
+            <if test="startTime!='' and startTime !=null ">
+                AND <![CDATA[ DATE_FORMAT(t1.operationTime, '%Y-%m-%d') >= #{startTime} ]]>
+            </if>
+            <if test="endTime!='' and endTime !=null ">
+                AND <![CDATA[ DATE_FORMAT(t1.operationTime, '%Y-%m-%d') <= #{endTime} ]]>
+            </if>
+        </where>
+        ORDER BY t1.operationTime DESC,t1.id DESC
+        limit #{start},#{pageSize}
+    </select>
+
+    <!-- 查询要件存取记录流水详情-->
+    <select id="selectElementAccessFlowDetail" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        t1.id,
+        t2.orderType,
+        t2.customerName,
+        t2.cityName,
+        t2.creditType,
+        t2.borrowingAmount,
+        t2.borrowingDay,
+        t2.channelManagerName,
+        t2.acceptMemberName,
+        t2.state,
+        t2.sealDepartment,
+        t2.boxNo,
+        t2.hasRiskElement,
+        t2.hasPublicBusiness,
+        t1.operationTime,
+        t1.operationType,
+        t1.currentHandler,
+        t1.applierName,
+        t1.dbId,
+        t1.elementSet,
+        t1.currentBoxElementSet,
+        t1.beginBorrowElementTime,
+        t1.endBorrowElementTime,
+        t1.borrowDay,
+        t1.remark,
+        t1.riskPicture,
+        t1.receivablePicture,
+        t1.elsePicture,
+        t1.sealPicture,
+        t1.orderNo,
+        t1.fileToSeal,
+        t1.sealFileCount,
+        t1.fileType,
+        t1.fileImgUrl
+        FROM
+        tbl_element_access_flow t1
+        LEFT JOIN tbl_element_list t2 ON t1.orderNo = t2.orderNo
+        <where>
+            t1.id = #{id}
+        </where>
+    </select>
+
+    <!-- 查询要件审批流水-->
+    <select id="selectElementAuditFlowListByDbId" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        id,
+        auditorName,
+        remark,
+        auditLevel,
+        hasNext
+        FROM
+        tbl_element_audit_flow
+        <where>
+            dbId = #{dbId}
+        </where>
+        ORDER BY auditLevel
+    </select>
+
+    <!-- 查询要件审批流水-->
+    <select id="getElementAuditBaseDetail" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            fileType,
+            fileToSeal,
+            sealFileCount,
+            reason,
+            fileImgUrl
+        FROM
+          tbl_element_audit_base
+        WHERE
+          id = #{dbId}
+    </select>
+
+    <!-- 要件详情列表 -->
+    <select id="selectElementFileList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        id,
+        elementType,
+        cardType,
+        cardNumber,
+        cardCustomer,
+        boxNo,
+        bankName,
+        bankSubName,
+        type,
+        orderNo,
+        status
+        FROM
+        tbl_element_element_file
+        <where>
+            <if test="fileList !=null ">
+                id in
+                <foreach collection="fileList" index="index" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </select>
+    <!-- 要件详情列表 -->
+    <select id="selectAllElementFileList" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        id,
+        elementType,
+        cardType,
+        cardNumber,
+        cardCustomer,
+        boxNo,
+        bankName,
+        bankSubName,
+        type,
+        orderNo,
+        status
+        FROM
+        tbl_element_element_file
+    </select>
+
+    <!-- 当前要件箱中的要件 -->
+    <select id="getElementOrderDetail" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            currentBoxElementSet
+        FROM
+            tbl_element_list
+        WHERE
+            orderNo = #{orderNo}
+    </select>
+
+    <!-- 要件存取记录-数量 -->
+    <select id="selectElementCountByOrderNo" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT
+          COUNT(1)
+        FROM
+          tbl_element_access_flow
+        WHERE
+          orderNo = #{orderNo}
+    </select>
+
+    <!-- 要件存取记录-列表 -->
+    <select id="selectElementListByOrderNo" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            t1.id,
+            t2.orderType,
+            t2.customerName,
+            t2.cityName,
+            t2.creditType,
+            t2.borrowingAmount,
+            t2.borrowingDay,
+            t2.channelManagerName,
+            t2.acceptMemberName,
+            t2.state,
+            t2.sealDepartment,
+            t2.boxNo,
+            t2.hasRiskElement,
+            t2.hasPublicBusiness,
+            t1.operationTime,
+            t1.operationType,
+            t1.currentHandler,
+            t1.applierName,
+            t1.dbId,
+            t1.elementSet,
+            t1.currentBoxElementSet,
+            t1.beginBorrowElementTime,
+            t1.endBorrowElementTime,
+            t1.borrowDay,
+            t1.remark,
+            t1.riskPicture,
+            t1.receivablePicture,
+            t1.elsePicture,
+            t1.sealPicture
+        FROM
+            tbl_element_access_flow t1
+            LEFT JOIN tbl_element_list t2 ON t1.orderNo = t2.orderNo
+        WHERE
+            t1.orderNo = #{orderNo}
+        ORDER BY t1.operationTime,t1.id
+        limit #{start},#{pageSize}
+    </select>
+</mapper>

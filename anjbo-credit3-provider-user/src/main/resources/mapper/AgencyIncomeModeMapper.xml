@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.AgencyIncomeModeMapper" >
+  <sql id="sqlwhereSearch">
+  	<where>
+		<if test="null!=id and id>0"> AND `id`=#{id}</if>
+		<if test="null!=agencyId and agencyId>0"> AND `agencyId`=#{agencyId}</if>
+		<if test="null!=incomeMode and ''!=incomeMode"> AND `incomeMode`=#{incomeMode}</if>
+		<if test="null!=name and ''!=name"> AND `name`=#{name}</if>
+		<!--
+		<if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if>
+		<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if>
+		-->
+		<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+	</where>
+  </sql>
+    
+
+  <!-- 获取实体 -->
+  <select id="find" parameterType="AgencyIncomeModeDto" resultType="AgencyIncomeModeDto">    
+	SELECT `id`, `agencyId`, `incomeMode`, `name`, `createTime`, `createUid` 
+	FROM tbl_customer_agency_income_mode 
+	<include refid="sqlwhereSearch"/>
+  </select>
+
+  <!-- 查询 -->
+  <select id="search" parameterType="AgencyIncomeModeDto" resultType="AgencyIncomeModeDto">
+	SELECT `id`, `agencyId`, `incomeMode`, `name`, `createTime`, `createUid`
+	FROM tbl_customer_agency_income_mode 
+	<include refid="sqlwhereSearch"/>
+
+	<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+  </select>
+
+  <!-- 查询 -->
+  <select id="count" parameterType="AgencyIncomeModeDto" resultType="int">
+	SELECT count(1) 
+	FROM tbl_customer_agency_income_mode 
+	<include refid="sqlwhereSearch"/> 
+  </select>
+  
+    
+  <!-- 增删改 -->
+  <insert id="insert" parameterType="AgencyIncomeModeDto" useGeneratedKeys="true" keyProperty="id">
+    INSERT INTO tbl_customer_agency_income_mode(
+		`agencyId`,
+		`incomeMode`,
+		`name`,
+		`createTime`,
+		`createUid`
+	) VALUES(
+		#{agencyId},
+		#{incomeMode},
+		#{name},
+		now(),
+		#{createUid}
+	)	
+  </insert>
+
+
+  <delete id="delete" parameterType="AgencyIncomeModeDto" >
+    DELETE FROM tbl_customer_agency_income_mode 
+	<include refid="sqlwhereSearch"/>
+  </delete>
+  
+  <update id="update" parameterType="AgencyIncomeModeDto" >
+    UPDATE tbl_customer_agency_income_mode
+	<set>
+		<if test="null!=agencyId">`agencyId`=#{agencyId},</if>
+		<if test="null!=incomeMode">`incomeMode`=#{incomeMode},</if>
+		<if test="null!=name">`name`=#{name},</if>
+		<if test="null!=createTime">`createTime`=now(),</if>
+	</set>
+	WHERE ID=#{id}
+  </update>
+    
+</mapper>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN" "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.contract.ContractListMapper">
+	<sql id="sqlwhereSearch">
+		<where>
+			<if test="null!=id and ''!=id"> AND `id`=#{id}</if>
+			<if test="null!=createUid and ''!=createUid"> AND `createUid`=#{createUid}</if>
+			<!-- <if test="@Ognl@isNotEmpty(createTimeBegin)"> AND createTime >= #{createTimeBegin}</if> 
+				<if test="@Ognl@isNotEmpty(createTimeEnd)"> AND createTime &lt;= #{createTimeEnd}</if> -->
+			<if test="null!=updateUid and ''!=updateUid"> AND `updateUid`=#{updateUid}</if>
+			<!-- <if test="@Ognl@isNotEmpty(updateTimeBegin)"> AND updateTime >= #{updateTimeBegin}</if> 
+				<if test="@Ognl@isNotEmpty(updateTimeEnd)"> AND updateTime &lt;= #{updateTimeEnd}</if> -->
+			<if test="null!=agencyId and agencyId>0"> AND `agencyId`=#{agencyId}</if>
+			<if test="null!=orderNo and ''!=orderNo"> AND `orderNo`=#{orderNo}</if>
+			<if test="null!=cityCode and ''!=cityCode"> AND `cityCode`=#{cityCode}</if>
+			<if test="null!=cityName and ''!=cityName"> AND `cityName`=#{cityName}</if>
+			<if test="null!=productCode and ''!=productCode"> AND `productCode`=#{productCode}</if>
+			<if test="null!=productName and ''!=productName"> AND `productName`=#{productName}</if>
+			<if test="null!=customerName and ''!=customerName">and `customerName` like CONCAT('%',#{customerName},'%') </if>
+			<if test="null!=borrowingAmount and borrowingAmount>0"> AND `borrowingAmount`=#{borrowingAmount}</if>
+			<if test="null!=borrowingDay and borrowingDay>0"> AND `borrowingDay`=#{borrowingDay}</if>
+			<if test="null!=relationOrderNo and ''!=relationOrderNo"> AND `relationOrderNo`=#{relationOrderNo}</if>
+			<if test="null!=data and ''!=data"> AND `data`=#{data}</if>
+			<if test="null!=contractIds and ''!=contractIds"> AND `contractIds`=#{contractIds}</if>
+			<if test="createTimeStart !=null and createTimeStart !=''">
+				and  <![CDATA[ createTime >= #{createTimeStart} ]]>
+			</if>
+			<if test="createTimeEnd !=null and createTimeEnd !=''">
+				and  <![CDATA[ createTime < date_sub(#{createTimeEnd},interval -1 day) ]]>
+			</if>
+		</where>
+	</sql>
+
+
+	<!-- 获取实体 -->
+	<select id="find" parameterType="ContractListDto"
+		resultType="ContractListDto">
+		SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`,
+		`agencyId`, `orderNo`, `cityCode`, `cityName`, `productCode`,
+		`productName`, `customerName`, `borrowingAmount`, `borrowingDay`,
+		`relationOrderNo`, `data`, `contractIds`
+		FROM tbl_common_contract_list
+		<include refid="sqlwhereSearch" />
+	</select>
+
+	<!-- 查询 -->
+	<select id="search" parameterType="ContractListDto"
+		resultType="ContractListDto">
+		SELECT `id`, `createUid`, `createTime`, `updateUid`, `updateTime`,
+		`agencyId`, `orderNo`, `cityCode`, `cityName`, `productCode`,
+		`productName`, `customerName`, `borrowingAmount`, `borrowingDay`,
+		`relationOrderNo`, `data`, `contractIds`
+		FROM tbl_common_contract_list
+		<include refid="sqlwhereSearch" />
+		<if test="sortName !=null and sortName !=''">ORDER BY  ${sortName} ${sortOrder}</if>
+		<if test="pageSize > 0 ">limit #{start},#{pageSize}</if>
+	</select>
+
+	<!-- 查询 -->
+	<select id="count" parameterType="ContractListDto"
+		resultType="int">
+		SELECT count(1)
+		FROM tbl_common_contract_list
+		<include refid="sqlwhereSearch" />
+	</select>
+
+
+	<!-- 增删改 -->
+	<insert id="insert" parameterType="ContractListDto"
+		useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO tbl_common_contract_list(
+		`createUid`,
+		`createTime`,
+		`updateUid`,
+		`updateTime`,
+		`agencyId`,
+		`orderNo`,
+		`cityCode`,
+		`cityName`,
+		`productCode`,
+		`productName`,
+		`customerName`,
+		`borrowingAmount`,
+		`borrowingDay`,
+		`relationOrderNo`,
+		`data`,
+		`contractIds`
+		) VALUES(
+		#{createUid},
+		now(),
+		#{createUid},
+		now(),
+		#{agencyId},
+		#{orderNo},
+		#{cityCode},
+		#{cityName},
+		#{productCode},
+		#{productName},
+		#{customerName},
+		#{borrowingAmount},
+		#{borrowingDay},
+		#{relationOrderNo},
+		#{data},
+		#{contractIds}
+		)
+	</insert>
+
+
+	<delete id="delete" parameterType="ContractListDto">
+		DELETE FROM tbl_common_contract_list
+		<include refid="sqlwhereSearch" />
+	</delete>
+
+	<update id="update" parameterType="ContractListDto">
+		UPDATE tbl_common_contract_list
+		<set>
+			<if test="null!=updateTime">`updateTime`=now(),</if>
+			<if test="null!=agencyId">`agencyId`=#{agencyId},</if>
+			<if test="null!=orderNo">`orderNo`=#{orderNo},</if>
+			<if test="null!=cityCode">`cityCode`=#{cityCode},</if>
+			<if test="null!=cityName">`cityName`=#{cityName},</if>
+			<if test="null!=productCode">`productCode`=#{productCode},</if>
+			<if test="null!=productName">`productName`=#{productName},</if>
+			<if test="null!=customerName">`customerName`=#{customerName},</if>
+			<if test="null!=borrowingAmount">`borrowingAmount`=#{borrowingAmount},</if>
+			<if test="null!=borrowingDay">`borrowingDay`=#{borrowingDay},</if>
+			<if test="null!=relationOrderNo">`relationOrderNo`=#{relationOrderNo},</if>
+			<if test="null!=data">`data`=#{data},</if>
+			<if test="null!=contractIds">`contractIds`=#{contractIds},</if>
+		</set>
+		WHERE ID=#{id}
+	</update>
+
+</mapper>

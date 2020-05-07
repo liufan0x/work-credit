@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.anjbo.dao.FinalAuditMapper">
+    <resultMap id="BaseResultMap" type="FinalAuditDto">
+        
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="createUid" jdbcType="VARCHAR" property="createUid" />
+        <result column="createTime" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="updateUid" jdbcType="VARCHAR" property="updateUid" />
+        <result column="updateTime" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="orderNo" jdbcType="VARCHAR" property="orderNo" />
+        <result column="auditTime" jdbcType="TIMESTAMP" property="auditTime" />
+        <result column="isShow" jdbcType="INTEGER" property="isShow" />
+    </resultMap>
+  
+    <sql id="Base_Column_List">
+        id, createUid, createTime, updateUid, updateTime, orderNo, auditTime, isShow,remark,auditStatus,handleUid,paymentType,officerUid,officerUidType,allocationFundUid
+    </sql>
+    <select id="detail" parameterType="java.lang.String" resultType="FinalAuditDto">
+    	select
+    		<include refid="Base_Column_List"/>
+    	from tbl_risk_audit_final where orderNo = #{orderNo} ORDER BY createTime DESC LIMIT 1
+    </select>
+    <insert id="insert" parameterType="FinalAuditDto">
+        insert into tbl_risk_audit_final 
+        (
+        	id, createUid, createTime, 
+            updateUid, orderNo, 
+            auditTime, isShow, remark,auditStatus,handleUid,paymentType,officerUid,officerUidType,allocationFundUid
+         )
+        values 
+        (
+        	null, #{createUid}, now(), 
+            #{updateUid}, #{orderNo}, 
+            #{auditTime}, #{isShow}, #{remark},#{auditStatus},#{handleUid},#{paymentType},#{officerUid},#{officerUidType},#{allocationFundUid}
+           )
+    </insert>
+    <update id="update" parameterType="FinalAuditDto">
+        update tbl_risk_audit_final
+        <set>
+            <if test="createUid != null and createUid!=''">
+                createUid = #{createUid},
+            </if>
+            <if test="updateUid != null and updateUid!=''">
+                updateUid = #{updateUid},
+            </if>
+            <if test="updateTime != null">
+                updateTime = #{updateTime},
+            </if>
+            <if test="auditTime != null">
+                auditTime = #{auditTime},
+            </if>
+            <if test="isShow != null">
+                isShow = #{isShow},
+            </if>
+            <if test="remark != null and remark!=''">
+                remark = #{remark},
+            </if>
+            <if test="auditStatus!=null">
+            	auditStatus = #{auditStatus},
+            </if>
+            <if test="handleUid!=null and handleUid!=''">
+            	handleUid = #{handleUid},
+            </if>
+            <if test="paymentType!=null and paymentType!=''">
+                paymentType =#{paymentType},
+            </if>
+            <if test="officerUid !=null and officerUid !=''">
+               officerUid =#{officerUid},
+            </if>
+            <if test="officerUidType !=null and officerUidType>=0">
+              officerUidType=#{officerUidType},
+            </if>
+            <if test="allocationFundUid != null and allocationFundUid != ''">
+              allocationFundUid=#{allocationFundUid},
+            </if>
+        </set>
+        where orderNo = #{orderNo} ORDER BY createTime DESC LIMIT 1
+    </update>
+    <delete id="delete" parameterType="java.lang.String">
+       delete from tbl_risk_audit_final where orderNo=#{0}
+    </delete>
+</mapper>

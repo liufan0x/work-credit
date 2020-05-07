@@ -1,0 +1,30 @@
+<div class="col-md-12 detail-right-tit">&nbsp;&nbsp;支付信息</div>
+<form style="padding:0 50px" class="form-inline ng-pristine ng-invalid ng-invalid-required ng-valid-min" name="orderForm">
+	<div class="row form-inline detail-row w147" style="padding:30px 10px; ">
+		<div class="col-md-6 col-lg-6">
+			<label>交易类型:</label>
+			<select ng-disabled="!(ynStatus.payStatus.msg=='核销失败'||ynStatus.payStatus.msg=='待支付')" class="form-control" ng-model="YNZFXX.dictVoucherType" ng-init="YNZFXX.dictVoucherType = '0@线下转账'" style="width:180px">
+				<option value="">请选择</option>
+				<option value="0@线下转账">线下转账</option>
+				<option value="2@线上代扣">线上代扣</option>
+			</select>
+		</div>
+		<div class="col-md-6 col-lg-6">
+			<label>回款银行户名:</label>
+			<input ng-disabled="!(ynStatus.payStatus.msg=='核销失败'||ynStatus.payStatus.msg=='待支付')" type="text" ng-model="YNZFXX.accountName" class="form-control" />
+		</div>
+		<div class="col-md-6 col-lg-6">
+			<label>回款银行账号:</label>
+			<input style="width:250px" ng-disabled="!(ynStatus.payStatus.msg=='核销失败'||ynStatus.payStatus.msg=='待支付')" type="text" ng-model="YNZFXX.accountNo" class="form-control" />
+		</div>
+
+		<div class="col-md-6 col-lg-6">
+			<label>还款总金额:</label>
+			<span type="text" class="form-control" ng-bind="YNZFXX.amount"></span>元
+		</div>
+		<div class="col-md-6 col-lg-6">
+			<label>回款流水号:</label>
+			<input style="width:250px" ng-disabled="!(ynStatus.payStatus.msg=='核销失败'||ynStatus.payStatus.msg=='待支付')" type="text" ng-model="YNZFXX.bankTransactionNo" class="form-control" />
+		</div>
+	</div>
+</form>
