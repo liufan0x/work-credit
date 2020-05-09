@@ -795,6 +795,12 @@ angular.module("anjboApp", ['bsTable']).controller("orderListCtrl", function($sc
 				valign: 'bottom',
 				visible: columnSwitchList.channelManagerName
 			}, {
+				title: '分公司（营业部）',
+				field: 'branchCompany',
+				align: 'center',
+				valign: 'bottom',
+				visible: columnSwitchList.branchCompany
+			}, {
 				title: '受理员',
 				field: 'acceptMemberName',
 				align: 'center',
