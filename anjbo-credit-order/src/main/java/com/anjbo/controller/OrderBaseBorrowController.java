@@ -659,12 +659,12 @@ public class OrderBaseBorrowController extends BaseController {
 		goNextNode(orderFlowDto, orderListDto);
 		orderBaseBorrowService.addRiskList(orderNo);
 		//==============发送短信Start===================
-//		String ipWhite = ConfigUtil.getStringValue(Constants.BASE_AMS_IPWHITE,ConfigUtil.CONFIG_BASE); //ip
-//		String ProductName="债务置换";
-//		if(listDto!=null && !"01".equals(listDto.getProductCode()) && !"02".equals(listDto.getProductCode())){
-//			ProductName=listDto.getProductName();
-//		}
-//		AmsUtil.smsSend(CommonDataUtil.getUserDtoByUidAndMobile(currentHandlerUid).getMobile(), ipWhite, Constants.SMS_TEMPLATE_MANAGER, ProductName,listDto.getCustomerName(),listDto.getBorrowingAmount(),"分配订单");
+		String ipWhite = ConfigUtil.getStringValue(Constants.BASE_AMS_IPWHITE,ConfigUtil.CONFIG_BASE); //ip
+		String ProductName="债务置换";
+		if(listDto!=null && !"01".equals(listDto.getProductCode()) && !"02".equals(listDto.getProductCode())){
+			ProductName=listDto.getProductName();
+		}
+		AmsUtil.smsSend(CommonDataUtil.getUserDtoByUidAndMobile(currentHandlerUid).getMobile(), ipWhite, Constants.SMS_TEMPLATE_MANAGER, ProductName,listDto.getCustomerName(),listDto.getBorrowingAmount(),"分配订单");
 		
 	}
 	
