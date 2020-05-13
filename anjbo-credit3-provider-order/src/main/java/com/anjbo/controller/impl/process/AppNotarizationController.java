@@ -150,7 +150,7 @@ public class AppNotarizationController extends OrderBaseController implements IA
 			UserDto handlerUserDto = userApi.findUserDtoByUid(handlerUid);
 			baseListDto = new BaseListDto();
 			baseListDto.setOrderNo(dto.getOrderNo());
-			baseListDto.setAppShowValue1(DateUtils.dateToString(dto.getEstimatedTime(), DateUtils.FMT_TYPE2));
+			//baseListDto.setAppShowValue1(DateUtils.dateToString(dto.getEstimatedTime(), DateUtils.FMT_TYPE2));
 			baseListDto.setCurrentHandler(handlerUserDto.getName());
 			baseListDto.setCurrentHandlerUid(handlerUserDto.getUid());
 			goNextNode(flowDto, baseListDto);
