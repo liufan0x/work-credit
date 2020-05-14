@@ -91,7 +91,7 @@ public class MonitorSpringQtz {
 				System.out.println("任务"+(i+1));
 				System.out.println(sdf.format(new Date()) + " 添加定时器:"+keyName);
 				scheduler.scheduleJob(jobDetail, trigger);
-				Thread.sleep(3000);
+				Thread.sleep(1000*60*2);
 				if(!scheduler.isStarted()){
 					scheduler.start();
 					//发短信
