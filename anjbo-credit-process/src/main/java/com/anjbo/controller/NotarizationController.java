@@ -270,7 +270,7 @@ public class NotarizationController extends BaseController{
 					//填充列表预计出款
 					goNextNode(orderFlowDto, orderListDto);
 //				}
-				orderListDto.setAppShowValue1(DateUtil.getDateByFmt(notarizationDto.getEstimatedTime(), DateUtil.FMT_TYPE2));
+				//orderListDto.setAppShowValue1(DateUtil.getDateByFmt(notarizationDto.getEstimatedTime(), DateUtil.FMT_TYPE2));
 				orderListDto.setOrderNo(notarizationDto.getOrderNo());
 				httpUtil.getRespStatus(Constants.LINK_CREDIT, "/credit/order/base/v/updateOrderList", orderListDto);
 			} catch (Exception e) {
