@@ -50,8 +50,8 @@ public class HYTHandler extends SMSHandlerWeightBase{
 		
 		message.setSmsContent(message.getSmsContent().replace("快鸽按揭", "四海恒通").replace("快马金服APP","四海恒通APP")
 				.replace("贷款","订单").replace("（非交易类）订单","").replace("（交易类）订单","")
-		.replace("信贷系统","PC系统").replace("快鸽信贷系统","四海PC系统").replace("快鸽PC","四海PC"));
-		
+		.replace("信贷系统","PC系统").replace("快鸽信贷系统","四海PC系统").replace("快鸽PC","四海PC")
+				.replace("债务置换订单","订单").replace("万",""));
 		StringBuilder sb = new StringBuilder();
 		sb.append("action=send&");
 		sb.append("userid="+id+"&");
