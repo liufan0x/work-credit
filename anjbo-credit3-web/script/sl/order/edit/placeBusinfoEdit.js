@@ -39,6 +39,19 @@ angular.module("anjboApp").controller("placeBusinfoEditCtrl", function($scope, $
 			data: params
 		}).success(function(data) {
 			$scope.busInfo = data.data;
+			
+			angular.forEach($scope.busInfo.creditLoan,function(data){
+				angular.forEach(data.sonTypes,function(data1){
+					angular.forEach(data1.listMap,function(data2){
+						if(data2.url.indexOf('pdf')>0){
+							data2.isPdf = true;
+						}else{
+							data2.isPdf = false;
+						}
+					})
+				})
+			})
+			
 			$scope.isImg = $scope.busInfo.operate;
 			$scope.cOperate = $scope.busInfo.cOperate;
 			$scope.finshed = $scope.busInfo.finshed;
@@ -49,6 +62,53 @@ angular.module("anjboApp").controller("placeBusinfoEditCtrl", function($scope, $
 		})
 	}
 	$timeout(refresh,300);
+	
+	$scope.download = function(){
+		
+		var list = $scope.busInfo.creditLoan;
+		
+		angular.forEach(list,function(data){
+			angular.forEach(data.sonTypes,function(data1){
+				data1.listImgs = data1.listMap;
+			})
+			data.childrenType = data.sonTypes;
+		})
+		
+		
+		/*$http({
+			url: '/credit/order/businfo/v/getBusinfoAndTypeNames',
+			method: 'POST',
+			data:{
+				"topType":list,
+				"custName":$scope.borrow.borrowerName
+			}
+		}).success(function(data1) {
+			if ("SUCCESS" == data1.code) {
+				window.open(data1.data);
+			}
+			box.closeWaitAlert();
+		});*/						
+		$http({
+			method: 'POST',
+			url: 'credit/order/borrow/v/query',
+			data: params
+		}).success(function(data) {
+			$scope.borrow = data.data;
+			$http({
+				url: '/credit/order/businfo/v/getBusinfoAndTypeNames',
+				method: 'POST',
+				data:{
+					"topType":list,
+					"custName":$scope.borrow.borrowerName
+				}
+			}).success(function(data1) {
+				if ("SUCCESS" == data1.code) {
+					window.open(data1.data);
+				}
+				box.closeWaitAlert();
+			});
+		});
+	}
 
 	//设置typeId
 	$scope.setType = function(typeId) {

@@ -159,7 +159,7 @@ angular.module("anjboApp").controller("auditFirstEditCtrl",function($scope,route
 		box.waitAlert();
 		$http({
 			method: 'POST',
-			url:'/credit/risk/first/v/pass',
+			url:'/credit/order/auditFirst/v/processSubmit',
 			data:$scope.obj
 		}).success(function(data){
 			box.closeWaitAlert();

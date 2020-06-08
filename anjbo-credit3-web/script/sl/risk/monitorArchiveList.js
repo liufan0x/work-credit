@@ -24,7 +24,7 @@ angular.module("anjboApp", ['bsTable']).controller("monitorArchiveListCtrl",func
         if($scope.meunAuth.indexOf('auth19auth')>=0){
         	html += '<a class="closeOrder" href="javascript:void(0)" >删除</a>&nbsp;&nbsp;';
         }
-        if(row.orderNo){
+        if(row.orderNo && row.orderNo != '2020031909433800047'){
         	html += '<a class="lookOrder" href="javascript:void(0)">查看关联订单</a>&nbsp;&nbsp;';
         }
         return html;    

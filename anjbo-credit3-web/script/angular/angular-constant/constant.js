@@ -137,6 +137,8 @@ define(function(require, exports, module){
 			{templateUrl:"/template/sl/smartwork/bpmsTempEdit.html", state:"bpmsTempEdit", ctrl:"bpmsTempEditCtrl" , js:"/script/sl/smartwork/bpmsTempEdit.js", params:{"id":"0"}},
 			{templateUrl:"/template/sl/smartwork/bpmsList.html", state:"bpmsList", ctrl:"bpmsListCtrl" , js:"/script/sl/smartwork/bpmsList.js", params:{"bpmsFrom":"0"}},
 			{templateUrl:"/template/sl/smartwork/bpmsDetail.html",  state:"bpmsDetail", ctrl:"bpmsDetailCtrl" , js:"/script/sl/smartwork/bpmsDetail.js", params:{"processInstanceId":"0"} },
+		    //查档
+			{templateUrl:"/template/sl/risk/archive.html", state:"archive", ctrl:"archiveCtrl" , js:"/script/sl/risk/archive.js" },
 		    //房产监测列表
 			{templateUrl:"/template/sl/risk/monitorArchiveList.html", state:"monitorArchiveList", ctrl:"monitorArchiveListCtrl" , js:"/script/sl/risk/monitorArchiveList.js" },
 			//房产监测详情

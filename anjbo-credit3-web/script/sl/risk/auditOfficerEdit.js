@@ -59,7 +59,7 @@ angular.module("anjboApp").controller("auditOfficerEditCtrl",function($scope,rou
 			box.boxAlert("请选择推送金融机构员");
 			return;
 		}
-		if($scope.isToBack==1 && ($scope.loanAmont>=1000 && (!$scope.obj.justiceUid || ""==$scope.obj.justiceUid))){
+		if($scope.isToBack==1 && ($scope.loanAmont>=3000 && (!$scope.obj.justiceUid || ""==$scope.obj.justiceUid))){
 			box.boxAlert("请先选择法务审批员");
 			return;
 		}
@@ -121,7 +121,7 @@ angular.module("anjboApp").controller("auditOfficerEditCtrl",function($scope,rou
 		if($scope.cdBorrow){
 			$scope.loanAmont=$scope.cdBorrow.loanAmount;
 		}
-		if($scope.isToBack==1 && $scope.loanAmont>=1000){
+		if($scope.isToBack==1 && $scope.loanAmont>=3000){
 			$scope.personnelType = "法务审批";
 			box.editAlert($scope,"订单通过审批吗，请选择法务审批","<submit-box></submit-box>",$scope.selAlloction);			
 		}else if($scope.isToBack==1){

@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
 	<head>
  		<meta charset="UTF-8" />
@@ -55,17 +55,17 @@ $(function(){
 		'formData'  : {'path':'fc-img'},
         'auto'           : true, 
         'swf'            : 'uploadify.swf',  
-       //  'uploader'       : 'http://fs.anjbo.com/fs/img/upload',            //线上影像资料地址
-       'uploader'       : 'http://120.79.207.227:9123/fs/img/upload',         //测试环境影像资料地址
+         'uploader'       : 'http://fs.sihaijinfu.com/fs/img/upload',            //线上影像资料地址
+       //'uploader'       : 'http://120.79.207.227:9123/fs/img/upload',         //测试环境影像资料地址
         'queueID'        : 'fileQueue',
         'itemTemplate' : '<li id="$\{fileID}" class="uploadify-queue-item"><div class="xc_imgbox"><img src="xz_05.gif" /><div class="uploadify-progress"><div class="uploadify-progress-bar" style="width:1%;"><span class="data"></span></div></div></div><p><em>$\{fileName}</em>($\{fileSize})</p><div class="xc_close"><a href="javascript:$(\'#$\{instanceID}\').uploadify(\'cancel\', \'$\{fileID}\')">关闭</a></div></li>',
         'width'     : '150',
         'height'    : '150',
         'buttonImage':'xz_02.gif',
         'fileTypeDesc'   : '选择图片',
-        'fileTypeExts'   : '*.jpg;*.gif;*.png;*.bmp;*jpeg;*.JPG;*.GIF;*.PNG;*.BMP;*JPEG;*.PDF',
+        'fileTypeExts'   : '*.jpg;*.gif;*.png;*.bmp;*jpeg;*.JPG;*.GIF;*.PNG;*.BMP;*JPEG;*.PDF;*.rar;*.zip',
         'multi'          : true,
-        'fileSizeLimit' : '15MB',
+        'fileSizeLimit' : '100MB',
         'fileObjName' : 'file',  
         'method' : 'post',
         'removeCompleted':false,

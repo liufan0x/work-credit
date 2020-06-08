@@ -144,7 +144,7 @@ angular.module("anjboApp").controller("lendingHarvestEditCtrl",function($scope,$
 			return false;
 		}
 		var overdueRate = $scope.harvest.overdueRate+"";
-		if(overdueRate=='' || !vf.test(overdueRate)){
+		if((overdueRate=='' || !vf.test(overdueRate))&&$scope.isProductCode!='07'){
 			box.boxAlert("逾期费率不能为空或输入有误！");
 			return false;
 		}

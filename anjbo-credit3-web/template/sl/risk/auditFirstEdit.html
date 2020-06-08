@@ -309,7 +309,7 @@
 				<error class="text-danger">错误</error>
 			</span>
 		</div>
-		<div class="col-md-6 col-lg-4">
+		<div class="col-md-6 col-lg-4" ng-if="isProductCode!='07'">
 			<label>建议逾期费率：</label>
 			<input type="text" ng-model="obj.overdueRate" name="overdueRate" class="form-control"  ng-pattern="/^([1-9]\d{0,13}|0)([.]?|(\.\d{1,4})?)$/"  required>  %/天
 			<span class="inputError" ng-show="isAudit">
@@ -344,9 +344,9 @@
 	</div>
 	<div class="row">
 		<div class="col-md-12">
-<!-- 			<button type="button" class="btn btn-primary" ng-click="showFirstSubmit();" ng-show="auditFirstShow">审批通过</button> -->
+ 			<button type="button" class="btn btn-primary" ng-if="isProductCode=='07'" ng-click="showFirstSubmit();" >审批通过</button>
 			<button type="button" class="btn btn-primary" ng-if="isProductCode!='06'&&isProductCode!='07'" ng-click="reportFinalShow();">上报终审</button>
-			<button type="button" class="btn btn-primary" ng-if="isProductCode=='06'||isProductCode=='07'" ng-click="reportFinalShow();">上报复核审批</button>
+			<button type="button" class="btn btn-primary" ng-if="isProductCode=='06'" ng-click="reportFinalShow();">上报复核审批</button>
 			<button type="button" class="btn btn-warning" ng-show="!orderIsBack" ng-click="showFirstBack()">不通过（退回）</button>
 			<button type="button" class="btn btn-primary" ng-if="borrow.isChangLoan!=1&&isProductCode!='06'&&isProductCode!='07'" ng-show="showView!=7" ng-click="riskEditCredit();">修改征信</button>
 		</div>

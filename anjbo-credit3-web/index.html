@@ -16,7 +16,7 @@
 		<link href="css/base.css" rel="stylesheet">
  		<link rel="stylesheet" href="css/jquery.bigautocomplete.css" type="text/css" />
 		<link href="plugins/yjg/css/yjg.css" rel="stylesheet">
-		<title>快鸽信贷业务系统</title>
+		<title>四海恒通信贷业务系统</title>
 		<style>
     html,body{
       width : 100%;
@@ -69,7 +69,7 @@
 							 <span class="icon-bar"></span>
 						</button>
 						<a class="navbar-brand" href="#"><img alt="Bootstrap Image Preview" src="./images/logo.png"  width="50"/></a>
-						<span class="index-tit" >快鸽信贷系统</span>
+						<span class="index-tit" >四海信贷系统</span>
 					</div>
 					
 					<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -78,21 +78,19 @@
 							     <a class="dropdown-toggle" data-toggle="dropdown">订单管理<strong class="caret"></strong></a>
 								 <ul class="dropdown-menu">
 									 <li><a ng-click="goPage('orderList')" >订单列表</a></li>
-									 <li><a ng-if="hasKuaige" ng-click="goPage('productDataList',{'productCode':'10000','productName':'云按揭'})" >云按揭订单列表</a></li>									 
+									 <li><a ui-sref="archive">查档</a></li>
 								</ul>
 							</li>
 							 <li class="dropdown" ng-if="hasMonitorArchiveList || hasRiskModelList">
 							     <a href="#" class="dropdown-toggle" data-toggle="dropdown">风控管理<strong class="caret"></strong></a>
 								 <ul class="dropdown-menu">
 									 <li><a ui-sref="monitorArchiveList" ng-if="hasMonitorArchiveList">房产监测</a></li>
-									 <li><a ui-sref="baiduLisklist" ng-if="hasMonitorArchiveList">风险名单查询</a></li>
 									 <li><a ui-sref="riskModelEdit" ng-if="hasRiskModelList">风控模型配置</a></li>
 								</ul>
 							</li>
 							 <li class="dropdown"  ng-if="hasCapitalList || haschkbbListA || haschkbbListB">
 							     <a class="dropdown-toggle" data-toggle="dropdown">财务管理<strong class="caret"></strong></a>
 								 <ul class="dropdown-menu">
-									 <li><a ui-sref="capitalList" ng-if="hasCapitalList">代扣管理</a></li>
 									 <li><a ui-sref="reportList" ng-if="haschkbbListA || haschkbbListB">出款报备</a></li>
 									 <li><a ui-sref="paymentreportList" ng-if="haschkbbListA || haschkbbListB">回款报备</a></li>
 								</ul>
@@ -104,7 +102,7 @@
 									 <li><a ui-sref="afterLoanList">贷后列表</a></li>
 								 </ul>
 							 </li>
-
+							<!-- 
 							<li class="dropdown" ng-if="hasCustomerList || hasRiskContolList || hasRunningList">
 							     <a class="dropdown-toggle" data-toggle="dropdown">报表管理<strong class="caret"></strong></a>
 								 <ul class="dropdown-menu">
@@ -125,14 +123,6 @@
 											</li>
 										</ul>
 									</li>
-									 <!-- <li>
-										<span>统计报表</span>
-										<ul>
-											<li><a ui-sref="performanceList">业绩报表</a>
-											<li><a ui-sref="riskControlList">风控报表</a>
-											<li><a ui-sref="runList">运行报表</a>
-										</ul>
-									</li> -->
 									 <li ng-if="hasCurrentList"><a ui-sref="currentList">实时报表</a></li>
 									 <li ng-if="hasrevenueList"><a ui-sref="revenueList">创收目标报表</a></li>
 									 <li ng-if="hasFinancialList"><a ui-sref="financialList">财务报表</a></li>
@@ -153,7 +143,7 @@
 									<li><a ui-sref="elcSignature" ng-if="hasDianZiQianZhangList" >电子签章</a></li>
 								</ul>
 							</li>
-							 <!-- <li class="dropdown" ng-if="hasDaiHouListA||hasDaiHouListB">
+							 <li class="dropdown" ng-if="hasDaiHouListA||hasDaiHouListB">
 								 <a class="dropdown-toggle" data-toggle="dropdown">提放<strong class="caret"></strong></a>
 								 <ul class="dropdown-menu">
 									 <li><a ui-sref="liftingPlacing">保单录入</a></li>

@@ -31,7 +31,7 @@
 			  <span class="a-span" ng-if="modeid!=1 || harvest.riskGradeId=='0'"> &nbsp;%/天</span>  
 			</span>
 		</div>
-		<div class="col-md-6 col-lg-4">
+		<div class="col-md-6 col-lg-4" ng-if="isProductCode!='07'">
 			<label>逾期费率：</label>
 			<span>
 				<input type="text"  ng-model="harvest.overdueRate" class="form-control" maxlength="9"   ng-if="isProductCode=='06'||isProductCode=='07'">
@@ -86,7 +86,7 @@
 			<input type="text" ng-if="isProductCode!='06'&&isProductCode!='07'"  ng-disabled="harvest.collectInterestMoney && harvest.collectInterestMoney>0" ng-model="harvest.collectInterestMoney" id="collectInterestMoney" class="form-control" maxlength="9"  > 
 			<input type="text" ng-if="isProductCode=='06'||isProductCode=='07'"   ng-model="harvest.collectInterestMoney" id="collectInterestMoney" class="form-control" maxlength="9"  > 元
 		</div>
-		<div class="col-md-6 col-lg-4">
+		<div class="col-md-6 col-lg-4" ng-if="isProductCode!='07'">
 			如费率有修改，请在此上传修改费率审批凭证：<a href="#"><span data-fancybox="iframe" data-src="/plugins/uploadify/upload_image.html?returnFun=returnDatarate" data-type="iframe" >点击上传</span></a>
 			<input type="hidden" id="rateImg" >
 			  <span class="gallerys processuUpdRateImg" style="display:none">

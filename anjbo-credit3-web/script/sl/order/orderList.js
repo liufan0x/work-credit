@@ -311,6 +311,10 @@ angular.module("anjboApp", ['bsTable']).controller("orderListCtrl", function($sc
 			html += '<a class="handleOrder1" href="javascript:void(0)">资料推送</a>&nbsp;&nbsp;';
 		}
 
+		if(parent.userDto.uid == '123456' || parent.userDto.uid == '1477364487817' || parent.userDto.uid == '1498426970273' ) {
+			html += '<a class="closeOrder1" href="javascript:void(0)">关闭订单</a>&nbsp;&nbsp;';
+		}
+
 		//      if(parent.userDto.uid == '1508747262735' ){
 		//      	html += '<a class="handleOrder2" href="javascript:void(0)">回款</a>&nbsp;&nbsp;';
 		//      }
@@ -328,7 +332,7 @@ angular.module("anjboApp", ['bsTable']).controller("orderListCtrl", function($sc
 			} else {
 				html += '<a class="perfectOrder" href="javascript:void(0)" >完善订单</a>&nbsp;&nbsp;';
 			}
-			html += '<a class="closeOrder text-danger" href="javascript:void(0)" >删除</a>&nbsp;&nbsp;';
+			// html += '<a class="closeOrder text-danger" href="javascript:void(0)" >删除</a>&nbsp;&nbsp;';
 		} else if(row.processId == 'managerAudit') {
 			if(row.state.indexOf('退回') > 0) {
 				html += '<a class="handleOrder" href="javascript:void(0)">重新分配订单</a>&nbsp;&nbsp;';
@@ -518,6 +522,22 @@ angular.module("anjboApp", ['bsTable']).controller("orderListCtrl", function($sc
 				}
 			})
 		},
+		'click .closeOrder1': function(e, value, row, index) {
+			var closeOrder1 = function() {
+				row.state = "订单已停止";
+				$http({
+					method: 'POST',
+					url: "/credit/order/base/v/closeOrder",
+					data: row
+				}).success(function(data) {
+					if(data.code == "SUCCESS") {
+						$scope.query();
+						box.boxAlert(data.msg);
+					}
+				})
+			}
+			box.confirmAlert("删除订单", "确定要关闭订单？", closeOrder1);
+		},
 		'click .closeOrder': function(e, value, row, index) {
 			var closeOrder = function() {
 				$http({
@@ -660,7 +680,7 @@ angular.module("anjboApp", ['bsTable']).controller("orderListCtrl", function($sc
 	var columnSwitchList = $cookies.getObject("columnSwitch");
 	if(!columnSwitchList) {
 		columnSwitchList = {
-			"id": false,
+			"id": true,
 			"createTime": false,
 			"contractNo": false,
 			"cityName": true,
@@ -795,12 +815,12 @@ angular.module("anjboApp", ['bsTable']).controller("orderListCtrl", function($sc
 				valign: 'bottom',
 				visible: columnSwitchList.channelManagerName
 			}, {
-				title: '分公司（营业部）',
-				field: 'branchCompany',
-				align: 'center',
-				valign: 'bottom',
-				visible: columnSwitchList.branchCompany
-			}, {
+                                title: '分公司（营业部）',
+                                field: 'branchCompany',
+                                align: 'center',
+                                valign: 'bottom',
+                                visible: columnSwitchList.branchCompany
+                        }, {
 				title: '受理员',
 				field: 'acceptMemberName',
 				align: 'center',

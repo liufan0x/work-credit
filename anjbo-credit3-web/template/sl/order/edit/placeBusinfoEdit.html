@@ -1,6 +1,7 @@
 <!--表格-->
 <div class="col-md-12 detail-right-tit place-businfo-edit">&nbsp;&nbsp;<span ng-bind="cityName"></span>-<span ng-bind="productName"></span>的影像资料</div>
 	<div class="row" class="form-inline detail-row">
+		<button type="button" class="btn btn-danger lhw-alert-cancel" ng-click="download()">一键下载</button>
 		<div class="col-md-12">
 			<table class="table table-bordered">
 				<thead>
@@ -31,7 +32,7 @@
 						<span class="caozuo red-word" ng-if="isImg && sType.listMap.length>0"><a ng-click="imgShow('del',sType.id)">删除</a></span>&nbsp;&nbsp;&nbsp;
 						<span class="caozuo chakan-img gallerys" ng-show="showImgAuth">
 							<list ng-repeat="imgMap in sType.listMap">
-								<span class="gallery-pic-img" title="{{imgMap.url}}" ng-show="$index==0"></span>
+								<span class="gallery-pic-img" title="{{imgMap.url}}" ng-show=" !imgMap.isPdf && $index==0" ></span>
 							</list>
 						</span>
 						<input type="hidden" name="typeId" value="{{sType.id}}">

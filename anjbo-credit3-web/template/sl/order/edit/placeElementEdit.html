@@ -90,10 +90,10 @@
 		<select ng-disabled="all"class="form-control fl huikuantype" name="paymentMode" style="width:178px;" choice-dict-name="paymentMode" ng-model="paymentType.paymentMode" required>
 			<option value="">请选择</option>
 		</select>
-		<span class="a-span">&nbsp;</span>
+		<!--<span class="a-span">&nbsp;</span>
 		<span class="inputError" ng-show="isAudit">
 			<error class="text-danger" ng-show="elementForm.paymentMode.$error.required">必选</error>
-		</span>
+		</span>-->
 	</div>
 		
 	<div class="col-md-6 col-lg-4"><label>账户类型：</label>
@@ -196,9 +196,9 @@
 	<div class="col-md-6 col-lg-4" ><label>银行产品：</label>
 		<input ng-disabled="all" type="text" class="form-control" name="bankProducts"  ng-model="paymentType.bankProducts" required>
 		<span class="a-span">&nbsp;</span>
-		<span class="inputError" ng-show="isAudit">
+		<!--<span class="inputError" ng-show="isAudit">
 			<error class="text-danger" ng-show="elementForm.bankProducts.$error.required">必填</error>
-		</span>
+		</span>-->
 	</div>
 	<div class="col-md-12 col-lg-12 relative">
 	    <label>&nbsp;</label>

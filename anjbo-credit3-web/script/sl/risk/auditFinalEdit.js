@@ -106,7 +106,7 @@ angular.module("anjboApp").controller("auditFinalEditCtrl",function($scope,route
 		if($scope.cdBorrow){
 			$scope.loanAmont=$scope.cdBorrow.loanAmount;
 		}
-		if($scope.isToBack==1 && $scope.loanAmont>=1000){
+		if($scope.isToBack==1 && $scope.loanAmont>=3000){
 			$scope.personnelType = "法务审批";
 			box.editAlert($scope,"订单通过审批吗，请选择法务审批","<submit-box></submit-box>",$scope.selAlloction);			
 		}else if($scope.isToBack==1){
