@@ -15,7 +15,7 @@ angular.module("anjboApp").controller("notarizationEditCtrl",function($scope,$ht
 			$scope.obj = data.data;
 			if($scope.obj!=null){
 				$scope.obj.notarizationTime=$scope.obj.notarizationTimeStr;
-				$scope.obj.estimatedTime=$scope.obj.estimatedTimeStr;
+				//$scope.obj.estimatedTime=$scope.obj.estimatedTimeStr;
 				$scope.obj.notarizationAddressCode = $scope.obj.notarizationAddressCode+"";
 				if($scope.obj.notarizationImg!=null && $scope.obj.notarizationImg!=""){
 					$scope.obj.imgs = new Array();
@@ -72,10 +72,10 @@ angular.module("anjboApp").controller("notarizationEditCtrl",function($scope,$ht
 				box.boxAlert("公证地点不能为空");
 				return false;
 			}
-			if($scope.obj.estimatedTime==null  || $scope.obj.estimatedTime==''){
+			/*if($scope.obj.estimatedTime==null  || $scope.obj.estimatedTime==''){
 				box.boxAlert("预计出款日期不能为空");
 				return false;
-			}
+			}*/
 //			$scope.obj.estimatedTime += " 00:00:00";
 			if(img==null || img ==''){
 				box.boxAlert("公证图片不能为空");
