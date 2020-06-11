@@ -87,9 +87,9 @@ public class CreditServiceImpl implements CreditService{
 			}
 		}
 		//计算设置借款成数
-		if(credit.getLoanPercentage() == null &&credit.getLoanAmount()!=null&&null!=house&&house.getHouseLoanAmount()!=null){
+		/*if(credit.getLoanPercentage() == null &&credit.getLoanAmount()!=null&&null!=house&&house.getHouseLoanAmount()!=null){
 			credit.setLoanPercentage(NumberUtil.formatDecimal((credit.getLoanAmount()*100)/house.getHouseLoanAmount(),2));
-		}
+		}*/
 		
 		if(houseWorth!=null){
 			credit.setHouseWorth(houseWorth/10000.0);

@@ -81,7 +81,9 @@ public class ArchiveController extends BaseController{
 				OrderListDto listDto=new OrderListDto();
 				listDto.setOrderNo(MapUtils.getString(param, "orderNo", ""));
 				listDto=httpUtil.getObject(Constants.LINK_CREDIT, "/credit/order/base/v/selectDetailByOrderNo", listDto, OrderListDto.class);
-				param.put("productCode", listDto.getProductCode());
+				if(listDto!=null){
+					param.put("productCode", listDto.getProductCode());
+				}
 			}
 			UserDto user = getUserDto(request);
 			//取登录人信息
