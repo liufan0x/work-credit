@@ -308,6 +308,7 @@
 			and  (channelManagerName like CONCAT('%',#{searchName},'%') or  customerName like CONCAT('%',#{searchName},'%') or acceptMemberName like CONCAT('%',#{searchName},'%'))  
 		</if> 
 		<if test="customerType!=null and customerType!=0"> and customerType=#{customerType}</if>
+		<if test="id!=null and id!=0"> and id=#{id}</if>
 		 /*and state != '已关闭' */
 	</sql>
 	

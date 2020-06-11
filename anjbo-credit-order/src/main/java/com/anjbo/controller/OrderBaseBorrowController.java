@@ -333,7 +333,7 @@ public class OrderBaseBorrowController extends BaseController {
 				RespHelper.setFailDataObject(resp, 6, "请先上传必须的影像资料");
 				return resp;
 			}
-			if(!"06".equals(orderListdto.getProductCode())&&!"07".equals(orderListdto.getProductCode())) {
+			/*if(!"06".equals(orderListdto.getProductCode())&&!"07".equals(orderListdto.getProductCode())) {
 				CreditDto creditDto =new CreditDto();
 				creditDto.setOrderNo(orderListDto.getOrderNo());
 				creditDto = httpUtil.getObject(
@@ -344,7 +344,7 @@ public class OrderBaseBorrowController extends BaseController {
 					RespHelper.setFailDataObject(resp,7, "请完善征信信息");
 					return resp;
 				}
-			}
+			}*/
 		}else{//畅贷关联订单
 			//已经面签判断面签资料必传
 			OrderFlowDto orderFlow = new OrderFlowDto();
@@ -439,7 +439,7 @@ public class OrderBaseBorrowController extends BaseController {
 						RespHelper.setFailRespStatus(resp, "请先上传必须的影像资料");
 						return resp;
 					}
-					if(!"06".equals(orderListdto.getProductCode())&&!"07".equals(orderListdto.getProductCode())) {	
+					/*if(!"06".equals(orderListdto.getProductCode())&&!"07".equals(orderListdto.getProductCode())) {
 						CreditDto creditDto =new CreditDto();
 						creditDto.setOrderNo(orderListDto.getOrderNo());
 						creditDto = httpUtil.getObject(
@@ -450,7 +450,7 @@ public class OrderBaseBorrowController extends BaseController {
 							RespHelper.setFailRespStatus(resp, "请完善征信信息");
 							return resp;
 						}
-					}
+					}*/
 			}else{//畅贷关联订单
 				//已经面签判断面签资料必传
 				OrderFlowDto orderFlow = new OrderFlowDto();

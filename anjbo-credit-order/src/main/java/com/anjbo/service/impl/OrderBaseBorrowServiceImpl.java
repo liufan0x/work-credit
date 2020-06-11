@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.annotation.Resource;
 
+import com.anjbo.utils.*;
 import net.sf.json.JSONObject;
 
 import org.apache.commons.lang.StringUtils;
@@ -45,12 +46,6 @@ import com.anjbo.dao.OrderBaseMapper;
 import com.anjbo.dao.OrderBaseReceivableForMapper;
 import com.anjbo.dao.OrderFlowMapper;
 import com.anjbo.service.OrderBaseBorrowService;
-import com.anjbo.utils.AmsUtil;
-import com.anjbo.utils.CommonDataUtil;
-import com.anjbo.utils.ConfigUtil;
-import com.anjbo.utils.HttpUtil;
-import com.anjbo.utils.StringUtil;
-import com.anjbo.utils.UidUtil;
 
 @Service
 public class OrderBaseBorrowServiceImpl implements OrderBaseBorrowService {
@@ -317,6 +312,7 @@ public class OrderBaseBorrowServiceImpl implements OrderBaseBorrowService {
 		orderListDto.setAuditSort(orderBaseBorrowDto.getAuditSort());
 		//预计出款时间
 		orderListDto.setFinanceOutLoanTime(orderBaseBorrowDto.getFinanceOutLoanTime());
+		//orderListDto.setAppShowValue1(DateUtils.dateToString(orderBaseBorrowDto.getFinanceOutLoanTime(), DateUtils.FMT_TYPE2));
 		//普通用户
 		if("快鸽APP".equals(orderBaseBorrowDto.getSource()) && "save".equals(operation)&&orderBaseBorrowDto.getAgencyId()==0){
 			orderListDto.setRelationOrderNo(orderBaseBorrowDto.getRelationOrderNo());
@@ -626,17 +622,17 @@ public class OrderBaseBorrowServiceImpl implements OrderBaseBorrowService {
 		 * 要件检验，不参与编辑
 		 * 1.畅贷关联订单   
 		 */
-		if(!("03".equals(productCode) && StringUtils.isNotBlank(relationOrderNo))&&!"04".equals(productCode)&&!"05".equals(productCode)&&!"06".equals(productCode)&&!"07".equals(productCode)){
+		/*if(!("03".equals(productCode) && StringUtils.isNotBlank(relationOrderNo))&&!"04".equals(productCode)&&!"05".equals(productCode)&&!"06".equals(productCode)&&!"07".equals(productCode)){
 			DocumentsDto dtoDocuments = new DocumentsDto();
 			dtoDocuments.setOrderNo(orderNo);
-			RespDataObject<DocumentsDto> respDocument = this.httpUtil.getRespDataObject(Constants.LINK_CREDIT, "/credit/element/basics/v/detail", dtoDocuments, DocumentsDto.class);		
+			RespDataObject<DocumentsDto> respDocument = this.httpUtil.getRespDataObject(Constants.LINK_CREDIT, "/credit/element/basics/v/detail", dtoDocuments, DocumentsDto.class);
 			if(null==respDocument || !RespStatusEnum.SUCCESS.getCode().equalsIgnoreCase(respDocument.getCode()) || null==respDocument.getData() || null==respDocument.getData().getPaymentType()
 				|| StringUtils.isEmpty(respDocument.getData().getPaymentType().getPaymentMode()) || StringUtils.isEmpty(respDocument.getData().getPaymentType().getBankProducts())){
 				map.put("code", 4);
 				map.put("msg", "请完善要件检验信息");
 				return map;
 			}
-		}
+		}*/
 		
 		map.put("code", 0);
 		map.put("msg", "通过");

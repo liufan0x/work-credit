@@ -4326,6 +4326,7 @@ public class OrderBaseController extends BaseController {
 						stateMap.put("state", "订单已停止");
 						stateMap.put("stateName", "订单已停止");
 						stateList.add(stateMap);
+						stateListAll.add(stateMap);
 						stateMap = new HashMap<String, Object>();
 						stateMap.put("state", "已关闭");
 						stateMap.put("stateName", "已关闭");
