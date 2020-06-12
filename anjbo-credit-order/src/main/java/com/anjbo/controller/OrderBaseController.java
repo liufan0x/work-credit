@@ -4326,7 +4326,6 @@ public class OrderBaseController extends BaseController {
 						stateMap.put("state", "订单已停止");
 						stateMap.put("stateName", "订单已停止");
 						stateList.add(stateMap);
-						stateListAll.add(stateMap);
 						stateMap = new HashMap<String, Object>();
 						stateMap.put("state", "已关闭");
 						stateMap.put("stateName", "已关闭");
@@ -4369,6 +4368,11 @@ public class OrderBaseController extends BaseController {
 				productMap.put("productCode", "");
 				productMap.put("productName", "不限");
 				productMap.put("type", "1");
+				//加订单已停止
+				stateMap = new HashMap<String, Object>();
+				stateMap.put("state", "订单已停止");
+				stateMap.put("stateName", "订单已停止");
+				stateListAll.add(stateMap);
 				productMap.put("stateList", stateListAll);
 				productList.add(0, productMap);
 				if (!lstKeysPro.contains("")) {
@@ -4739,7 +4743,7 @@ public class OrderBaseController extends BaseController {
 	 * 智能要件同步信贷订单数据集合
 	 * 
 	 * @param request
-	 * @param orderListDto
+	 * @param
 	 * @return
 	 */
 	@ResponseBody
@@ -4764,7 +4768,7 @@ public class OrderBaseController extends BaseController {
 	 * 获取信贷系统订单集合
 	 * 
 	 * @param request
-	 * @param orderListDto
+	 * @param
 	 * @return
 	 */
 	@ResponseBody
