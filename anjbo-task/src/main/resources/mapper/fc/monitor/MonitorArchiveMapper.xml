@@ -22,7 +22,7 @@
 	
 	<!-- 查询所有的房产监控加入定时器 -->
 	<select id="selectArchiveList" parameterType="MonitorArchiveDto" resultType="MonitorArchiveDto">
-	   select id,startTime,endTime,queryFrequency,phone,archiveId,estateNo,identityNo from tbl_risk_monitor_archive
+	   select id,startTime,endTime,queryFrequency,phone,archiveId,estateNo,identityNo from tbl_risk_monitor_archive order by id desc
 	</select>
 	
 	<!-- 查询所有的房产监控加入定时器 -->

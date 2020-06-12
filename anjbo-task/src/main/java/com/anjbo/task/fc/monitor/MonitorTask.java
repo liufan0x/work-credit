@@ -128,22 +128,24 @@ public class MonitorTask {
 //							Log.error("发送短信失败："+content);
 //						}
 						//发短信给指定的人
-						//if(newArchiveDto.getPropertyStatus().equals("查封") || newArchiveDto.getPropertyStatus().equals("抵押查封")){
-						if(!(Enums.PropertyStatusEnum.L6.getName().equals(oldArchiveDto.getPropertyStatus())&&!newArchiveDto.getPropertyStatus().contains("查封"))){
-							String[] phones = ConfigUtil.getStringValue("MONITOR_PHONES").split(",");
-							String content = "快鸽信贷系统监测的房 产（房 产证号："+estateNo+"，姓名/身份证号："+identityNo;
-							if(StringUtils.isNotBlank(name)){
-								content+="，订单客户姓名："+name;
-							}
-							content += "），房 产状态已从"+oldArchiveDto.getPropertyStatus()+"变为"+newArchiveDto.getPropertyStatus()+"，请知悉。";
-							for (String phone : phones) {
-								try {
-									AmsUtil.smsSend(phone, ipWhite,content , Constants.SMSCOMEFROM_TEST);
-								} catch (AnjboException e) {
-									e.printStackTrace();
-									Log.error("发送短信失败："+content);
+						if(newArchiveDto.getPropertyStatus().equals("查封") || newArchiveDto.getPropertyStatus().equals("抵押查封")){
+						//if(!(Enums.PropertyStatusEnum.L6.getName().equals(oldArchiveDto.getPropertyStatus())&&!newArchiveDto.getPropertyStatus().contains("查封"))){
+							//if(!(oldArchiveDto.getPropertyStatus().contains("有效")&&newArchiveDto.getPropertyStatus().contains("有效"))){
+								String[] phones = ConfigUtil.getStringValue("MONITOR_PHONES").split(",");
+								String content = "快鸽信贷系统监测的房 产（房 产证号："+estateNo+"，姓名/身份证号："+identityNo;
+								if(StringUtils.isNotBlank(name)){
+									content+="，订单客户姓名："+name;
 								}
-							}
+								content += "），房 产状态已从"+oldArchiveDto.getPropertyStatus()+"变为"+newArchiveDto.getPropertyStatus()+"，请知悉。";
+								for (String phone : phones) {
+									try {
+										AmsUtil.smsSend(phone, ipWhite,content , Constants.SMSCOMEFROM_TEST);
+									} catch (AnjboException e) {
+										e.printStackTrace();
+										Log.error("发送短信失败："+content);
+									}
+								}
+							//}
 						}
 					}else{
 						Log.info("查档id:"+archiveId+"结果未变更");

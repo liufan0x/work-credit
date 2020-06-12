@@ -42,8 +42,10 @@ public class MonitorTask
   @Autowired
   private MonitorArchiveService monitorArchiveService;
 
-  @Scheduled(cron="0 0 10,12,15,18 * * ?")
-  public void run() { SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+  @Scheduled(cron="0 19 11,13,15,18 * * ?")
+  public void run() {
+    log.info("执行查档");
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     MonitorArchiveDto archiveDto = new MonitorArchiveDto();
     List<MonitorArchiveDto> archiveDtos = this.monitorArchiveService.selectArchiveListAll(archiveDto);
     for (MonitorArchiveDto monitorArchiveDto : archiveDtos)
@@ -56,8 +58,9 @@ public class MonitorTask
           Date endDate = sdf.parse(monitorArchiveDto.getEndTime());
           if ((startDate.getTime() <= new Date().getTime()) && (new Date().getTime() <= endDate.getTime()))
             qArchiveMsg(monitorArchiveDto);
+            Thread.sleep(1000*90);
         }
-        catch (ParseException e) {
+        catch (Exception e) {
           e.printStackTrace();
         }
       }
