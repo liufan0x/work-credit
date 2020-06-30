@@ -134,9 +134,11 @@ public class OrderBusinfoController extends BaseController {
 							||"rebate".equals(orderListDto.getProcessId())||"已关闭".equals(orderListDto.getState())||"closeOrder".equals(orderListDto.getProcessId())
 							||processConfig.contains(orderListDto.getProcessId()));
 					if((
-						(null!=uid&&null!=orderListDto&&(uid.equals(acceptMemberUid)||uid.equals(channelManagerUid)))
+						(null!=uid&&null!=orderListDto&&(uid.equals(acceptMemberUid)))
 						||(uid.equals(orderListDto.getFacesignUid())&&"facesign".equals(orderListDto.getProcessId()))
-							||(uid.equals(orderListDto.getCurrentHandlerUid())&&("auditFirst".equals(orderListDto.getProcessId())||"auditFinal".equals(orderListDto.getProcessId())))
+						||(uid.equals(orderListDto.getCurrentHandlerUid())&&("auditFirst".equals(orderListDto.getProcessId())
+						||"auditFinal".equals(orderListDto.getProcessId())))
+						||(uid.equals(channelManagerUid)&&("auditFirst".equals(orderListDto.getProcessId())||"managerAudit".equals(orderListDto.getProcessId())||"placeOrder".equals(orderListDto.getProcessId())))
 					   )&&flag){
 						operate=true;
 						data.put("progressId", orderListDto.getProcessId());
