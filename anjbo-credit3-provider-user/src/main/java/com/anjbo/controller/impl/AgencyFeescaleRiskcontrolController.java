@@ -212,7 +212,13 @@ public class AgencyFeescaleRiskcontrolController extends BaseController implemen
 	 * @param params
 	 * @return 收费金额，不含(关外手续费+其他金额+固定费用)
 	 */
-	private double calcChargeMoney(double loanAmount, int borrowingDays, Map<String,Object> params){
+	private double calcChargeMoney(double loanAmount, int borrowingDay, Map<String,Object> params){
+		int borrowingDays = 0;
+		if(borrowingDay>5){
+			borrowingDays = borrowingDay-1;
+		}else{
+			borrowingDays = borrowingDay;
+		}
 		double rate = MapUtils.getDoubleValue(params, "rate", 0);//费率
 		int modeid = MapUtils.getIntValue(params, "modeid", 1);  //按段，按天		
 		System.out.println("费率："+rate+"收费方式："+modeid+"借款金额："+loanAmount+"借款期限："+borrowingDays);
