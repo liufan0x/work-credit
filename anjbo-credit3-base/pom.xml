@@ -125,7 +125,7 @@
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
-			<version>1.2.46</version>
+			<version>1.2.83</version>
 		</dependency>
 
 		<!-- lang -->
@@ -209,7 +209,7 @@
 		<dependency>
 			<groupId>com.alibaba</groupId>
 			<artifactId>fastjson</artifactId>
-			<version>1.2.31</version>
+			<version>1.2.83</version>
 		</dependency>
 		
 		<!-- pinyin -->
